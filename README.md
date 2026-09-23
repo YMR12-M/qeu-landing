@@ -154,7 +154,12 @@ store app takes over.
 
 ## Deploying
 
-Upload `dist/client` to any static host. Things to check:
+**Vercel** (the project is connected to this repository): every push to `main` deploys to
+production. `vercel.json` carries the settings the dashboard would otherwise guess wrong — the
+output directory is `dist/client` (not `dist`), clean URLs are on, `/assets/*` is cached for a
+year, and basic security headers are set.
+
+**Any other static host:** upload `dist/client`. Things to check:
 
 1. `/english` is served from `english.html` — the default "clean URLs" behaviour of Netlify,
    Cloudflare Pages and GitHub Pages (Vercel: `cleanUrls`), and what `npm run preview` does;
