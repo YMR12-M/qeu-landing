@@ -25,6 +25,7 @@ const ar = {
     switchLocale: 'View this page in English',
     pauseMotion: 'إيقاف حركة الخلفية',
     playMotion: 'تشغيل حركة الخلفية',
+    sectionsMenu: 'أقسام الصفحة',
   },
 
   nav: {
@@ -36,6 +37,7 @@ const ar = {
     ],
     download: 'حمّل كيو',
     switchLocale: 'EN',
+    here: 'أنت هنا',
   },
 
   hero: {
@@ -117,7 +119,14 @@ const ar = {
     eyebrow: 'قبل ما تحمّل',
     title: 'عندك سؤال؟',
     lead: 'جمعنا لك الأجوبة في فاتورة وحدة: واضحة، مختصرة، وبدون رسوم.',
-    contact: 'ما لقيت جوابك؟ راسلنا على {email}',
+    // The take-a-number ticket beside the receipt: now serving the last question, yours is next.
+    ticket: {
+      take: 'خذ رقمك',
+      now: 'الدور الحالي',
+      label: 'رقمك',
+      question: 'سؤالك مو في الفاتورة؟',
+      action: 'راسلنا',
+    },
     receipt: {
       title: 'فاتورة أسئلة',
       count: {

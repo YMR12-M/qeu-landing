@@ -19,15 +19,16 @@ Node ≥ 20.19.
 
 ## What the page is
 
-| Section                                                                                                           | Source                                                                               |
-| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| Header, hero with drifting app screens                                                                            | v3                                                                                   |
-| «ليه كيو؟» — pinned, scroll-driven benefits with the matching screen                                              | v3                                                                                   |
-| «كيف يشتغل / عروضنا تجيك وبنفس السعر» — three steps on the order's route, Qeu's van driving to the door on scroll | **kept** from the earlier proposal (takes v3's "inside the app" slot); route **new** |
-| «عندك سؤال؟» — FAQ printed on a till receipt                                                                      | **new**: answers restate the page and the Google Play listing only                   |
-| Google Play figures (count up on scroll)                                                                          | v3                                                                                   |
-| «حمّل كيو» with the app-icon stage, phone and QR card                                                             | v3 text + **kept** stage from the earlier proposal                                   |
-| Footer                                                                                                            | v3, with the missing legal and contact details added                                 |
+| Section                                                                                                                                              | Source                                                                               |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Navigation island floating over the page: takes each section's colour, folds to a "you are here" pill while reading, opens the sections as a receipt | **new**: replaces v3's header bar                                                    |
+| Hero with drifting app screens                                                                                                                       | v3                                                                                   |
+| «ليه كيو؟» — pinned, scroll-driven benefits with the matching screen                                                                                 | v3                                                                                   |
+| «كيف يشتغل / عروضنا تجيك وبنفس السعر» — three steps on the order's route, Qeu's van driving to the door on scroll                                    | **kept** from the earlier proposal (takes v3's "inside the app" slot); route **new** |
+| «عندك سؤال؟» — FAQ printed on a till receipt, with a take-a-number ticket for anything it doesn't answer                                             | **new**: answers restate the page and the Google Play listing only                   |
+| Google Play figures (count up on scroll)                                                                                                             | v3                                                                                   |
+| «حمّل كيو» with the app-icon stage, phone and QR card                                                                                                | v3 text + **kept** stage from the earlier proposal                                   |
+| Footer                                                                                                                                               | v3, with the missing legal and contact details added                                 |
 
 ### Changed from v3
 
@@ -55,7 +56,9 @@ Content (claims v3 made that the sources don't support)
   privacy policy link, and the legal entity and address.
 - v3 translated the text in place (brand "Que"). There is now a real `/english` page (brand "Q",
   as on qeu.app/english) with hreflang.
-- Header: the real wordmark vector replaces the typed name.
+- Header: the real wordmark vector replaces the typed name, and the fixed bar is gone. The nav
+  floats over the page and takes on the colour of the section under it, so nothing separates it
+  from the page.
 - Arabic headings no longer get letter-spacing, which breaks letter joining.
 
 ## Stack, and why
@@ -92,7 +95,8 @@ src/
     brand/                Logo (vector wordmark from qeu.app)
     ui/                   Picture, Reveal, SectionHeading, icons
   i18n/                   locales config, provider, useLocale()
-  hooks/                  usePlatform, useCurrentYear (hydration-safe), useScrollReveal
+  hooks/                  usePlatform, useCurrentYear (hydration-safe), useScrollReveal,
+                          useActiveSection (the section being read)
   lib/                    links (store URLs + UTM), analytics, formatting, cx
   seo/head.js             <title>, meta, hreflang, Open Graph, JSON-LD
   styles/                 fonts, tokens, base, layout

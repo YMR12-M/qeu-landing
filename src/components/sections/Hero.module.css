@@ -5,7 +5,10 @@
   position: relative;
   display: flex;
   align-items: center;
-  min-block-size: clamp(32rem, 34.9vw, 41.875rem);
+  /* The hero runs up under the floating nav island: the drift and the dark fill reach the
+     top of the screen, while the copy is centred in the space below the island. */
+  min-block-size: calc(clamp(32rem, 34.9vw, 41.875rem) + var(--header-height));
+  padding-block-start: var(--header-height);
   overflow: hidden;
   background: var(--night);
 }
@@ -75,7 +78,7 @@
 @media (max-width: 47.99em) {
   .hero {
     align-items: flex-start;
-    min-block-size: 40rem;
+    min-block-size: calc(40rem + var(--header-height));
   }
 
   .drift {

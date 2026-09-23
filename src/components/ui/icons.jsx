@@ -44,6 +44,24 @@ export function Globe(props) {
   );
 }
 
+/** A till receipt — torn bottom edge, three printed lines: the page's sections menu. */
+export function Receipt(props) {
+  return (
+    <Icon
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M5 3h14v17l-1.75-1.25L15.5 20l-1.75-1.25L12 20l-1.75-1.25L8.5 20l-1.75-1.25L5 20Z" />
+      <path d="M8.5 8h7M8.5 11.5h7M8.5 15h4" />
+    </Icon>
+  );
+}
+
 // Media controls keep their direction in RTL (they describe playback, not reading order).
 export function Pause(props) {
   return (

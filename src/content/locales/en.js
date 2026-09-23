@@ -24,6 +24,7 @@ const en = {
     switchLocale: 'عرض الصفحة بالعربي',
     pauseMotion: 'Pause background animation',
     playMotion: 'Play background animation',
+    sectionsMenu: 'Page sections',
   },
 
   nav: {
@@ -35,6 +36,7 @@ const en = {
     ],
     download: 'Get Q',
     switchLocale: 'ع',
+    here: 'You’re here',
   },
 
   hero: {
@@ -115,7 +117,13 @@ const en = {
     eyebrow: 'Before you download',
     title: 'Got a question?',
     lead: 'We printed the answers on one receipt: short, clear and free of charge.',
-    contact: 'Didn’t find your answer? Email us at {email}',
+    ticket: {
+      take: 'Take a number',
+      now: 'Now serving',
+      label: 'Your number',
+      question: 'Your question isn’t on the receipt?',
+      action: 'Email us',
+    },
     receipt: {
       title: 'Question receipt',
       count: { one: '{n} question', other: '{n} questions' },

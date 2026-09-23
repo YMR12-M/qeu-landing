@@ -17,16 +17,29 @@
   gap: clamp(3rem, 5vw, 6rem);
 }
 
+/* Computers: the heading and the ticket dispenser share the counter beside the receipt.
+   Phones keep the reading order: heading, receipt, then the ticket for anything left. */
 @media (min-width: 64em) {
   .layout {
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'intro printer'
+      'queue printer';
     align-items: start;
+    row-gap: clamp(2.5rem, 4vw, 4.5rem);
   }
 
-  /* The question stays in view beside the receipt while it's read. */
   .intro {
-    position: sticky;
-    inset-block-start: calc(var(--header-height) + 3rem);
+    grid-area: intro;
+  }
+
+  .printer {
+    grid-area: printer;
+  }
+
+  .queue {
+    grid-area: queue;
   }
 }
 
@@ -73,26 +86,11 @@
   color: var(--glow);
 }
 
-.contact {
-  margin-block-start: 2.25rem;
-  font-weight: 500;
-  color: rgb(255 255 255 / 0.78);
-}
-
 .mail {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.3em;
   overflow-wrap: anywhere;
-}
-
-.contact .mail {
-  color: var(--white);
-  text-decoration-color: var(--glow);
-}
-
-.contact .mail:hover {
-  color: var(--glow);
 }
 
 /* ── The printer ────────────────────────────────────────────────── */
@@ -403,4 +401,212 @@
   .slot {
     margin-inline: -0.5rem;
   }
+}
+
+/* ── The take-a-number dispenser ────────────────────────────────── */
+
+.queue {
+  inline-size: min(100%, 23rem);
+  margin-inline: auto;
+}
+
+@media (min-width: 64em) {
+  .queue {
+    margin-inline: 0;
+  }
+}
+
+/* The machine: "now serving", in amber LED digits, above the slot the ticket comes out of. */
+.dispenser {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1.125rem 1.5rem;
+  border-radius: 1.25rem 1.25rem 0.875rem 0.875rem;
+  background: linear-gradient(#17444d, #05222a);
+  box-shadow:
+    inset 0 1px 0 rgb(159 227 234 / 0.22),
+    0 1rem 2rem -1rem rgb(0 0 0 / 0.65);
+}
+
+.dispenser::after {
+  content: '';
+  position: absolute;
+  inset-inline: 1.5rem;
+  inset-block-end: 0.5rem;
+  block-size: 0.1875rem;
+  border-radius: var(--pill);
+  background: #010c0f;
+}
+
+.nowServing {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(159 227 234 / 0.75);
+}
+
+.nowServing:lang(ar) {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+
+.display {
+  padding: 0.125rem 0.625rem;
+  border-radius: 0.5rem;
+  background: #021216;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--star);
+  text-shadow: 0 0 0.625rem rgb(255 196 61 / 0.55);
+}
+
+/* Clipped along the top only: the ticket comes out of the slot, its shadow falls freely. */
+.ticketFeed {
+  margin-block-start: -0.625rem;
+  clip-path: inset(0 -3rem -6rem);
+}
+
+.ticketPaper {
+  margin-inline: 1.25rem;
+  rotate: 2.5deg;
+  transform-origin: 50% 0;
+  filter: drop-shadow(0 1.25rem 1.5rem rgb(1 12 15 / 0.55));
+  transition: rotate var(--duration-base) var(--ease-out);
+}
+
+.ticketPaper:hover {
+  rotate: 0.5deg;
+}
+
+/* Scrolled into view, the machine hands out the ticket and calls the number. */
+.queue[data-reveal='pending'] .ticketPaper {
+  translate: 0 -100%;
+}
+
+.queue[data-reveal='shown'] .ticketPaper {
+  transition:
+    translate 1.2s cubic-bezier(0.3, 0.6, 0.2, 1) 0.3s,
+    rotate var(--duration-base) var(--ease-out);
+}
+
+.queue[data-reveal='shown'] .display {
+  animation: call 0.5s steps(1) 1.5s 3;
+}
+
+@keyframes call {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+/* The ticket: aqua card, a stub that tears off along a perforation with a notch each side. */
+.ticket {
+  --cut: 3.625rem; /* the perforation, from the ticket's top (its first 0.625rem is in the slot) */
+  --notch: 0.625rem;
+  --focus-ring: var(--night);
+  padding: 0 1.375rem 1.5rem;
+  background: var(--glow);
+  color: var(--night);
+  mask:
+    radial-gradient(circle at 0 var(--cut), #0000 var(--notch), #000 calc(var(--notch) + 0.5px)) 0
+      0 / 51% 100% no-repeat,
+    radial-gradient(circle at 100% var(--cut), #0000 var(--notch), #000 calc(var(--notch) + 0.5px))
+      100% 0 / 51% 100% no-repeat;
+}
+
+.stub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  block-size: var(--cut);
+  padding-block-start: 0.625rem; /* clear of the machine's slot */
+  border-block-end: 2px dashed rgb(4 40 47 / 0.28);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--deep);
+}
+
+.stub:lang(ar) {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+
+.ticketLogo {
+  inline-size: 2.75rem;
+  block-size: auto;
+  color: var(--deep);
+}
+
+.ticketLabel {
+  margin-block-start: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--deep);
+}
+
+.ticketLabel:lang(ar) {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+
+.ticketNumber {
+  font-family: var(--font-mono);
+  font-size: clamp(4.5rem, 6vw, 6rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.ticketQuestion {
+  margin-block-start: 0.875rem;
+  font-size: 1.125rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.ticketAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  margin-block-start: 1rem;
+  padding-inline: 1.5rem;
+  border-radius: var(--pill);
+  background: var(--night);
+  color: var(--glow);
+  font-weight: 700;
+  transition: background-color var(--duration-fast) ease;
+}
+
+.ticketAction:hover {
+  background: var(--deep);
+}
+
+.ticketEmail {
+  margin-block-start: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--deep);
+  overflow-wrap: anywhere;
 }

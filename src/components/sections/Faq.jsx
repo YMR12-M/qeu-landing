@@ -9,6 +9,8 @@ import styles from './Faq.module.css';
 
 const EMAIL = site.contact.email;
 
+const twoDigits = (value) => String(value).padStart(2, '0');
+
 // The barcode under the total is decoration. Its bars come from a fixed seed, so the
 // pre-rendered HTML and the browser draw exactly the same ones.
 const BARCODE = (() => {
@@ -42,6 +44,8 @@ function withEmailLink(text) {
 /**
  * «عندك سؤال؟» — the FAQ, printed on a till receipt that feeds out of a printer slot as it
  * scrolls into view: dashed rules, a torn edge, a barcode, and a total that comes to "free".
+ * Beside it, the counter's other machine: a take-a-number dispenser serving the receipt's
+ * last question, whose ticket — the next number — is the way to ask one of your own.
  *
  * Each question is a native <details> (one open at a time), so the answers work before
  * hydration and without JavaScript, with the browser's own keyboard and screen-reader
@@ -50,9 +54,11 @@ function withEmailLink(text) {
 export function Faq() {
   const { t, figures, locale } = useLocale();
   const { faq } = t;
-  const { receipt } = faq;
+  const { receipt, ticket } = faq;
   const feedRef = useRef(null);
+  const queueRef = useRef(null);
   useScrollReveal(feedRef);
+  useScrollReveal(queueRef);
 
   return (
     <section id="faq" className={styles.section} aria-labelledby="faq-title">
@@ -63,7 +69,6 @@ export function Faq() {
             {faq.title}
           </h2>
           <p className={styles.lead}>{faq.lead}</p>
-          <p className={styles.contact}>{withEmailLink(faq.contact)}</p>
         </div>
 
         <div className={styles.printer}>
@@ -88,7 +93,7 @@ export function Faq() {
                   <details key={item.id} className={styles.item} name="faq">
                     <summary className={styles.question}>
                       <span className={styles.number} aria-hidden="true">
-                        {String(index + 1).padStart(2, '0')}
+                        {twoDigits(index + 1)}
                       </span>
                       <span className={styles.questionText}>{item.question}</span>
                       <span className={styles.leader} aria-hidden="true" />
@@ -118,6 +123,36 @@ export function Faq() {
                   ))}
                 </svg>
                 <p className={styles.thanks}>{receipt.thanks}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div ref={queueRef} className={styles.queue}>
+          <div className={styles.dispenser} aria-hidden="true">
+            <span className={styles.nowServing}>{ticket.now}</span>
+            <span className={styles.display}>{twoDigits(faq.items.length)}</span>
+          </div>
+          <div className={styles.ticketFeed}>
+            <div className={styles.ticketPaper}>
+              <div className={styles.ticket}>
+                <div className={styles.stub} aria-hidden="true">
+                  <span>{ticket.take}</span>
+                  <Logo className={styles.ticketLogo} />
+                </div>
+                <p className={styles.ticketLabel} aria-hidden="true">
+                  {ticket.label}
+                </p>
+                <p className={styles.ticketNumber} aria-hidden="true">
+                  {twoDigits(faq.items.length + 1)}
+                </p>
+                <p className={styles.ticketQuestion}>{ticket.question}</p>
+                <a className={styles.ticketAction} href={`mailto:${EMAIL}`}>
+                  {ticket.action}
+                </a>
+                <p className={styles.ticketEmail}>
+                  <span dir="ltr">{EMAIL}</span>
+                </p>
               </div>
             </div>
           </div>

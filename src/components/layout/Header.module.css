@@ -1,95 +1,289 @@
-.sentinel {
-  position: absolute;
-  inset-block-start: 0;
-  inline-size: 1px;
-  block-size: 1px;
-}
+/*
+ * The navigation island: a capsule floating over the page, tinted by the section beneath
+ * it, open at the top and folded into a "you are here" pill while reading. No bar, no rule:
+ * the sections run straight up under it.
+ */
 
 .header {
-  position: sticky;
+  position: fixed;
   inset-block-start: 0;
+  inset-inline: 0;
   z-index: 60;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  block-size: var(--header-height);
-  padding-inline: var(--header-pad);
-  background: var(--header-bg);
-  border-block-end: 1px solid var(--line);
-  transition: box-shadow var(--duration-base) ease;
+  justify-content: center;
+  padding: 0.75rem clamp(0.75rem, 3vw, 2rem) 0;
+  pointer-events: none; /* only the island itself takes clicks */
 }
 
-.header[data-scrolled] {
-  box-shadow: 0 0.5rem 1.5rem -1.25rem rgb(4 40 47 / 0.35);
+.island {
+  --island-bg: rgb(252 253 253 / 0.84);
+  --island-fg: var(--text);
+  --island-brand: var(--deep);
+  --island-soft: var(--muted);
+  --island-line: rgb(4 40 47 / 0.1);
+  --island-blob: #e2f2f3; /* a teal tint: the marker reads on the pale glass */
+  --island-accent: var(--brand-text);
+  --island-shadow: 0 0.75rem 2rem -1.25rem rgb(4 40 47 / 0.4);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  max-inline-size: 100%;
+  padding: 0.3125rem;
+  border: 1px solid var(--island-line);
+  border-radius: var(--pill);
+  background: var(--island-bg);
+  color: var(--island-fg);
+  box-shadow: var(--island-shadow);
+  backdrop-filter: blur(18px) saturate(1.5);
+  pointer-events: auto;
+  transition:
+    background-color 450ms ease,
+    border-color 450ms ease,
+    color 450ms ease,
+    box-shadow 450ms ease;
 }
+
+/* Over a dark section it turns to dark glass, so it reads as part of that section. */
+.header[data-tone='dark'] .island {
+  --island-bg: rgb(4 40 47 / 0.8);
+  --island-fg: var(--white);
+  --island-brand: var(--white);
+  --island-soft: rgb(159 227 234 / 0.82);
+  --island-line: rgb(159 227 234 / 0.18);
+  --island-blob: rgb(159 227 234 / 0.16);
+  --island-accent: var(--glow);
+  --island-shadow: 0 0.75rem 2rem -1rem rgb(0 0 0 / 0.55);
+  --focus-ring: var(--glow);
+}
+
+/* Reading progress, drawn along the island's lower edge as the page scrolls. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .island::after {
+      content: '';
+      position: absolute;
+      inset-inline: 1.75rem;
+      inset-block-end: -1px;
+      block-size: 2px;
+      border-radius: var(--pill);
+      background: var(--island-accent);
+      transform-origin: left;
+      animation-name: read;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+    }
+
+    .header:dir(rtl) .island::after {
+      transform-origin: right;
+    }
+  }
+}
+
+@keyframes read {
+  from {
+    scale: 0 1;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+
+/* ── Brand ──────────────────────────────────────────────────────── */
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  color: var(--deep);
+  min-block-size: 2.75rem;
+  padding-inline: 0.3125rem;
+  color: var(--island-brand);
 }
 
 .icon {
-  inline-size: clamp(2.25rem, 2.2917vw, 2.75rem);
+  inline-size: 2.25rem;
   block-size: auto;
-  border-radius: 22%;
+  border-radius: 28%;
+}
+
+.wordmarkBox {
+  display: none;
 }
 
 .wordmark {
-  inline-size: clamp(3.5rem, 3.5vw, 4.25rem);
+  inline-size: 3.5rem;
   block-size: auto;
+  margin-inline: 0.625rem 0.375rem;
 }
 
-.nav {
-  display: flex;
-  align-items: center;
-  gap: clamp(1rem, 1.875vw, 2.25rem);
+/* ── The sections, open (computers) ─────────────────────────────── */
+
+.directory {
+  display: none;
+}
+
+.track {
+  position: relative;
+}
+
+/* "You are here": a liquid marker. The end moving towards the new link sets off first,
+   the other follows a beat later — it stretches across, then settles. */
+.blob {
+  position: absolute;
+  inset-block: 0;
+  left: var(--blob-left, 0);
+  right: var(--blob-right, 100%);
+  border-radius: var(--pill);
+  background: var(--island-blob);
+  opacity: 0;
+  transition:
+    left 420ms var(--ease-out),
+    right 420ms var(--ease-out),
+    opacity var(--duration-fast) ease,
+    background-color 450ms ease;
+}
+
+.track[data-moving='right'] .blob {
+  transition:
+    left 420ms var(--ease-out) 110ms,
+    right 420ms var(--ease-out),
+    opacity var(--duration-fast) ease,
+    background-color 450ms ease;
+}
+
+.track[data-moving='left'] .blob {
+  transition:
+    left 420ms var(--ease-out),
+    right 420ms var(--ease-out) 110ms,
+    opacity var(--duration-fast) ease,
+    background-color 450ms ease;
+}
+
+.track[data-blob] .blob {
+  opacity: 1;
 }
 
 .links {
-  display: none;
+  position: relative;
+  display: flex;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-@media (min-width: 64em) {
-  .links {
-    display: flex;
-    gap: clamp(1.25rem, 1.875vw, 2.25rem);
-  }
-}
-
 .link {
   display: inline-flex;
-  align-items: center;
-  min-block-size: 2.75rem;
+  align-items: baseline;
+  gap: 0.4375rem;
+  padding: 0.6875rem clamp(0.75rem, 1vw, 1.0625rem);
+  border-radius: var(--pill);
   font-size: var(--text-nav);
   font-weight: 500;
-  color: var(--text);
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--island-soft);
   transition: color var(--duration-fast) ease;
 }
 
-.link:hover {
-  color: var(--brand-text);
+.link:hover,
+.link[aria-current] {
+  color: var(--island-fg);
 }
 
+/* Section numbers, like the numbers over supermarket aisles. */
+.aisle {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--island-accent);
+  opacity: 0.7;
+}
+
+.link[aria-current] .aisle {
+  opacity: 1;
+}
+
+/* ── The pill: where you are, and the way into the receipt ──────── */
+
+.now {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  padding-inline: 1rem 0.875rem;
+  border-radius: var(--pill);
+  background: var(--island-blob);
+  color: var(--island-fg);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  list-style: none;
+  transition:
+    background-color 450ms ease,
+    color 450ms ease;
+}
+
+.now::-webkit-details-marker {
+  display: none;
+}
+
+.nowAisle {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--island-accent);
+}
+
+/* Each new section name rolls up into place, like a departure board. */
+.nowLabel {
+  display: inline-block;
+  animation: roll-in 450ms var(--ease-out);
+}
+
+@keyframes roll-in {
+  from {
+    translate: 0 70%;
+    opacity: 0;
+  }
+}
+
+.nowIcon {
+  flex: none;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  color: var(--island-accent);
+}
+
+.menu[open] .now {
+  background: var(--island-accent);
+  color: var(--night);
+}
+
+.menu[open] .nowAisle,
+.menu[open] .nowIcon {
+  color: var(--night);
+}
+
+/* ── Language ───────────────────────────────────────────────────── */
+
 .locale {
-  display: inline-flex;
+  display: none;
   align-items: center;
   gap: 0.4rem;
   min-block-size: 2.75rem;
+  padding-inline: 0.75rem 0.875rem;
   font-family: var(--font-mono);
   font-size: var(--text-mono);
   font-weight: 500;
-  color: var(--muted);
+  white-space: nowrap;
+  color: var(--island-soft);
   transition: color var(--duration-fast) ease;
 }
 
 .locale:hover {
-  color: var(--deep);
+  color: var(--island-fg);
 }
 
 .locale:lang(ar) {
@@ -99,6 +293,184 @@
 }
 
 .globe {
+  flex: none;
   inline-size: 1.125em;
   block-size: 1.125em;
+}
+
+/* ── Computers: open at the top, folding while reading down ─────── */
+
+@media (min-width: 64em) {
+  .wordmarkBox,
+  .directory,
+  .locale,
+  .menu {
+    display: block;
+    overflow: hidden;
+    transition:
+      max-inline-size 520ms var(--ease-out),
+      opacity 320ms ease,
+      visibility 0s linear;
+  }
+
+  .locale {
+    display: inline-flex;
+  }
+
+  .wordmarkBox {
+    max-inline-size: 5rem;
+  }
+
+  .directory {
+    max-inline-size: 48rem;
+  }
+
+  .locale {
+    max-inline-size: 6rem;
+  }
+
+  .menu {
+    max-inline-size: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* Folded: only the icon, the pill naming the section, and the store button remain. */
+  .header[data-folded] :is(.wordmarkBox, .directory, .locale) {
+    max-inline-size: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      max-inline-size 520ms var(--ease-out),
+      opacity 200ms ease,
+      visibility 0s linear 520ms;
+  }
+
+  .header[data-folded] .menu {
+    max-inline-size: 20rem;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* ── The receipt: the sections, printed out from under the island ── */
+
+.feed {
+  position: absolute;
+  inset-block-start: calc(100% + 0.625rem);
+  left: 50%;
+  inline-size: min(21rem, calc(100vw - 1.5rem));
+  translate: -50% 0;
+  clip-path: inset(0 -2rem -3rem);
+  filter: drop-shadow(0 1.25rem 1.5rem rgb(4 40 47 / 0.3));
+}
+
+.receipt {
+  --tooth: 1rem; /* one tooth of the torn edge */
+  --rule: #b9cbce;
+  --focus-ring: var(--brand-text);
+  padding: 1rem 1.25rem calc(1rem + var(--tooth) / 2);
+  background: var(--white);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono);
+  /* Torn bottom edge, as on the FAQ's receipt. */
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% /
+    var(--tooth) 100%;
+}
+
+.receiptTitle {
+  padding-block-end: 0.75rem;
+  border-block-end: 1.5px dashed var(--rule);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.receiptTitle:lang(ar) {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+
+.receiptList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.receiptLink {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding-block: 0.875rem;
+  border-block-end: 1.5px dashed var(--rule);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.receiptLink[aria-current] {
+  color: var(--deep);
+}
+
+.receiptLink .aisle {
+  flex: none;
+  inline-size: 1.75rem;
+  color: var(--brand-text);
+  opacity: 1;
+}
+
+.leader {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  border-block-end: 2px dotted var(--rule);
+}
+
+/* "You are here", stamped on the line being read. */
+.here {
+  flex: none;
+  align-self: center;
+  padding: 0.125rem 0.625rem;
+  border-radius: var(--pill);
+  background: var(--brand);
+  color: var(--on-brand);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.here:lang(ar) {
+  font-family: var(--font-sans);
+  font-weight: 700;
+}
+
+.receiptLocale {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  margin-block-start: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* Opening, the receipt prints: it feeds down out from under the island. */
+@media (prefers-reduced-motion: no-preference) {
+  .menu[open] .receipt {
+    transition: translate 450ms var(--ease-out);
+  }
+
+  @starting-style {
+    .menu[open] .receipt {
+      translate: 0 -100%;
+    }
+  }
 }
