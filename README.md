@@ -19,15 +19,15 @@ Node ≥ 20.19.
 
 ## What the page is
 
-| Section                                                              | Source                                                                |
-| -------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| Header, hero with drifting app screens                               | v3                                                                    |
-| «ليه كيو؟» — pinned, scroll-driven benefits with the matching screen | v3                                                                    |
-| «كيف يشتغل / عروضنا تجيك وبنفس السعر» — three steps with screens     | **kept** from the earlier proposal (takes v3's "inside the app" slot) |
-| «عندك سؤال؟» — FAQ printed on a till receipt                         | **new**: answers restate the page and the Google Play listing only    |
-| Google Play figures (count up on scroll)                             | v3                                                                    |
-| «حمّل كيو» with the app-icon stage, phone and QR card                | v3 text + **kept** stage from the earlier proposal                    |
-| Footer                                                               | v3, with the missing legal and contact details added                  |
+| Section                                                                                                           | Source                                                                               |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Header, hero with drifting app screens                                                                            | v3                                                                                   |
+| «ليه كيو؟» — pinned, scroll-driven benefits with the matching screen                                              | v3                                                                                   |
+| «كيف يشتغل / عروضنا تجيك وبنفس السعر» — three steps on the order's route, Qeu's van driving to the door on scroll | **kept** from the earlier proposal (takes v3's "inside the app" slot); route **new** |
+| «عندك سؤال؟» — FAQ printed on a till receipt                                                                      | **new**: answers restate the page and the Google Play listing only                   |
+| Google Play figures (count up on scroll)                                                                          | v3                                                                                   |
+| «حمّل كيو» with the app-icon stage, phone and QR card                                                             | v3 text + **kept** stage from the earlier proposal                                   |
+| Footer                                                                                                            | v3, with the missing legal and contact details added                                 |
 
 ### Changed from v3
 

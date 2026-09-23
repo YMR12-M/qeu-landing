@@ -1,12 +1,319 @@
+/*
+ * «كيف يشتغل» — the order's route: a tracker line with a stop over each step, Qeu's van
+ * driving from the first stop to the house at the last as the section scrolls by, and the
+ * steps hanging from their stops on dotted threads.
+ */
+
 .section {
+  --gap: clamp(1.25rem, 2.0833vw, 2.5rem); /* shared by route and steps: stops sit over columns */
+  --rule: #b9cbce;
   padding-block: var(--section-space) clamp(3rem, 4.1667vw, 5rem);
   background: var(--surface);
 }
 
+/* ── The route ──────────────────────────────────────────────────── */
+
+.route {
+  --track: 0.3125rem;
+  --dot: 1rem;
+  --house: 1.375rem;
+  --van-width: 4.5rem;
+  --van-height: calc(var(--van-width) * 57 / 136);
+  --line-y: calc(var(--van-height) + 0.75rem); /* the tracker line, from the route's top */
+  --stop-center: calc((100% - 2 * var(--gap)) / 6); /* the first stop, from the start edge */
+  --travel: calc((100cqi - 2 * var(--gap)) * 2 / 3 + 2 * var(--gap)); /* first stop → last */
+  --park: calc(var(--house) / 2 + 0.25rem); /* the van stops this short of the door */
+  --dir: 1;
+  --stop-off: #a9bec2;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--gap);
+  block-size: calc(var(--line-y) + var(--dot) / 2 + 2rem);
+  margin-block-start: clamp(2.5rem, 3.3333vw, 4rem);
+  container-type: inline-size;
+  view-timeline: --route block;
+}
+
+/* Right to left, the steps — and the van — travel leftwards. */
+.route:dir(rtl) {
+  --dir: -1;
+}
+
+/* The route still to drive, dashed like a planned route on a map; it ends where the van
+   parks, with the house standing just beyond… */
+.route::before {
+  content: '';
+  position: absolute;
+  inset-block-start: calc(var(--line-y) - var(--track) / 2);
+  inset-inline-start: var(--stop-center);
+  inset-inline-end: calc(var(--stop-center) + var(--park));
+  block-size: var(--track);
+  background: repeating-linear-gradient(90deg, var(--rule) 0 0.625rem, transparent 0 1.125rem);
+}
+
+/* …and the stretch already driven, solid like an order tracker's progress. */
+.fill {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: calc(var(--line-y) - var(--track) / 2);
+  inset-inline-start: var(--stop-center);
+  inset-inline-end: calc(var(--stop-center) + var(--park));
+  block-size: var(--track);
+  border-radius: var(--pill);
+  background: var(--brand);
+  transform-origin: left;
+}
+
+.route:dir(rtl) .fill {
+  transform-origin: right;
+}
+
+/* A stop: a node on the line and its number. Coloured = reached. */
+.stop {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.625rem;
+  padding-block-start: calc(var(--line-y) - var(--dot) / 2);
+  color: var(--brand-text);
+}
+
+.dot {
+  inline-size: var(--dot);
+  block-size: var(--dot);
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow:
+    0 0 0 0.1875rem var(--surface),
+    0 0 0 0.4375rem color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.stopNumber {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+/* The last stop is the house itself, standing on the line (its node keeps the spacing). */
+.stop:has(.house) .dot {
+  visibility: hidden;
+}
+
+.house {
+  position: absolute;
+  inset-block-start: calc(var(--line-y) - var(--track) / 2 - var(--house) * 22 / 24);
+  left: 50%;
+  inline-size: var(--house);
+  block-size: auto;
+  translate: -50% 0;
+  fill: currentColor;
+}
+
+/* ── The van ────────────────────────────────────────────────────── */
+
+/* Parked at the door, front bumper just short of the house: the arrival, and the resting state. */
+.van {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: calc(var(--line-y) - var(--track) / 2 - var(--van-height));
+  inset-inline-start: calc(var(--stop-center) - var(--van-width) * 130 / 136);
+  inline-size: var(--van-width);
+  block-size: var(--van-height);
+  translate: calc((var(--travel) - var(--park)) * var(--dir)) 0;
+}
+
+.vanArt {
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+}
+
+.route:dir(rtl) .vanArt {
+  scale: -1 1;
+}
+
+.vanBody {
+  fill: var(--white);
+  stroke: #c3d3d6;
+  stroke-width: 1.25;
+}
+
+.waveLight {
+  fill: var(--icon-aqua);
+}
+
+.waveBrand {
+  fill: var(--brand);
+}
+
+.vanWindow {
+  fill: var(--deep);
+}
+
+.vanSeam {
+  fill: none;
+  stroke: #d3e0e2;
+}
+
+.headlight {
+  fill: var(--star);
+}
+
+.bumper {
+  fill: none;
+  stroke: var(--deep);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.wheel {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.tyre {
+  fill: var(--deep);
+}
+
+.hub {
+  fill: #e8f0f1;
+}
+
+.spokes {
+  fill: none;
+  stroke: var(--deep);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.vanShadow {
+  fill: rgb(4 40 47 / 0.14);
+}
+
+/* Motion lines behind the van — only while it's driving. */
+.speed {
+  fill: none;
+  stroke: var(--deep);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  opacity: 0;
+}
+
+/* The wordmark on the van's side: never mirrored, because it isn't part of the flipped art. */
+.vanLogo {
+  position: absolute;
+  inset-block-start: 23%;
+  inset-inline-start: 28.7%;
+  inline-size: 17.6%;
+  block-size: auto;
+  color: var(--deep);
+}
+
+/* ── The drive ──────────────────────────────────────────────────── */
+
+/* Tied to scrolling, run by the browser off the main thread. Elsewhere — or with reduced
+   motion — nothing animates and the van stays parked at the door, every stop reached. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .van,
+    .fill,
+    .wheel,
+    .speed,
+    .stop[data-stop='2'],
+    .stop[data-stop='3'] {
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --route;
+      animation-range: cover 15% cover 50%;
+    }
+
+    .van {
+      animation-name: drive;
+    }
+
+    .fill {
+      animation-name: fill-in;
+    }
+
+    .wheel {
+      animation-name: roll;
+    }
+
+    .speed {
+      animation-name: driving;
+    }
+
+    .stop[data-stop='2'] {
+      animation-name: reach-middle;
+    }
+
+    .stop[data-stop='3'] {
+      animation-name: reach-door;
+    }
+  }
+}
+
+@keyframes drive {
+  from {
+    translate: 0 0;
+  }
+}
+
+@keyframes fill-in {
+  from {
+    scale: 0 1;
+  }
+}
+
+@keyframes roll {
+  to {
+    rotate: 12turn;
+  }
+}
+
+@keyframes driving {
+  0%,
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes reach-middle {
+  0%,
+  46% {
+    color: var(--stop-off);
+  }
+  54%,
+  100% {
+    color: var(--brand-text);
+  }
+}
+
+@keyframes reach-door {
+  0%,
+  94% {
+    color: var(--stop-off);
+  }
+  100% {
+    color: var(--brand-text);
+  }
+}
+
+/* ── The steps ──────────────────────────────────────────────────── */
+
 .steps {
+  --hang: 1.75rem; /* the thread from a stop down to its step */
+  --drop: clamp(3rem, 4.1667vw, 5rem); /* the middle step hangs lower, breaking the grid */
   display: grid;
   gap: 1.5rem;
-  margin: clamp(2.5rem, 3.3333vw, 4rem) 0 0;
+  margin: 1.5rem 0 0;
   padding: 0;
   list-style: none;
 }
@@ -23,6 +330,10 @@
   overflow: hidden;
   border-radius: var(--radius-md);
   background: var(--screen-backdrop);
+  box-shadow: 0 1.25rem 2rem -1.5rem rgb(4 40 47 / 0.45);
+  transition:
+    translate var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
 }
 
 .image {
@@ -53,27 +364,49 @@
   color: var(--muted);
 }
 
-/* Tablet and up: three columns, the middle one dropped to break the grid. */
+/* Tablet and up: three columns under the three stops, each hanging on its thread. */
 @media (min-width: 48em) {
+  .route {
+    --van-width: 8.5rem; /* 136px: the drawing's own units, pixel for pixel */
+    --house: 1.625rem;
+  }
+
   .steps {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(1.25rem, 2.0833vw, 2.5rem);
+    column-gap: var(--gap);
+    margin-block-start: var(--hang);
     align-items: start;
   }
 
   .step {
+    position: relative;
     grid-template-columns: none;
     align-items: start;
     gap: 1.5rem;
   }
 
+  .step::before {
+    content: '';
+    position: absolute;
+    inset-block-end: 100%;
+    inset-inline-start: calc(50% - 0.75px);
+    block-size: var(--thread, var(--hang));
+    border-inline-start: 1.5px dotted var(--rule);
+  }
+
   .step:nth-child(2) {
-    margin-block-start: clamp(3rem, 4.1667vw, 5rem);
+    --thread: calc(var(--hang) + var(--drop));
+    margin-block-start: var(--drop);
   }
 
   .frame {
     aspect-ratio: 4 / 5;
     border-radius: var(--radius-lg);
+  }
+
+  .step:hover .frame {
+    translate: 0 -0.375rem;
+    box-shadow: 0 2rem 2.5rem -1.75rem rgb(4 40 47 / 0.5);
   }
 
   .image {
@@ -84,6 +417,11 @@
 
   .step[data-step='delivery'] .image {
     object-position: center;
+  }
+
+  /* The stop above each step already numbers it. */
+  .number {
+    display: none;
   }
 
   .copy {
