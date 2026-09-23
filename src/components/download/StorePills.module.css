@@ -1,0 +1,48 @@
+.list {
+  display: grid;
+  gap: 1rem;
+  inline-size: min(100%, clamp(15rem, 14.4792vw, 17.375rem));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  block-size: clamp(3.25rem, 3.125vw, 3.75rem);
+  border: 1.5px solid var(--deep);
+  border-radius: var(--pill);
+  font-size: clamp(1.0625rem, 1.0417vw, 1.25rem);
+  font-weight: 700;
+  transition:
+    background-color var(--duration-fast) ease,
+    color var(--duration-fast) ease,
+    filter var(--duration-fast) ease;
+}
+
+.solid {
+  background: var(--deep);
+  color: var(--white);
+}
+
+.solid:hover {
+  filter: brightness(1.12);
+}
+
+.outline {
+  color: var(--deep);
+}
+
+.outline:hover {
+  background: var(--deep);
+  color: var(--white);
+}
+
+.icon {
+  flex: none;
+  inline-size: 1.25em;
+  block-size: 1.25em;
+}

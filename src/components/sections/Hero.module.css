@@ -1,0 +1,129 @@
+.hero {
+  --screen-height: clamp(14rem, 25vw, 30rem);
+  --screen-gap: clamp(0.875rem, 1.25vw, 1.5rem);
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-block-size: clamp(32rem, 34.9vw, 41.875rem);
+  overflow: hidden;
+  background: var(--night);
+}
+
+/* ── Drifting screens ─────────────────────────────────────────────── */
+
+.drift {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  direction: ltr;
+  opacity: 0.9;
+}
+
+.track {
+  display: flex;
+  gap: var(--screen-gap);
+  inline-size: max-content;
+  padding-inline-end: var(--screen-gap);
+  animation: drift var(--drift-duration) linear infinite;
+}
+
+@keyframes drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.screen {
+  flex: none;
+  inline-size: auto;
+  max-inline-size: none;
+  block-size: var(--screen-height);
+  border-radius: var(--radius-sm);
+}
+
+/* The copy sits on the reading-start side, so the scrim is darkest there. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to left,
+    rgb(4 40 47 / 0.95),
+    rgb(4 40 47 / 0.9) 58%,
+    rgb(4 40 47 / 0.34)
+  );
+}
+
+.hero:dir(ltr) .scrim {
+  background: linear-gradient(
+    to right,
+    rgb(4 40 47 / 0.95),
+    rgb(4 40 47 / 0.9) 58%,
+    rgb(4 40 47 / 0.34)
+  );
+}
+
+/* Phones: copy on top, the screens drift along the bottom edge where the scrim lets them show. */
+@media (max-width: 47.99em) {
+  .hero {
+    align-items: flex-start;
+    min-block-size: 40rem;
+  }
+
+  .drift {
+    align-items: flex-end;
+    padding-block-end: 1.5rem;
+  }
+
+  .scrim,
+  .hero:dir(ltr) .scrim {
+    background: linear-gradient(
+      to bottom,
+      rgb(4 40 47 / 0.97) 0%,
+      rgb(4 40 47 / 0.92) 48%,
+      rgb(4 40 47 / 0.3) 100%
+    );
+  }
+
+  .content {
+    padding-block: 3rem 17rem;
+  }
+}
+
+/* ── Copy ─────────────────────────────────────────────────────────── */
+
+.content {
+  position: relative;
+  inline-size: 100%;
+  padding-block: 4rem;
+  padding-inline: clamp(1.25rem, 6.25vw, 7.5rem);
+}
+
+.title {
+  max-inline-size: 18em;
+  font-size: var(--text-hero);
+  line-height: var(--leading-hero);
+  color: var(--white);
+}
+
+.line {
+  display: block;
+}
+
+.accent {
+  color: var(--glow);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem clamp(1rem, 1.4583vw, 1.75rem);
+  margin-block-start: clamp(1.75rem, 2.0833vw, 2.5rem);
+}
+
+.note {
+  font-size: clamp(0.9375rem, 1.0417vw, 1.25rem);
+  font-weight: 500;
+  color: var(--glow);
+}

@@ -1,0 +1,44 @@
+.card {
+  display: none;
+}
+
+/* A QR code only helps on a computer — phones get the store buttons instead. */
+@media (min-width: 64em) and (hover: hover) {
+  .card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-inline-size: 18.5rem;
+    padding: 0.875rem;
+    padding-inline-end: 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    color: var(--text);
+  }
+}
+
+.code {
+  flex: none;
+  inline-size: 6rem;
+  block-size: 6rem;
+}
+
+.copy {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--deep);
+}
+
+.text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--muted);
+}

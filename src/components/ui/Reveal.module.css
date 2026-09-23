@@ -1,0 +1,12 @@
+.reveal[data-reveal='pending'] {
+  opacity: 0;
+  transform: translateY(1.5rem);
+}
+
+.reveal[data-reveal='shown'] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 900ms var(--ease-out) var(--reveal-delay, 0ms),
+    transform 900ms var(--ease-out) var(--reveal-delay, 0ms);
+}

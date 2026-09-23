@@ -1,0 +1,28 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--pill);
+  background: var(--brand);
+  color: var(--on-brand);
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: filter var(--duration-fast) ease;
+}
+
+.button:hover {
+  filter: brightness(0.94);
+}
+
+.md {
+  min-block-size: 3rem;
+  padding: clamp(0.75rem, 0.8333vw, 1rem) clamp(1.5rem, 2.0833vw, 2.5rem);
+  font-size: var(--text-cta);
+}
+
+.sm {
+  min-block-size: 2.75rem;
+  padding: 0.5rem clamp(1rem, 1.0417vw, 1.25rem);
+  font-size: clamp(0.9375rem, 1.0417vw, 1.25rem);
+}

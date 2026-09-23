@@ -1,0 +1,155 @@
+/**
+ * English copy — served at /english.
+ *
+ * The brand is "Q" in English, as on qeu.app/english and the store listing ("كيو | Q").
+ * Benefit texts and the Q-ur line are quoted from qeu.app/english; the rest translates
+ * the Arabic source (listed in README → Content sources for client review).
+ */
+
+const en = {
+  meta: {
+    title: 'Q Shopping App - Easy Grocery Deals & Lowest Prices',
+    description:
+      'Discover Q — the smart grocery shopping app with great deals, the lowest prices and a clear, easy browsing experience for your everyday needs.',
+    siteName: 'Q',
+    ogImageAlt: 'The Q logo — all the deals in one place',
+  },
+
+  a11y: {
+    skipToContent: 'Skip to content',
+    home: 'Q — home',
+    primaryNav: 'Main navigation',
+    storeLinks: 'Download the app',
+    switchLocale: 'عرض الصفحة بالعربي',
+  },
+
+  nav: {
+    items: [
+      { id: 'why', label: 'Why Q' },
+      { id: 'inside', label: 'Inside the app' },
+      { id: 'download', label: 'Download' },
+    ],
+    download: 'Get Q',
+    switchLocale: 'ع',
+  },
+
+  hero: {
+    titleLines: ['An app that’s all deals,', 'from start to finish'],
+    titleAccent: 'with prices you won’t find anywhere else',
+    cta: {
+      default: 'Get Q for free',
+      ios: 'Download free on the App Store',
+      android: 'Download free on Google Play',
+    },
+    note: '100K+ downloads in 8 months',
+  },
+
+  why: {
+    title: 'Why Q?',
+    lead: 'Because Q brings together the best deals, the lowest prices and ready-made collections in one simple, clear experience — shop faster, easier and for less.',
+    items: [
+      {
+        id: 'deals',
+        title: '1+1 Free Deals',
+        text: 'Discover the best available deals on your daily products, from 1+1 offers to clear and simple discounts — all in one place.',
+        imageAlt: 'The Q app home screen: a super deal on Al Fakhama rice with Al Fakhama oil free',
+      },
+      {
+        id: 'search',
+        title: 'Search & Browsing',
+        text: 'Find any product quickly or browse categories with ease. Enjoy a smooth, organized experience without complications.',
+        imageAlt:
+          'The categories screen in the Q app with the search bar: groceries, and fresh produce like fruit and vegetables',
+      },
+      {
+        id: 'prices',
+        title: 'Lowest Prices',
+        text: 'Save money with products that offer the lowest price in their category. Everything is displayed clearly to help you choose fast.',
+        imageAlt:
+          'Products in the Q app with their price before and after the discount, and the size under each one',
+      },
+      {
+        id: 'picks',
+        title: 'Personalized Picks',
+        text: 'Get product suggestions tailored to your taste and needs, so you can discover the right items faster — without overthinking or scrolling forever.',
+        imageAlt:
+          'Q-ur, the smart assistant in the Q app, suggesting “Kabsa ingredients” in one list with an “Add all” button',
+      },
+    ],
+  },
+
+  inside: {
+    eyebrow: 'How it works',
+    title: 'Our deals come to you — at the same price',
+    lead: 'A simple, clear shopping experience with secure payment options and fast, organised delivery right to your door.',
+    steps: [
+      {
+        id: 'offers',
+        title: 'Browse the deals',
+        text: 'A wide range of products, with standout deals and prices you’ll only find on Q.',
+        imageAlt:
+          'The Q app home screen: a five-can Coca-Cola deal and the “prices you’ll only find on Q” section',
+      },
+      {
+        id: 'picks',
+        title: 'Choose and order',
+        text: 'Add what you need to your cart and order in seconds, with secure payment options.',
+        imageAlt:
+          'The “Our picks for you” section of the Q app: products with their price before and after the discount, each with an add button',
+      },
+      {
+        id: 'delivery',
+        title: 'Get it at your door',
+        text: 'Fast, organised delivery — and you track your order step by step.',
+        imageAlt:
+          'The order review screen in the Q app, next to a Q delivery van reading “Our deals come to you at the same price”',
+      },
+    ],
+  },
+
+  stats: {
+    downloads: { unit: 'K+', label: 'downloads on Google Play in the 8 months since launch' },
+    rating: { label: 'rating from phone users on Google Play' },
+    fiveStar: { unit: '%', label: 'of phone ratings are 5 stars ({count} ratings)' },
+    count: { label: 'phone ratings · 1.3K in total' },
+  },
+
+  download: {
+    title: 'Get Q',
+    subtitle: 'Free on your phone',
+    text: 'Available for iPhone and Android. Scan the code or pick your store — the app is free, and the deals start on the very first screen.',
+    source:
+      'Source: the app’s official Google Play page (sa.qeu1.app), captured 20 September 2026.',
+    stageAlt:
+      'The Q app home screen: a super deal on Al Fakhama rice with Al Fakhama oil free, and the “prices you’ll only find on Q” section',
+  },
+
+  stores: {
+    appStore: 'App Store',
+    googlePlay: 'Google Play',
+  },
+
+  qr: {
+    title: 'Browsing on a computer?',
+    text: 'Scan the code with your phone camera to get Q.',
+    alt: 'QR code that opens the Q app download link',
+  },
+
+  footer: {
+    tagline: 'Everything in Q is a deal',
+    contact: {
+      title: 'Contact us',
+      report: 'Report a problem in the app',
+      reportSubject: 'Problem in the Q app',
+      store: 'Q on Google Play',
+    },
+    more: {
+      title: 'More information',
+      privacy: 'Privacy policy',
+    },
+    sourceLine: 'Q · sa.qeu1.app · figures from the official Google Play page',
+    legal: '© {year} {company} — Al-Rehab District, Jeddah',
+  },
+};
+
+export default en;

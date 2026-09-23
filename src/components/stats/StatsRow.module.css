@@ -1,0 +1,61 @@
+/* Hairline grid: the 1px gaps show the line colour behind the cells, as in v3. */
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  background: var(--line);
+}
+
+@media (min-width: 64em) {
+  .row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 2rem 1.5rem 1.75rem;
+  background: var(--surface);
+}
+
+.figure {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.number {
+  font-family: var(--font-mono);
+  font-size: var(--text-stat);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--deep);
+}
+
+/* Plex Mono has no Arabic-Indic digits or separators (٬ ٫): set Arabic figures in Tajawal. */
+.number:lang(ar) {
+  font-family: var(--font-sans);
+  font-weight: 700;
+}
+
+.unit {
+  font-size: clamp(1.125rem, 1.25vw, 1.5rem);
+  font-weight: 800;
+  color: var(--brand);
+}
+
+.star {
+  font-size: clamp(1.125rem, 1.25vw, 1.5rem);
+  color: var(--star);
+}
+
+.label {
+  font-size: clamp(0.9375rem, 0.9375vw, 1.125rem);
+  font-weight: 500;
+  color: var(--muted);
+}

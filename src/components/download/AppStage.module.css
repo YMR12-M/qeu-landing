@@ -1,0 +1,44 @@
+.visual {
+  position: relative;
+  justify-self: center;
+  inline-size: min(100%, 27rem);
+}
+
+.stage {
+  position: relative;
+  aspect-ratio: 5 / 6;
+  overflow: hidden;
+  border-radius: 22%;
+  background: var(--icon-aqua);
+}
+
+.logo {
+  position: absolute;
+  inset-block-start: 10%;
+  inset-inline: 0;
+  inline-size: 46%;
+  margin-inline: auto;
+  color: var(--white);
+}
+
+.phone {
+  position: absolute;
+  inset-block-start: 34%;
+  inset-inline: 0;
+  inline-size: 62%;
+  margin-inline: auto;
+  filter: drop-shadow(0 1.75rem 2rem rgb(4 40 47 / 0.35));
+}
+
+@media (min-width: 64em) {
+  .stage {
+    aspect-ratio: 4 / 5;
+  }
+
+  .qr {
+    position: absolute;
+    inset-block-end: -1.75rem;
+    inset-inline-start: -3.5rem;
+    box-shadow: var(--shadow-float);
+  }
+}

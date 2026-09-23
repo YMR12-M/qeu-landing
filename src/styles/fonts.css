@@ -1,0 +1,13 @@
+/*
+ * Self-hosted fonts (from @fontsource), as specified by the v3 design:
+ *   Tajawal 400 · 500 · 700 · 800 — all text (Arabic + Latin subsets)
+ *   IBM Plex Mono 400 · 500        — figures, step numbers, fine print
+ * Each subset is a separate file; the browser downloads only what the page renders.
+ */
+
+@import '@fontsource/tajawal/400.css';
+@import '@fontsource/tajawal/500.css';
+@import '@fontsource/tajawal/700.css';
+@import '@fontsource/tajawal/800.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';

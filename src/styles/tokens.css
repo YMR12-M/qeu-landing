@@ -1,0 +1,77 @@
+/*
+ * Design tokens — the Qeu Landing v3 design system.
+ *
+ * Colours and type come straight from the v3 design file. v3 draws at 1920px and scales
+ * everything with the viewport; here each size is a clamp() whose preferred value keeps
+ * that exact proportion (k × 0.8333vw = k rem at 1920px) while the rem floor and ceiling
+ * keep text readable on phones and resizable with browser zoom.
+ */
+
+:root {
+  /* ── Colour · v3 ───────────────────────────────────────────────── */
+  --brand: #17a2ae;
+  --on-brand: #052f38; /* dark text on brand buttons — white fails contrast on #17A2AE */
+  --deep: #0b4a57; /* headings, footer */
+  --text: #12333a;
+  --muted: #3e6e78;
+  --line: #dce5e6;
+  --surface: #f4f7f7;
+  --surface-strong: #edf2f3;
+  --header-bg: #fcfdfd;
+  --night: #04282f; /* hero */
+  --glow: #9fe3ea; /* hero accent line */
+  --star: #ffc43d;
+  --white: #ffffff;
+
+  /* Kept from the previous design: the app-icon aqua and the screenshots' backdrop. */
+  --icon-aqua: #74c7d0;
+  --screen-backdrop: #b8dee4;
+
+  --focus-ring: var(--brand);
+
+  /* ── Type ──────────────────────────────────────────────────────── */
+  --font-sans: 'Tajawal', system-ui, -apple-system, 'Segoe UI', 'Geeza Pro', Tahoma, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Tajawal', ui-monospace, monospace;
+
+  --text-hero: clamp(2.125rem, 3.3333vw, 4rem);
+  --text-h2: clamp(1.875rem, 2.8125vw, 3.375rem);
+  --text-h3: clamp(1.3125rem, 1.875vw, 2.25rem);
+  --text-lead: clamp(1.0625rem, 1.4583vw, 1.75rem);
+  --text-cta: clamp(1rem, 1.25vw, 1.5rem);
+  --text-body: clamp(1rem, 1.0417vw, 1.25rem);
+  --text-nav: clamp(0.9375rem, 0.9375vw, 1.125rem);
+  --text-mono: clamp(0.8125rem, 0.8333vw, 1rem);
+  --text-stat: clamp(2.25rem, 2.8125vw, 3.375rem);
+
+  --leading-hero: 1.125;
+  --leading-heading: 1.33;
+  --leading-body: 1.5;
+
+  /* ── Layout ────────────────────────────────────────────────────── */
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+  --header-height: clamp(4rem, 4.1667vw, 5rem);
+  --header-pad: clamp(1.25rem, 4.1667vw, 5rem);
+  --section-space: clamp(4rem, 5.8333vw, 7rem);
+
+  /* ── Shape & depth ─────────────────────────────────────────────── */
+  --pill: 1000px;
+  --radius-sm: 0.6875rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.75rem;
+  --shadow-soft: 0 0.25rem 0.875rem rgb(23 162 174 / 0.24);
+  --shadow-float:
+    0 2.25rem 4rem -1.75rem rgb(4 40 47 / 0.45), 0 0.75rem 1.5rem -0.75rem rgb(4 40 47 / 0.2);
+
+  /* ── Motion ────────────────────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 200ms;
+  --duration-base: 450ms;
+  --drift-duration: 72s; /* hero screens, one full loop */
+}
+
+/* v3 lays the page out with a 15rem gutter at 1920px — full width on tablets and phones. */
+@media (min-width: 64em) {
+  :root {
+    --gutter: clamp(3rem, 12.5vw, 15rem);
+  }
+}
