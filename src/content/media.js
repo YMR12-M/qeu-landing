@@ -5,6 +5,8 @@
  * (`as=picture` → { sources, img }). All sources are Qeu's own material:
  *   screen-home, screen-categories   → app screens published on qeu.app (device frame included)
  *   screen-picks, screen-chat, step-* → Google Play screenshots, cropped (≈1.8× the provided crops)
+ *   play-*                            → the six Google Play screenshots, whole (1242×2688 originals
+ *                                       scaled to 960px wide); play-delivery-1/-2 are one panorama
  *   app-icon                          → Google Play icon
  *
  * AVIF and WebP are encoded separately because sharp's quality scales differ: AVIF at q50 is
@@ -18,6 +20,18 @@
  */
 
 import appIcon from '../assets/images/app-icon.png?w=48;96;160;240&format=webp&quality=80&as=picture';
+import playPicksAvif from '../assets/images/play-picks.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
+import playPicksWebp from '../assets/images/play-picks.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
+import playAssistantAvif from '../assets/images/play-assistant.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
+import playAssistantWebp from '../assets/images/play-assistant.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
+import playDelivery1Avif from '../assets/images/play-delivery-1.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
+import playDelivery1Webp from '../assets/images/play-delivery-1.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
+import playDelivery2Avif from '../assets/images/play-delivery-2.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
+import playDelivery2Webp from '../assets/images/play-delivery-2.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
+import playOffersAvif from '../assets/images/play-offers.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
+import playOffersWebp from '../assets/images/play-offers.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
+import playSmartAvif from '../assets/images/play-smart.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
+import playSmartWebp from '../assets/images/play-smart.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
 import screenCategoriesAvif from '../assets/images/screen-categories.webp?w=360;540;720&format=avif&quality=50&as=picture';
 import screenCategoriesWebp from '../assets/images/screen-categories.webp?w=360;540;720&format=webp&quality=72&as=picture';
 import screenChatAvif from '../assets/images/screen-chat.webp?w=240;360;540;720&format=avif&quality=50&as=picture';
@@ -36,6 +50,12 @@ import stepPicksWebp from '../assets/images/step-picks.webp?w=240;360;480;720;94
 /** One picture from the two encodings: AVIF listed first, WebP as its fallback and the <img>. */
 const picture = (avif, webp) => ({ sources: { ...avif.sources, ...webp.sources }, img: webp.img });
 
+const playPicks = picture(playPicksAvif, playPicksWebp);
+const playAssistant = picture(playAssistantAvif, playAssistantWebp);
+const playDelivery1 = picture(playDelivery1Avif, playDelivery1Webp);
+const playDelivery2 = picture(playDelivery2Avif, playDelivery2Webp);
+const playOffers = picture(playOffersAvif, playOffersWebp);
+const playSmart = picture(playSmartAvif, playSmartWebp);
 const screenCategories = picture(screenCategoriesAvif, screenCategoriesWebp);
 const screenChat = picture(screenChatAvif, screenChatWebp);
 const screenHome = picture(screenHomeAvif, screenHomeWebp);
@@ -50,13 +70,17 @@ const crop = (image, focus) => ({ image, kind: 'crop', focus });
 export const media = {
   appIcon,
 
-  /** Hero: the screens stand on the deals shelf as products, each over its offer label (by id). */
+  /**
+   * Hero: the six Google Play screenshots stand on the deals shelf, in the store's order, each
+   * over its offer label (by id). The two delivery shots are one panorama, read right to left.
+   */
   shelf: [
-    { id: 'offers', image: stepOffers },
-    { id: 'prices', image: screenPicks },
-    { id: 'picks', image: stepPicks },
-    { id: 'suggestions', image: screenChat },
-    { id: 'delivery', image: stepDelivery },
+    { id: 'picks', image: playPicks },
+    { id: 'assistant', image: playAssistant },
+    { id: 'delivery1', image: playDelivery1 },
+    { id: 'delivery2', image: playDelivery2 },
+    { id: 'offers', image: playOffers },
+    { id: 'smart', image: playSmart },
   ],
 
   /** «ليه كيو؟» — one screen per benefit, keyed by benefit id. */

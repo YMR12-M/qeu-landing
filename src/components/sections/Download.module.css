@@ -23,6 +23,16 @@
   font-size: var(--text-h2);
 }
 
+/* The brand's name in the heading is its wordmark, sized to the letters around it. */
+.brand {
+  display: inline-block;
+  block-size: 1.02em;
+  inline-size: auto;
+  margin-inline: 0.08em;
+  vertical-align: -0.2em;
+  color: var(--deep);
+}
+
 .subtitle {
   margin-block-start: 0.5rem;
   font-size: var(--text-h3);

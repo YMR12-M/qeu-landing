@@ -48,15 +48,16 @@ const en = {
       android: 'Download free on Google Play',
     },
     note: '{downloads}+ downloads in {months}',
-    // The shelf: every product's label is an offer; the names are the app's own features.
+    // The shelf: every product's label is an offer; the names echo the store screenshots.
     shelf: {
       offer: 'Deal',
       labels: {
-        offers: 'Browse deals',
-        prices: 'Lowest prices',
-        picks: 'Choose & order',
-        suggestions: 'Picks for you',
-        delivery: 'To your door',
+        picks: 'Picked for you',
+        assistant: 'AI helper',
+        delivery1: 'Deals to you',
+        delivery2: 'Same price',
+        offers: 'All deals',
+        smart: 'Gets you',
       },
       app: 'The Q app',
       price: 'Free',
@@ -64,7 +65,7 @@ const en = {
   },
 
   why: {
-    title: 'Why Q?',
+    title: 'Why {brand}?',
     lead: 'Because Q brings together the best deals, the lowest prices and ready-made collections in one simple, clear experience — shop faster, easier and for less.',
     items: [
       {
@@ -201,7 +202,7 @@ const en = {
   },
 
   download: {
-    title: 'Get Q',
+    title: 'Get {brand}',
     subtitle: 'Free on your phone',
     text: 'Available for iPhone and Android. Scan the code or pick your store — the app is free, and the deals start on the very first screen.',
     source: 'Source: the app’s official Google Play page ({package}), captured {capturedOn}.',

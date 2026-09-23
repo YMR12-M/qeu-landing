@@ -8,20 +8,22 @@ import { Pause, Play } from '../ui/icons.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import styles from './Hero.module.css';
 
-// Identical sets of products side by side: the shelf slides by exactly one set, so the loop has
-// no seam, and the sets still to come keep even an ultra-wide screen (≈4,300px) stocked.
+// Identical sets of the six store screenshots side by side: the shelf moves by exactly one set
+// per loop, so the loop has no seam, and the sets still to come keep even an ultra-wide screen
+// (≈4,300px) stocked.
 const SETS = 4;
 const STOCK = Array.from({ length: SETS }, () => media.shelf).flat();
 
 /**
- * «رف العروض» — the hero is a supermarket shelf at night. The app's real screens stand on it
- * like products, lit from above, and every label on the shelf edge is a yellow offer label:
- * all deals, from one end of the shelf to the other. The headline is on display at the head
- * of the shelf, with the app's own price label under it: free.
+ * «رف العروض» — the hero is a supermarket shelf at night. The app's six Google Play
+ * screenshots stand on it like products, all one size and in the store's order, lit from
+ * above; every label on the shelf edge is a yellow offer label: all deals, from one end of the
+ * shelf to the other. The headline is on display at the head of the shelf, with the app's own
+ * price label under it: free.
  *
- * The shelf drifts slowly away from the headline, as if walking down the aisle. The headline
+ * The shelf is restocked a product at a time, sliding away from the headline. The headline
  * has no entrance animation and is one block of text (lines broken with <br>), so it — not a
- * product — is the page's Largest Contentful Paint, painted with the first frame. The drift
+ * product — is the page's Largest Contentful Paint, painted with the first frame. The motion
  * can be paused (WCAG 2.2.2), stops while the hero is out of view, and is off entirely under
  * reduced motion.
  */
@@ -74,7 +76,7 @@ export function Hero() {
                 <Picture
                   image={image}
                   alt=""
-                  sizes="(min-width: 110em) 14rem, (min-width: 64em) 14vw, (min-width: 36em) 10rem, 7rem"
+                  sizes="(min-width: 110em) 14rem, (min-width: 64em) 12.5vw, (min-width: 30em) 8.5rem, 28vw"
                   loading="eager"
                   fetchPriority="low"
                   className={styles.product}

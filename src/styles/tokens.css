@@ -65,7 +65,7 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 200ms;
   --duration-base: 450ms;
-  --drift-duration: 72s; /* hero screens, one full loop */
+  --restock-duration: 27s; /* hero shelf: six restocks, one full loop */
 }
 
 /* v3 lays the page out with a 15rem gutter at 1920px — full width on tablets and phones. */

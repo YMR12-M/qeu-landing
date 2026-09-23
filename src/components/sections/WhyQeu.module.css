@@ -11,6 +11,16 @@
   font-size: var(--text-h2);
 }
 
+/* The brand's name in the heading is its wordmark, sized to the letters around it. */
+.brand {
+  display: inline-block;
+  block-size: 1.02em;
+  inline-size: auto;
+  margin-inline: 0.08em;
+  vertical-align: -0.2em;
+  color: var(--deep);
+}
+
 .lead {
   max-inline-size: 30em;
   margin-block-start: 0.75rem;
@@ -95,7 +105,8 @@
 
 /* ── Wide screens: pinned, one benefit open, its screen beside it ─── */
 
-@media (min-width: 48.0625em) {
+/* Tall enough to pin, too: a phone on its side keeps the plain list (WhyQeu.jsx matches). */
+@media (min-width: 48.0625em) and (min-height: 36em) {
   .track {
     position: relative;
     block-size: 250vh;
@@ -181,5 +192,42 @@
     inline-size: 86%;
     margin-inline: auto;
     filter: drop-shadow(0 1.5rem 2rem rgb(4 40 47 / 0.3));
+  }
+}
+
+/* Portrait tablets: a tall, narrow screen. Beside the list the screen would be small and the
+   block would float in the middle of the viewport with empty bands above and below — so the
+   screen goes under the list and takes all the height that is left: the block fills the view. */
+@media (min-width: 48.0625em) and (min-height: 36em) and (orientation: portrait) {
+  .pin {
+    align-items: stretch;
+    block-size: calc(100svh - var(--header-height));
+    min-block-size: 0;
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    padding-block: clamp(2rem, 4.5vh, 3.5rem);
+  }
+
+  .body {
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    min-block-size: 0;
+  }
+
+  .steps {
+    flex: none;
+  }
+
+  .visual {
+    flex: 1;
+    min-block-size: 0;
+  }
+
+  .frame {
+    block-size: min(100%, 40rem);
   }
 }

@@ -49,15 +49,16 @@ const ar = {
       android: 'حمّله مجاناً من Google Play',
     },
     note: 'أكثر من {downloads} تنزيل في {months}',
-    // The shelf: every product's label is an offer; the names are the app's own features.
+    // The shelf: every product's label is an offer; the names echo the store screenshots.
     shelf: {
       offer: 'عرض',
       labels: {
-        offers: 'تصفّح العروض',
-        prices: 'أقل الأسعار',
-        picks: 'اختار واطلب',
-        suggestions: 'اقتراحات لك',
-        delivery: 'لحد بابك',
+        picks: 'اخترناها لك',
+        assistant: 'مساعد ذكي',
+        delivery1: 'عروضنا تجيك',
+        delivery2: 'بنفس السعر',
+        offers: 'كله عروض',
+        smart: 'يفهمك',
       },
       app: 'تطبيق كيو',
       price: 'مجاناً',
@@ -65,7 +66,7 @@ const ar = {
   },
 
   why: {
-    title: 'ليه كيو؟',
+    title: 'ليه {brand}؟',
     lead: 'لأن كيو يجمع لك أفضل العروض، أقل الأسعار، والتشكيلات الجاهزة في تجربة واحدة بسيطة وواضحة — تسوّق أسرع، وأسهل، وأوفر.',
     items: [
       {
@@ -208,7 +209,7 @@ const ar = {
   },
 
   download: {
-    title: 'حمّل كيو',
+    title: 'حمّل {brand}',
     subtitle: 'مجاناً على جوالك',
     text: 'متوفر للآيفون والأندرويد. امسح الكود أو اختار متجرك — التطبيق مجاني، والعروض تبدأ من أول شاشة.',
     source: 'المصدر: صفحة التطبيق الرسمية على Google Play ‏({package})، بتاريخ {capturedOn}.',

@@ -19,16 +19,16 @@ Node ≥ 20.19.
 
 ## What the page is
 
-| Section                                                                                                                                                                   | Source                                                                               |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| Navigation island floating over the page: takes each section's colour, folds to a "you are here" pill while reading, opens the sections as a receipt                      | **new**: replaces v3's header bar                                                    |
-| «رف العروض» — the hero as a supermarket shelf: the app screens stand on it as products over yellow offer labels, the headline on display with its own price label, "free" | v3 copy and screens; shelf **new**                                                   |
-| «ليه كيو؟» — pinned, scroll-driven benefits with the matching screen                                                                                                      | v3                                                                                   |
-| «كيف يشتغل / عروضنا تجيك وبنفس السعر» — three steps on the order's route, Qeu's van driving to the door on scroll                                                         | **kept** from the earlier proposal (takes v3's "inside the app" slot); route **new** |
-| «عندك سؤال؟» — FAQ printed on a till receipt, with a take-a-number ticket for anything it doesn't answer                                                                  | **new**: answers restate the page and the Google Play listing only                   |
-| Google Play figures (count up on scroll)                                                                                                                                  | v3                                                                                   |
-| «حمّل كيو» with the app-icon stage, phone and QR card                                                                                                                     | v3 text + **kept** stage from the earlier proposal                                   |
-| Footer as the bag the order comes in: the brand printed on it, a delivery sticker with the contents (ticked off as they are read) and the contact links                   | v3, with the missing legal and contact details added; bag **new**                    |
+| Section                                                                                                                                                                                                                     | Source                                                                               |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Navigation island floating over the page: takes each section's colour, folds to a "you are here" pill while reading, opens the sections as a receipt                                                                        | **new**: replaces v3's header bar                                                    |
+| «رف العروض» — the hero as a supermarket shelf: the six Google Play screenshots stand on it in the store's order over yellow offer labels, restocked one at a time; the headline on display with its own price label, "free" | v3 copy, store screenshots; shelf **new**                                            |
+| «ليه كيو؟» — pinned, scroll-driven benefits with the matching screen                                                                                                                                                        | v3                                                                                   |
+| «كيف يشتغل / عروضنا تجيك وبنفس السعر» — three steps on the order's route, Qeu's van driving to the door on scroll                                                                                                           | **kept** from the earlier proposal (takes v3's "inside the app" slot); route **new** |
+| «عندك سؤال؟» — FAQ printed on a till receipt, with a take-a-number ticket for anything it doesn't answer                                                                                                                    | **new**: answers restate the page and the Google Play listing only                   |
+| Google Play figures (count up on scroll)                                                                                                                                                                                    | v3                                                                                   |
+| «حمّل كيو» with the app-icon stage, phone and QR card                                                                                                                                                                       | v3 text + **kept** stage from the earlier proposal                                   |
+| Footer as the bag the order comes in: the brand printed on it, a delivery sticker with the contents (ticked off as they are read) and the contact links                                                                     | v3, with the missing legal and contact details added; bag **new**                    |
 
 ### Changed from v3
 
@@ -60,6 +60,10 @@ Content (claims v3 made that the sources don't support)
   floats over the page and takes on the colour of the section under it, so nothing separates it
   from the page.
 - Arabic headings no longer get letter-spacing, which breaks letter joining.
+- In «ليه كيو؟» and «حمّل كيو» the brand's name is drawn as its wordmark (the name stays in the
+  text, visually hidden, for screen readers and search).
+- Portrait tablets: «ليه كيو؟» puts the screen under the list so the pinned block fills the view;
+  screens too short to pin (a phone on its side) get the plain list.
 
 ## Stack, and why
 

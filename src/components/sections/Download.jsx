@@ -1,5 +1,6 @@
 import { useLocale } from '../../i18n/useLocale.js';
 import { interpolate } from '../../lib/format.js';
+import { WithBrand } from '../brand/WithBrand.jsx';
 import { AppStage } from '../download/AppStage.jsx';
 import { StorePills } from '../download/StorePills.jsx';
 import { StatsRow } from '../stats/StatsRow.jsx';
@@ -18,7 +19,7 @@ export function Download() {
         <div className={styles.grid}>
           <div className={styles.copy}>
             <h2 id="download-title" className={styles.title}>
-              {download.title}
+              <WithBrand text={download.title} name={t.meta.siteName} className={styles.brand} />
             </h2>
             <p className={styles.subtitle}>{download.subtitle}</p>
             <p className={styles.text}>{download.text}</p>

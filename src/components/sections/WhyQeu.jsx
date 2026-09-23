@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { media } from '../../content/media.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
+import { WithBrand } from '../brand/WithBrand.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import styles from './WhyQeu.module.css';
 
-// Matches the CSS breakpoint below which the section is a plain list (no pinning).
-const PINNED_QUERY = '(min-width: 48.0625em)';
+// Matches the CSS: narrower (or shorter) than this, the section is a plain list (no pinning).
+const PINNED_QUERY = '(min-width: 48.0625em) and (min-height: 36em)';
 
 /**
  * v3 «ليه كيو؟»: on wide screens the section pins while the reader scrolls through a
@@ -49,7 +50,7 @@ export function WhyQeu() {
         <div className={styles.pin}>
           <div className={cx('container', styles.inner)}>
             <h2 id="why-title" className={styles.title}>
-              {why.title}
+              <WithBrand text={why.title} name={t.meta.siteName} className={styles.brand} />
             </h2>
             <p className={styles.lead}>{why.lead}</p>
 
@@ -85,7 +86,7 @@ export function WhyQeu() {
                         key={item.id}
                         image={image}
                         alt={item.imageAlt}
-                        sizes="(min-width: 48.0625em) 45vh, 1px"
+                        sizes="(min-width: 48.0625em) and (min-height: 36em) 45vh, 1px"
                         className={styles.screen}
                         style={focus ? { '--focus': focus } : undefined}
                         data-kind={kind}
