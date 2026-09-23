@@ -173,8 +173,7 @@
 
 .link {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.4375rem;
+  align-items: center;
   padding: 0.6875rem clamp(0.75rem, 1vw, 1.0625rem);
   border-radius: var(--pill);
   font-size: var(--text-nav);
@@ -188,20 +187,6 @@
 .link:hover,
 .link[aria-current] {
   color: var(--island-fg);
-}
-
-/* Section numbers, like the numbers over supermarket aisles. */
-.aisle {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--island-accent);
-  opacity: 0.7;
-}
-
-.link[aria-current] .aisle {
-  opacity: 1;
 }
 
 /* ── The pill: where you are, and the way into the receipt ──────── */
@@ -229,13 +214,6 @@
   display: none;
 }
 
-.nowAisle {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--island-accent);
-}
-
 /* Each new section name rolls up into place, like a departure board. */
 .nowLabel {
   display: inline-block;
@@ -261,7 +239,6 @@
   color: var(--night);
 }
 
-.menu[open] .nowAisle,
 .menu[open] .nowIcon {
   color: var(--night);
 }
@@ -416,13 +393,6 @@
 
 .receiptLink[aria-current] {
   color: var(--deep);
-}
-
-.receiptLink .aisle {
-  flex: none;
-  inline-size: 1.75rem;
-  color: var(--brand-text);
-  opacity: 1;
 }
 
 .leader {

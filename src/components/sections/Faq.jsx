@@ -5,27 +5,12 @@ import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { formatPlural, interpolate } from '../../lib/format.js';
 import { Logo } from '../brand/Logo.jsx';
+import { Barcode } from '../ui/Barcode.jsx';
 import styles from './Faq.module.css';
 
 const EMAIL = site.contact.email;
 
 const twoDigits = (value) => String(value).padStart(2, '0');
-
-// The barcode under the total is decoration. Its bars come from a fixed seed, so the
-// pre-rendered HTML and the browser draw exactly the same ones.
-const BARCODE = (() => {
-  const seed = 'QEU FAQ';
-  const bars = [];
-  let x = 0;
-  for (let index = 0; index < 46; index += 1) {
-    const code = seed.charCodeAt(index % seed.length) + index * 7;
-    const width = 1 + (code % 3);
-    bars.push({ x, width });
-    x += width + 1 + ((code >> 2) % 2);
-  }
-  const last = bars.at(-1);
-  return { bars, width: last.x + last.width };
-})();
 
 /** Copy with its {email} token rendered as the support mail link. */
 function withEmailLink(text) {
@@ -110,18 +95,7 @@ export function Faq() {
                   <span className={styles.leader} aria-hidden="true" />
                   <span>{receipt.totalValue}</span>
                 </p>
-                <svg
-                  className={styles.barcode}
-                  viewBox={`0 0 ${BARCODE.width} 1`}
-                  preserveAspectRatio="none"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  {BARCODE.bars.map(({ x, width }) => (
-                    <rect key={x} x={x} width={width} height="1" />
-                  ))}
-                </svg>
+                <Barcode seed="QEU FAQ" className={styles.barcode} />
                 <p className={styles.thanks}>{receipt.thanks}</p>
               </div>
             </div>

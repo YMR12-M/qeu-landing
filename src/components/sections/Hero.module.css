@@ -1,124 +1,106 @@
+/*
+ * «رف العروض» — the hero as a supermarket shelf at night: a pegboard back panel lit from
+ * above, the app's screens standing on the shelf as products, and a price rail of yellow
+ * offer labels along its edge. The headline is on display at the head of the shelf.
+ */
+
 .hero {
-  --screen-height: clamp(14rem, 25vw, 30rem);
-  --screen-gap: clamp(0.875rem, 1.25vw, 1.5rem);
+  --product-h: clamp(10rem, 44vw, 16rem); /* a product’s height on the shelf */
+  --board: clamp(0.625rem, 0.8vw, 0.875rem); /* the shelf's top face, seen from just above */
+  --rail: clamp(2.75rem, 3.2vw, 3.5rem); /* the price rail along its front edge */
+  --gap: clamp(1rem, 2vw, 2.25rem); /* between products */
+  --base: clamp(3.75rem, 5vw, 5rem); /* the back panel showing under the shelf */
+  /* Where the page's content starts: the same line as every section's container. */
+  --edge: max(var(--gutter), calc((100cqi - 90rem) / 2));
+  --toward: 1; /* the side new stock comes from: the reading start (the right, in Arabic) */
   --focus-ring: var(--glow);
   position: relative;
-  display: flex;
-  align-items: center;
-  /* The hero runs up under the floating nav island: the drift and the dark fill reach the
-     top of the screen, while the copy is centred in the space below the island. */
-  min-block-size: calc(clamp(32rem, 34.9vw, 41.875rem) + var(--header-height));
-  padding-block-start: var(--header-height);
+  container-type: inline-size;
+  padding-block: var(--header-height) var(--base);
   overflow: hidden;
-  background: var(--night);
+  background:
+    radial-gradient(80% 65% at 50% 0, rgb(159 227 234 / 0.1), rgb(159 227 234 / 0) 70%),
+    radial-gradient(circle, rgb(159 227 234 / 0.08) 0.07rem, rgb(159 227 234 / 0) 0.1rem) 50% 0 /
+      1.5rem 1.5rem,
+    var(--night);
 }
 
-/* ── Drifting screens ─────────────────────────────────────────────── */
-
-.drift {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  direction: ltr;
-  opacity: 0.9;
+.hero:dir(ltr) {
+  --toward: -1;
 }
 
-.track {
-  display: flex;
-  gap: var(--screen-gap);
-  inline-size: max-content;
-  padding-inline-end: var(--screen-gap);
-  animation: drift var(--drift-duration) linear infinite;
+/* Phones and tablets: the headline, then the shelf under it. */
+.shelf {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: [display] auto [goods] auto [board] var(--board) [rail] var(--rail) [end];
 }
 
-/* Paused by the visitor, or scrolled out of view (nothing to see, nothing to animate). */
-.hero[data-paused] .track,
-.hero[data-offscreen] .track {
-  animation-play-state: paused;
+.display {
+  grid-row: display;
+  padding: clamp(2rem, 6vw, 3rem) var(--gutter) clamp(2.5rem, 7vw, 3.5rem);
 }
 
-/* One set = the track's width divided by the number of sets (Hero.jsx → --drift-sets). */
-@keyframes drift {
-  to {
-    transform: translateX(calc(-100% / var(--drift-sets)));
-  }
+.aisle {
+  grid-column: 1;
+  grid-row: goods / end;
 }
 
-.screen {
-  flex: none;
-  inline-size: auto;
-  max-inline-size: none;
-  block-size: var(--screen-height);
-  border-radius: var(--radius-sm);
+.edge {
+  grid-column: 1;
+  grid-row: board / end;
 }
 
-/* The copy sits on the reading-start side, so the scrim is darkest there. */
-.scrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to left,
-    rgb(4 40 47 / 0.95),
-    rgb(4 40 47 / 0.9) 58%,
-    rgb(4 40 47 / 0.34)
-  );
-}
-
-.hero:dir(ltr) .scrim {
-  background: linear-gradient(
-    to right,
-    rgb(4 40 47 / 0.95),
-    rgb(4 40 47 / 0.9) 58%,
-    rgb(4 40 47 / 0.34)
-  );
-}
-
-/* Phones: copy on top, the screens drift along the bottom edge where the scrim lets them show. */
-@media (max-width: 47.99em) {
+/* Computers: the headline stands on the shelf itself, at its head, beside the products. */
+@media (min-width: 64em) {
   .hero {
-    align-items: flex-start;
-    min-block-size: calc(40rem + var(--header-height));
+    --product-h: clamp(13rem, 23vw, 24rem);
   }
 
-  .drift {
-    align-items: flex-end;
-    padding-block-end: 1.5rem;
+  .shelf {
+    grid-template-columns: [display] auto [aisle] minmax(0, 1fr);
+    grid-template-rows: [goods] auto [board] var(--board) [rail] var(--rail) [end];
+    column-gap: clamp(2rem, 3.5vw, 4.5rem);
+    margin-block-start: clamp(1rem, 2.5vw, 3rem);
   }
 
-  .scrim,
-  .hero:dir(ltr) .scrim {
-    background: linear-gradient(
-      to bottom,
-      rgb(4 40 47 / 0.97) 0%,
-      rgb(4 40 47 / 0.92) 48%,
-      rgb(4 40 47 / 0.3) 100%
-    );
+  .display {
+    grid-column: display;
+    grid-row: goods;
+    align-self: end;
+    max-inline-size: calc(var(--edge) + min(46rem, 52cqi));
+    padding-block: 0 clamp(1.25rem, 2vw, 2.25rem);
+    padding-inline: var(--edge) 0;
   }
 
-  .content {
-    padding-block: 3rem 17rem;
+  .aisle {
+    grid-column: aisle;
+  }
+
+  .edge {
+    grid-column: 1 / -1;
   }
 }
 
-/* ── Copy ─────────────────────────────────────────────────────────── */
-
-.content {
-  position: relative;
-  inline-size: 100%;
-  padding-block: 4rem;
-  padding-inline: clamp(1.25rem, 6.25vw, 7.5rem);
-}
+/* ── The headline ────────────────────────────────────────────────── */
 
 .title {
-  max-inline-size: 18em;
-  font-size: var(--text-hero);
+  max-inline-size: 16em;
+  text-wrap: balance;
+  font-size: clamp(2.125rem, 3.4vw, 4rem);
   line-height: var(--leading-hero);
   color: var(--white);
 }
 
 .accent {
   color: var(--glow);
+}
+
+/* Phones: small enough that the last line keeps its words together. */
+@media (max-width: 47.99em) {
+  .title {
+    font-size: clamp(1.75rem, 7.6vw, 2.125rem);
+  }
 }
 
 .actions {
@@ -135,12 +117,200 @@
   color: var(--glow);
 }
 
+/* ── The products ────────────────────────────────────────────────── */
+
+/* Above the shelf's edge: products stand on its top face, their labels sit in its rail. */
+.aisle {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  overflow: clip;
+}
+
+.track {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gap);
+  inline-size: max-content;
+  padding-inline-end: var(--gap);
+  animation: drift var(--drift-duration) linear infinite;
+}
+
+/* Paused by the visitor, or scrolled out of view (nothing to see, nothing to animate). */
+.hero[data-paused] .track,
+.hero[data-offscreen] .track {
+  animation-play-state: paused;
+}
+
+/* One set = the track's width divided by the number of sets (Hero.jsx → --sets). The shelf
+   starts a set further back and slides out of the reading start, away from the headline. */
+@keyframes drift {
+  from {
+    translate: calc(var(--toward) * 100% / var(--sets)) 0;
+  }
+}
+
+/* A product stands on the middle of the shelf's top face; its label is in the rail below. */
+.facing {
+  position: relative;
+  flex: none;
+  padding-block-end: calc(var(--board) / 2 + var(--rail));
+}
+
+.facing picture {
+  display: block;
+}
+
+.product {
+  display: block;
+  inline-size: auto;
+  max-inline-size: none;
+  block-size: var(--product-h);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1rem 1.5rem -1rem rgb(0 0 0 / 0.8);
+}
+
+/* Where it stands, a soft contact shadow on the shelf. */
+.facing::after {
+  content: '';
+  position: absolute;
+  inset-inline: 4%;
+  inset-block-end: calc(var(--board) / 2 + var(--rail) - 0.3125rem);
+  block-size: 0.625rem;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0));
+}
+
+/* The shelf label: a yellow offer flag, then the product's name. As wide as the product,
+   or as its name needs — up to the gap before the next one. */
+.label {
+  position: absolute;
+  inset-block-end: calc(var(--rail) * 0.14);
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  inline-size: max-content;
+  min-inline-size: calc(100% - 0.5rem);
+  max-inline-size: calc(100% + var(--gap) - 0.375rem);
+  block-size: calc(var(--rail) * 0.72);
+  overflow: hidden;
+  border-radius: 0.25rem;
+  background: var(--white);
+  color: var(--night);
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 0.4);
+}
+
+.flag {
+  display: grid;
+  flex: none;
+  place-items: center;
+  padding-inline: 0.5rem;
+  background: var(--star);
+  font-size: clamp(0.8125rem, 0.9vw, 1rem);
+  font-weight: 800;
+}
+
+.name {
+  align-self: center;
+  min-inline-size: 0;
+  padding-inline: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: clamp(0.6875rem, 0.75vw, 0.875rem);
+  font-weight: 700;
+  color: var(--deep);
+}
+
+/* Narrow products: the flag fills the label. */
+@media (max-width: 47.99em) {
+  .flag {
+    flex: 1;
+  }
+
+  .name {
+    display: none;
+  }
+}
+
+/* Computers: a clear divider stands at the head of the shelf; the stock slides out from
+   behind it. */
+@media (min-width: 64em) {
+  .aisle::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset-inline-start: 0;
+    inset-block-end: calc(var(--board) / 2 + var(--rail));
+    inline-size: 0.1875rem;
+    block-size: calc(var(--product-h) * 0.7);
+    border-radius: 0.125rem 0.125rem 0 0;
+    background: linear-gradient(to top, rgb(159 227 234 / 0.55), rgb(159 227 234 / 0.06));
+  }
+}
+
+/* ── The shelf ───────────────────────────────────────────────────── */
+
+/* The top face (lit from above), the edge catching the light, the price rail — and the
+   shadow the shelf throws on the panel below. */
+.edge {
+  position: relative;
+  background:
+    linear-gradient(rgb(159 227 234 / 0.45), rgb(159 227 234 / 0.45)) 0 var(--board) / 100% 1px
+      no-repeat,
+    linear-gradient(#1c5864, #10424c) 0 0 / 100% var(--board) no-repeat,
+    linear-gradient(var(--deep), #073842) 0 var(--board) / 100% var(--rail) no-repeat;
+  box-shadow: 0 1.5rem 2rem -1rem rgb(0 0 0 / 0.65);
+}
+
+/* The app's own label, under the headline: its price. */
+.priceTag {
+  display: none;
+}
+
+@media (min-width: 64em) {
+  .priceTag {
+    position: absolute;
+    inset-inline-start: var(--edge);
+    inset-block-end: calc(var(--rail) * 0.14);
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    block-size: calc(var(--rail) * 0.72);
+    padding-inline: 0.875rem;
+    border-radius: 0.25rem;
+    background: var(--white);
+    color: var(--night);
+    white-space: nowrap;
+    box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 0.4);
+  }
+}
+
+.priceName {
+  font-size: clamp(0.75rem, 0.8vw, 0.9375rem);
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.price {
+  font-size: clamp(1.125rem, 1.4vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--deep);
+}
+
+.priceBarcode {
+  inline-size: 2.75rem;
+  block-size: 55%;
+}
+
 /* ── Pause control (WCAG 2.2.2) ───────────────────────────────────── */
 
 .motionToggle {
   position: absolute;
-  inset-block-end: clamp(1rem, 1.5vw, 1.75rem);
-  inset-inline-end: clamp(1.25rem, 6.25vw, 7.5rem);
+  inset-block-end: calc((var(--base) - 2.75rem) / 2);
+  inset-inline-end: var(--edge);
   display: grid;
   place-items: center;
   inline-size: 2.75rem;

@@ -48,6 +48,19 @@ const en = {
       android: 'Download free on Google Play',
     },
     note: '{downloads}+ downloads in {months}',
+    // The shelf: every product's label is an offer; the names are the app's own features.
+    shelf: {
+      offer: 'Deal',
+      labels: {
+        offers: 'Browse deals',
+        prices: 'Lowest prices',
+        picks: 'Choose & order',
+        suggestions: 'Picks for you',
+        delivery: 'To your door',
+      },
+      app: 'The Q app',
+      price: 'Free',
+    },
   },
 
   why: {
@@ -208,7 +221,15 @@ const en = {
   },
 
   footer: {
-    tagline: 'Everything in Q is a deal',
+    tagline: { before: 'Everything in Q is a', offer: 'deal' },
+    // The delivery sticker on the bag the order comes in.
+    sticker: {
+      title: 'Your order’s here',
+      from: 'From',
+      fromValue: 'Q',
+      to: 'To',
+      toValue: 'your door',
+    },
     contact: {
       title: 'Contact us',
       report: 'Report a problem in the app',
@@ -216,7 +237,7 @@ const en = {
       store: 'Q on Google Play',
     },
     more: {
-      title: 'More information',
+      title: 'Contents',
       privacy: 'Privacy policy',
     },
     sourceLine: 'Q · {package} · figures from the official Google Play page',

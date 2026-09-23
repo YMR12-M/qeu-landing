@@ -3,26 +3,32 @@ import { media } from '../../content/media.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { interpolate } from '../../lib/format.js';
 import { DownloadLink } from '../download/DownloadLink.jsx';
+import { Barcode } from '../ui/Barcode.jsx';
 import { Pause, Play } from '../ui/icons.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import styles from './Hero.module.css';
 
-// Identical sets side by side: the track slides by exactly one set, so the loop has no seam,
-// and the three sets still ahead keep even an ultra-wide screen (≈4,300px) covered throughout.
-const DRIFT_SETS = 4;
-const DRIFT = Array.from({ length: DRIFT_SETS }, () => media.drift).flat();
+// Identical sets of products side by side: the shelf slides by exactly one set, so the loop has
+// no seam, and the sets still to come keep even an ultra-wide screen (≈4,300px) stocked.
+const SETS = 4;
+const STOCK = Array.from({ length: SETS }, () => media.shelf).flat();
 
 /**
- * v3 hero: real app screens drift slowly behind a dark scrim, the headline sits on top.
+ * «رف العروض» — the hero is a supermarket shelf at night. The app's real screens stand on it
+ * like products, lit from above, and every label on the shelf edge is a yellow offer label:
+ * all deals, from one end of the shelf to the other. The headline is on display at the head
+ * of the shelf, with the app's own price label under it: free.
  *
- * The headline has no entrance animation and is one block of text (lines broken with <br>),
- * so the browser measures it whole: it — not a background screen — is the page's Largest
- * Contentful Paint, and it paints with the first frame. The drift can be paused (WCAG 2.2.2),
- * stops while the hero is out of view, and is off entirely under reduced motion.
+ * The shelf drifts slowly away from the headline, as if walking down the aisle. The headline
+ * has no entrance animation and is one block of text (lines broken with <br>), so it — not a
+ * product — is the page's Largest Contentful Paint, painted with the first frame. The drift
+ * can be paused (WCAG 2.2.2), stops while the hero is out of view, and is off entirely under
+ * reduced motion.
  */
 export function Hero() {
   const { t, figures } = useLocale();
   const { hero } = t;
+  const { shelf } = hero;
   const sectionRef = useRef(null);
   const [paused, setPaused] = useState(false);
 
@@ -43,37 +49,51 @@ export function Hero() {
       data-paused={paused || undefined}
       aria-labelledby="hero-title"
     >
-      <div className={styles.drift} aria-hidden="true">
-        <div className={styles.track} style={{ '--drift-sets': DRIFT_SETS }}>
-          {DRIFT.map((image, index) => (
-            <Picture
-              key={index}
-              image={image}
-              alt=""
-              sizes="(min-width: 48em) 18rem, 10rem"
-              loading="eager"
-              fetchPriority="low"
-              className={styles.screen}
-            />
-          ))}
+      <div className={styles.shelf}>
+        <div className={styles.display}>
+          <h1 id="hero-title" className={styles.title}>
+            {hero.titleLines.map((line) => (
+              <Fragment key={line}>
+                {line} <br />
+              </Fragment>
+            ))}
+            <span className={styles.accent}>{hero.titleAccent}</span>
+          </h1>
+          <div className={styles.actions}>
+            <DownloadLink placement="hero" labels={hero.cta}>
+              {hero.cta.default}
+            </DownloadLink>
+            <p className={styles.note}>{interpolate(hero.note, figures)}</p>
+          </div>
         </div>
-      </div>
-      <div className={styles.scrim} />
 
-      <div className={styles.content}>
-        <h1 id="hero-title" className={styles.title}>
-          {hero.titleLines.map((line) => (
-            <Fragment key={line}>
-              {line} <br />
-            </Fragment>
-          ))}
-          <span className={styles.accent}>{hero.titleAccent}</span>
-        </h1>
-        <div className={styles.actions}>
-          <DownloadLink placement="hero" labels={hero.cta}>
-            {hero.cta.default}
-          </DownloadLink>
-          <p className={styles.note}>{interpolate(hero.note, figures)}</p>
+        <div className={styles.aisle} aria-hidden="true">
+          <div className={styles.track} style={{ '--sets': SETS }}>
+            {STOCK.map(({ id, image }, index) => (
+              <div key={index} className={styles.facing}>
+                <Picture
+                  image={image}
+                  alt=""
+                  sizes="(min-width: 110em) 14rem, (min-width: 64em) 14vw, (min-width: 36em) 10rem, 7rem"
+                  loading="eager"
+                  fetchPriority="low"
+                  className={styles.product}
+                />
+                <span className={styles.label}>
+                  <span className={styles.flag}>{shelf.offer}</span>
+                  <span className={styles.name}>{shelf.labels[id]}</span>
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.edge} aria-hidden="true">
+          <span className={styles.priceTag}>
+            <span className={styles.priceName}>{shelf.app}</span>
+            <span className={styles.price}>{shelf.price}</span>
+            <Barcode seed="QEU APP" count={18} className={styles.priceBarcode} />
+          </span>
         </div>
       </div>
 

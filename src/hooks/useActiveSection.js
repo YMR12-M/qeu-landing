@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+/** The reading line: a thin band just above the middle of the viewport. */
+export const READING_BAND = '-45% 0px -54% 0px';
+
 /**
  * "You are here": the id of the section under a thin band just above the middle of the
  * viewport, or null — at the top of the page, and before hydration, nothing is marked.
@@ -19,7 +22,7 @@ export function useActiveSection(ids) {
         }
         setActive(order.find((id) => inBand.has(id)) ?? null);
       },
-      { rootMargin: '-45% 0px -54% 0px' },
+      { rootMargin: READING_BAND },
     );
     for (const id of order) {
       const section = document.getElementById(id);

@@ -8,8 +8,6 @@ import { Globe, Receipt } from '../ui/icons.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import styles from './Header.module.css';
 
-const aisle = (index) => String(index + 1).padStart(2, '0');
-
 /**
  * 'dark' or 'light': the colour of the section under a point. It reads the section's own
  * background, not a card or picture inside it (the FAQ's white receipt sits on a dark
@@ -149,12 +147,9 @@ export function Header() {
           <div ref={trackRef} className={styles.track}>
             <span className={styles.blob} aria-hidden="true" />
             <ul className={styles.links} role="list">
-              {items.map((item, index) => (
+              {items.map((item) => (
                 <li key={item.id}>
                   <a className={styles.link} href={`#${item.id}`} aria-current={current(item.id)}>
-                    <span className={styles.aisle} aria-hidden="true">
-                      {aisle(index)}
-                    </span>
                     {item.label}
                   </a>
                 </li>
@@ -169,14 +164,7 @@ export function Header() {
           onToggle={(event) => setMenuOpen(event.currentTarget.open)}
         >
           <summary className={styles.now}>
-            {activeIndex >= 0 && (
-              <>
-                <span className="visually-hidden">{t.a11y.sectionsMenu}: </span>
-                <span className={styles.nowAisle} aria-hidden="true">
-                  {aisle(activeIndex)}
-                </span>
-              </>
-            )}
+            {activeIndex >= 0 && <span className="visually-hidden">{t.a11y.sectionsMenu}: </span>}
             <span key={active ?? 'none'} className={styles.nowLabel}>
               {activeIndex >= 0 ? items[activeIndex].label : t.a11y.sectionsMenu}
             </span>
@@ -188,7 +176,7 @@ export function Header() {
                 {t.a11y.sectionsMenu}
               </p>
               <ul className={styles.receiptList} role="list">
-                {items.map((item, index) => (
+                {items.map((item) => (
                   <li key={item.id}>
                     <a
                       className={styles.receiptLink}
@@ -196,9 +184,6 @@ export function Header() {
                       aria-current={current(item.id)}
                       onClick={closeMenu}
                     >
-                      <span className={styles.aisle} aria-hidden="true">
-                        {aisle(index)}
-                      </span>
                       <span>{item.label}</span>
                       <span className={styles.leader} aria-hidden="true" />
                       {active === item.id && (

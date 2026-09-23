@@ -50,8 +50,14 @@ const crop = (image, focus) => ({ image, kind: 'crop', focus });
 export const media = {
   appIcon,
 
-  /** Hero background: the screens drift past behind the headline. */
-  drift: [stepOffers, screenPicks, stepPicks, screenChat, stepDelivery],
+  /** Hero: the screens stand on the deals shelf as products, each over its offer label (by id). */
+  shelf: [
+    { id: 'offers', image: stepOffers },
+    { id: 'prices', image: screenPicks },
+    { id: 'picks', image: stepPicks },
+    { id: 'suggestions', image: screenChat },
+    { id: 'delivery', image: stepDelivery },
+  ],
 
   /** «ليه كيو؟» — one screen per benefit, keyed by benefit id. */
   why: {

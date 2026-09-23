@@ -49,6 +49,19 @@ const ar = {
       android: 'حمّله مجاناً من Google Play',
     },
     note: 'أكثر من {downloads} تنزيل في {months}',
+    // The shelf: every product's label is an offer; the names are the app's own features.
+    shelf: {
+      offer: 'عرض',
+      labels: {
+        offers: 'تصفّح العروض',
+        prices: 'أقل الأسعار',
+        picks: 'اختار واطلب',
+        suggestions: 'اقتراحات لك',
+        delivery: 'لحد بابك',
+      },
+      app: 'تطبيق كيو',
+      price: 'مجاناً',
+    },
   },
 
   why: {
@@ -215,7 +228,15 @@ const ar = {
   },
 
   footer: {
-    tagline: 'كل شي في كيو عرض',
+    tagline: { before: 'كل شي في كيو', offer: 'عرض' },
+    // The delivery sticker on the bag the order comes in.
+    sticker: {
+      title: 'طلبك وصل',
+      from: 'من',
+      fromValue: 'كيو',
+      to: 'إلى',
+      toValue: 'بابك',
+    },
     contact: {
       title: 'تواصل معنا',
       report: 'بلّغ عن مشكلة في التطبيق',
@@ -223,7 +244,7 @@ const ar = {
       store: 'صفحة كيو على Google Play',
     },
     more: {
-      title: 'المزيد من المعلومات',
+      title: 'المحتويات',
       privacy: 'سياسة الخصوصية',
     },
     sourceLine: 'كيو · {package} · الأرقام من صفحة Google Play الرسمية',
