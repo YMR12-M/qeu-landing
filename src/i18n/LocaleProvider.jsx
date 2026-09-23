@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { figuresFor } from '../content/figures.js';
 import { dictionaries } from '../content/locales/index.js';
 import { LocaleContext } from './context.js';
 import { alternateLocale, LOCALES } from './locales.js';
@@ -8,6 +9,7 @@ export function LocaleProvider({ locale, children }) {
     () => ({
       locale,
       t: dictionaries[locale],
+      figures: figuresFor(locale),
       config: LOCALES[locale],
       alternate: alternateLocale(locale),
     }),

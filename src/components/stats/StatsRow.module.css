@@ -46,7 +46,7 @@
 .unit {
   font-size: clamp(1.125rem, 1.25vw, 1.5rem);
   font-weight: 800;
-  color: var(--brand);
+  color: var(--brand-text);
 }
 
 .star {

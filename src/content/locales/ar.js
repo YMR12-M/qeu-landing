@@ -4,7 +4,8 @@
  * Structure and wording follow the Qeu Landing v3 design, with its claims checked against
  * the sources (qeu.app, the Google Play listing, Qeu's own app and store screenshots —
  * see README → Content sources). Lines v3 invented, or that only half-matched a source,
- * were corrected. `{tokens}` are filled in by the components.
+ * were corrected. `{tokens}` are filled in by the components; the store figures the copy
+ * quotes ({downloads}, {months}…) come from src/content/site.js via src/content/figures.js.
  */
 
 const ar = {
@@ -22,6 +23,8 @@ const ar = {
     primaryNav: 'القائمة الرئيسية',
     storeLinks: 'حمّل التطبيق من المتجر',
     switchLocale: 'View this page in English',
+    pauseMotion: 'إيقاف حركة الخلفية',
+    playMotion: 'تشغيل حركة الخلفية',
   },
 
   nav: {
@@ -42,7 +45,7 @@ const ar = {
       ios: 'حمّله مجاناً من App Store',
       android: 'حمّله مجاناً من Google Play',
     },
-    note: 'أكثر من ١٠٠ ألف تنزيل في ٨ شهور',
+    note: 'أكثر من {downloads} تنزيل في {months}',
   },
 
   why: {
@@ -108,17 +111,21 @@ const ar = {
   },
 
   stats: {
-    downloads: { prefix: '+', unit: 'ألف', label: 'تنزيل على Google Play خلال ٨ شهور من الإطلاق' },
+    downloads: {
+      prefix: '+',
+      unit: { thousand: 'ألف', million: 'مليون' },
+      label: 'تنزيل على Google Play خلال {months} من الإطلاق',
+    },
     rating: { label: 'تقييم مستخدمي الجوال على Google Play' },
     fiveStar: { unit: '٪', label: 'من تقييمات الجوال ٥ نجوم ({count} تقييم)' },
-    count: { label: 'تقييم من الجوال · ١٫٣ ألف إجمالاً' },
+    count: { label: 'تقييم من الجوال · {allRatings} إجمالاً' },
   },
 
   download: {
     title: 'حمّل كيو',
     subtitle: 'مجاناً على جوالك',
     text: 'متوفر للآيفون والأندرويد. امسح الكود أو اختار متجرك — التطبيق مجاني، والعروض تبدأ من أول شاشة.',
-    source: 'المصدر: صفحة التطبيق الرسمية على Google Play ‏(sa.qeu1.app)، بتاريخ ٢٠ سبتمبر ٢٠٢٦.',
+    source: 'المصدر: صفحة التطبيق الرسمية على Google Play ‏({package})، بتاريخ {capturedOn}.',
     stageAlt:
       'الشاشة الرئيسية في تطبيق كيو: عرض السوبر «أرز الفخامة + زيت الفخامة مجاناً»، وقسم «أسعار ما تلاقيها إلا في كيو!»',
   },
@@ -146,8 +153,33 @@ const ar = {
       title: 'المزيد من المعلومات',
       privacy: 'سياسة الخصوصية',
     },
-    sourceLine: 'كيو · sa.qeu1.app · الأرقام من صفحة Google Play الرسمية',
+    sourceLine: 'كيو · {package} · الأرقام من صفحة Google Play الرسمية',
     legal: '© {year} {company} — حي الرحاب، جدة',
+  },
+
+  /** How the figures are written; {n} is the number, already in Arabic-Indic digits. */
+  numbers: {
+    thousand: '{n} ألف',
+    million: '{n} مليون',
+    months: { one: 'شهر', two: 'شهرين', few: '{n} شهور', many: '{n} شهر', other: '{n} شهر' },
+  },
+
+  dates: {
+    format: '{day} {month} {year}',
+    months: [
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
+    ],
   },
 };
 

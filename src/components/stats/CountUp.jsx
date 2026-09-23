@@ -8,6 +8,8 @@ const DURATION = 1100;
  * The pre-rendered HTML carries the real number. Only a figure that starts fully off
  * screen is reset to zero (in an observer callback, so never visibly) and then counted
  * up; one already on screen keeps its value. Nothing moves under reduced motion.
+ * Screen readers (and crawlers) always get the real number: the moving one is hidden
+ * from them.
  */
 export function CountUp({ value, format, className }) {
   const ref = useRef(null);
@@ -55,7 +57,8 @@ export function CountUp({ value, format, className }) {
 
   return (
     <span ref={ref} className={className}>
-      {format(current)}
+      <span aria-hidden="true">{format(current)}</span>
+      <span className="visually-hidden">{format(value)}</span>
     </span>
   );
 }

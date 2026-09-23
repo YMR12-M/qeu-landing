@@ -30,6 +30,11 @@ export function resolveLocale(pathname) {
   return /^\/english(\/|$)/.test(pathname) ? 'en' : DEFAULT_LOCALE;
 }
 
+/** Maps an <html lang> value back to its locale code: 'en' → en, anything unknown → ar. */
+export function localeFromLang(lang) {
+  return Object.values(LOCALES).find((locale) => locale.lang === lang)?.code ?? DEFAULT_LOCALE;
+}
+
 /** The locale the language switch points to. */
 export function alternateLocale(code) {
   return code === 'ar' ? LOCALES.en : LOCALES.ar;

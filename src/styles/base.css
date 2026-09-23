@@ -75,6 +75,12 @@ picture {
   display: contents;
 }
 
+/* …and keep its <source> elements out of that layout: otherwise each one is a zero-width
+   flex or grid item that still takes a `gap`. Source selection doesn't depend on display. */
+picture > source {
+  display: none;
+}
+
 a {
   color: inherit;
   text-decoration: none;

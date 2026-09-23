@@ -1,19 +1,20 @@
 import { media } from '../../content/media.js';
 import { site } from '../../content/site.js';
+import { useCurrentYear } from '../../hooks/useCurrentYear.js';
+import { usePlatform } from '../../hooks/usePlatform.js';
 import { useLocale } from '../../i18n/useLocale.js';
+import { trackDownloadClick } from '../../lib/analytics.js';
 import { formatNumber, interpolate } from '../../lib/format.js';
-import { getStoreHref } from '../../lib/links.js';
+import { getStoreHref, storeLinkTarget } from '../../lib/links.js';
 import { Picture } from '../ui/Picture.jsx';
 import styles from './Footer.module.css';
 
-// Evaluated when the page is built (and again in the browser) so the year never goes stale.
-const YEAR = new Date().getFullYear();
-
 export function Footer() {
-  const { t, config, locale } = useLocale();
+  const { t, figures, config, locale } = useLocale();
   const { footer } = t;
+  const platform = usePlatform();
   const mailto = `mailto:${site.contact.email}`;
-  const year = formatNumber(YEAR, { locale, grouping: false });
+  const year = formatNumber(useCurrentYear(), { locale, grouping: false });
 
   return (
     <footer className={styles.footer}>
@@ -40,7 +41,11 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href={getStoreHref('googlePlay', 'footer')} target="_blank" rel="noopener">
+                <a
+                  href={getStoreHref('googlePlay', 'footer')}
+                  {...storeLinkTarget(platform)}
+                  onClick={() => trackDownloadClick({ store: 'googlePlay', placement: 'footer' })}
+                >
                   {footer.contact.store}
                 </a>
               </li>
@@ -65,10 +70,8 @@ export function Footer() {
         </div>
 
         <div className={styles.bottom}>
-          <p>{footer.sourceLine}</p>
-          <p suppressHydrationWarning>
-            {interpolate(footer.legal, { year, company: site.company.legalName })}
-          </p>
+          <p>{interpolate(footer.sourceLine, figures)}</p>
+          <p>{interpolate(footer.legal, { year, company: site.company.legalName })}</p>
         </div>
       </div>
     </footer>

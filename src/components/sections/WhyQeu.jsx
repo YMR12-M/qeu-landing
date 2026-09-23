@@ -85,7 +85,7 @@ export function WhyQeu() {
                         key={item.id}
                         image={image}
                         alt={item.imageAlt}
-                        sizes="(min-width: 48em) 22rem, 1px"
+                        sizes="(min-width: 48.0625em) 45vh, 1px"
                         className={styles.screen}
                         style={focus ? { '--focus': focus } : undefined}
                         data-kind={kind}

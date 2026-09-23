@@ -73,7 +73,7 @@
 }
 
 .link:hover {
-  color: var(--brand);
+  color: var(--brand-text);
 }
 
 .locale {

@@ -9,9 +9,9 @@ const STORE_BY_PLATFORM = { ios: 'appStore', android: 'googlePlay' };
 /**
  * The primary "get the app" pill.
  *
- * On a phone it opens that phone's store directly (and can name it: `labels.ios` /
- * `labels.android`); on a computer — and in the pre-rendered HTML — it jumps to the
- * download section, which has both stores and a QR code.
+ * On a phone it opens that phone's store directly, in the same tab so the store app can
+ * take over (and can name it: `labels.ios` / `labels.android`); on a computer — and in the
+ * pre-rendered HTML — it jumps to the download section, which has both stores and a QR code.
  */
 export function DownloadLink({ placement, size = 'md', labels, className, children }) {
   const platform = usePlatform();
@@ -31,8 +31,6 @@ export function DownloadLink({ placement, size = 'md', labels, className, childr
     <a
       className={classes}
       href={getStoreHref(store, placement)}
-      target="_blank"
-      rel="noopener"
       onClick={() => trackDownloadClick({ store, placement })}
     >
       {label}

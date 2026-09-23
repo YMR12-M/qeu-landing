@@ -9,7 +9,7 @@
   font-size: var(--text-mono);
   font-weight: 500;
   letter-spacing: 0.06em;
-  color: var(--brand);
+  color: var(--brand-text);
 }
 
 .eyebrow:lang(ar) {
@@ -28,12 +28,4 @@
   font-size: var(--text-lead);
   font-weight: 500;
   color: var(--muted);
-}
-
-.dark .title {
-  color: var(--white);
-}
-
-.dark .lead {
-  color: var(--glow);
 }

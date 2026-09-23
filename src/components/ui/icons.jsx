@@ -43,3 +43,21 @@ export function Globe(props) {
     </Icon>
   );
 }
+
+// Media controls keep their direction in RTL (they describe playback, not reading order).
+export function Pause(props) {
+  return (
+    <Icon viewBox="0 0 24 24" {...props}>
+      <rect x="6" y="5" width="4" height="14" rx="1" />
+      <rect x="14" y="5" width="4" height="14" rx="1" />
+    </Icon>
+  );
+}
+
+export function Play(props) {
+  return (
+    <Icon viewBox="0 0 24 24" {...props}>
+      <path d="M8 5.8v12.4a1 1 0 0 0 1.5.86l10.2-6.2a1 1 0 0 0 0-1.72L9.5 4.94A1 1 0 0 0 8 5.8Z" />
+    </Icon>
+  );
+}

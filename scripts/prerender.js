@@ -3,7 +3,9 @@
  *
  * Renders every locale with the server bundle and writes real HTML into dist/client:
  *   /          → dist/client/index.html          (Arabic)
- *   /english   → dist/client/english/index.html  (English)
+ *   /english   → dist/client/english.html        (English — what hosts and `vite preview`
+ *                dist/client/english/index.html   serve for /english; the folder copy
+ *                                                  answers /english/)
  * Crawlers and the first paint get the full page; React then hydrates it in the browser.
  */
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
@@ -14,8 +16,28 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const clientDir = path.join(root, 'dist', 'client');
 const serverEntry = path.join(root, 'dist', 'server', 'entry-server.js');
 
+// The client build's index.html is the template, and the Arabic page is then written over
+// it. A copy is kept outside the deployed folder, so the prerender can run again (on its
+// own) without reading a page it already rendered.
+const indexFile = path.join(clientDir, 'index.html');
+const templateCopy = path.join(root, 'dist', 'index.template.html');
+const HEAD_SLOT = '<!--app-head-->';
+const HTML_SLOT = '<!--app-html-->';
+const isTemplate = (html) => html.includes(HEAD_SLOT) && html.includes(HTML_SLOT);
+
+let template = await readFile(indexFile, 'utf8');
+if (isTemplate(template)) {
+  await writeFile(templateCopy, template);
+} else {
+  template = await readFile(templateCopy, 'utf8').catch(() => '');
+  if (!isTemplate(template)) {
+    throw new Error(
+      `No page template with ${HEAD_SLOT} and ${HTML_SLOT} was found — run \`npm run build\`.`,
+    );
+  }
+}
+
 const { render, routes } = await import(pathToFileURL(serverEntry).href);
-const template = await readFile(path.join(clientDir, 'index.html'), 'utf8');
 const assets = await readdir(path.join(clientDir, 'assets'));
 
 // Preload the two Tajawal files the first screen paints with (headline 800, body 500),
@@ -29,17 +51,26 @@ const fontFile = (name) =>
 const fontPreload = (file) =>
   `<link rel="preload" href="/assets/${file}" as="font" type="font/woff2" crossorigin />`;
 
+/** '/' → index.html; '/english' → english.html and english/index.html. */
+const outputFiles = (route) =>
+  route === '/' ? ['index.html'] : [`${route.slice(1)}.html`, `${route.slice(1)}/index.html`];
+
 for (const route of routes) {
   const { html, head, lang, dir } = render(route.locale);
   const preloads = FIRST_PAINT_FONTS[route.locale].map(fontFile).filter(Boolean).map(fontPreload);
 
+  // Replacer functions insert the markup verbatim ("$&", "$'"… are not patterns there).
   const page = template
-    .replace(/<html[^>]*>/, `<html lang="${lang}" dir="${dir}">`)
-    .replace('<!--app-head-->', [...preloads, head].join('\n    '))
-    .replace('<!--app-html-->', html);
+    .replace(/<html[^>]*>/, () => `<html lang="${lang}" dir="${dir}">`)
+    .replace(HEAD_SLOT, () => [...preloads, head].join('\n    '))
+    .replace(HTML_SLOT, () => html);
 
-  const outFile = path.join(clientDir, route.path, 'index.html');
-  await mkdir(path.dirname(outFile), { recursive: true });
-  await writeFile(outFile, page);
-  console.log(`  ✓ ${route.path.padEnd(10)} → ${path.relative(root, outFile)}`);
+  const written = [];
+  for (const file of outputFiles(route.path)) {
+    const outFile = path.join(clientDir, file);
+    await mkdir(path.dirname(outFile), { recursive: true });
+    await writeFile(outFile, page);
+    written.push(path.relative(root, outFile));
+  }
+  console.log(`  ✓ ${route.path.padEnd(10)} → ${written.join(', ')}`);
 }

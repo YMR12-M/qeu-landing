@@ -14,7 +14,9 @@ const output = new URL('../src/assets/qr/download-qr.svg', import.meta.url);
 
 const svg = await QRCode.toString(url, {
   type: 'svg',
-  errorCorrectionLevel: 'M',
+  // L: the code is only ever shown on a screen (no print wear to recover from), and it keeps
+  // the tagged link at 37×37 modules, large enough to scan at the card's 96px.
+  errorCorrectionLevel: 'L',
   margin: 0, // the card around the code provides the quiet zone
   color: { dark: '#0a2a2f', light: '#0000' },
 });

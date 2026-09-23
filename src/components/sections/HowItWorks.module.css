@@ -39,7 +39,7 @@
   font-size: var(--text-mono);
   font-weight: 500;
   letter-spacing: 0.06em;
-  color: var(--brand);
+  color: var(--brand-text);
 }
 
 .title {

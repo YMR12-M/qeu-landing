@@ -3,7 +3,8 @@
  *
  * The brand is "Q" in English, as on qeu.app/english and the store listing ("كيو | Q").
  * Benefit texts and the Q-ur line are quoted from qeu.app/english; the rest translates
- * the Arabic source (listed in README → Content sources for client review).
+ * the Arabic source (listed in README → Content sources for client review), in the same
+ * US spelling as the quoted lines. {tokens} work as in ar.js.
  */
 
 const en = {
@@ -21,6 +22,8 @@ const en = {
     primaryNav: 'Main navigation',
     storeLinks: 'Download the app',
     switchLocale: 'عرض الصفحة بالعربي',
+    pauseMotion: 'Pause background animation',
+    playMotion: 'Play background animation',
   },
 
   nav: {
@@ -41,7 +44,7 @@ const en = {
       ios: 'Download free on the App Store',
       android: 'Download free on Google Play',
     },
-    note: '100K+ downloads in 8 months',
+    note: '{downloads}+ downloads in {months}',
   },
 
   why: {
@@ -81,7 +84,7 @@ const en = {
   inside: {
     eyebrow: 'How it works',
     title: 'Our deals come to you — at the same price',
-    lead: 'A simple, clear shopping experience with secure payment options and fast, organised delivery right to your door.',
+    lead: 'A simple, clear shopping experience with secure payment options and fast, organized delivery right to your door.',
     steps: [
       {
         id: 'offers',
@@ -100,7 +103,7 @@ const en = {
       {
         id: 'delivery',
         title: 'Get it at your door',
-        text: 'Fast, organised delivery — and you track your order step by step.',
+        text: 'Fast, organized delivery — and you track your order step by step.',
         imageAlt:
           'The order review screen in the Q app, next to a Q delivery van reading “Our deals come to you at the same price”',
       },
@@ -108,18 +111,20 @@ const en = {
   },
 
   stats: {
-    downloads: { unit: 'K+', label: 'downloads on Google Play in the 8 months since launch' },
+    downloads: {
+      unit: { thousand: 'K+', million: 'M+' },
+      label: 'downloads on Google Play in the {months} since launch',
+    },
     rating: { label: 'rating from phone users on Google Play' },
     fiveStar: { unit: '%', label: 'of phone ratings are 5 stars ({count} ratings)' },
-    count: { label: 'phone ratings · 1.3K in total' },
+    count: { label: 'phone ratings · {allRatings} in total' },
   },
 
   download: {
     title: 'Get Q',
     subtitle: 'Free on your phone',
     text: 'Available for iPhone and Android. Scan the code or pick your store — the app is free, and the deals start on the very first screen.',
-    source:
-      'Source: the app’s official Google Play page (sa.qeu1.app), captured 20 September 2026.',
+    source: 'Source: the app’s official Google Play page ({package}), captured {capturedOn}.',
     stageAlt:
       'The Q app home screen: a super deal on Al Fakhama rice with Al Fakhama oil free, and the “prices you’ll only find on Q” section',
   },
@@ -147,8 +152,33 @@ const en = {
       title: 'More information',
       privacy: 'Privacy policy',
     },
-    sourceLine: 'Q · sa.qeu1.app · figures from the official Google Play page',
+    sourceLine: 'Q · {package} · figures from the official Google Play page',
     legal: '© {year} {company} — Al-Rehab District, Jeddah',
+  },
+
+  /** How the figures are written; {n} is the number. */
+  numbers: {
+    thousand: '{n}K',
+    million: '{n}M',
+    months: { one: '{n} month', other: '{n} months' },
+  },
+
+  dates: {
+    format: '{day} {month} {year}',
+    months: [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ],
   },
 };
 

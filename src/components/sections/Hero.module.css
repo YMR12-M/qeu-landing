@@ -1,6 +1,7 @@
 .hero {
   --screen-height: clamp(14rem, 25vw, 30rem);
   --screen-gap: clamp(0.875rem, 1.25vw, 1.5rem);
+  --focus-ring: var(--glow);
   position: relative;
   display: flex;
   align-items: center;
@@ -28,9 +29,16 @@
   animation: drift var(--drift-duration) linear infinite;
 }
 
+/* Paused by the visitor, or scrolled out of view (nothing to see, nothing to animate). */
+.hero[data-paused] .track,
+.hero[data-offscreen] .track {
+  animation-play-state: paused;
+}
+
+/* One set = the track's width divided by the number of sets (Hero.jsx → --drift-sets). */
 @keyframes drift {
   to {
-    transform: translateX(-50%);
+    transform: translateX(calc(-100% / var(--drift-sets)));
   }
 }
 
@@ -106,10 +114,6 @@
   color: var(--white);
 }
 
-.line {
-  display: block;
-}
-
 .accent {
   color: var(--glow);
 }
@@ -126,4 +130,39 @@
   font-size: clamp(0.9375rem, 1.0417vw, 1.25rem);
   font-weight: 500;
   color: var(--glow);
+}
+
+/* ── Pause control (WCAG 2.2.2) ───────────────────────────────────── */
+
+.motionToggle {
+  position: absolute;
+  inset-block-end: clamp(1rem, 1.5vw, 1.75rem);
+  inset-inline-end: clamp(1.25rem, 6.25vw, 7.5rem);
+  display: grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  padding: 0;
+  border: 1px solid rgb(159 227 234 / 0.35);
+  border-radius: 50%;
+  background: rgb(4 40 47 / 0.72);
+  color: var(--glow);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) ease;
+}
+
+.motionToggle:hover {
+  background: rgb(4 40 47 / 0.95);
+}
+
+.motionIcon {
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+}
+
+/* Nothing moves under reduced motion, so there is nothing to pause. */
+@media (prefers-reduced-motion: reduce) {
+  .motionToggle {
+    display: none;
+  }
 }
