@@ -1,6 +1,8 @@
+import { figuresFor } from '../content/figures.js';
 import { dictionaries } from '../content/locales/index.js';
 import { site } from '../content/site.js';
 import { LOCALES } from '../i18n/locales.js';
+import { interpolate } from '../lib/format.js';
 
 /**
  * <head> tags for one locale: title, description, canonical + hreflang, Open Graph,
@@ -15,8 +17,10 @@ const escapeHtml = (value) =>
 const absolute = (path) => new URL(path, site.origin).href;
 
 function structuredData(locale) {
-  const { meta } = dictionaries[locale];
+  const { meta, faq } = dictionaries[locale];
+  const config = LOCALES[locale];
   const organizationId = `${site.origin}/#organization`;
+  const tokens = { ...figuresFor(locale), email: site.contact.email };
 
   return {
     '@context': 'https://schema.org',
@@ -55,6 +59,17 @@ function structuredData(locale) {
         installUrl: site.links.googlePlay,
         offers: { '@type': 'Offer', price: String(site.app.price), priceCurrency: 'SAR' },
         publisher: { '@id': organizationId },
+      },
+      {
+        // The same questions and answers the page shows in its FAQ section.
+        '@type': 'FAQPage',
+        '@id': `${absolute(config.path)}#faq`,
+        inLanguage: config.hreflang,
+        mainEntity: faq.items.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: { '@type': 'Answer', text: interpolate(item.answer, tokens) },
+        })),
       },
     ],
   };

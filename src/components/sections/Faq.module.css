@@ -1,0 +1,406 @@
+/*
+ * «عندك سؤال؟» — a till receipt on the dark counter. Paper, dashed rules, a torn edge and a
+ * barcode, set in the page's own pairing: IBM Plex Mono for the till print, Tajawal for
+ * what people actually read.
+ */
+
+.section {
+  --focus-ring: var(--glow);
+  --rule: #b9cbce; /* till-print rules on the paper (decorative) */
+  padding-block: var(--section-space);
+  background: var(--night);
+  color: var(--white);
+}
+
+.layout {
+  display: grid;
+  gap: clamp(3rem, 5vw, 6rem);
+}
+
+@media (min-width: 64em) {
+  .layout {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  /* The question stays in view beside the receipt while it's read. */
+  .intro {
+    position: sticky;
+    inset-block-start: calc(var(--header-height) + 3rem);
+  }
+}
+
+/* ── The heading, on the counter ────────────────────────────────── */
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--glow);
+}
+
+.eyebrow::before {
+  content: '';
+  flex: none;
+  inline-size: 2.5rem;
+  block-size: 1px;
+  background: currentColor;
+}
+
+.eyebrow:lang(ar) {
+  font-family: var(--font-sans);
+  font-size: var(--text-nav);
+  font-weight: 700;
+  letter-spacing: normal;
+}
+
+.title {
+  margin-block-start: 1.25rem;
+  font-size: clamp(2.75rem, 5.2vw, 6rem);
+  line-height: 1.05;
+  color: var(--white);
+}
+
+.lead {
+  max-inline-size: 21em;
+  margin-block-start: 1.5rem;
+  font-size: var(--text-lead);
+  font-weight: 500;
+  color: var(--glow);
+}
+
+.contact {
+  margin-block-start: 2.25rem;
+  font-weight: 500;
+  color: rgb(255 255 255 / 0.78);
+}
+
+.mail {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  overflow-wrap: anywhere;
+}
+
+.contact .mail {
+  color: var(--white);
+  text-decoration-color: var(--glow);
+}
+
+.contact .mail:hover {
+  color: var(--glow);
+}
+
+/* ── The printer ────────────────────────────────────────────────── */
+
+.printer {
+  inline-size: min(100%, 31rem);
+  margin-inline: auto;
+}
+
+.slot {
+  position: relative;
+  z-index: 1;
+  block-size: 1.5rem;
+  margin-inline: -1rem;
+  border-radius: var(--pill);
+  background: linear-gradient(#17444d, #031a1f);
+  box-shadow:
+    inset 0 1px 0 rgb(159 227 234 / 0.22),
+    0 0.75rem 1.5rem -0.5rem rgb(0 0 0 / 0.65);
+}
+
+/* The slit the paper feeds out of… */
+.slot::after {
+  content: '';
+  position: absolute;
+  inset-inline: 1.75rem;
+  inset-block-end: 0.375rem;
+  block-size: 0.1875rem;
+  border-radius: var(--pill);
+  background: #010c0f;
+}
+
+/* …and the printer's status light. */
+.slot::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0.4375rem;
+  inset-inline-end: 0.75rem;
+  inline-size: 0.375rem;
+  block-size: 0.375rem;
+  border-radius: 50%;
+  background: var(--glow);
+  box-shadow: 0 0 0.5rem var(--glow);
+}
+
+/* Clipped only along the top: the paper disappears into the slot, its shadow falls freely. */
+.feed {
+  margin-block-start: -0.625rem;
+  clip-path: inset(0 -4rem -8rem);
+}
+
+.paper {
+  filter: drop-shadow(0 1.75rem 2rem rgb(1 12 15 / 0.6));
+}
+
+/* Hung from the slot, a touch off square. */
+@media (min-width: 64em) {
+  .paper {
+    rotate: -1deg;
+    transform-origin: 50% 0;
+  }
+}
+
+/* Scrolled into view, the receipt prints: it feeds down out of the slot. */
+.feed[data-reveal='pending'] .paper {
+  translate: 0 -100%;
+}
+
+.feed[data-reveal='shown'] .paper {
+  transition: translate 1.8s cubic-bezier(0.3, 0.6, 0.2, 1);
+}
+
+/* ── The receipt ────────────────────────────────────────────────── */
+
+.receipt {
+  --focus-ring: var(--brand-text);
+  --tooth: 1rem; /* one tooth of the torn edge */
+  padding: 1.75rem clamp(1.25rem, 4vw, 2.25rem) calc(1.5rem + var(--tooth) / 2);
+  background: linear-gradient(rgb(4 40 47 / 0.16), rgb(4 40 47 / 0) 1.25rem), var(--white);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono);
+  /* Torn bottom edge: every tile keeps a 90° cone rising from its bottom centre. */
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% /
+    var(--tooth) 100%;
+}
+
+.head {
+  display: grid;
+  justify-items: center;
+  gap: 0.375rem;
+  padding-block-end: 1.25rem;
+  border-block-end: 1.5px dashed var(--rule);
+  text-align: center;
+}
+
+.logo {
+  inline-size: 4.5rem;
+  block-size: auto;
+  margin-block-end: 0.5rem;
+  color: var(--deep);
+}
+
+.receiptTitle {
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.meta {
+  color: var(--muted);
+}
+
+.columns {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 1rem 0.625rem;
+  border-block-end: 1.5px dashed var(--rule);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Arabic has no capitals to space out: the till lines go to Tajawal at a reading size. */
+:is(.receiptTitle, .meta, .columns, .thanks):lang(ar) {
+  font-family: var(--font-sans);
+  letter-spacing: normal;
+}
+
+.receiptTitle:lang(ar) {
+  font-size: var(--text-nav);
+  font-weight: 700;
+}
+
+.columns:lang(ar) {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+:is(.meta, .thanks):lang(ar) {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+/* ── One line per question ──────────────────────────────────────── */
+
+.item {
+  border-block-end: 1.5px dashed var(--rule);
+  interpolate-size: allow-keywords;
+}
+
+.question {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding-block: 1.125rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.question::-webkit-details-marker {
+  display: none;
+}
+
+.question:focus-visible {
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+.number {
+  flex: none;
+  inline-size: 1.75rem;
+  font-weight: 500;
+  color: var(--brand-text);
+}
+
+.questionText {
+  font-family: var(--font-sans);
+  font-size: clamp(1.0625rem, 1.25vw, 1.3125rem);
+  font-weight: 700;
+  line-height: 1.4;
+  transition: color var(--duration-fast) ease;
+}
+
+.question:hover .questionText,
+.item[open] .questionText {
+  color: var(--deep);
+}
+
+/* Dot leaders, as between an item and its price. They only fill the room a line has left,
+   so on a narrow receipt the question keeps its width and the dots simply step aside. */
+.leader {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  border-block-end: 2px dotted var(--rule);
+  transition: border-color var(--duration-fast) ease;
+}
+
+.question:hover .leader {
+  border-color: var(--brand-text);
+}
+
+/* A shopping-list box: + to open, filled − when the answer is out. */
+.mark {
+  position: relative;
+  flex: none;
+  align-self: center;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border: 1.5px solid var(--deep);
+  border-radius: 0.3125rem;
+  transition: background-color var(--duration-fast) ease;
+}
+
+.mark::before,
+.mark::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline: 22%;
+  block-size: 1.5px;
+  background: var(--deep);
+  translate: 0 -50%;
+  transition:
+    rotate var(--duration-base) var(--ease-out),
+    background-color var(--duration-fast) ease;
+}
+
+.mark::after {
+  rotate: 90deg;
+}
+
+.item[open] .mark {
+  background: var(--deep);
+}
+
+.item[open] .mark::before,
+.item[open] .mark::after {
+  background: var(--white);
+}
+
+.item[open] .mark::after {
+  rotate: 0deg;
+}
+
+/* The answer prints out under its line (where the browser can animate <details>). */
+.item::details-content {
+  block-size: 0;
+  overflow-y: clip;
+  opacity: 0;
+  transition:
+    block-size var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) ease,
+    content-visibility var(--duration-base) allow-discrete;
+}
+
+.item[open]::details-content {
+  block-size: auto;
+  opacity: 1;
+}
+
+.answer {
+  padding-block-end: 1.25rem;
+  padding-inline: calc(1.75rem + 0.75rem) 2.25rem;
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.05vw, 1.125rem);
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.answer .mail {
+  color: var(--brand-text);
+}
+
+/* ── The total, the barcode, the thanks ─────────────────────────── */
+
+.total {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-block-start: 0.375rem;
+  padding-block: 1.125rem 1rem;
+  border-block-start: 3px double var(--deep);
+  font-family: var(--font-sans);
+  font-size: clamp(1.25rem, 1.5vw, 1.5rem);
+  font-weight: 800;
+  color: var(--deep);
+}
+
+.barcode {
+  inline-size: 100%;
+  block-size: 3.25rem;
+  margin-block-start: 0.5rem;
+  color: var(--text);
+}
+
+.thanks {
+  margin-block-start: 0.875rem;
+  text-align: center;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* Phones: the slot hugs the paper a little closer. */
+@media (max-width: 47.99em) {
+  .slot {
+    margin-inline: -0.5rem;
+  }
+}

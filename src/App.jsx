@@ -2,6 +2,7 @@ import { Footer } from './components/layout/Footer.jsx';
 import { Header } from './components/layout/Header.jsx';
 import { SkipLink } from './components/layout/SkipLink.jsx';
 import { Download } from './components/sections/Download.jsx';
+import { Faq } from './components/sections/Faq.jsx';
 import { Hero } from './components/sections/Hero.jsx';
 import { HowItWorks } from './components/sections/HowItWorks.jsx';
 import { WhyQeu } from './components/sections/WhyQeu.jsx';
@@ -17,6 +18,7 @@ export function App({ locale }) {
         <Hero />
         <WhyQeu />
         <HowItWorks />
+        <Faq />
         <Download />
       </main>
       <Footer />

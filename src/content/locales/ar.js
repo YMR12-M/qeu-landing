@@ -31,6 +31,7 @@ const ar = {
     items: [
       { id: 'why', label: 'ليه كيو' },
       { id: 'inside', label: 'جوه التطبيق' },
+      { id: 'faq', label: 'الأسئلة' },
       { id: 'download', label: 'حمّل التطبيق' },
     ],
     download: 'حمّل كيو',
@@ -106,6 +107,69 @@ const ar = {
         text: 'توصيل سريع ومنظّم، وتتابع طلبك خطوة بخطوة.',
         imageAlt:
           'شاشة مراجعة الطلب في تطبيق كيو، وسيارة توصيل كيو مكتوب عليها «عروضنا تجيك وبنفس السعر»',
+      },
+    ],
+  },
+
+  // Every answer restates what the page and the Google Play listing already say — nothing new
+  // is promised here (no delivery areas, fees or payment brands: the sources don't give them).
+  faq: {
+    eyebrow: 'قبل ما تحمّل',
+    title: 'عندك سؤال؟',
+    lead: 'جمعنا لك الأجوبة في فاتورة وحدة: واضحة، مختصرة، وبدون رسوم.',
+    contact: 'ما لقيت جوابك؟ راسلنا على {email}',
+    receipt: {
+      title: 'فاتورة أسئلة',
+      count: {
+        one: 'سؤال واحد',
+        two: 'سؤالين',
+        few: '{n} أسئلة',
+        many: '{n} سؤال',
+        other: '{n} سؤال',
+      },
+      columns: { question: 'السؤال', answer: 'الجواب' },
+      total: 'الإجمالي',
+      totalValue: 'مجاناً',
+      thanks: 'شكراً لاختيارك كيو',
+    },
+    items: [
+      {
+        id: 'free',
+        question: 'هل تطبيق كيو مجاني؟',
+        answer: 'أكيد. تحميل كيو مجاني على App Store و Google Play، والعروض تبدأ من أول شاشة.',
+      },
+      {
+        id: 'devices',
+        question: 'على أي جوال يشتغل كيو؟',
+        answer: 'على الآيفون، وعلى جوالات الأندرويد بإصدار {androidMin} أو أحدث.',
+      },
+      {
+        id: 'deals',
+        question: 'إيش العروض اللي في كيو؟',
+        answer:
+          'عروض ١+١ مجاناً، وخصومات واضحة على المنتجات اليومية، وأسعار ما تلاقيها إلا في كيو.',
+      },
+      {
+        id: 'order',
+        question: 'كيف أطلب؟',
+        answer: 'تصفّح العروض، أضف اللي تبيه للسلة، واطلب خلال ثواني — مع خيارات دفع آمنة.',
+      },
+      {
+        id: 'tracking',
+        question: 'أقدر أتابع طلبي؟',
+        answer: 'أكيد، من التطبيق نفسه: تتابع طلبك خطوة بخطوة لحد ما يوصل باب بيتك.',
+      },
+      {
+        id: 'assistant',
+        question: 'مين هو كيور؟',
+        answer:
+          'كيور هو المساعد الذكي في تطبيق كيو. اسأله عن طبخة مثل الكبسة، ويجهّز لك مكوناتها في قائمة وحدة تضيفها للسلة بزر «أضف الكل».',
+      },
+      {
+        id: 'support',
+        question: 'كيف أتواصل معكم؟',
+        answer:
+          'لو واجهتك أي مشكلة، راسلنا على {email}، أو من رابط «بلّغ عن مشكلة في التطبيق» في آخر الصفحة.',
       },
     ],
   },

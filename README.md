@@ -24,6 +24,7 @@ Node ≥ 20.19.
 | Header, hero with drifting app screens                               | v3                                                                    |
 | «ليه كيو؟» — pinned, scroll-driven benefits with the matching screen | v3                                                                    |
 | «كيف يشتغل / عروضنا تجيك وبنفس السعر» — three steps with screens     | **kept** from the earlier proposal (takes v3's "inside the app" slot) |
+| «عندك سؤال؟» — FAQ printed on a till receipt                         | **new**: answers restate the page and the Google Play listing only    |
 | Google Play figures (count up on scroll)                             | v3                                                                    |
 | «حمّل كيو» with the app-icon stage, phone and QR card                | v3 text + **kept** stage from the earlier proposal                    |
 | Footer                                                               | v3, with the missing legal and contact details added                  |
@@ -85,13 +86,13 @@ src/
     media.js              every image + its responsive sizes
   components/
     layout/               Header, Footer, SkipLink
-    sections/             Hero, WhyQeu, HowItWorks, Download
+    sections/             Hero, WhyQeu, HowItWorks, Faq, Download
     download/             DownloadLink, StorePills, AppStage, QrCard
     stats/                StatsRow, CountUp
     brand/                Logo (vector wordmark from qeu.app)
     ui/                   Picture, Reveal, SectionHeading, icons
   i18n/                   locales config, provider, useLocale()
-  hooks/                  usePlatform (iOS / Android / desktop), useCurrentYear — hydration-safe
+  hooks/                  usePlatform, useCurrentYear (hydration-safe), useScrollReveal
   lib/                    links (store URLs + UTM), analytics, formatting, cx
   seo/head.js             <title>, meta, hreflang, Open Graph, JSON-LD
   styles/                 fonts, tokens, base, layout
@@ -124,7 +125,8 @@ translation and should be reviewed by the client.
 ## SEO, accessibility, performance
 
 - One `h1`; `lang` and `dir` set per page; hreflang, a canonical URL, Open Graph and schema.org
-  data (Organization, WebSite, MobileApplication). The data carries no `aggregateRating`: Google
+  data (Organization, WebSite, MobileApplication, and FAQPage from the same copy as the FAQ
+  section). The data carries no `aggregateRating`: Google
   doesn't allow marking up ratings collected on another site.
 - Skip link, landmarks, visible focus, 44px touch targets, and descriptive alt text on every app
   screen (the drifting hero screens are decorative). Animation (drift, count-up, reveals,

@@ -30,6 +30,7 @@ const en = {
     items: [
       { id: 'why', label: 'Why Q' },
       { id: 'inside', label: 'Inside the app' },
+      { id: 'faq', label: 'FAQ' },
       { id: 'download', label: 'Download' },
     ],
     download: 'Get Q',
@@ -106,6 +107,64 @@ const en = {
         text: 'Fast, organized delivery — and you track your order step by step.',
         imageAlt:
           'The order review screen in the Q app, next to a Q delivery van reading “Our deals come to you at the same price”',
+      },
+    ],
+  },
+
+  faq: {
+    eyebrow: 'Before you download',
+    title: 'Got a question?',
+    lead: 'We printed the answers on one receipt: short, clear and free of charge.',
+    contact: 'Didn’t find your answer? Email us at {email}',
+    receipt: {
+      title: 'Question receipt',
+      count: { one: '{n} question', other: '{n} questions' },
+      columns: { question: 'Question', answer: 'Answer' },
+      total: 'Total',
+      totalValue: 'Free',
+      thanks: 'Thanks for choosing Q',
+    },
+    items: [
+      {
+        id: 'free',
+        question: 'Is Q free?',
+        answer:
+          'Yes. Q is free to download on the App Store and Google Play, and the deals start on the very first screen.',
+      },
+      {
+        id: 'devices',
+        question: 'Which phones does Q work on?',
+        answer: 'iPhone, and Android phones running Android {androidMin} or later.',
+      },
+      {
+        id: 'deals',
+        question: 'What kind of deals does Q have?',
+        answer:
+          '1+1 free offers, clear discounts on everyday products, and prices you’ll only find on Q.',
+      },
+      {
+        id: 'order',
+        question: 'How do I order?',
+        answer:
+          'Browse the deals, add what you need to your cart and order in seconds, with secure payment options.',
+      },
+      {
+        id: 'tracking',
+        question: 'Can I track my order?',
+        answer:
+          'Yes, right in the app: you follow your order step by step until it reaches your door.',
+      },
+      {
+        id: 'assistant',
+        question: 'Who is Q-ur?',
+        answer:
+          'Q-ur is the smart assistant in the Q app. Ask it about a dish like kabsa, and it puts the ingredients in one list you add to your cart with “Add all”.',
+      },
+      {
+        id: 'support',
+        question: 'How do I reach you?',
+        answer:
+          'If anything goes wrong in the app, email us at {email}, or use “Report a problem in the app” at the bottom of this page.',
       },
     ],
   },
