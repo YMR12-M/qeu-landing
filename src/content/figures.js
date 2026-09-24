@@ -15,11 +15,18 @@ const monthsBetween = (from, to) =>
  *   {downloads}  "١٠٠ ألف" / "100K"      {months}     "٨ شهور" / "8 months"
  *   {allRatings} "١٫٣ ألف" / "1.3K"      {capturedOn} "٢٠ سبتمبر ٢٠٢٦" / "20 September 2026"
  *   {package}    "sa.qeu1.app"          {androidMin} "٧٫٠" / "7.0"
+ *                                        {iosMin}     "١٥٫٠" / "15.0"
  */
 export function figuresFor(locale) {
   const { numbers, dates } = dictionaries[locale];
   const months = monthsBetween(site.app.releasedAt, site.capturedAt);
-  const androidDecimals = site.app.androidMinVersion.split('.')[1]?.length ?? 0;
+  // A version is written as the store writes it: "7.0", not "7".
+  const version = (value) =>
+    formatNumber(Number(value), {
+      locale,
+      decimals: value.split('.')[1]?.length ?? 0,
+      grouping: false,
+    });
 
   return {
     downloads: formatCompact(site.downloads, { locale, numbers }),
@@ -27,10 +34,7 @@ export function figuresFor(locale) {
     allRatings: formatCompact(site.ratings.total, { locale, numbers }),
     capturedOn: formatDate(site.capturedAt, { locale, dates }),
     package: site.app.androidPackage,
-    androidMin: formatNumber(Number(site.app.androidMinVersion), {
-      locale,
-      decimals: androidDecimals,
-      grouping: false,
-    }),
+    androidMin: version(site.app.androidMinVersion),
+    iosMin: version(site.app.iosMinVersion),
   };
 }

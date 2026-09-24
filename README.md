@@ -60,6 +60,9 @@ Content (claims v3 made that the sources don't support)
   floats over the page and takes on the colour of the section under it, so nothing separates it
   from the page.
 - Arabic headings no longer get letter-spacing, which breaks letter joining.
+- Wording follows the live site where v3 differed: «ليش كيو؟» (v3: «ليه»), and the footer slogan
+  is qeu.app's «أسعارنا هي أصلًا عروض» (v3: «كل شي في كيو عرض»). The English hero is
+  qeu.app/english's own line.
 - In «ليه كيو؟» and «حمّل كيو» the brand's name is drawn as its wordmark (the name stays in the
   text, visually hidden, for screen readers and search).
 - Portrait tablets: «ليه كيو؟» puts the screen under the list so the pinned block fills the view;
@@ -124,7 +127,10 @@ Everything on the page comes from Qeu's own material, captured September 2026:
 - **qeu.app** — marketing lines, the four benefits, Q-ur, the logo vector, the app screens and the privacy-policy summary.
 - **Google Play (`sa.qeu1.app`)** — rating 4.7 from 1,252 phone ratings (1.3K overall), the
   star distribution, 100K+ downloads, first release 25 Jan 2026 (≈8 months to the capture date),
-  the description (secure payment, fast delivery, order tracking), the screenshots and the icon.
+  the description (secure payment, fast delivery, order tracking), the screenshots and the icon,
+  and the privacy-policy address (https://qeu.app/policy, in Arabic only).
+- **App Store (`id6754709202`)**, captured 24 Sep 2026 — the direct store link, and the iPhone
+  requirement (iPhone only, iOS 15.0 or later).
 - **Qeu's store screenshots** — «عروضنا تجيك وبنفس السعر» (van livery), the kabsa conversation with Q-ur.
 
 The English copy is quoted from qeu.app/english where a line exists there; the rest is a
@@ -176,13 +182,12 @@ year, and basic security headers are set.
    `english/index.html` answers `/english/`. On nginx: `try_files $uri $uri.html $uri/index.html`.
    Should a host still send the Arabic page for `/english`, it hydrates as Arabic instead of
    mixing languages.
-2. **Move `/policy` and `/policy-english` over from the current Framer site before pointing the
-   domain here.** The footer links to them.
+2. **Move `/policy` over from the current Framer site before pointing the domain here.** The
+   footer links to https://qeu.app/policy (Arabic only: qeu.app has no English policy page).
 3. Give `/assets/*` a long cache lifetime (file names are content-hashed).
 
 ## Needed from the client
 
-- [ ] The direct App Store URL (`site.links.appStore`). Until it's set, iPhone buttons use the smart link.
 - [ ] Confirmation that `link-to.app` keeps UTM parameters.
 - [ ] A GTM / GA4 container (and Snap / TikTok pixels) if campaigns will run.
 - [ ] A 1200×630 share image. `public/og-image.png` is the current 682×298 one from qeu.app.

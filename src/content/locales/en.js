@@ -40,8 +40,9 @@ const en = {
   },
 
   hero: {
-    titleLines: ['An app that’s all deals,', 'from start to finish'],
-    titleAccent: 'with prices you won’t find anywhere else',
+    // The hero line on qeu.app/english.
+    titleLines: ['Make your shopping easier,'],
+    titleAccent: 'and your deals better!',
     cta: {
       default: 'Get Q for free',
       ios: 'Download free on the App Store',
@@ -130,7 +131,7 @@ const en = {
   faq: {
     eyebrow: 'Before you download',
     title: 'Got a question?',
-    lead: 'We printed the answers on one receipt: short, clear and free of charge.',
+    lead: 'We printed the answers on one receipt: short and clear.',
     ticket: {
       take: 'Take a number',
       now: 'Now serving',
@@ -156,7 +157,8 @@ const en = {
       {
         id: 'devices',
         question: 'Which phones does Q work on?',
-        answer: 'iPhone, and Android phones running Android {androidMin} or later.',
+        answer:
+          'iPhone with iOS {iosMin} or later, and Android phones running Android {androidMin} or later.',
       },
       {
         id: 'deals',
@@ -222,7 +224,8 @@ const en = {
   },
 
   footer: {
-    tagline: { before: 'Everything in Q is a', offer: 'deal' },
+    // The slogan on qeu.app/english: “Our Prices are Offers!”.
+    tagline: { before: 'Our prices are', offer: 'offers' },
     // The delivery sticker on the bag the order comes in.
     sticker: {
       title: 'Your order’s here',
@@ -239,7 +242,7 @@ const en = {
     },
     more: {
       title: 'Contents',
-      privacy: 'Privacy policy',
+      privacy: 'Privacy policy (in Arabic)',
     },
     sourceLine: 'Q · {package} · figures from the official Google Play page',
     legal: '© {year} {company} — Al-Rehab District, Jeddah',

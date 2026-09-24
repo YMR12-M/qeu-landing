@@ -10,7 +10,6 @@ export const LOCALES = {
     hreflang: 'ar-SA',
     ogLocale: 'ar_SA',
     path: '/',
-    privacyPath: '/policy',
   },
   en: {
     code: 'en',
@@ -19,7 +18,6 @@ export const LOCALES = {
     hreflang: 'en',
     ogLocale: 'en_US',
     path: '/english',
-    privacyPath: '/policy-english',
   },
 };
 

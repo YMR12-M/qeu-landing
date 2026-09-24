@@ -13,12 +13,14 @@ export const site = {
   // The day the Google Play figures below were read from the store listing.
   capturedAt: '2026-09-20',
 
-  // Source: Google Play listing for sa.qeu1.app — captured 20 September 2026.
+  // Source: Google Play listing for sa.qeu1.app — captured 20 September 2026; the iOS line
+  // from the App Store listing (id6754709202) — captured 24 September 2026.
   app: {
     androidPackage: 'sa.qeu1.app',
     androidMinVersion: '7.0',
-    price: 0,
-    releasedAt: '2026-01-25', // first release
+    iosMinVersion: '15.0', // iPhone only — the App Store lists no iPad version
+    price: 0, // free on both stores
+    releasedAt: '2026-01-25', // first release on Google Play (the App Store's: 22 January 2026)
   },
 
   // Source: Google Play listing — captured 20 September 2026. Downloads is the store's
@@ -36,10 +38,11 @@ export const site = {
     // Source: qeu.app — every download button on the current site points here, for both
     // iPhone and Android, so it routes each visitor to the right store.
     smartDownload: 'https://link-to.app/qeu',
-    // TODO(client): add the direct App Store URL (https://apps.apple.com/sa/app/id…).
-    // Until then, iPhone buttons use the smart link above.
-    appStore: null,
+    // Source: App Store listing, Saudi storefront — captured 24 September 2026.
+    appStore: 'https://apps.apple.com/sa/app/id6754709202',
     googlePlay: 'https://play.google.com/store/apps/details?id=sa.qeu1.app',
+    // Source: the Google Play listing and qeu.app. The policy is on qeu.app, in Arabic only.
+    privacyPolicy: 'https://qeu.app/policy',
   },
 
   // Source: qeu.app footer and qeu.app/policy.

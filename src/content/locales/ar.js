@@ -30,7 +30,7 @@ const ar = {
 
   nav: {
     items: [
-      { id: 'why', label: 'ليه كيو' },
+      { id: 'why', label: 'ليش كيو' },
       { id: 'inside', label: 'جوه التطبيق' },
       { id: 'faq', label: 'الأسئلة' },
       { id: 'download', label: 'حمّل التطبيق' },
@@ -66,7 +66,7 @@ const ar = {
   },
 
   why: {
-    title: 'ليه {brand}؟',
+    title: 'ليش {brand}؟',
     lead: 'لأن كيو يجمع لك أفضل العروض، أقل الأسعار، والتشكيلات الجاهزة في تجربة واحدة بسيطة وواضحة — تسوّق أسرع، وأسهل، وأوفر.',
     items: [
       {
@@ -132,7 +132,7 @@ const ar = {
   faq: {
     eyebrow: 'قبل ما تحمّل',
     title: 'عندك سؤال؟',
-    lead: 'جمعنا لك الأجوبة في فاتورة وحدة: واضحة، مختصرة، وبدون رسوم.',
+    lead: 'جمعنا لك الأجوبة في فاتورة وحدة: واضحة ومختصرة.',
     // The take-a-number ticket beside the receipt: now serving the last question, yours is next.
     ticket: {
       take: 'خذ رقمك',
@@ -164,7 +164,8 @@ const ar = {
       {
         id: 'devices',
         question: 'على أي جوال يشتغل كيو؟',
-        answer: 'على الآيفون، وعلى جوالات الأندرويد بإصدار {androidMin} أو أحدث.',
+        answer:
+          'على الآيفون بإصدار iOS {iosMin} أو أحدث، وعلى جوالات الأندرويد بإصدار {androidMin} أو أحدث.',
       },
       {
         id: 'deals',
@@ -229,7 +230,8 @@ const ar = {
   },
 
   footer: {
-    tagline: { before: 'كل شي في كيو', offer: 'عرض' },
+    // The slogan on qeu.app: «اسعارنا هي اصلًا عروض».
+    tagline: { before: 'أسعارنا هي أصلًا', offer: 'عروض' },
     // The delivery sticker on the bag the order comes in.
     sticker: {
       title: 'طلبك وصل',

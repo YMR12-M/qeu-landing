@@ -116,7 +116,7 @@ export function Footer() {
           <p>
             {interpolate(footer.legal, { year, company: site.company.legalName })}
             <span aria-hidden="true"> · </span>
-            <a className={styles.smallLink} href={config.privacyPath}>
+            <a className={styles.smallLink} href={site.links.privacyPolicy} hrefLang="ar">
               {footer.more.privacy}
             </a>
           </p>
