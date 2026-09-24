@@ -21,11 +21,11 @@ const STOCK = Array.from({ length: SETS }, () => media.shelf).flat();
  * shelf to the other. The headline is on display at the head of the shelf, with the app's own
  * price label under it: free.
  *
- * The shelf is restocked a product at a time, sliding away from the headline. The headline
- * has no entrance animation and is one block of text (lines broken with <br>), so it — not a
- * product — is the page's Largest Contentful Paint, painted with the first frame. The motion
- * can be paused (WCAG 2.2.2), stops while the hero is out of view, and is off entirely under
- * reduced motion.
+ * The shelf glides slowly and steadily away from the headline, like walking down the aisle.
+ * The headline has no entrance animation and is one block of text (lines broken with <br>),
+ * so it — not a product — is the page's Largest Contentful Paint, painted with the first
+ * frame. The motion can be paused (WCAG 2.2.2), stops while the hero is out of view, and is
+ * off entirely under reduced motion.
  */
 export function Hero() {
   const { t, figures } = useLocale();

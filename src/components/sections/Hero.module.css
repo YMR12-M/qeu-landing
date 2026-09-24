@@ -134,9 +134,7 @@
   gap: var(--gap);
   inline-size: max-content;
   padding-inline-end: var(--gap);
-  /* One slot = one product and the gap after it: a sixth of a set (Hero.jsx → --sets). */
-  --slot: calc(100% / var(--sets) / 6);
-  animation: restock var(--restock-duration) cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  animation: drift var(--drift-duration) linear infinite;
 }
 
 /* The store lays its screenshots out right to left — the two delivery shots make one panorama
@@ -151,37 +149,12 @@
   animation-play-state: paused;
 }
 
-/* The shelf is restocked a product at a time: it slides one slot away from the headline,
-   rests, and slides again — six slots, one set, then the loop starts over unseen. At every
-   rest a product's edge is exactly at the head of the shelf, so the row reads as a tidy set,
-   the way the store lays out its screenshots. */
-@keyframes restock {
-  0%,
-  13.33% {
-    translate: calc(var(--toward) * var(--slot) * 6) 0;
-  }
-  16.67%,
-  30% {
-    translate: calc(var(--toward) * var(--slot) * 5) 0;
-  }
-  33.33%,
-  46.67% {
-    translate: calc(var(--toward) * var(--slot) * 4) 0;
-  }
-  50%,
-  63.33% {
-    translate: calc(var(--toward) * var(--slot) * 3) 0;
-  }
-  66.67%,
-  80% {
-    translate: calc(var(--toward) * var(--slot) * 2) 0;
-  }
-  83.33%,
-  96.67% {
-    translate: calc(var(--toward) * var(--slot)) 0;
-  }
-  100% {
-    translate: 0 0;
+/* One set = the track's width divided by the number of sets (Hero.jsx → --sets). The shelf
+   starts a set further back and glides, without a stop, away from the headline — like walking
+   slowly down the aisle. Linear, so the pace never changes, and the loop has no seam. */
+@keyframes drift {
+  from {
+    translate: calc(var(--toward) * 100% / var(--sets)) 0;
   }
 }
 
