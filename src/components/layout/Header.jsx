@@ -34,10 +34,15 @@ function toneAt(x, y) {
  * (a liquid "you are here" marker stretches from one to the next) and the store button.
  * Reading down, it folds into a small pill that names the section being read; that pill
  * opens the sections as a receipt. On phones it is always the pill.
+ *
+ * `sections` are the page's own sections, for the pill and the receipt — the home page's by
+ * default; the privacy policy passes its contents. The open island always links to the home
+ * page's sections, from any page.
  */
-export function Header() {
-  const { t, config, alternate } = useLocale();
-  const { items } = t.nav;
+export function Header({ sections }) {
+  const { t, config, alternate, page, sectionHref } = useLocale();
+  const links = t.nav.items;
+  const items = sections ?? links;
   const islandRef = useRef(null);
   const trackRef = useRef(null);
   const menuRef = useRef(null);
@@ -81,20 +86,22 @@ export function Header() {
   }, []);
 
   // The liquid marker: its two ends travel to the active link one after the other — the
-  // leading end first, the trailing end catching up — so it stretches, then settles.
+  // leading end first, the trailing end catching up — so it stretches, then settles. It only
+  // shows on the page whose sections the island lists.
   useEffect(() => {
     const track = trackRef.current;
     const place = () => {
-      const link = track.querySelector(active ? `a[href="#${active}"]` : 'a');
+      const target = active && track.querySelector(`a[data-id="${active}"]`);
+      const link = target || track.querySelector('a');
       const box = track.getBoundingClientRect();
-      const target = link.getBoundingClientRect();
-      const left = target.left - box.left - track.clientLeft;
-      const right = box.left + track.clientLeft + track.clientWidth - target.right;
+      const rect = link.getBoundingClientRect();
+      const left = rect.left - box.left - track.clientLeft;
+      const right = box.left + track.clientLeft + track.clientWidth - rect.right;
       const previous = parseFloat(track.style.getPropertyValue('--blob-left'));
       track.dataset.moving = left >= previous || Number.isNaN(previous) ? 'right' : 'left';
       track.style.setProperty('--blob-left', `${left}px`);
       track.style.setProperty('--blob-right', `${right}px`);
-      track.toggleAttribute('data-blob', Boolean(active));
+      track.toggleAttribute('data-blob', Boolean(target));
     };
     place();
     const observer = new ResizeObserver(place);
@@ -126,6 +133,9 @@ export function Header() {
     menuRef.current.open = false;
   };
   const current = (id) => (active === id ? 'location' : undefined);
+  // The language link: this very page in the other language — or, from the policy (which has
+  // no other language), the site.
+  const switchLabel = page === 'home' ? t.a11y.switchLocale : t.a11y.switchSite;
 
   return (
     <header className={styles.header} data-tone={tone} data-folded={folded || undefined}>
@@ -147,9 +157,14 @@ export function Header() {
           <div ref={trackRef} className={styles.track}>
             <span className={styles.blob} aria-hidden="true" />
             <ul className={styles.links} role="list">
-              {items.map((item) => (
+              {links.map((item) => (
                 <li key={item.id}>
-                  <a className={styles.link} href={`#${item.id}`} aria-current={current(item.id)}>
+                  <a
+                    className={styles.link}
+                    href={sectionHref(item.id)}
+                    data-id={item.id}
+                    aria-current={current(item.id)}
+                  >
                     {item.label}
                   </a>
                 </li>
@@ -202,7 +217,7 @@ export function Header() {
                 lang={alternate.lang}
               >
                 <Globe className={styles.globe} />
-                {t.a11y.switchLocale}
+                {switchLabel}
               </a>
             </nav>
           </div>
@@ -217,7 +232,7 @@ export function Header() {
           href={alternate.path}
           hrefLang={alternate.hreflang}
           lang={alternate.lang}
-          aria-label={t.a11y.switchLocale}
+          aria-label={switchLabel}
         >
           <Globe className={styles.globe} />
           <span>{t.nav.switchLocale}</span>

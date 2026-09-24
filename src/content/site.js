@@ -41,8 +41,6 @@ export const site = {
     // Source: App Store listing, Saudi storefront — captured 24 September 2026.
     appStore: 'https://apps.apple.com/sa/app/id6754709202',
     googlePlay: 'https://play.google.com/store/apps/details?id=sa.qeu1.app',
-    // Source: the Google Play listing and qeu.app. The policy is on qeu.app, in Arabic only.
-    privacyPolicy: 'https://qeu.app/policy',
   },
 
   // Source: qeu.app footer and qeu.app/policy.

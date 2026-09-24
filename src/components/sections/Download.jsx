@@ -1,5 +1,4 @@
 import { useLocale } from '../../i18n/useLocale.js';
-import { interpolate } from '../../lib/format.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
 import { AppStage } from '../download/AppStage.jsx';
 import { StorePills } from '../download/StorePills.jsx';
@@ -8,7 +7,7 @@ import styles from './Download.module.css';
 
 /** v3 «حمّل كيو»: the store figures, then the call to download beside the kept app stage. */
 export function Download() {
-  const { t, figures } = useLocale();
+  const { t } = useLocale();
   const { download } = t;
 
   return (
@@ -24,7 +23,6 @@ export function Download() {
             <p className={styles.subtitle}>{download.subtitle}</p>
             <p className={styles.text}>{download.text}</p>
             <StorePills placement="download" className={styles.pills} />
-            <p className={styles.source}>{interpolate(download.source, figures)}</p>
           </div>
 
           <AppStage />

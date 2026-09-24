@@ -22,6 +22,7 @@ const en = {
     primaryNav: 'Main navigation',
     storeLinks: 'Download the app',
     switchLocale: 'عرض الصفحة بالعربي',
+    switchSite: 'عرض الموقع بالعربي',
     pauseMotion: 'Pause background animation',
     playMotion: 'Play background animation',
     sectionsMenu: 'Page sections',
@@ -207,7 +208,6 @@ const en = {
     title: 'Get {brand}',
     subtitle: 'Free on your phone',
     text: 'Available for iPhone and Android. Scan the code or pick your store — the app is free, and the deals start on the very first screen.',
-    source: 'Source: the app’s official Google Play page ({package}), captured {capturedOn}.',
     stageAlt:
       'The Q app home screen: a super deal on Al Fakhama rice with Al Fakhama oil free, and the “prices you’ll only find on Q” section',
   },
@@ -238,13 +238,14 @@ const en = {
       title: 'Contact us',
       report: 'Report a problem in the app',
       reportSubject: 'Problem in the Q app',
-      store: 'Q on Google Play',
+      googlePlay: 'Q on Google Play',
+      appStore: 'Q on the App Store',
     },
     more: {
       title: 'Contents',
       privacy: 'Privacy policy (in Arabic)',
     },
-    sourceLine: 'Q · {package} · figures from the official Google Play page',
+    sourceLine: 'Q · {package}',
     legal: '© {year} {company} — Al-Rehab District, Jeddah',
   },
 

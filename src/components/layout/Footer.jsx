@@ -12,6 +12,9 @@ import { Logo } from '../brand/Logo.jsx';
 import { Barcode } from '../ui/Barcode.jsx';
 import styles from './Footer.module.css';
 
+// Both store pages, in the order of the download section's pills.
+const STORES = ['googlePlay', 'appStore'];
+
 /**
  * The footer is the bag the order comes home in: Qeu's teal paper, its top edge cut in teeth,
  * the brand printed large across it — and the delivery sticker slapped on as it scrolls into
@@ -20,7 +23,7 @@ import styles from './Footer.module.css';
  * store id. The small print along the bottom keeps the legal line and the figures' source.
  */
 export function Footer() {
-  const { t, figures, config, locale } = useLocale();
+  const { t, figures, config, locale, page, policyPath, sectionHref } = useLocale();
   const { footer } = t;
   const { sticker } = footer;
   const platform = usePlatform();
@@ -71,7 +74,7 @@ export function Footer() {
                 <ul className={styles.links} role="list">
                   {t.nav.items.map((item) => (
                     <li key={item.id} data-seen={seen.has(item.id) || undefined}>
-                      <a href={`#${item.id}`}>
+                      <a href={sectionHref(item.id)}>
                         <span className={styles.tick} aria-hidden="true" />
                         {item.label}
                       </a>
@@ -95,17 +98,17 @@ export function Footer() {
                       {footer.contact.report}
                     </a>
                   </li>
-                  <li>
-                    <a
-                      href={getStoreHref('googlePlay', 'footer')}
-                      {...storeLinkTarget(platform)}
-                      onClick={() =>
-                        trackDownloadClick({ store: 'googlePlay', placement: 'footer' })
-                      }
-                    >
-                      {footer.contact.store}
-                    </a>
-                  </li>
+                  {STORES.map((store) => (
+                    <li key={store}>
+                      <a
+                        href={getStoreHref(store, 'footer')}
+                        {...storeLinkTarget(platform)}
+                        onClick={() => trackDownloadClick({ store, placement: 'footer' })}
+                      >
+                        {footer.contact[store]}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -116,7 +119,12 @@ export function Footer() {
           <p>
             {interpolate(footer.legal, { year, company: site.company.legalName })}
             <span aria-hidden="true"> · </span>
-            <a className={styles.smallLink} href={site.links.privacyPolicy} hrefLang="ar">
+            <a
+              className={styles.smallLink}
+              href={policyPath}
+              hrefLang={locale === 'ar' ? undefined : 'ar'}
+              aria-current={page === 'policy' ? 'page' : undefined}
+            >
               {footer.more.privacy}
             </a>
           </p>

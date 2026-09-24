@@ -12,4 +12,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://qeu.app/english" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://qeu.app/" />
   </url>
+  <url>
+    <loc>https://qeu.app/policy</loc>
+    <lastmod>2025-12-21</lastmod>
+  </url>
 </urlset>

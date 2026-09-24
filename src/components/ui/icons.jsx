@@ -79,3 +79,49 @@ export function Play(props) {
     </Icon>
   );
 }
+
+/** The privacy policy's three recipients: a delivery van, a payment card, a government building. */
+function LineIcon({ children, ...props }) {
+  return (
+    <Icon
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      {children}
+    </Icon>
+  );
+}
+
+export function Van(props) {
+  return (
+    <LineIcon {...props}>
+      <path d="M2.5 6.5h11v9.5h-11z" />
+      <path d="M13.5 9.5h4.2l3.3 3.4v3.1h-7.5" />
+      <circle cx="6.5" cy="17.2" r="1.9" />
+      <circle cx="17" cy="17.2" r="1.9" />
+    </LineIcon>
+  );
+}
+
+export function PaymentCard(props) {
+  return (
+    <LineIcon {...props}>
+      <rect x="2.5" y="5.5" width="19" height="13" rx="2.2" />
+      <path d="M2.5 10h19M6 14.5h4" />
+    </LineIcon>
+  );
+}
+
+export function Landmark(props) {
+  return (
+    <LineIcon {...props}>
+      <path d="M12 3.5 3.5 8h17z" />
+      <path d="M6 9.5v7M10 9.5v7M14 9.5v7M18 9.5v7M4 17.5h16M3 20.5h18" />
+    </LineIcon>
+  );
+}

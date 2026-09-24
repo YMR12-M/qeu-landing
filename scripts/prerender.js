@@ -1,11 +1,13 @@
 /**
  * Static pre-rendering (SSG) — runs after both Vite builds.
  *
- * Renders every locale with the server bundle and writes real HTML into dist/client:
+ * Renders every page with the server bundle and writes real HTML into dist/client:
  *   /          → dist/client/index.html          (Arabic)
  *   /english   → dist/client/english.html        (English — what hosts and `vite preview`
  *                dist/client/english/index.html   serve for /english; the folder copy
  *                                                  answers /english/)
+ *   /policy    → dist/client/policy.html          (the privacy policy, Arabic only)
+ *                dist/client/policy/index.html
  * Crawlers and the first paint get the full page; React then hydrates it in the browser.
  */
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
@@ -56,12 +58,12 @@ const outputFiles = (route) =>
   route === '/' ? ['index.html'] : [`${route.slice(1)}.html`, `${route.slice(1)}/index.html`];
 
 for (const route of routes) {
-  const { html, head, lang, dir } = render(route.locale);
+  const { html, head, lang, dir, page: pageId } = render(route.locale, route.page);
   const preloads = FIRST_PAINT_FONTS[route.locale].map(fontFile).filter(Boolean).map(fontPreload);
 
   // Replacer functions insert the markup verbatim ("$&", "$'"… are not patterns there).
   const page = template
-    .replace(/<html[^>]*>/, () => `<html lang="${lang}" dir="${dir}">`)
+    .replace(/<html[^>]*>/, () => `<html lang="${lang}" dir="${dir}" data-page="${pageId}">`)
     .replace(HEAD_SLOT, () => [...preloads, head].join('\n    '))
     .replace(HTML_SLOT, () => html);
 

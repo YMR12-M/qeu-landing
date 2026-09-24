@@ -23,6 +23,14 @@ export const LOCALES = {
 
 export const DEFAULT_LOCALE = 'ar';
 
+/** The privacy policy: one page, in Arabic (the policy has no other language). */
+export const POLICY_PATH = '/policy';
+
+/** Maps a URL path to a page: /policy → policy, everything else → home. */
+export function resolvePage(pathname) {
+  return /^\/policy(\/|$)/.test(pathname) ? 'policy' : 'home';
+}
+
 /** Maps a URL path to a locale code: /english → en, everything else → ar. */
 export function resolveLocale(pathname) {
   return /^\/english(\/|$)/.test(pathname) ? 'en' : DEFAULT_LOCALE;

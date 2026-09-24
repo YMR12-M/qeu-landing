@@ -23,12 +23,13 @@ Node ≥ 20.19.
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | Navigation island floating over the page: takes each section's colour, folds to a "you are here" pill while reading, opens the sections as a receipt                                                                    | **new**: replaces v3's header bar                                                    |
 | «رف العروض» — the hero as a supermarket shelf: the six Google Play screenshots stand on it in the store's order over yellow offer labels, gliding slowly past; the headline on display with its own price label, "free" | v3 copy, store screenshots; shelf **new**                                            |
-| «ليه كيو؟» — pinned, scroll-driven benefits with the matching screen                                                                                                                                                    | v3                                                                                   |
+| «ليش كيو؟» — pinned, scroll-driven benefits with the matching screen                                                                                                                                                    | v3                                                                                   |
 | «كيف يشتغل / عروضنا تجيك وبنفس السعر» — three steps on the order's route, Qeu's van driving to the door on scroll                                                                                                       | **kept** from the earlier proposal (takes v3's "inside the app" slot); route **new** |
 | «عندك سؤال؟» — FAQ printed on a till receipt, with a take-a-number ticket for anything it doesn't answer                                                                                                                | **new**: answers restate the page and the Google Play listing only                   |
 | Google Play figures (count up on scroll)                                                                                                                                                                                | v3                                                                                   |
 | «حمّل كيو» with the app-icon stage, phone and QR card                                                                                                                                                                   | v3 text + **kept** stage from the earlier proposal                                   |
 | Footer as the bag the order comes in: the brand printed on it, a delivery sticker with the contents (ticked off as they are read) and the contact links                                                                 | v3, with the missing legal and contact details added; bag **new**                    |
+| `/policy` — the privacy policy as an official document: the company letterhead, the policy word for word, an index card that ticks each section off as it is read, and the company stamp pressed on at the end          | qeu.app/policy text; page **new**                                                    |
 
 ### Changed from v3
 
@@ -39,7 +40,7 @@ Images
   resolution of the provided files, so they stay sharp on retina screens. The build serves them
   as responsive AVIF (quality 50) and WebP (quality 72), encoded separately: at the same quality
   number AVIF came out larger than WebP, while at q50 it is ~27% smaller and closer to the source.
-- Each «ليه كيو؟» benefit now shows a screen that matches it. In v3, "Lowest prices" showed the
+- Each «ليش كيو؟» benefit now shows a screen that matches it. In v3, "Lowest prices" showed the
   delivery screen.
 
 Content (claims v3 made that the sources don't support)
@@ -63,9 +64,9 @@ Content (claims v3 made that the sources don't support)
 - Wording follows the live site where v3 differed: «ليش كيو؟» (v3: «ليه»), and the footer slogan
   is qeu.app's «أسعارنا هي أصلًا عروض» (v3: «كل شي في كيو عرض»). The English hero is
   qeu.app/english's own line.
-- In «ليه كيو؟» and «حمّل كيو» the brand's name is drawn as its wordmark (the name stays in the
+- In «ليش كيو؟» and «حمّل كيو» the brand's name is drawn as its wordmark (the name stays in the
   text, visually hidden, for screen readers and search).
-- Portrait tablets: «ليه كيو؟» puts the screen under the list so the pinned block fills the view;
+- Portrait tablets: «ليش كيو؟» puts the screen under the list so the pinned block fills the view;
   screens too short to pin (a phone on its side) get the plain list.
 
 ## Stack, and why
@@ -86,17 +87,19 @@ Content (claims v3 made that the sources don't support)
 
 ```
 src/
-  App.jsx                 page composition
+  App.jsx                 page composition: the landing page, or the privacy policy
   entry-client.jsx        hydrate (prod) / render (dev)
-  entry-server.jsx        render one locale to HTML — used by the prerender
+  entry-server.jsx        render one page to HTML — used by the prerender
   content/
     site.js               facts: ratings, downloads, links, company — single source of truth
     figures.js            those facts formatted per locale, for the copy's {tokens}
     locales/ar.js, en.js  all copy, same shape in both files
+    policy.js             the privacy policy, word for word from qeu.app/policy (Arabic only)
     media.js              every image + its responsive sizes
   components/
     layout/               Header, Footer, SkipLink
     sections/             Hero, WhyQeu, HowItWorks, Faq, Download
+    policy/               PolicyPage — the policy as a stamped document on a letterhead
     download/             DownloadLink, StorePills, AppStage, QrCard
     stats/                StatsRow, CountUp
     brand/                Logo (vector wordmark from qeu.app)
@@ -108,7 +111,8 @@ src/
   seo/head.js             <title>, meta, hreflang, Open Graph, JSON-LD
   styles/                 fonts, tokens, base, layout
 scripts/
-  prerender.js            writes dist/client/index.html, english.html and english/index.html
+  prerender.js            writes dist/client/index.html, english.html (+ english/index.html)
+                          and policy.html (+ policy/index.html)
   generate-qr.js          src/assets/qr/download-qr.svg
 public/                   favicons, manifest, robots.txt, sitemap.xml, og-image.png
 ```
@@ -116,7 +120,7 @@ public/                   favicons, manifest, robots.txt, sitemap.xml, og-image.
 **Editing content:** copy is in `src/content/locales/*.js`, numbers and links in
 `src/content/site.js`, and images in `src/content/media.js`. Components contain no copy.
 The copy quotes the store figures as `{tokens}` (`{downloads}`, `{months}`, `{allRatings}`,
-`{capturedOn}`): after a new capture of the Google Play listing, update `capturedAt`,
+`{androidMin}`, `{iosMin}`): after a new capture of the Google Play listing, update `capturedAt`,
 `downloads` and `ratings` in `site.js` and rebuild — both languages follow, with Arabic numerals
 and plural forms handled.
 
@@ -124,11 +128,14 @@ and plural forms handled.
 
 Everything on the page comes from Qeu's own material, captured September 2026:
 
-- **qeu.app** — marketing lines, the four benefits, Q-ur, the logo vector, the app screens and the privacy-policy summary.
+- **qeu.app** — marketing lines, the four benefits, Q-ur, the logo vector and the app screens.
+- **qeu.app/policy** (last updated 21 Dec 2025) — the privacy policy at `/policy`, word for word,
+  with two corrections to flag to the client: its complaints address read `support@que.app`
+  (the support address everywhere else is `support@qeu.app`), and «[•] يوم عمل» was never filled
+  in, so the page reads «خلال المدة المحددة نظامًا» until the client gives a number.
 - **Google Play (`sa.qeu1.app`)** — rating 4.7 from 1,252 phone ratings (1.3K overall), the
   star distribution, 100K+ downloads, first release 25 Jan 2026 (≈8 months to the capture date),
-  the description (secure payment, fast delivery, order tracking), the screenshots and the icon,
-  and the privacy-policy address (https://qeu.app/policy, in Arabic only).
+  the description (secure payment, fast delivery, order tracking), the screenshots and the icon.
 - **App Store (`id6754709202`)**, captured 24 Sep 2026 — the direct store link, and the iPhone
   requirement (iPhone only, iOS 15.0 or later).
 - **Qeu's store screenshots** — «عروضنا تجيك وبنفس السعر» (van livery), the kabsa conversation with Q-ur.
@@ -182,12 +189,14 @@ year, and basic security headers are set.
    `english/index.html` answers `/english/`. On nginx: `try_files $uri $uri.html $uri/index.html`.
    Should a host still send the Arabic page for `/english`, it hydrates as Arabic instead of
    mixing languages.
-2. **Move `/policy` over from the current Framer site before pointing the domain here.** The
-   footer links to https://qeu.app/policy (Arabic only: qeu.app has no English policy page).
+2. `/policy` is served from `policy.html` in the same way. It is the site's own page now, so
+   nothing needs to move over from Framer.
 3. Give `/assets/*` a long cache lifetime (file names are content-hashed).
 
 ## Needed from the client
 
+- [ ] The response time for data requests in the privacy policy (the original left
+      «[•] يوم عمل» blank), and confirmation of the corrected complaints address.
 - [ ] Confirmation that `link-to.app` keeps UTM parameters.
 - [ ] A GTM / GA4 container (and Snap / TikTok pixels) if campaigns will run.
 - [ ] A 1200×630 share image. `public/og-image.png` is the current 682×298 one from qeu.app.

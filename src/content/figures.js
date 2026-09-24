@@ -1,4 +1,4 @@
-import { formatCompact, formatDate, formatNumber, formatPlural } from '../lib/format.js';
+import { formatCompact, formatNumber, formatPlural } from '../lib/format.js';
 import { dictionaries } from './locales/index.js';
 import { site } from './site.js';
 
@@ -13,12 +13,12 @@ const monthsBetween = (from, to) =>
  * The figures the copy quotes as {tokens}, formatted for one locale from src/content/site.js,
  * so a new capture of the store listing is a one-file change:
  *   {downloads}  "١٠٠ ألف" / "100K"      {months}     "٨ شهور" / "8 months"
- *   {allRatings} "١٫٣ ألف" / "1.3K"      {capturedOn} "٢٠ سبتمبر ٢٠٢٦" / "20 September 2026"
+ *   {allRatings} "١٫٣ ألف" / "1.3K"
  *   {package}    "sa.qeu1.app"          {androidMin} "٧٫٠" / "7.0"
  *                                        {iosMin}     "١٥٫٠" / "15.0"
  */
 export function figuresFor(locale) {
-  const { numbers, dates } = dictionaries[locale];
+  const { numbers } = dictionaries[locale];
   const months = monthsBetween(site.app.releasedAt, site.capturedAt);
   // A version is written as the store writes it: "7.0", not "7".
   const version = (value) =>
@@ -32,7 +32,6 @@ export function figuresFor(locale) {
     downloads: formatCompact(site.downloads, { locale, numbers }),
     months: formatPlural(months, numbers.months, { locale }),
     allRatings: formatCompact(site.ratings.total, { locale, numbers }),
-    capturedOn: formatDate(site.capturedAt, { locale, dates }),
     package: site.app.androidPackage,
     androidMin: version(site.app.androidMinVersion),
     iosMin: version(site.app.iosMinVersion),

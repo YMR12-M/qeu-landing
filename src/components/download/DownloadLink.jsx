@@ -1,4 +1,5 @@
 import { usePlatform } from '../../hooks/usePlatform.js';
+import { useLocale } from '../../i18n/useLocale.js';
 import { trackDownloadClick } from '../../lib/analytics.js';
 import { cx } from '../../lib/cx.js';
 import { getStoreHref } from '../../lib/links.js';
@@ -15,13 +16,14 @@ const STORE_BY_PLATFORM = { ios: 'appStore', android: 'googlePlay' };
  */
 export function DownloadLink({ placement, size = 'md', labels, className, children }) {
   const platform = usePlatform();
+  const { sectionHref } = useLocale();
   const store = STORE_BY_PLATFORM[platform];
   const label = labels?.[platform] ?? children;
   const classes = cx(styles.button, styles[size], className);
 
   if (!store) {
     return (
-      <a className={classes} href="#download">
+      <a className={classes} href={sectionHref('download')}>
         {label}
       </a>
     );

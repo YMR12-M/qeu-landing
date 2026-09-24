@@ -23,6 +23,7 @@ const ar = {
     primaryNav: 'القائمة الرئيسية',
     storeLinks: 'حمّل التطبيق من المتجر',
     switchLocale: 'View this page in English',
+    switchSite: 'View the site in English',
     pauseMotion: 'إيقاف حركة الخلفية',
     playMotion: 'تشغيل حركة الخلفية',
     sectionsMenu: 'أقسام الصفحة',
@@ -213,7 +214,6 @@ const ar = {
     title: 'حمّل {brand}',
     subtitle: 'مجاناً على جوالك',
     text: 'متوفر للآيفون والأندرويد. امسح الكود أو اختار متجرك — التطبيق مجاني، والعروض تبدأ من أول شاشة.',
-    source: 'المصدر: صفحة التطبيق الرسمية على Google Play ‏({package})، بتاريخ {capturedOn}.',
     stageAlt:
       'الشاشة الرئيسية في تطبيق كيو: عرض السوبر «أرز الفخامة + زيت الفخامة مجاناً»، وقسم «أسعار ما تلاقيها إلا في كيو!»',
   },
@@ -244,13 +244,14 @@ const ar = {
       title: 'تواصل معنا',
       report: 'بلّغ عن مشكلة في التطبيق',
       reportSubject: 'مشكلة في تطبيق كيو',
-      store: 'صفحة كيو على Google Play',
+      googlePlay: 'صفحة كيو على Google Play',
+      appStore: 'صفحة كيو على App Store',
     },
     more: {
       title: 'المحتويات',
       privacy: 'سياسة الخصوصية',
     },
-    sourceLine: 'كيو · {package} · الأرقام من صفحة Google Play الرسمية',
+    sourceLine: 'كيو · {package}',
     legal: '© {year} {company} — حي الرحاب، جدة',
   },
 

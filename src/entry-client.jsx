@@ -2,7 +2,8 @@ import { StrictMode } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { App } from './App.jsx';
 import { dictionaries } from './content/locales/index.js';
-import { LOCALES, localeFromLang, resolveLocale } from './i18n/locales.js';
+import { policy } from './content/policy.js';
+import { LOCALES, localeFromLang, resolveLocale, resolvePage } from './i18n/locales.js';
 import './styles/index.css';
 
 const container = document.getElementById('root');
@@ -14,10 +15,14 @@ const prerendered = container.firstElementChild !== null;
 const locale = prerendered
   ? localeFromLang(document.documentElement.lang)
   : resolveLocale(window.location.pathname);
+// The page, likewise: from the pre-rendered <html data-page>, or the path on the dev server.
+const page = prerendered
+  ? (document.documentElement.dataset.page ?? 'home')
+  : resolvePage(window.location.pathname);
 
 const app = (
   <StrictMode>
-    <App locale={locale} />
+    <App locale={locale} page={page} />
   </StrictMode>
 );
 
@@ -28,6 +33,6 @@ if (prerendered) {
   // Development: nothing was pre-rendered, so set up the document and render from scratch.
   const { lang, dir } = LOCALES[locale];
   Object.assign(document.documentElement, { lang, dir });
-  document.title = dictionaries[locale].meta.title;
+  document.title = page === 'policy' ? policy.meta.title : dictionaries[locale].meta.title;
   createRoot(container).render(app);
 }
