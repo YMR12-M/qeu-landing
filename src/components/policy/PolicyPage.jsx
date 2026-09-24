@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { media } from '../../content/media.js';
 import { policy } from '../../content/policy.js';
+import { POLICY_CONTENTS } from '../../content/policy-contents.js';
 import { site } from '../../content/site.js';
 import { useActiveSection } from '../../hooks/useActiveSection.js';
 import { useScrollReveal } from '../../hooks/useScrollReveal.js';
@@ -15,7 +16,8 @@ import { Landmark, PaymentCard, Van } from '../ui/icons.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import styles from './PolicyPage.module.css';
 
-const IDS = policy.sections.map((section) => section.id);
+const IDS = POLICY_CONTENTS.map((section) => section.id);
+const LABELS = Object.fromEntries(POLICY_CONTENTS.map(({ id, label }) => [id, label]));
 const ICONS = { delivery: Van, payment: PaymentCard, government: Landmark };
 const twoDigits = (value) => String(value).padStart(2, '0');
 
@@ -77,7 +79,7 @@ export function PolicyPage() {
                     aria-current={active === section.id ? 'location' : undefined}
                   >
                     <span className={styles.tick} aria-hidden="true" />
-                    {section.label}
+                    {LABELS[section.id]}
                   </a>
                 </li>
               ))}

@@ -9,15 +9,14 @@
  *   · «سنستجيب لطلبك خلال [•] يوم عمل» was never filled in. Rather than invent a number, it
  *     reads «خلال المدة المحددة نظامًا» until the client sets one.
  *
- * `label` is each section's short name for the contents list; `title` is the policy's own.
+ * Each section's short name, for the contents list, is in src/content/policy-contents.js;
+ * `title` is the policy's own.
  */
 
+import { POLICY_META } from './policy-contents.js';
+
 export const policy = {
-  meta: {
-    title: 'تطبيق كيو للتسوق - سياسة الخصوصية والاستخدام',
-    description:
-      'سياسة الخصوصية لتطبيق كيو: البيانات الشخصية التي نجمعها، وكيف نستخدمها ونخزّنها ونفصح عنها، وحقوقك بموجب نظام حماية البيانات الشخصية.',
-  },
+  meta: POLICY_META,
 
   title: 'سياسة الخصوصية',
   subtitle: 'لتطبيق {brand}',
@@ -30,7 +29,7 @@ export const policy = {
     contact: 'بيانات التواصل',
     updated: 'تاريخ آخر تحديث',
     law: 'المرجع النظامي',
-    contents: 'المحتويات',
+    contents: 'محتويات السياسة',
     // The round company stamp at the end of the document: its name over the top, its city under.
     stamp: { name: 'شركة الخيال اللامحدود', place: 'جدة · المملكة العربية السعودية' },
   },
@@ -45,7 +44,6 @@ export const policy = {
   sections: [
     {
       id: 'data',
-      label: 'البيانات التي نجمعها',
       title: 'ما هي البيانات الشخصية التي يتم جمعها؟',
       blocks: [
         { type: 'p', text: 'نقوم بجمع ومعالجة البيانات الشخصية التالية:' },
@@ -68,7 +66,6 @@ export const policy = {
     },
     {
       id: 'collection',
-      label: 'كيف نجمعها ولماذا',
       title: 'كيف يتم جمع بياناتك الشخصية وما هو الغرض من جمعها؟',
       blocks: [
         {
@@ -97,7 +94,6 @@ export const policy = {
     },
     {
       id: 'use',
-      label: 'كيف نستخدمها',
       title: 'كيف نستخدم بياناتك الشخصية؟',
       blocks: [
         { type: 'p', text: 'نستخدم البيانات الشخصية التي تم جمعها على النحو التالي:' },
@@ -122,7 +118,6 @@ export const policy = {
     },
     {
       id: 'disclosure',
-      label: 'متى نفصح عنها',
       title: 'كيف نفصح عن بياناتك الشخصية؟',
       blocks: [
         {
@@ -149,7 +144,6 @@ export const policy = {
     },
     {
       id: 'cookies',
-      label: 'ملفات تعريف الارتباط',
       title: 'ملفات تعريف الارتباط (الكوكيز)',
       blocks: [
         {
@@ -160,7 +154,6 @@ export const policy = {
     },
     {
       id: 'legal-basis',
-      label: 'المسوغات النظامية',
       title: 'المسوغات النظامية لجمع ومعالجة بياناتك الشخصية',
       blocks: [
         {
@@ -180,7 +173,6 @@ export const policy = {
     },
     {
       id: 'storage',
-      label: 'التخزين والحماية',
       title: 'كيف نقوم بتخزين بياناتك الشخصية؟',
       blocks: [
         {
@@ -204,7 +196,6 @@ export const policy = {
     },
     {
       id: 'rights',
-      label: 'حقوقك',
       title: 'حقوقك فيما يتعلق بمعالجة بياناتك الشخصية',
       blocks: [
         { type: 'p', text: 'بموجب نظام حماية البيانات الشخصية، لديك الحقوق التالية:' },
@@ -228,7 +219,6 @@ export const policy = {
     },
     {
       id: 'complaints',
-      label: 'الشكاوى والاعتراض',
       title: 'كيف تقدم شكوى أو اعتراض؟',
       blocks: [
         {
@@ -250,7 +240,6 @@ export const policy = {
     },
     {
       id: 'external-links',
-      label: 'الروابط الخارجية',
       title: 'روابط المواقع الخارجية',
       blocks: [
         {
@@ -261,7 +250,6 @@ export const policy = {
     },
     {
       id: 'updates',
-      label: 'تحديثات السياسة',
       title: 'تحديثات سياسة الخصوصية',
       blocks: [
         {
@@ -272,7 +260,6 @@ export const policy = {
     },
     {
       id: 'consent',
-      label: 'موافقتك',
       title: 'موافقتك',
       blocks: [
         {

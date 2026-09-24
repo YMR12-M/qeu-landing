@@ -1,37 +1,32 @@
+import { lazy, Suspense } from 'react';
 import { Footer } from './components/layout/Footer.jsx';
 import { Header } from './components/layout/Header.jsx';
 import { SkipLink } from './components/layout/SkipLink.jsx';
-import { PolicyPage } from './components/policy/PolicyPage.jsx';
-import { Download } from './components/sections/Download.jsx';
-import { Faq } from './components/sections/Faq.jsx';
-import { Hero } from './components/sections/Hero.jsx';
-import { HowItWorks } from './components/sections/HowItWorks.jsx';
-import { WhyQeu } from './components/sections/WhyQeu.jsx';
-import { policy } from './content/policy.js';
+import { POLICY_CONTENTS } from './content/policy-contents.js';
 import { LocaleProvider } from './i18n/LocaleProvider.jsx';
+import { PAGES } from './pages/index.js';
 
-// The policy's contents, for the navigation island while the policy is read.
-const POLICY_CONTENTS = policy.sections.map(({ id, label }) => ({ id, label }));
+const LAZY_PAGES = Object.fromEntries(
+  Object.entries(PAGES).map(([page, load]) => [page, lazy(load)]),
+);
 
-/** The Qeu Landing v3 page — or, with page="policy", the privacy policy. */
-export function App({ locale, page = 'home' }) {
-  const isPolicy = page === 'policy';
+/**
+ * The site: the navigation island, one page, the footer.
+ *
+ * `page` is 'home', 'policy' or 'notFound'. Its component is loaded on demand — the
+ * pre-renderer waits for it — unless the caller already has it (`Page`): the browser loads it
+ * first, so hydration never has to wait mid-way.
+ */
+export function App({ locale, page = 'home', Page = LAZY_PAGES[page] }) {
   return (
     <LocaleProvider locale={locale} page={page}>
       <SkipLink />
-      <Header sections={isPolicy ? POLICY_CONTENTS : undefined} />
+      {/* On the policy, the island's pill and receipt list the policy's own sections. */}
+      <Header sections={page === 'policy' ? POLICY_CONTENTS : undefined} />
       <main id="main" tabIndex={-1}>
-        {isPolicy ? (
-          <PolicyPage />
-        ) : (
-          <>
-            <Hero />
-            <WhyQeu />
-            <HowItWorks />
-            <Faq />
-            <Download />
-          </>
-        )}
+        <Suspense fallback={null}>
+          <Page />
+        </Suspense>
       </main>
       <Footer />
     </LocaleProvider>

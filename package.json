@@ -5,7 +5,7 @@
   "description": "Landing page for the Qeu (كيو | Q) grocery deals app — Arabic (default) + English, statically pre-rendered.",
   "type": "module",
   "engines": {
-    "node": ">=20.19"
+    "node": "^22.13 || ^24"
   },
   "scripts": {
     "dev": "vite",
@@ -16,7 +16,8 @@
     "preview": "vite preview --outDir dist/client",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "qr": "node scripts/generate-qr.js"
+    "qr": "node scripts/generate-qr.js",
+    "og": "node scripts/og-images.js"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.3.0",

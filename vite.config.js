@@ -24,6 +24,11 @@ export default defineConfig(({ isSsrBuild }) => ({
   build: {
     // Keep fonts, images and the QR code as separate, cacheable files (never base64).
     assetsInlineLimit: 0,
+    // One stylesheet for every page: it is linked in the pre-rendered <head>, so a page's
+    // styles are there at first paint even though its script arrives as its own chunk.
+    cssCodeSplit: false,
+    // Which chunk each page needs, for the pre-renderer's modulepreload links.
+    manifest: !isSsrBuild,
     // public/ belongs to the deployed site only: the server bundle, used just to
     // pre-render, doesn't need a copy of it.
     copyPublicDir: !isSsrBuild,

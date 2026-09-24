@@ -1,19 +1,21 @@
 # Qeu — landing page (كيو | Q)
 
 Marketing site for the Qeu grocery-deals app: Arabic at `/` (default, RTL) and English at
-`/english` (LTR). Built on the **Qeu Landing v3** design, with two blocks kept from the earlier
-proposal and every image and claim checked against Qeu's own sources.
+`/english` (LTR), plus the privacy policy at `/policy`. Built on the **Qeu Landing v3** design,
+with two blocks kept from the earlier proposal and every image and claim checked against Qeu's
+own sources.
 
 ```bash
 npm install
-npm run dev       # http://localhost:5173 (Arabic) · /english
+npm run dev       # http://localhost:5173 (Arabic) · /english · /policy
 npm run build     # static site → dist/client
 npm run preview   # serve the production build
 npm run lint      # ESLint
 npm run qr        # regenerate the download QR code (after changing the smart link)
+npm run og        # redraw the link-preview images (after changing the hero; needs Chrome)
 ```
 
-Node ≥ 20.19.
+Node 22 (22.13 or later) or 24 — the versions every build tool here supports. Vercel builds on 24.
 
 ---
 
@@ -30,6 +32,7 @@ Node ≥ 20.19.
 | «حمّل كيو» with the app-icon stage, phone and QR card                                                                                                                                                                   | v3 text + **kept** stage from the earlier proposal                                   |
 | Footer as the bag the order comes in: the brand printed on it, a delivery sticker with the contents (ticked off as they are read) and the contact links                                                                 | v3, with the missing legal and contact details added; bag **new**                    |
 | `/policy` — the privacy policy as an official document: the company letterhead, the policy word for word, an index card that ticks each section off as it is read, and the company stamp pressed on at the end          | qeu.app/policy text; page **new**                                                    |
+| 404 — the hero's shelf, emptied: clear dividers with nothing between them and one label left, «نفد», with the way back home                                                                                             | **new**                                                                              |
 
 ### Changed from v3
 
@@ -74,6 +77,10 @@ Content (claims v3 made that the sources don't support)
 - **React 19 + Vite 8, pre-rendered (SSG).** Pages are written as React components and rendered
   to static HTML at build time (`scripts/prerender.js`). Crawlers and the first paint get the
   whole page, and React hydrates it for the small amount of interaction.
+- **One chunk per page.** The header, footer and React are shared; each page (`src/pages`) is
+  its own chunk, which its HTML preloads, so the policy doesn't download the landing page and
+  the other way round. The HTML carries no inline script: every boundary is rendered in place,
+  and the build fails if an inline `<script>` ever appears (the CSP would block it).
 - **No server and no database.** The content is static and changes rarely, so `dist/client` is
   plain files for any static host or CDN. Node is used only for the build. A server or MySQL
   would add cost and attack surface without adding anything here.
@@ -87,14 +94,17 @@ Content (claims v3 made that the sources don't support)
 
 ```
 src/
-  App.jsx                 page composition: the landing page, or the privacy policy
-  entry-client.jsx        hydrate (prod) / render (dev)
+  App.jsx                 the frame every page shares: navigation island, the page, footer
+  entry-client.jsx        load the page's chunk, then hydrate (prod) / render (dev)
   entry-server.jsx        render one page to HTML — used by the prerender
+  pages/                  Home (the landing page), Policy, NotFound (404) — one chunk each;
+                          index.js maps page names to them
   content/
     site.js               facts: ratings, downloads, links, company — single source of truth
     figures.js            those facts formatted per locale, for the copy's {tokens}
     locales/ar.js, en.js  all copy, same shape in both files
     policy.js             the privacy policy, word for word from qeu.app/policy (Arabic only)
+    policy-contents.js    its title and section list — all the header needs of it
     media.js              every image + its responsive sizes
   components/
     layout/               Header, Footer, SkipLink
@@ -102,8 +112,8 @@ src/
     policy/               PolicyPage — the policy as a stamped document on a letterhead
     download/             DownloadLink, StorePills, AppStage, QrCard
     stats/                StatsRow, CountUp
-    brand/                Logo (vector wordmark from qeu.app)
-    ui/                   Picture, Reveal, SectionHeading, Barcode, icons
+    brand/                Logo (vector wordmark from qeu.app), WithBrand
+    ui/                   Picture, Reveal, SectionHeading, Barcode (+ barcode-bars.js), icons
   i18n/                   locales config, provider, useLocale()
   hooks/                  usePlatform, useCurrentYear (hydration-safe), useScrollReveal,
                           useActiveSection (the section being read), useSeenSections
@@ -111,10 +121,12 @@ src/
   seo/head.js             <title>, meta, hreflang, Open Graph, JSON-LD
   styles/                 fonts, tokens, base, layout
 scripts/
-  prerender.js            writes dist/client/index.html, english.html (+ english/index.html)
-                          and policy.html (+ policy/index.html)
+  prerender.js            writes dist/client/index.html, english.html (+ english/index.html),
+                          policy.html (+ policy/index.html) and 404.html
   generate-qr.js          src/assets/qr/download-qr.svg
-public/                   favicons, manifest, robots.txt, sitemap.xml, og-image.png
+  og-images.js            public/og-image.jpg and og-image-en.jpg
+public/                   favicons, manifest, robots.txt, sitemap.xml, the link-preview images,
+                          no-js.css (the page without JavaScript)
 ```
 
 **Editing content:** copy is in `src/content/locales/*.js`, numbers and links in
@@ -122,7 +134,7 @@ public/                   favicons, manifest, robots.txt, sitemap.xml, og-image.
 The copy quotes the store figures as `{tokens}` (`{downloads}`, `{months}`, `{allRatings}`,
 `{androidMin}`, `{iosMin}`): after a new capture of the Google Play listing, update `capturedAt`,
 `downloads` and `ratings` in `site.js` and rebuild — both languages follow, with Arabic numerals
-and plural forms handled.
+and plural forms handled. The build reminds you when the capture is more than 60 days old.
 
 ## Content sources
 
@@ -147,8 +159,16 @@ translation and should be reviewed by the client.
 
 - One `h1`; `lang` and `dir` set per page; hreflang, a canonical URL, Open Graph and schema.org
   data (Organization, WebSite, MobileApplication, and FAQPage from the same copy as the FAQ
-  section). The data carries no `aggregateRating`: Google
+  section; WebPage and a breadcrumb on the policy). The data carries no `aggregateRating`: Google
   doesn't allow marking up ratings collected on another site.
+- Link previews use a 1200×630 image per language, drawn from the hero (`npm run og`). On
+  Vercel the image URL names the project's production domain (`VERCEL_PROJECT_PRODUCTION_URL`),
+  so previews work on the `.vercel.app` address now and switch to qeu.app with the first deploy
+  after that domain is added. The 404 page is `noindex`, and so is every `*.vercel.app` address
+  (`X-Robots-Tag`): the canonical site is qeu.app, and this copy shouldn't compete with it in
+  search.
+- Without JavaScript the page still reads in full: `public/no-js.css` unpins «ليش كيو؟», opens
+  every benefit, and hides the controls that need a script.
 - Skip link, landmarks, visible focus, 44px touch targets, and descriptive alt text on every app
   screen (the drifting hero screens are decorative). Animation (drift, count-up, reveals,
   transitions) switches off under `prefers-reduced-motion`.
@@ -159,14 +179,18 @@ translation and should be reviewed by the client.
   pins from tablet width up, with the screen always beside the list.
 - The hero headline is one block of text, so it — not a background screen — is the Largest
   Contentful Paint, painted with the first frame.
-- Build output: about 85 KB of JS (gzipped; React is ~68 KB of that), 5.5 KB of CSS, fonts
-  of about 9–15 KB per file, ~62 KB of hero images on a phone, and lazy-loaded images below
-  the fold.
+- Build output (gzipped): 89 KB of shared JS, most of it React; the page's own chunk (5.9 KB
+  for the landing page, 6.5 KB for the policy, 0.7 KB for the 404); one 14 KB stylesheet for
+  the whole site, so no page waits for another's CSS; fonts of about 9–15 KB per file; ~62 KB
+  of hero images on a phone, and lazy-loaded images below the fold.
 
 ## Analytics
 
 `src/lib/analytics.js` loads no trackers of its own. Once Google Tag Manager or gtag.js is
-added, every store click arrives as `app_download_click` with `{ store, placement }`.
+added, every store click arrives as `app_download_click` with `{ store, placement }`. Adding a
+tag means adding its origins to the Content-Security-Policy in `vercel.json` (for GTM and GA4:
+`https://www.googletagmanager.com` in `script-src`, and the GA4 collection origins in
+`connect-src` and `img-src`); the page allows nothing from other sites until then.
 
 Store links carry `utm_source=website`, `utm_medium=button|qr`,
 `utm_campaign=landing_<placement>` and `utm_content=<placement>`. Play Console reports store
@@ -178,9 +202,17 @@ store app takes over.
 ## Deploying
 
 **Vercel** (the project is connected to this repository): every push to `main` deploys to
-production. `vercel.json` carries the settings the dashboard would otherwise guess wrong — the
-output directory is `dist/client` (not `dist`), clean URLs are on, `/assets/*` is cached for a
-year, and basic security headers are set.
+production. `vercel.json` carries the settings the dashboard would otherwise guess wrong:
+
+- the output directory is `dist/client` (not `dist`);
+- clean URLs, with no trailing slash (`/english/` redirects to `/english`); an unknown address
+  gets `404.html` with a real 404 status;
+- `/assets/*` is cached for a year (file names are content-hashed);
+- security headers: a Content-Security-Policy that allows the site's own files only (inline
+  style attributes aside — React writes a few), no framing, `nosniff`, a strict referrer
+  policy, `Cross-Origin-Opener-Policy`, and a `Permissions-Policy` that turns off the camera,
+  microphone, location, payment and USB;
+- `X-Robots-Tag: noindex` on `*.vercel.app` hosts only — it drops away by itself on qeu.app.
 
 **Any other static host:** upload `dist/client`. Things to check:
 
@@ -191,14 +223,21 @@ year, and basic security headers are set.
    mixing languages.
 2. `/policy` is served from `policy.html` in the same way. It is the site's own page now, so
    nothing needs to move over from Framer.
-3. Give `/assets/*` a long cache lifetime (file names are content-hashed).
+3. Serve `404.html` for unknown addresses, with status 404.
+4. Give `/assets/*` a long cache lifetime, and carry over the headers above.
 
 ## Needed from the client
 
 - [ ] The response time for data requests in the privacy policy (the original left
       «[•] يوم عمل» blank), and confirmation of the corrected complaints address.
+- [ ] The stores' privacy labels. The App Store ("Data Not Collected") and Google Play's Data
+      safety section both say the app collects no data, while the privacy policy lists the ID
+      number, payment card details, location and IP address. That is fixed in App Store Connect
+      and the Play Console, not on this site.
+- [ ] A decision on ratings: the page quotes the Google Play rating (4.7 from phone users) and
+      says so; the Saudi App Store rating is 3.1 from 995 ratings.
 - [ ] Confirmation that `link-to.app` keeps UTM parameters.
-- [ ] A GTM / GA4 container (and Snap / TikTok pixels) if campaigns will run.
-- [ ] A 1200×630 share image. `public/og-image.png` is the current 682×298 one from qeu.app.
+- [ ] A GTM / GA4 container (and Snap / TikTok pixels) if campaigns will run — see Analytics
+      for the matching CSP change.
 - [ ] Official App Store and Google Play badge artwork if brand-strict badges are required.
 - [ ] A review of the English copy.

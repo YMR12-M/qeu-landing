@@ -46,7 +46,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      id="top"
+      id="hero"
       className={styles.hero}
       data-paused={paused || undefined}
       aria-labelledby="hero-title"
@@ -102,6 +102,7 @@ export function Hero() {
       <button
         type="button"
         className={styles.motionToggle}
+        data-needs-js
         aria-label={paused ? t.a11y.playMotion : t.a11y.pauseMotion}
         onClick={() => setPaused((value) => !value)}
       >

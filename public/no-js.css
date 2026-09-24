@@ -1,0 +1,28 @@
+/*
+ * Loaded only when JavaScript is off (index.html → <noscript>). Nothing then picks the open
+ * benefit in «ليش كيو؟» or pauses the shelf, so every benefit is shown, unpinned, and the
+ * pause button — which needs a script — is hidden. Everything else works without one.
+ */
+
+[data-why-track] {
+  block-size: auto !important;
+}
+
+[data-why-pin] {
+  position: static !important;
+  block-size: auto !important;
+  min-block-size: 0 !important;
+}
+
+[data-why-step] {
+  opacity: 1 !important;
+}
+
+[data-why-body] {
+  grid-template-rows: 1fr !important;
+  opacity: 1 !important;
+}
+
+[data-needs-js] {
+  display: none !important;
+}

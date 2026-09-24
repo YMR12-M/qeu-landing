@@ -46,8 +46,10 @@ export function WhyQeu() {
 
   return (
     <section id="why" className={styles.section} aria-labelledby="why-title">
-      <div ref={trackRef} className={styles.track}>
-        <div className={styles.pin}>
+      {/* qeu.app's old anchor for this section, so links to it still land here. */}
+      <span id="benefits" aria-hidden="true" />
+      <div ref={trackRef} className={styles.track} data-why-track>
+        <div className={styles.pin} data-why-pin>
           <div className={cx('container', styles.inner)}>
             <h2 id="why-title" className={styles.title}>
               <WithBrand text={why.title} name={t.meta.siteName} className={styles.brand} />
@@ -60,6 +62,7 @@ export function WhyQeu() {
                   <li
                     key={item.id}
                     className={styles.step}
+                    data-why-step
                     data-active={index === active || undefined}
                   >
                     <div className={styles.stepHead}>
@@ -68,7 +71,7 @@ export function WhyQeu() {
                       </span>
                       <h3 className={styles.stepTitle}>{item.title}</h3>
                     </div>
-                    <div className={styles.stepBody}>
+                    <div className={styles.stepBody} data-why-body>
                       <div>
                         <p className={styles.stepText}>{item.text}</p>
                       </div>

@@ -13,7 +13,11 @@ const en = {
     description:
       'Discover Q — the smart grocery shopping app with great deals, the lowest prices and a clear, easy browsing experience for your everyday needs.',
     siteName: 'Q',
-    ogImageAlt: 'The Q logo — all the deals in one place',
+    // The link-preview image (scripts/og-images.js draws it from the hero and this line).
+    ogImage: {
+      alt: 'Q: “Make your shopping easier, and your deals better!” and a “Get Q for free” button, beside the app’s screens on a shelf of deals',
+      stores: 'on Google Play and the App Store',
+    },
   },
 
   a11y: {
@@ -67,7 +71,7 @@ const en = {
   },
 
   why: {
-    title: 'Why {brand}?',
+    title: 'Why Q?',
     lead: 'Because Q brings together the best deals, the lowest prices and ready-made collections in one simple, clear experience — shop faster, easier and for less.',
     items: [
       {
@@ -162,6 +166,13 @@ const en = {
           'iPhone with iOS {iosMin} or later, and Android phones running Android {androidMin} or later.',
       },
       {
+        // Only asked in English: the app's screens are Arabic (as its store screenshots show),
+        // and English speakers should know before they download.
+        id: 'language',
+        question: 'Is the app in English?',
+        answer: 'The app is in Arabic.',
+      },
+      {
         id: 'deals',
         question: 'What kind of deals does Q have?',
         answer:
@@ -205,9 +216,9 @@ const en = {
   },
 
   download: {
-    title: 'Get {brand}',
+    title: 'Get Q',
     subtitle: 'Free on your phone',
-    text: 'Available for iPhone and Android. Scan the code or pick your store — the app is free, and the deals start on the very first screen.',
+    text: 'Available for iPhone and Android. Scan the code or pick your store — the app is free, and the deals start on the very first screen. The app itself is in Arabic.',
     stageAlt:
       'The Q app home screen: a super deal on Al Fakhama rice with Al Fakhama oil free, and the “prices you’ll only find on Q” section',
   },
@@ -247,6 +258,18 @@ const en = {
     },
     sourceLine: 'Q · {package}',
     legal: '© {year} {company} — Al-Rehab District, Jeddah',
+  },
+
+  // Same shape as ar.js; the 404 page itself is Arabic, with a line in English.
+  notFound: {
+    title: 'Page not found — Q',
+    eyebrow: 'Error 404',
+    heading: 'This page isn’t on the shelf',
+    text: 'The link may be old or mistyped. All the deals are on the home page, and in the app itself.',
+    home: 'Home page',
+    english: 'This page doesn’t exist — see Q in English',
+    flag: 'Sold out',
+    name: 'The page you asked for',
   },
 
   /** How the figures are written; {n} is the number. */

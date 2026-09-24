@@ -8,11 +8,15 @@
  *                                                  answers /english/)
  *   /policy    → dist/client/policy.html          (the privacy policy, Arabic only)
  *                dist/client/policy/index.html
+ *   (404)      → dist/client/404.html            (what hosts serve for a missing page)
  * Crawlers and the first paint get the full page; React then hydrates it in the browser.
+ * Each page's own chunk is preloaded next to the main script, so hydration never waits.
  */
-import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { site } from '../src/content/site.js';
+import { PAGE_MODULES } from '../src/pages/index.js';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const clientDir = path.join(root, 'dist', 'client');
@@ -20,27 +24,45 @@ const serverEntry = path.join(root, 'dist', 'server', 'entry-server.js');
 
 // The client build's index.html is the template, and the Arabic page is then written over
 // it. A copy is kept outside the deployed folder, so the prerender can run again (on its
-// own) without reading a page it already rendered.
+// own) without reading a page it already rendered. The build manifest is kept the same way,
+// and removed from the deployed folder: the site has no use for it.
 const indexFile = path.join(clientDir, 'index.html');
 const templateCopy = path.join(root, 'dist', 'index.template.html');
+const manifestFile = path.join(clientDir, '.vite', 'manifest.json');
+const manifestCopy = path.join(root, 'dist', 'manifest.client.json');
 const HEAD_SLOT = '<!--app-head-->';
 const HTML_SLOT = '<!--app-html-->';
 const isTemplate = (html) => html.includes(HEAD_SLOT) && html.includes(HTML_SLOT);
+const missing = (what) =>
+  new Error(`No ${what} was found in dist/ — run \`npm run build\` (not only the prerender).`);
 
 let template = await readFile(indexFile, 'utf8');
 if (isTemplate(template)) {
   await writeFile(templateCopy, template);
 } else {
   template = await readFile(templateCopy, 'utf8').catch(() => '');
-  if (!isTemplate(template)) {
-    throw new Error(
-      `No page template with ${HEAD_SLOT} and ${HTML_SLOT} was found — run \`npm run build\`.`,
-    );
-  }
+  if (!isTemplate(template)) throw missing(`page template with ${HEAD_SLOT} and ${HTML_SLOT}`);
 }
+
+let manifestJson = await readFile(manifestFile, 'utf8').catch(() => null);
+if (manifestJson) {
+  await writeFile(manifestCopy, manifestJson);
+  await rm(path.dirname(manifestFile), { recursive: true });
+} else {
+  manifestJson = await readFile(manifestCopy, 'utf8').catch(() => null);
+  if (!manifestJson) throw missing('build manifest');
+}
+const manifest = JSON.parse(manifestJson);
 
 const { render, routes } = await import(pathToFileURL(serverEntry).href);
 const assets = await readdir(path.join(clientDir, 'assets'));
+
+// Canonical URLs name qeu.app, but a link preview's image has to exist where the page is
+// actually served. On Vercel that is the project's production domain, which Vercel gives the
+// build: its .vercel.app address today, qeu.app itself (the shortest custom domain) once that
+// is added to the project — so the previews follow the move with the next deploy.
+const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+const assetOrigin = productionHost ? `https://${productionHost}` : undefined;
 
 // Preload the two Tajawal files the first screen paints with (headline 800, body 500),
 // so the hero renders in the brand font without a visible swap.
@@ -53,19 +75,47 @@ const fontFile = (name) =>
 const fontPreload = (file) =>
   `<link rel="preload" href="/assets/${file}" as="font" type="font/woff2" crossorigin />`;
 
-/** '/' → index.html; '/english' → english.html and english/index.html. */
-const outputFiles = (route) =>
-  route === '/' ? ['index.html'] : [`${route.slice(1)}.html`, `${route.slice(1)}/index.html`];
+/** A page's chunk and the chunks it imports — all but the main one, which index.html loads. */
+function pageChunks(key, seen = new Set()) {
+  const chunk = manifest[key];
+  if (!chunk || chunk.isEntry || seen.has(key)) return [];
+  seen.add(key);
+  return [chunk.file, ...(chunk.imports ?? []).flatMap((imported) => pageChunks(imported, seen))];
+}
+const modulePreload = (file) => `<link rel="modulepreload" crossorigin href="/${file}" />`;
+
+// The Content-Security-Policy (vercel.json) runs scripts from files only, so a page must not
+// carry an inline one. Structured data (JSON-LD) is data, not a script, and may stay.
+const INLINE_SCRIPT = /<script(?![^>]*\ssrc=)(?![^>]*\stype="application\/ld\+json")[^>]*>/;
+
+/** '/' → index.html; '/english' → english.html and english/index.html; '/404' → 404.html. */
+const outputFiles = (route) => {
+  if (route === '/') return ['index.html'];
+  if (route === '/404') return ['404.html'];
+  return [`${route.slice(1)}.html`, `${route.slice(1)}/index.html`];
+};
 
 for (const route of routes) {
-  const { html, head, lang, dir, page: pageId } = render(route.locale, route.page);
-  const preloads = FIRST_PAINT_FONTS[route.locale].map(fontFile).filter(Boolean).map(fontPreload);
+  const rendered = await render(route.locale, route.page, { assetOrigin });
+  const { html, head, lang, dir, page: pageId } = rendered;
+  const chunks = pageChunks(PAGE_MODULES[pageId]);
+  if (!chunks.length) throw new Error(`No chunk for the ${pageId} page in the build manifest.`);
+  const fonts = FIRST_PAINT_FONTS[route.locale].map(fontFile).filter(Boolean).map(fontPreload);
 
-  // Replacer functions insert the markup verbatim ("$&", "$'"… are not patterns there).
+  // Replacer functions insert the markup verbatim ("$&", "$'"… are not patterns there). The
+  // page's chunks are only needed to hydrate, so they come last, after the main script and
+  // the stylesheet: the first paint's requests (the fonts, the CSS) are made before them.
   const page = template
     .replace(/<html[^>]*>/, () => `<html lang="${lang}" dir="${dir}" data-page="${pageId}">`)
-    .replace(HEAD_SLOT, () => [...preloads, head].join('\n    '))
+    .replace(HEAD_SLOT, () => [...fonts, head].join('\n    '))
+    .replace('</head>', () => `  ${chunks.map(modulePreload).join('\n    ')}\n  </head>`)
     .replace(HTML_SLOT, () => html);
+  if (INLINE_SCRIPT.test(page)) {
+    throw new Error(
+      `The ${route.path} page has an inline <script>, which the Content-Security-Policy ` +
+        'in vercel.json blocks: load the code from a file instead.',
+    );
+  }
 
   const written = [];
   for (const file of outputFiles(route.path)) {
@@ -75,4 +125,14 @@ for (const route of routes) {
     written.push(path.relative(root, outFile));
   }
   console.log(`  ✓ ${route.path.padEnd(10)} → ${written.join(', ')}`);
+}
+
+// The store figures are a capture: say so when it's time to take a new one.
+const STALE_AFTER_DAYS = 60;
+const age = Math.floor((Date.now() - Date.parse(site.capturedAt)) / 86_400_000);
+if (age > STALE_AFTER_DAYS) {
+  console.warn(
+    `\n  ⚠ The store figures were captured ${age} days ago (${site.capturedAt}). Check the ` +
+      'Google Play listing and update src/content/site.js — downloads, ratings, capturedAt.',
+  );
 }

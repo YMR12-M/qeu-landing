@@ -186,7 +186,8 @@ export function Header({ sections }) {
             <Receipt className={styles.nowIcon} />
           </summary>
           <div className={styles.feed}>
-            <nav className={styles.receipt} aria-label={t.a11y.primaryNav}>
+            {/* Named apart from the island's own list: two landmarks, two names. */}
+            <nav className={styles.receipt} aria-label={t.a11y.sectionsMenu}>
               <p className={styles.receiptTitle} aria-hidden="true">
                 {t.a11y.sectionsMenu}
               </p>
@@ -195,7 +196,7 @@ export function Header({ sections }) {
                   <li key={item.id}>
                     <a
                       className={styles.receiptLink}
-                      href={`#${item.id}`}
+                      href={sections ? `#${item.id}` : sectionHref(item.id)}
                       aria-current={current(item.id)}
                       onClick={closeMenu}
                     >

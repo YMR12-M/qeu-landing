@@ -10,7 +10,9 @@ import { interpolate } from '../lib/format.js';
  * schema.org structured data. Used only at build time by the pre-renderer.
  */
 
-const OG_IMAGE = { path: '/og-image.png', width: 682, height: 298 };
+// The link-preview images, one per language (scripts/og-images.js draws them from the hero).
+const OG_IMAGES = { ar: '/og-image.jpg', en: '/og-image-en.jpg' };
+const OG_SIZE = { width: 1200, height: 630 };
 
 const escapeHtml = (value) =>
   String(value).replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
@@ -112,8 +114,19 @@ function structuredData(locale) {
   };
 }
 
-export function renderHead(locale, page = 'home') {
-  const { meta } = dictionaries[locale];
+/**
+ * `assetOrigin` is where the link-preview image is fetched from: the canonical site unless the
+ * build says the files are served elsewhere for now (scripts/prerender.js).
+ */
+export function renderHead(locale, page = 'home', { assetOrigin = site.origin } = {}) {
+  const { meta, notFound } = dictionaries[locale];
+  if (page === 'notFound') {
+    // A link that leads nowhere: named for the tab, kept out of search results.
+    return [
+      `<title>${escapeHtml(notFound.title)}</title>`,
+      `<meta name="robots" content="noindex" />`,
+    ].join('\n    ');
+  }
   const config = LOCALES[locale];
   const isPolicy = page === 'policy';
   // The policy has one language, so no alternates; the home page has one per locale.
@@ -129,6 +142,7 @@ export function renderHead(locale, page = 'home') {
         ),
         `<link rel="alternate" hreflang="x-default" href="${absolute('/')}" />`,
       ];
+  const image = new URL(OG_IMAGES[locale], assetOrigin).href;
   const data = isPolicy ? policyData() : structuredData(locale);
   const jsonLd = JSON.stringify(data).replace(/</g, '\\u003c');
 
@@ -144,14 +158,16 @@ export function renderHead(locale, page = 'home') {
     `<meta property="og:url" content="${url}" />`,
     `<meta property="og:locale" content="${config.ogLocale}" />`,
     ...others.map((l) => `<meta property="og:locale:alternate" content="${l.ogLocale}" />`),
-    `<meta property="og:image" content="${absolute(OG_IMAGE.path)}" />`,
-    `<meta property="og:image:width" content="${OG_IMAGE.width}" />`,
-    `<meta property="og:image:height" content="${OG_IMAGE.height}" />`,
-    `<meta property="og:image:alt" content="${escapeHtml(meta.ogImageAlt)}" />`,
+    `<meta property="og:image" content="${image}" />`,
+    `<meta property="og:image:type" content="image/jpeg" />`,
+    `<meta property="og:image:width" content="${OG_SIZE.width}" />`,
+    `<meta property="og:image:height" content="${OG_SIZE.height}" />`,
+    `<meta property="og:image:alt" content="${escapeHtml(meta.ogImage.alt)}" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
     `<meta name="twitter:title" content="${escapeHtml(title)}" />`,
     `<meta name="twitter:description" content="${escapeHtml(description)}" />`,
-    `<meta name="twitter:image" content="${absolute(OG_IMAGE.path)}" />`,
+    `<meta name="twitter:image" content="${image}" />`,
+    `<meta name="twitter:image:alt" content="${escapeHtml(meta.ogImage.alt)}" />`,
     `<script type="application/ld+json">${jsonLd}</script>`,
   ].join('\n    ');
 }

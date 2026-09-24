@@ -113,7 +113,9 @@
   margin-block-start: calc(var(--overlap) * -1);
 }
 
-@media (min-width: 64em) {
+/* The index card takes a column only where the sheet keeps a full reading measure beside it;
+   narrower, the navigation island's receipt lists the same contents. */
+@media (min-width: 80em) {
   .layout {
     grid-template-columns: 16.5rem minmax(0, 1fr);
     align-items: start;
@@ -125,7 +127,7 @@
   display: none;
 }
 
-@media (min-width: 64em) {
+@media (min-width: 80em) {
   .index {
     position: sticky;
     inset-block-start: calc(var(--header-height) + 1rem);
@@ -291,6 +293,9 @@
 }
 
 .sender a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.75rem; /* a comfortable target, not just a line of text */
   color: var(--brand-text);
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -722,6 +727,9 @@
 }
 
 .channel a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.75rem;
   color: var(--brand-text);
   text-decoration: underline;
   text-decoration-thickness: 1px;

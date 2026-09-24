@@ -14,7 +14,11 @@ const ar = {
     description:
       'اكتشف تطبيق كيو — تطبيق التسوق الذكي للمقاضي بعروض مميزة، أقل الأسعار، وتجربة تصفح واضحة وسهلة لتلبية احتياجاتك اليومية.',
     siteName: 'كيو',
-    ogImageAlt: 'شعار كيو — كل العروض في مكان واحد',
+    // The link-preview image (scripts/og-images.js draws it from the hero and this line).
+    ogImage: {
+      alt: 'كيو: «تطبيق كله عروض من أوله إلى آخره، وأسعار ما تلاقيها إلا فيه» وزر «حمّل كيو مجاناً»، بجانب شاشات التطبيق على رف العروض',
+      stores: 'على Google Play و App Store',
+    },
   },
 
   a11y: {
@@ -32,7 +36,7 @@ const ar = {
   nav: {
     items: [
       { id: 'why', label: 'ليش كيو' },
-      { id: 'inside', label: 'جوه التطبيق' },
+      { id: 'inside', label: 'داخل التطبيق' },
       { id: 'faq', label: 'الأسئلة' },
       { id: 'download', label: 'حمّل التطبيق' },
     ],
@@ -253,6 +257,18 @@ const ar = {
     },
     sourceLine: 'كيو · {package}',
     legal: '© {year} {company} — حي الرحاب، جدة',
+  },
+
+  // The page hosts show for a link that leads nowhere: an empty shelf, its label «نفد».
+  notFound: {
+    title: 'الصفحة غير موجودة — كيو',
+    eyebrow: 'خطأ ٤٠٤',
+    heading: 'هالصفحة مو على الرف',
+    text: 'يمكن الرابط قديم أو فيه حرف ناقص. العروض كلها في الصفحة الرئيسية، وفي التطبيق نفسه.',
+    home: 'الصفحة الرئيسية',
+    english: 'This page doesn’t exist — see Q in English',
+    flag: 'نفد',
+    name: 'الصفحة المطلوبة',
   },
 
   /** How the figures are written; {n} is the number, already in Arabic-Indic digits. */

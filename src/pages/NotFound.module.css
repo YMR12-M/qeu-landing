@@ -1,0 +1,181 @@
+/*
+ * 404: the hero's shelf, emptied — the same night-lit pegboard, clear dividers with nothing
+ * between them, and one label left in the rail: «نفد».
+ */
+
+.page {
+  --board: clamp(0.625rem, 0.8vw, 0.875rem);
+  --rail: clamp(2.75rem, 3.2vw, 3.5rem);
+  --focus-ring: var(--glow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-block-size: 100svh;
+  padding-block: calc(var(--header-height) + clamp(2.5rem, 7vh, 5rem)) clamp(2.5rem, 5vw, 4rem);
+  overflow: hidden;
+  background:
+    radial-gradient(80% 65% at 50% 0, rgb(159 227 234 / 0.1), rgb(159 227 234 / 0) 70%),
+    radial-gradient(circle, rgb(159 227 234 / 0.08) 0.07rem, rgb(159 227 234 / 0) 0.1rem) 50% 0 /
+      1.5rem 1.5rem,
+    var(--night);
+  color: var(--white);
+}
+
+.copy {
+  inline-size: 100%;
+  max-inline-size: calc(90rem + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  font-size: var(--text-nav);
+  font-weight: 700;
+  color: var(--star);
+}
+
+.eyebrow::before {
+  content: '';
+  flex: none;
+  inline-size: 2.5rem;
+  block-size: 1px;
+  background: currentColor;
+}
+
+.title {
+  max-inline-size: 14em;
+  margin-block-start: 1.25rem;
+  font-size: clamp(2.5rem, 5.5vw, 6rem);
+  line-height: 1.1;
+  text-wrap: balance;
+  color: var(--white);
+}
+
+.text {
+  max-inline-size: 32em;
+  margin-block-start: 1.25rem;
+  font-size: var(--text-lead);
+  font-weight: 500;
+  color: var(--glow);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-block-start: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 3.25rem;
+  padding-inline: 1.75rem;
+  border: 1.5px solid rgb(159 227 234 / 0.5);
+  border-radius: var(--pill);
+  font-size: var(--text-cta);
+  font-weight: 700;
+  color: var(--white);
+  transition: background-color var(--duration-fast) ease;
+}
+
+.home:hover {
+  background: rgb(159 227 234 / 0.12);
+}
+
+.english {
+  margin-block-start: 1.75rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.english a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.75rem;
+  color: var(--glow);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+
+/* ── The empty shelf ─────────────────────────────────────────────── */
+
+.shelf {
+  margin-block-start: clamp(3rem, 8vh, 5rem);
+}
+
+/* Clear dividers still standing, with nothing between them. */
+.dividers {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  block-size: clamp(6rem, 15vh, 10rem);
+  padding-inline: var(--gutter);
+}
+
+.dividers span {
+  inline-size: 0.1875rem;
+  block-size: 72%;
+  border-radius: 0.125rem 0.125rem 0 0;
+  background: linear-gradient(to top, rgb(159 227 234 / 0.5), rgb(159 227 234 / 0.05));
+}
+
+/* The shelf's top face, the lit edge and the price rail — as in the hero. */
+.edge {
+  position: relative;
+  block-size: calc(var(--board) + var(--rail));
+  background:
+    linear-gradient(rgb(159 227 234 / 0.45), rgb(159 227 234 / 0.45)) 0 var(--board) / 100% 1px
+      no-repeat,
+    linear-gradient(#1c5864, #10424c) 0 0 / 100% var(--board) no-repeat,
+    linear-gradient(var(--deep), #073842) 0 var(--board) / 100% var(--rail) no-repeat;
+  box-shadow: 0 1.5rem 2rem -1rem rgb(0 0 0 / 0.65);
+}
+
+/* The one label left: sold out. */
+.label {
+  position: absolute;
+  inset-block-end: calc(var(--rail) * 0.14);
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  align-items: stretch;
+  block-size: calc(var(--rail) * 0.72);
+  overflow: hidden;
+  border-radius: 0.25rem;
+  background: var(--white);
+  white-space: nowrap;
+  box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 0.4);
+}
+
+.flag {
+  display: grid;
+  place-items: center;
+  padding-inline: 0.75rem;
+  background: var(--night);
+  color: var(--white);
+  font-size: clamp(0.8125rem, 0.9vw, 1rem);
+  font-weight: 800;
+}
+
+.name {
+  align-self: center;
+  padding-inline: 0.75rem;
+  font-size: clamp(0.75rem, 0.8vw, 0.875rem);
+  font-weight: 700;
+  color: var(--deep);
+}
+
+.barcode {
+  align-self: center;
+  inline-size: 2.75rem;
+  block-size: 55%;
+  margin-inline-end: 0.75rem;
+  color: var(--night);
+}

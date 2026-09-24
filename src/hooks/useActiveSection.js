@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 /** The reading line: a thin band just above the middle of the viewport. */
-export const READING_BAND = '-45% 0px -54% 0px';
+const READING_BAND = '-45% 0px -54% 0px';
 
 /**
  * "You are here": the id of the section under a thin band just above the middle of the
