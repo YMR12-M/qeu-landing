@@ -15,11 +15,11 @@ const SETS = 4;
 const STOCK = Array.from({ length: SETS }, () => media.shelf).flat();
 
 /**
- * «رف العروض» — the hero is a supermarket shelf at night. The app's six Google Play
- * screenshots stand on it like products, all one size and in the store's order, lit from
- * above; every label on the shelf edge is a yellow offer label: all deals, from one end of the
- * shelf to the other. The headline is on display at the head of the shelf, with the app's own
- * price label under it: free.
+ * «رف العروض» — the hero is a supermarket shelf at night, lit from the shelf above. The app's
+ * six Google Play screenshots stand on it like products, all one size and in the store's
+ * order, each with its stock lined up behind it; every label on the shelf edge is a yellow
+ * offer label: all deals, from one end of the shelf to the other. The headline is on display
+ * at the head of the shelf, with the app's own price label under it: free.
  *
  * The shelf glides slowly and steadily away from the headline, like walking down the aisle.
  * The headline has no entrance animation and is one block of text (lines broken with <br>),
@@ -70,6 +70,8 @@ export function Hero() {
         </div>
 
         <div className={styles.aisle} aria-hidden="true">
+          {/* The shelf above: its edge, and the strip of light under it. */}
+          <span className={styles.canopy} />
           <div className={styles.track} style={{ '--sets': SETS }}>
             {STOCK.map(({ id, image }, index) => (
               <div key={index} className={styles.facing}>

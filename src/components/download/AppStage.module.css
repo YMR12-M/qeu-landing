@@ -30,9 +30,23 @@
   filter: drop-shadow(0 1.75rem 2rem rgb(4 40 47 / 0.35));
 }
 
+/* The «مجاناً» starburst, on the stage's outer top corner: inside the page's edge on a phone,
+   standing off the corner on a computer. */
+.sticker {
+  --size: clamp(5.5rem, 9vw, 7.5rem);
+  position: absolute;
+  z-index: 1;
+  inset-block-start: calc(var(--size) * -0.3);
+  inset-inline-end: -0.25rem;
+}
+
 @media (min-width: 64em) {
   .stage {
     aspect-ratio: 4 / 5;
+  }
+
+  .sticker {
+    inset-inline-end: calc(var(--size) * -0.25);
   }
 
   .qr {

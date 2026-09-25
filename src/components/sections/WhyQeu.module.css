@@ -1,4 +1,5 @@
 .section {
+  overflow-x: clip; /* a sticker standing off the frame never widens the page (and it pins) */
   border-block: 1px solid var(--line);
   background: var(--white);
 }
@@ -136,9 +137,26 @@
   }
 
   .step[data-active] {
+    position: relative;
     padding-block: clamp(1rem, 1.3542vw, 1.625rem);
-    border-block-start-color: var(--brand);
     opacity: 1;
+  }
+
+  /* The open benefit's rule fills as the reader scrolls through it (--step-fill, WhyQeu.jsx),
+     from the side the text starts on. */
+  .step[data-active]::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: -1px;
+    block-size: 2px;
+    background: var(--brand);
+    scale: var(--step-fill, 1) 1;
+    transform-origin: right;
+  }
+
+  .step[data-active]:dir(ltr)::before {
+    transform-origin: left;
   }
 
   .step:not([data-active]) .stepBody {
@@ -154,13 +172,28 @@
 
   /* Capped by the viewport's width as well as its height: on a portrait tablet the screen
      still fits beside the list, and the pinned block within the viewport. */
-  .frame {
+  .frameBox {
     position: relative;
     block-size: min(40rem, 56vh, 40vw);
     aspect-ratio: 4 / 5;
+  }
+
+  .frame {
+    position: relative;
+    block-size: 100%;
     overflow: hidden;
     border-radius: var(--radius-lg);
     background: var(--screen-backdrop);
+  }
+
+  /* The open benefit's sticker, on the frame's outer top corner: all four wait there, and
+     the open one is slapped on (Sticker: data-state). */
+  .frameSticker {
+    --size: clamp(5.5rem, 7vw, 7.75rem);
+    position: absolute;
+    z-index: 1;
+    inset-block-start: calc(var(--size) * -0.32);
+    inset-inline-end: calc(var(--size) * -0.32);
   }
 
   .screen {
@@ -227,7 +260,135 @@
     min-block-size: 0;
   }
 
-  .frame {
+  .frameBox {
     block-size: min(100%, 40rem);
+  }
+}
+
+/* ── Phones: a row of cards, one per benefit, swiped through ────── */
+
+.shot,
+.swipe,
+.cardSticker {
+  display: none;
+}
+
+/* Everything that doesn't pin: phones, and screens too short to pin (WhyQeu.jsx matches). */
+@media not all and (min-width: 48.0625em) and (min-height: 36em) {
+  .body {
+    row-gap: 0;
+  }
+
+  /* The row runs from edge to edge of the screen, each card snapping to the text's edge. Room
+     above it for the stickers standing off the cards' corners. */
+  .steps {
+    display: grid;
+    grid-auto-columns: min(78%, 19rem);
+    grid-auto-flow: column;
+    gap: 1rem;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 1.25rem var(--gutter) 1.25rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+    scroll-timeline: --why-swipe inline;
+  }
+
+  .steps::-webkit-scrollbar {
+    display: none;
+  }
+
+  .step,
+  .step:last-child {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border: 0;
+    scroll-snap-align: start;
+  }
+
+  /* Each card's sticker, slapped on its screen's corner as the card comes into view. */
+  .cardSticker {
+    --size: 5.25rem;
+    position: absolute;
+    z-index: 1;
+    inset-block-start: -1rem;
+    inset-inline-end: -0.5rem;
+    display: block;
+  }
+
+  /* The screen, framed as in the pinned layout: store crops fill it, device renders stand in it. */
+  .shot {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    margin-block-end: 1.25rem;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--screen-backdrop);
+  }
+
+  .shotScreen[data-kind='crop'] {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: var(--focus, top);
+  }
+
+  .shotScreen[data-kind='device'] {
+    position: absolute;
+    inset-block-start: 7%;
+    inset-inline: 0;
+    inline-size: 86%;
+    margin-inline: auto;
+    filter: drop-shadow(0 1.5rem 2rem rgb(4 40 47 / 0.3));
+  }
+
+  .stepText {
+    margin-block-start: 0.5rem;
+    font-size: var(--text-body);
+  }
+
+  /* Under the row, a bar fills as it is swiped: a quarter per card, drawn by the browser from
+     the row's own scroll position. */
+  @supports (animation-timeline: scroll()) {
+    .body {
+      timeline-scope: --why-swipe;
+    }
+
+    .swipe {
+      display: block;
+      flex: 1 0 100%;
+      block-size: 0.1875rem;
+      overflow: hidden;
+      border-radius: var(--pill);
+      background: var(--line);
+    }
+
+    .swipe::before {
+      content: '';
+      display: block;
+      block-size: 100%;
+      border-radius: inherit;
+      background: var(--brand);
+      transform-origin: left;
+      animation: swiped linear both;
+      animation-timeline: --why-swipe;
+    }
+
+    .swipe:dir(rtl)::before {
+      transform-origin: right;
+    }
+  }
+}
+
+@keyframes swiped {
+  from {
+    scale: 0.25 1;
   }
 }

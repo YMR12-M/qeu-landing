@@ -8,11 +8,18 @@
   font-weight: 700;
   line-height: 1.2;
   white-space: nowrap;
-  transition: filter var(--duration-fast) ease;
+  transition:
+    filter var(--duration-fast) ease,
+    scale 150ms ease;
 }
 
 .button:hover {
   filter: brightness(0.94);
+}
+
+/* Pressed, it gives a little: the tap is felt before the store opens. */
+.button:active {
+  scale: 0.97;
 }
 
 .md {

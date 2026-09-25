@@ -1,0 +1,217 @@
+/*
+ * Promo stickers: a printed shape with the white edge of a die-cut sticker, a soft shadow
+ * where it stands off the pack, and heavy type. Sized by --size (set it on a parent); all
+ * that is inside scales with it.
+ */
+
+.sticker {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--size, 6.5rem);
+  block-size: var(--size, 6.5rem);
+  font-size: calc(var(--size, 6.5rem) / 6.5);
+  line-height: 1;
+  rotate: var(--tilt, -8deg);
+  filter: drop-shadow(0 0.25em 0.35em rgb(4 40 47 / 0.3));
+  pointer-events: none;
+  transition:
+    opacity 200ms ease,
+    scale 200ms ease;
+}
+
+.art {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+}
+
+/* The white margin a die-cut sticker keeps around its print. */
+.body,
+.tails {
+  stroke: var(--white);
+  stroke-width: 4;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+/* The ring printed inside, as on real ones. */
+.ring {
+  fill: none;
+  stroke-width: 1.2;
+  stroke-dasharray: 2.5 2.5;
+}
+
+.words {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 0.12em;
+  font-weight: 800;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── The four kinds ─────────────────────────────────────────────── */
+
+/* The yellow starburst of a deal. */
+.burst .body {
+  fill: var(--star);
+}
+
+.burst .ring {
+  stroke: rgb(4 40 47 / 0.35);
+}
+
+.burst .words {
+  color: var(--night);
+}
+
+.burst .main {
+  font-size: 2em;
+}
+
+.burst .main:only-child {
+  font-size: 1.45em;
+}
+
+.burst .sub {
+  font-size: 1em;
+}
+
+/* A round sticker in the brand's teal. */
+.round .body {
+  fill: var(--brand-text);
+}
+
+.round .ring {
+  stroke: rgb(255 255 255 / 0.55);
+}
+
+.round .words {
+  color: var(--white);
+}
+
+.round .main {
+  font-size: 1.45em;
+}
+
+.round .sub {
+  font-size: 0.95em;
+  font-weight: 700;
+}
+
+/* The red price-cut label. */
+.tag .body {
+  fill: #d62828; /* white type keeps 5.3:1 on it */
+}
+
+.tag .ring {
+  stroke: rgb(255 255 255 / 0.6);
+}
+
+.tag .words {
+  color: var(--white);
+}
+
+.tag .main {
+  font-size: 1.6em;
+}
+
+.tag .sub {
+  font-size: 1.25em;
+}
+
+/* A rosette, ribbons and all: "picked for you". */
+.seal .body {
+  fill: var(--deep);
+}
+
+.seal .tails {
+  fill: var(--brand);
+}
+
+.seal .ring {
+  stroke: var(--glow);
+  stroke-width: 1;
+  stroke-dasharray: none;
+}
+
+.seal .words {
+  gap: 0.2em;
+  margin-block-end: 14%;
+  color: var(--white);
+}
+
+.seal .main {
+  font-size: 0.8em;
+}
+
+.seal .sub {
+  font-size: 1.35em;
+  color: var(--glow);
+}
+
+/* Latin words run wider than the Arabic ones they stand for. */
+.burst:lang(en) .main:only-child,
+.tag:lang(en) .main {
+  font-size: 1.3em;
+}
+
+.round:lang(en) .main {
+  font-size: 1.2em;
+}
+
+.tag:lang(en) .sub {
+  font-size: 1.05em;
+}
+
+.seal:lang(en) .sub {
+  font-size: 0.95em;
+}
+
+/* ── Slapped on, peeled off ─────────────────────────────────────── */
+
+/* Dropped from above the pack and pressed flat, with a little squash as it lands. */
+.sticker[data-state='slap'],
+.sticker[data-reveal='shown'] {
+  animation: slap 520ms cubic-bezier(0.2, 0.9, 0.3, 1.25) both;
+}
+
+.sticker[data-state='off'] {
+  opacity: 0;
+  scale: 1.08;
+}
+
+.sticker[data-reveal='pending'] {
+  opacity: 0;
+}
+
+@keyframes slap {
+  0% {
+    opacity: 0;
+    scale: 1.7;
+    rotate: calc(var(--tilt, -8deg) - 16deg);
+    filter: drop-shadow(0 1.5em 1.2em rgb(4 40 47 / 0.2));
+  }
+
+  60% {
+    opacity: 1;
+    scale: 0.94;
+    rotate: var(--tilt, -8deg);
+    filter: drop-shadow(0 0.15em 0.2em rgb(4 40 47 / 0.35));
+  }
+
+  80% {
+    scale: 1.03;
+  }
+
+  100% {
+    opacity: 1;
+    scale: 1;
+    rotate: var(--tilt, -8deg);
+    filter: drop-shadow(0 0.25em 0.35em rgb(4 40 47 / 0.3));
+  }
+}

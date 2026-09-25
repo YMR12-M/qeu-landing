@@ -8,6 +8,8 @@
  *   play-*                            → the six Google Play screenshots, whole (1242×2688 originals
  *                                       scaled to 960px wide); play-delivery-1/-2 are one panorama
  *   app-icon                          → Google Play icon
+ *   qur-*                             → the kabsa ingredients كيور lists in the chat screenshot
+ *                                       (screen-chat), cropped from it with their + button
  *
  * AVIF and WebP are encoded separately because sharp's quality scales differ: AVIF at q50 is
  * 25–30 % smaller than WebP at q72 on these screens and closer to the source (SSIM), while
@@ -32,6 +34,9 @@ import playOffersAvif from '../assets/images/play-offers.webp?w=240;360;480;720&
 import playOffersWebp from '../assets/images/play-offers.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
 import playSmartAvif from '../assets/images/play-smart.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
 import playSmartWebp from '../assets/images/play-smart.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
+import qurRice from '../assets/images/qur-rice.webp?w=120;180;250&format=webp&quality=80&as=picture';
+import qurSpice from '../assets/images/qur-spice.webp?w=120;180;250&format=webp&quality=80&as=picture';
+import qurTomato from '../assets/images/qur-tomato.webp?w=120;180;250&format=webp&quality=80&as=picture';
 import screenCategoriesAvif from '../assets/images/screen-categories.webp?w=360;540;720&format=avif&quality=50&as=picture';
 import screenCategoriesWebp from '../assets/images/screen-categories.webp?w=360;540;720&format=webp&quality=72&as=picture';
 import screenChatAvif from '../assets/images/screen-chat.webp?w=240;360;540;720&format=avif&quality=50&as=picture';
@@ -89,6 +94,13 @@ export const media = {
     search: device(screenCategories),
     prices: crop(screenPicks),
     picks: crop(screenChat, '50% 72%'), // the «مكونات الكبسة» card
+  },
+
+  /** «اسأل كيور» — the products in its kabsa list, keyed by product id (assistant-chat.js). */
+  assistant: {
+    spice: qurSpice,
+    rice: qurRice,
+    tomato: qurTomato,
   },
 
   /** «كيف يشتغل» — keyed by step id. */

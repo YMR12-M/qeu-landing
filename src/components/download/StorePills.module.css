@@ -20,7 +20,12 @@
   transition:
     background-color var(--duration-fast) ease,
     color var(--duration-fast) ease,
-    filter var(--duration-fast) ease;
+    filter var(--duration-fast) ease,
+    scale 150ms ease;
+}
+
+.pill:active {
+  scale: 0.98;
 }
 
 .solid {

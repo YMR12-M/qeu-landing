@@ -35,6 +35,7 @@ const en = {
   nav: {
     items: [
       { id: 'why', label: 'Why Q' },
+      { id: 'assistant', label: 'Ask Q-ur' },
       { id: 'inside', label: 'Inside the app' },
       { id: 'faq', label: 'FAQ' },
       { id: 'download', label: 'Download' },
@@ -77,12 +78,14 @@ const en = {
       {
         id: 'deals',
         title: '1+1 Free Deals',
+        sticker: { main: '1+1', sub: 'FREE' },
         text: 'Discover the best available deals on your daily products, from 1+1 offers to clear and simple discounts — all in one place.',
         imageAlt: 'The Q app home screen: a super deal on Al Fakhama rice with Al Fakhama oil free',
       },
       {
         id: 'search',
         title: 'Search & Browsing',
+        sticker: { main: 'Search', sub: 'with ease' },
         text: 'Find any product quickly or browse categories with ease. Enjoy a smooth, organized experience without complications.',
         imageAlt:
           'The categories screen in the Q app with the search bar: groceries, and fresh produce like fruit and vegetables',
@@ -90,6 +93,7 @@ const en = {
       {
         id: 'prices',
         title: 'Lowest Prices',
+        sticker: { main: 'Lowest', sub: 'prices' },
         text: 'Save money with products that offer the lowest price in their category. Everything is displayed clearly to help you choose fast.',
         imageAlt:
           'Products in the Q app with their price before and after the discount, and the size under each one',
@@ -97,6 +101,7 @@ const en = {
       {
         id: 'picks',
         title: 'Personalized Picks',
+        sticker: { main: 'Picked', sub: 'for you' },
         text: 'Get product suggestions tailored to your taste and needs, so you can discover the right items faster — without overthinking or scrolling forever.',
         imageAlt:
           'Q-ur, the smart assistant in the Q app, suggesting “Kabsa ingredients” in one list with an “Add all” button',
@@ -104,8 +109,25 @@ const en = {
     ],
   },
 
+  // The section around the replayed conversation, which stays in Arabic: so is the app.
+  assistant: {
+    eyebrow: 'The smart assistant in Q',
+    name: 'Q-ur',
+    title: 'Ask Q-ur about your dish',
+    lead: 'Ask it about a dish like kabsa, and it puts the ingredients in one list you add to your cart with “Add all”.',
+    steps: ['Ask about a dish', 'Q-ur lists the ingredients', 'Add them all in one tap'],
+    cta: 'Get Q and try Q-ur',
+    demoLabel: 'A chat with Q-ur in the Q app, in Arabic like the app',
+    hint: 'Try it yourself: tap',
+    hintAfter: '(Add all)',
+    done: 'Added to the cart',
+    added: 'The kabsa ingredients were added to the cart: 15 products for SAR 179',
+    replay: 'Replay the chat',
+  },
+
   inside: {
     eyebrow: 'How it works',
+    arrived: 'Your order’s here',
     title: 'Our deals come to you — at the same price',
     lead: 'A simple, clear shopping experience with secure payment options and fast, organized delivery right to your door.',
     steps: [
@@ -205,19 +227,27 @@ const en = {
     ],
   },
 
+  // The store figures, printed as the app's nutrition-facts label.
   stats: {
+    title: 'Nutrition Facts',
+    product: 'for the Q app',
+    serving: { label: 'Serving size', value: '1 app' },
     downloads: {
+      name: 'Downloads',
       unit: { thousand: 'K+', million: 'M+' },
-      label: 'downloads on Google Play in the {months} since launch',
+      detail: 'on Google Play in the {months} since launch',
     },
-    rating: { label: 'rating from phone users on Google Play' },
-    fiveStar: { unit: '%', label: 'of phone ratings are 5 stars ({count} ratings)' },
-    count: { label: 'phone ratings · {allRatings} in total' },
+    rating: { name: 'Rating', detail: 'from phone users on Google Play' },
+    fiveStar: { name: '5-star ratings', unit: '%', detail: '{count} phone ratings' },
+    count: { name: 'Ratings', detail: 'from phones · {allRatings} in total' },
+    price: { name: 'Price', value: 'Free', detail: 'on the App Store and Google Play' },
+    source: 'Figures from Q’s Google Play page, {date}.',
   },
 
   download: {
     title: 'Get Q',
     subtitle: 'Free on your phone',
+    sticker: 'FREE',
     text: 'Available for iPhone and Android. Scan the code or pick your store — the app is free, and the deals start on the very first screen. The app itself is in Arabic.',
     stageAlt:
       'The Q app home screen: a super deal on Al Fakhama rice with Al Fakhama oil free, and the “prices you’ll only find on Q” section',

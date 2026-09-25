@@ -1,3 +1,4 @@
+import { Assistant } from '../components/sections/Assistant.jsx';
 import { Download } from '../components/sections/Download.jsx';
 import { Faq } from '../components/sections/Faq.jsx';
 import { Hero } from '../components/sections/Hero.jsx';
@@ -10,6 +11,7 @@ export default function Home() {
     <>
       <Hero />
       <WhyQeu />
+      <Assistant />
       <HowItWorks />
       <Faq />
       <Download />

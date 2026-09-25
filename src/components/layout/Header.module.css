@@ -37,6 +37,7 @@
   box-shadow: var(--island-shadow);
   backdrop-filter: blur(18px) saturate(1.5);
   pointer-events: auto;
+  view-transition-name: qeu-island; /* carried across page loads (base.css) */
   transition:
     background-color 450ms ease,
     border-color 450ms ease,
@@ -278,6 +279,40 @@
 /* ── Computers: open at the top, folding while reading down ─────── */
 
 @media (min-width: 64em) {
+  /* The island places itself: centred while open, and as it folds it glides — with the same
+     timing as the fold — to the start of the page's content (the right, in Arabic), in line
+     with the text of every section. */
+  .header {
+    display: block;
+  }
+
+  .island {
+    --flip: 1;
+    position: absolute;
+    inset-block-start: 0.75rem;
+    inset-inline-start: 50%;
+    inline-size: max-content;
+    translate: calc(-50% * var(--flip)) 0;
+    transition:
+      background-color 450ms ease,
+      border-color 450ms ease,
+      color 450ms ease,
+      box-shadow 450ms ease,
+      inset-inline-start 520ms var(--ease-out),
+      left 520ms var(--ease-out),
+      right 520ms var(--ease-out),
+      translate 520ms var(--ease-out);
+  }
+
+  .header:dir(rtl) .island {
+    --flip: -1;
+  }
+
+  .header[data-folded] .island {
+    inset-inline-start: max(var(--gutter), (100% - 90rem) / 2);
+    translate: 0 0;
+  }
+
   .wordmarkBox,
   .directory,
   .locale,

@@ -80,6 +80,111 @@ export function Play(props) {
   );
 }
 
+/**
+ * كيور's mark in the app: a four-pointed sparkle. `gradient` names a <linearGradient> id to
+ * fill it with (the app's violet-to-teal); without one it takes the text colour.
+ */
+export function Sparkle({ gradient, ...props }) {
+  return (
+    <Icon viewBox="0 0 24 24" {...props}>
+      <path
+        fill={gradient ? `url(#${gradient})` : undefined}
+        d="M12 0c.9 6.2 5.8 11.1 12 12-6.2.9-11.1 5.8-12 12-.9-6.2-5.8-11.1-12-12C6.2 11.1 11.1 6.2 12 0Z"
+      />
+    </Icon>
+  );
+}
+
+/** Line icons for the app screen in «اسأل كيور»: its back chevron, the cart, send, done. */
+function StrokeIcon({ children, ...props }) {
+  return (
+    <Icon
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      {children}
+    </Icon>
+  );
+}
+
+/** Points right: the back button of a right-to-left screen (the app is Arabic). */
+export function ChevronBack(props) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="m9 5 7 7-7 7" />
+    </StrokeIcon>
+  );
+}
+
+export function Basket(props) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M3.5 9.5h17l-1.6 9.1a2 2 0 0 1-2 1.7H7.1a2 2 0 0 1-2-1.7Z" />
+      <path d="m8.5 9.5 3-6M15.5 9.5l-3-6M9 13.5v3M15 13.5v3" />
+    </StrokeIcon>
+  );
+}
+
+export function ArrowUp(props) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M12 19V5M6 11l6-6 6 6" />
+    </StrokeIcon>
+  );
+}
+
+export function Check(props) {
+  return (
+    <StrokeIcon strokeWidth="2.6" {...props}>
+      <path d="m5 12.5 4.5 4.5L19 7.5" />
+    </StrokeIcon>
+  );
+}
+
+/** The reactions under كيور's answers in the app: copy, like, dislike. */
+export function Copy(props) {
+  return (
+    <StrokeIcon strokeWidth="1.7" {...props}>
+      <rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2.5" />
+      <path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5" />
+    </StrokeIcon>
+  );
+}
+
+const THUMB =
+  'M7.5 11v9H5a1.5 1.5 0 0 1-1.5-1.5v-6A1.5 1.5 0 0 1 5 11h2.5Zm0 0 3.4-6.8a1.8 1.8 0 0 1 3.4 1.1L13.6 9h4.9a2 2 0 0 1 2 2.3l-1.1 7a2 2 0 0 1-2 1.7H7.5';
+
+export function ThumbUp(props) {
+  return (
+    <StrokeIcon strokeWidth="1.7" {...props}>
+      <path d={THUMB} />
+    </StrokeIcon>
+  );
+}
+
+export function ThumbDown(props) {
+  return (
+    <StrokeIcon strokeWidth="1.7" {...props}>
+      <path d={THUMB} transform="rotate(180 12 12)" />
+    </StrokeIcon>
+  );
+}
+
+/** Replay: a circular arrow, anticlockwise. Media control, so it keeps its direction. */
+export function Replay(props) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M4 12a8 8 0 1 0 2.6-5.9" />
+      <path d="M4 4.5v4.2h4.2" />
+    </StrokeIcon>
+  );
+}
+
 /** The privacy policy's three recipients: a delivery van, a payment card, a government building. */
 function LineIcon({ children, ...props }) {
   return (

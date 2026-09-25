@@ -3,13 +3,15 @@ import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { Logo } from '../brand/Logo.jsx';
 import { Picture } from '../ui/Picture.jsx';
+import { Sticker } from '../ui/Sticker.jsx';
 import { QrCard } from './QrCard.jsx';
 import styles from './AppStage.module.css';
 
 /**
  * Kept from the previous design: the app icon blown up into a stage — its aqua and the
  * white wordmark — with the real home screen standing in front and the download QR code
- * pinned to the corner for visitors on a computer.
+ * pinned to the corner for visitors on a computer. A yellow «مجاناً» starburst is slapped on
+ * its top corner as it scrolls into view: the one price the app has.
  */
 export function AppStage({ className }) {
   const { t } = useLocale();
@@ -25,6 +27,9 @@ export function AppStage({ className }) {
           className={styles.phone}
         />
       </div>
+      <span className={styles.sticker}>
+        <Sticker shape="burst" main={t.download.sticker} style={{ '--tilt': '12deg' }} reveal />
+      </span>
       <QrCard className={styles.qr} />
     </div>
   );

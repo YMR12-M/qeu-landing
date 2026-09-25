@@ -15,6 +15,13 @@ html {
   html {
     scroll-behavior: smooth;
   }
+
+  /* Between the site's pages (Arabic, English, the policy) the page cross-fades instead of
+     flashing, and the navigation island glides to its new shape (Header: view-transition-name).
+     Where the browser can't, links simply load as before. */
+  @view-transition {
+    navigation: auto;
+  }
 }
 
 body {

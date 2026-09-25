@@ -36,6 +36,7 @@ const ar = {
   nav: {
     items: [
       { id: 'why', label: 'ليش كيو' },
+      { id: 'assistant', label: 'اسأل كيور' },
       { id: 'inside', label: 'داخل التطبيق' },
       { id: 'faq', label: 'الأسئلة' },
       { id: 'download', label: 'حمّل التطبيق' },
@@ -77,12 +78,14 @@ const ar = {
       {
         id: 'deals',
         title: 'عروض ١+١ مجاناً',
+        sticker: { main: '١+١', sub: 'مجاناً' },
         text: 'اكتشف أفضل العروض المتاحة على المنتجات اليومية، من ١+١ مجاناً إلى الخصومات الواضحة، وكلها في مكان واحد.',
         imageAlt: 'الشاشة الرئيسية في تطبيق كيو: عرض السوبر «أرز الفخامة + زيت الفخامة مجاناً»',
       },
       {
         id: 'search',
         title: 'بحث وتصفّح بسيط',
+        sticker: { main: 'ابحث', sub: 'بسهولة' },
         text: 'ابحث عن أي منتج بسرعة، أو تصفّح الأقسام بسهولة بفضل واجهة واضحة تساعدك توصل للي تبيه بدون تعقيد.',
         imageAlt:
           'شاشة الأقسام في تطبيق كيو مع خانة البحث: المقاضي، والمنتجات الطازجة مثل الفواكه والخضروات',
@@ -90,12 +93,15 @@ const ar = {
       {
         id: 'prices',
         title: 'أقل الأسعار',
+        sticker: { main: 'أقل', sub: 'سعر' },
         text: 'وفّر وقتك وشوف المنتجات اللي تقدم أقل سعر بكل وضوح، مع عرض الحجم والسعر بطريقة تساعدك تختار بسرعة.',
         imageAlt: 'منتجات في تطبيق كيو بسعرها قبل الخصم وبعده، مع الحجم تحت كل منتج',
       },
       {
         id: 'picks',
         title: 'اقتراحات تناسبك',
+        // The screen's own heading: «منتجات اخترناها لك!»
+        sticker: { main: 'اخترناها', sub: 'لك' },
         text: 'نقترح لك منتجات تناسب ذوقك واحتياجك، عشان تختار أسرع وبكل ثقة — بدون لف ودوران.',
         imageAlt:
           'كيور، المساعد الذكي في تطبيق كيو، يقترح «مكونات الكبسة» في قائمة وحدة مع زر «أضف الكل»',
@@ -103,8 +109,28 @@ const ar = {
     ],
   },
 
+  // «اسأل كيور»: the section around the replayed conversation (src/content/assistant-chat.js).
+  // It says only what the FAQ's answer about كيور says, from the same screenshot.
+  assistant: {
+    eyebrow: 'المساعد الذكي في كيو',
+    name: 'كيور', // drawn in the assistant's colours wherever the title names it
+    title: 'اسأل كيور عن طبختك',
+    lead: 'اسأله عن طبخة مثل الكبسة، ويجهّز لك مكوناتها في قائمة وحدة تضيفها للسلة بزر «أضف الكل».',
+    steps: ['اسأل عن الطبخة', 'كيور يجهّز مكوناتها', 'أضف الكل للسلة بضغطة'],
+    cta: 'حمّل كيو وجرّب كيور',
+    demoLabel: 'محادثة مع كيور في تطبيق كيو',
+    hint: 'جرّبها بنفسك: اضغط',
+    hintAfter: '',
+    done: 'تمّت الإضافة للسلة',
+    // Announced to screen readers when «أضف الكل» is pressed.
+    added: 'أُضيفت مكونات الكبسة للسلة: ١٥ منتج بـ ١٧٩ ر.س',
+    replay: 'أعد المحادثة',
+  },
+
   inside: {
     eyebrow: 'كيف يشتغل',
+    // Over the house when the van arrives: the footer's sticker says it too.
+    arrived: 'طلبك وصل',
     title: 'عروضنا تجيك وبنفس السعر',
     lead: 'نقدّم تجربة شراء بسيطة وواضحة، مع خيارات دفع آمنة وتوصيل سريع ومنظّم لحد باب بيتك.',
     steps: [
@@ -203,20 +229,30 @@ const ar = {
     ],
   },
 
+  // The store figures, printed as the app's nutrition-facts label — «القيمة الغذائية» on
+  // every pack in the supermarket. The figures are the ones src/content/site.js holds.
   stats: {
+    title: 'القيمة الغذائية',
+    product: 'لتطبيق كيو',
+    serving: { label: 'حجم الحصة', value: 'تطبيق واحد' },
     downloads: {
+      name: 'التنزيلات',
       prefix: '+',
       unit: { thousand: 'ألف', million: 'مليون' },
-      label: 'تنزيل على Google Play خلال {months} من الإطلاق',
+      detail: 'على Google Play خلال {months} من الإطلاق',
     },
-    rating: { label: 'تقييم مستخدمي الجوال على Google Play' },
-    fiveStar: { unit: '٪', label: 'من تقييمات الجوال ٥ نجوم ({count} تقييم)' },
-    count: { label: 'تقييم من الجوال · {allRatings} إجمالاً' },
+    rating: { name: 'التقييم', detail: 'من مستخدمي الجوال على Google Play' },
+    fiveStar: { name: 'تقييمات ٥ نجوم', unit: '٪', detail: '{count} تقييم من الجوال' },
+    count: { name: 'عدد التقييمات', detail: 'من الجوال · {allRatings} إجمالاً' },
+    price: { name: 'السعر', value: 'مجاناً', detail: 'على App Store و Google Play' },
+    source: 'الأرقام من صفحة كيو على Google Play بتاريخ {date}.',
   },
 
   download: {
     title: 'حمّل {brand}',
     subtitle: 'مجاناً على جوالك',
+    // The yellow starburst on the app's stage.
+    sticker: 'مجاناً',
     text: 'متوفر للآيفون والأندرويد. امسح الكود أو اختار متجرك — التطبيق مجاني، والعروض تبدأ من أول شاشة.',
     stageAlt:
       'الشاشة الرئيسية في تطبيق كيو: عرض السوبر «أرز الفخامة + زيت الفخامة مجاناً»، وقسم «أسعار ما تلاقيها إلا في كيو!»',

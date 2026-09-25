@@ -1,6 +1,7 @@
 import { media } from '../../content/media.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { Logo } from '../brand/Logo.jsx';
+import { Bag, House, Palm, Pin, Skyline, Store } from '../illustrations/Street.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import { Reveal } from '../ui/Reveal.jsx';
 import { SectionHeading } from '../ui/SectionHeading.jsx';
@@ -54,25 +55,14 @@ function DeliveryVan() {
   );
 }
 
-/** The last stop: your door. It stands on the line, and the van pulls up in front of it. */
-function House() {
-  return (
-    <svg className={styles.house} viewBox="0 0 24 22" aria-hidden="true" focusable="false">
-      <path
-        fillRule="evenodd"
-        d="M12 1.5 22.5 10H20v11H4V10H1.5L12 1.5ZM9.5 21v-6.5a2.5 2.5 0 0 1 5 0V21h-5Z"
-      />
-    </svg>
-  );
-}
-
 /**
- * «كيف يشتغل» — the order's route. Three steps from the Google Play description, each with
- * its screen, hanging from a stop on a tracker line; as the section scrolls by, Qeu's van
- * drives from the first stop to your door and lights each stop it reaches — the way the app
- * tracks an order step by step. The motion is a CSS scroll-driven animation: no JavaScript,
- * off the main thread, and where it can't run (or motion is reduced) the van simply waits
- * at the door.
+ * «كيف يشتغل» — the order's route, as a street. Three steps from the Google Play description,
+ * each with its screen, hanging from a stop: Qeu's store at the first, the pin where the order
+ * is placed at the second, your house at the third. As the section scrolls by, Qeu's van drives
+ * from the store to your door, drawing the route behind it and lighting each stop it reaches —
+ * the way the app tracks an order step by step — and the bag is at the door when it arrives.
+ * The motion is a CSS scroll-driven animation: no JavaScript, off the main thread, and where
+ * it can't run (or motion is reduced) the van simply waits at the door.
  */
 export function HowItWorks() {
   const { t } = useLocale();
@@ -89,11 +79,22 @@ export function HowItWorks() {
         />
 
         <div className={styles.route} aria-hidden="true">
+          <Skyline className={styles.skyline} />
+          <Store className={styles.store} />
+          <Palm className={styles.palm} data-at="1" />
+          <Pin className={styles.pin} />
+          <Palm className={styles.palm} data-at="2" />
+          <div className={styles.home}>
+            <House className={styles.house} />
+            <Bag className={styles.bag} />
+            <span className={styles.bubble}>{inside.arrived}</span>
+          </div>
+          <span className={styles.walk} />
+          <span className={styles.road} />
           <span className={styles.fill} />
           {inside.steps.map((step, index) => (
             <span key={step.id} className={styles.stop} data-stop={index + 1}>
               <span className={styles.dot} />
-              {index === inside.steps.length - 1 && <House />}
               <span className={styles.stopNumber}>{stepNumber(index)}</span>
             </span>
           ))}

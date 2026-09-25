@@ -1,7 +1,10 @@
 /*
- * «كيف يشتغل» — the order's route: a tracker line with a stop over each step, Qeu's van
- * driving from the first stop to the house at the last as the section scrolls by, and the
- * steps hanging from their stops on dotted threads.
+ * «كيف يشتغل» — the order's route, as a street: Qeu's store at the first stop, the pin where
+ * the order is placed at the second, the customer's house at the third, with palms, the city
+ * behind and the road in front. As the section scrolls by, the van drives from the store to
+ * the door, drawing the route behind it as the app's tracker does and lighting each stop it
+ * reaches — and a bag is waiting at the door when it gets there. The steps hang from their
+ * stops on dotted threads below.
  */
 
 .section {
@@ -11,52 +14,153 @@
   background: var(--surface);
 }
 
-/* ── The route ──────────────────────────────────────────────────── */
+/* ── The street ─────────────────────────────────────────────────── */
 
+/* The route is a container: everything in the street is sized from its width, so the store,
+   the house, the road and the van keep their proportions from a phone to a wide screen. */
 .route {
-  --track: 0.3125rem;
-  --dot: 1rem;
-  --house: 1.375rem;
-  --van-width: 4.5rem;
+  --store-w: clamp(6.5rem, 22cqi, 14.5rem);
+  --house-w: clamp(5.5rem, 17cqi, 11rem);
+  --palm-w: clamp(2.75rem, 7.5cqi, 5.25rem);
+  --pin-w: clamp(1.75rem, 4.2cqi, 2.75rem);
+  --walk: clamp(0.375rem, 0.9cqi, 0.625rem); /* the pavement */
+  --road-h: clamp(1.75rem, 3.6cqi, 2.75rem);
+  --road-y: calc(var(--store-w) * 182 / 202 + var(--walk)); /* the road, under the store */
+  --track: clamp(0.25rem, 0.5cqi, 0.375rem); /* the route drawn on the road */
+  --dot: clamp(0.75rem, 1.4cqi, 1rem);
+  --van-width: clamp(4.5rem, 13cqi, 8.5rem);
   --van-height: calc(var(--van-width) * 57 / 136);
-  --line-y: calc(var(--van-height) + 0.75rem); /* the tracker line, from the route's top */
   --stop-center: calc((100% - 2 * var(--gap)) / 6); /* the first stop, from the start edge */
   --travel: calc((100cqi - 2 * var(--gap)) * 2 / 3 + 2 * var(--gap)); /* first stop → last */
-  --park: calc(var(--house) / 2 + 0.25rem); /* the van stops this short of the door */
+  --park: calc(var(--house-w) / 2 + 0.25rem); /* the van stops at the house's door side */
   --dir: 1;
   --stop-off: #a9bec2;
   position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   column-gap: var(--gap);
-  block-size: calc(var(--line-y) + var(--dot) / 2 + 2rem);
   margin-block-start: clamp(2.5rem, 3.3333vw, 4rem);
   container-type: inline-size;
   view-timeline: --route block;
 }
 
-/* Right to left, the steps — and the van — travel leftwards. */
+/* Right to left, the stops — and the van — run leftwards. */
 .route:dir(rtl) {
   --dir: -1;
 }
 
-/* The route still to drive, dashed like a planned route on a map; it ends where the van
-   parks, with the house standing just beyond… */
-.route::before {
-  content: '';
+/* The city behind, pale, and fading out at both ends like the street. */
+.skyline {
   position: absolute;
-  inset-block-start: calc(var(--line-y) - var(--track) / 2);
-  inset-inline-start: var(--stop-center);
-  inset-inline-end: calc(var(--stop-center) + var(--park));
-  block-size: var(--track);
-  background: repeating-linear-gradient(90deg, var(--rule) 0 0.625rem, transparent 0 1.125rem);
+  inset-inline: 0;
+  inset-block-start: calc(var(--road-y) - var(--walk) - var(--store-w) * 0.62);
+  inline-size: 100%;
+  block-size: calc(var(--store-w) * 0.62);
+  fill: #e2ebed;
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
 }
 
-/* …and the stretch already driven, solid like an order tracker's progress. */
-.fill {
+/* The buildings, the palms and the pin all stand on the pavement. */
+.store {
   position: absolute;
   z-index: 1;
-  inset-block-start: calc(var(--line-y) - var(--track) / 2);
+  inset-block-start: 0;
+  inset-inline-start: calc(var(--stop-center) - var(--store-w) / 2);
+  inline-size: var(--store-w);
+}
+
+.home {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: calc(var(--road-y) - var(--walk) - var(--house-w) * 157 / 136);
+  inset-inline-end: calc(var(--stop-center) - var(--house-w) / 2);
+  inline-size: var(--house-w);
+}
+
+.house {
+  display: block;
+  inline-size: 100%;
+}
+
+/* Drawn with its door on its left, the house turns to face a van coming from the right. */
+.route:dir(rtl) .house {
+  scale: -1 1;
+}
+
+.pin {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: calc(var(--road-y) - var(--walk) - var(--pin-w) * 2);
+  left: 50%;
+  inline-size: var(--pin-w);
+  translate: -50% 0;
+}
+
+.palm {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: calc(var(--road-y) - var(--walk) - var(--palm-w) * 1.52);
+  inline-size: var(--palm-w);
+}
+
+.palm[data-at='1'] {
+  inset-inline-start: calc(33.4% - var(--palm-w) / 2);
+}
+
+.palm[data-at='2'] {
+  inset-inline-start: calc(66.6% - var(--palm-w) / 2);
+}
+
+/* Too narrow for palms: the store, the pin and the house are enough. */
+@container (max-width: 34rem) {
+  .palm {
+    display: none;
+  }
+}
+
+/* The pavement and the road, fading out at both ends: the street goes on. */
+.walk,
+.road {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 0;
+  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+}
+
+.walk {
+  inset-block-start: calc(var(--road-y) - var(--walk));
+  block-size: var(--walk);
+  background: #dde7e9;
+  box-shadow: inset 0 1px 0 #eef4f5;
+}
+
+.road {
+  inset-block-start: var(--road-y);
+  block-size: var(--road-h);
+  border-block-end: 0.25rem solid #c9d7da;
+  background: #3b5156;
+}
+
+/* The lane markings. */
+.road::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: calc(50% - 0.09375rem);
+  block-size: 0.1875rem;
+  background: repeating-linear-gradient(
+    90deg,
+    rgb(255 255 255 / 0.5) 0 1.25rem,
+    rgb(255 255 255 / 0) 1.25rem 2.25rem
+  );
+}
+
+/* The route, drawn on the road the way the app's tracker draws it, from the store to where
+   the van parks. Solid behind the van, as far as it has driven. */
+.fill {
+  position: absolute;
+  z-index: 3;
+  inset-block-start: calc(var(--road-y) + (var(--road-h) - 0.25rem) / 2 - var(--track) / 2);
   inset-inline-start: var(--stop-center);
   inset-inline-end: calc(var(--stop-center) + var(--park));
   block-size: var(--track);
@@ -69,15 +173,15 @@
   transform-origin: right;
 }
 
-/* A stop: a node on the line and its number. Coloured = reached. */
+/* A stop: a marker on the road, and its number on the kerb below. Coloured = reached. */
 .stop {
   position: relative;
-  z-index: 1;
+  z-index: 4;
   display: grid;
   justify-items: center;
   align-content: start;
-  gap: 0.625rem;
-  padding-block-start: calc(var(--line-y) - var(--dot) / 2);
+  row-gap: calc(var(--road-h) / 2 + 0.625rem);
+  padding-block-start: calc(var(--road-y) + (var(--road-h) - 0.25rem) / 2 - var(--dot) / 2);
   color: var(--brand-text);
 }
 
@@ -85,10 +189,8 @@
   inline-size: var(--dot);
   block-size: var(--dot);
   border-radius: 50%;
-  background: currentColor;
-  box-shadow:
-    0 0 0 0.1875rem var(--surface),
-    0 0 0 0.4375rem color-mix(in srgb, currentColor 22%, transparent);
+  background: var(--white);
+  box-shadow: 0 0 0 0.1875rem currentColor;
 }
 
 .stopNumber {
@@ -98,28 +200,18 @@
   letter-spacing: 0.06em;
 }
 
-/* The last stop is the house itself, standing on the line (its node keeps the spacing). */
-.stop:has(.house) .dot {
+/* The van parks short of the last stop: its marker would sit under it. */
+.stop[data-stop='3'] .dot {
   visibility: hidden;
-}
-
-.house {
-  position: absolute;
-  inset-block-start: calc(var(--line-y) - var(--track) / 2 - var(--house) * 22 / 24);
-  left: 50%;
-  inline-size: var(--house);
-  block-size: auto;
-  translate: -50% 0;
-  fill: currentColor;
 }
 
 /* ── The van ────────────────────────────────────────────────────── */
 
-/* Parked at the door, front bumper just short of the house: the arrival, and the resting state. */
+/* On the road, parked at the door: the arrival, and the resting state. */
 .van {
   position: absolute;
-  z-index: 2;
-  inset-block-start: calc(var(--line-y) - var(--track) / 2 - var(--van-height));
+  z-index: 5;
+  inset-block-start: calc(var(--road-y) + var(--road-h) * 0.8 - var(--van-height));
   inset-inline-start: calc(var(--stop-center) - var(--van-width) * 130 / 136);
   inline-size: var(--van-width);
   block-size: var(--van-height);
@@ -176,7 +268,7 @@
 }
 
 .tyre {
-  fill: var(--deep);
+  fill: #0a2126;
 }
 
 .hub {
@@ -185,19 +277,19 @@
 
 .spokes {
   fill: none;
-  stroke: var(--deep);
+  stroke: #0a2126;
   stroke-width: 1.2;
   stroke-linecap: round;
 }
 
 .vanShadow {
-  fill: rgb(4 40 47 / 0.14);
+  fill: rgb(0 0 0 / 0.3);
 }
 
 /* Motion lines behind the van — only while it's driving. */
 .speed {
   fill: none;
-  stroke: var(--deep);
+  stroke: #9fb3b7;
   stroke-width: 2.2;
   stroke-linecap: round;
   opacity: 0;
@@ -213,16 +305,58 @@
   color: var(--deep);
 }
 
+/* ── The arrival ────────────────────────────────────────────────── */
+
+/* Qeu's bag, waiting on the pavement by the door… */
+.bag {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 3%;
+  inline-size: calc(var(--house-w) * 0.15);
+  transform-origin: 50% 100%;
+}
+
+/* …and above the house, what the footer's sticker says too. */
+.bubble {
+  position: absolute;
+  z-index: 6;
+  inset-block-end: 100%;
+  left: 50%;
+  padding: 0.375em 0.875em;
+  border-radius: var(--pill);
+  background: var(--white);
+  color: var(--deep);
+  font-size: clamp(0.8125rem, 1.8cqi, 1rem);
+  font-weight: 800;
+  line-height: 1.3;
+  white-space: nowrap;
+  box-shadow: 0 0.5rem 1.25rem -0.5rem rgb(4 40 47 / 0.35);
+  translate: -50% -0.5rem;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 100%;
+  left: calc(50% - 0.375rem);
+  border: 0.375rem solid transparent;
+  border-block-start-color: var(--white);
+}
+
 /* ── The drive ──────────────────────────────────────────────────── */
 
 /* Tied to scrolling, run by the browser off the main thread. Elsewhere — or with reduced
-   motion — nothing animates and the van stays parked at the door, every stop reached. */
+   motion — nothing animates: the van is parked at the door, every stop reached, the bag
+   waiting. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .van,
     .fill,
     .wheel,
     .speed,
+    .pin,
+    .bag,
+    .bubble,
     .stop[data-stop='2'],
     .stop[data-stop='3'] {
       animation-timing-function: linear;
@@ -245,6 +379,18 @@
 
     .speed {
       animation-name: driving;
+    }
+
+    .pin {
+      animation-name: reach-pin;
+    }
+
+    .bag {
+      animation-name: leave-bag;
+    }
+
+    .bubble {
+      animation-name: say-arrived;
     }
 
     .stop[data-stop='2'] {
@@ -278,10 +424,53 @@
 @keyframes driving {
   0%,
   90% {
-    opacity: 0.5;
+    opacity: 0.6;
   }
   100% {
     opacity: 0;
+  }
+}
+
+/* The pin is grey until the van gets there, then comes to life with a little hop. */
+@keyframes reach-pin {
+  0%,
+  46% {
+    opacity: 0.5;
+    filter: grayscale(1);
+    translate: -50% 0;
+  }
+  50% {
+    translate: -50% -0.4rem;
+  }
+  54%,
+  100% {
+    opacity: 1;
+    filter: none;
+    translate: -50% 0;
+  }
+}
+
+@keyframes leave-bag {
+  0%,
+  93% {
+    opacity: 0;
+    scale: 0.3;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes say-arrived {
+  0%,
+  96% {
+    opacity: 0;
+    translate: -50% 0.25rem;
+  }
+  100% {
+    opacity: 1;
+    translate: -50% -0.5rem;
   }
 }
 
@@ -366,11 +555,6 @@
 
 /* Tablet and up: three columns under the three stops, each hanging on its thread. */
 @media (min-width: 48em) {
-  .route {
-    --van-width: 8.5rem; /* 136px: the drawing's own units, pixel for pixel */
-    --house: 1.625rem;
-  }
-
   .steps {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     column-gap: var(--gap);

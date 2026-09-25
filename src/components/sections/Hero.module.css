@@ -119,16 +119,42 @@
 
 /* ── The products ────────────────────────────────────────────────── */
 
-/* Above the shelf's edge: products stand on its top face, their labels sit in its rail. */
+/* Above the shelf's edge: products stand on its top face, their labels sit in its rail; over
+   them, room up to the shelf above. */
 .aisle {
+  --lip: clamp(0.625rem, 0.9vw, 0.875rem); /* the front edge of the shelf above */
   position: relative;
   z-index: 1;
   display: flex;
   align-items: flex-end;
+  padding-block-start: calc(var(--lip) + clamp(1.25rem, 2.6vw, 2.75rem));
   overflow: clip;
 }
 
+/* The shelf above: its front edge along the top of the aisle, the strip of light under it,
+   and that light washing down the back panel behind the stock. */
+.canopy {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  block-size: var(--lip);
+  background: linear-gradient(#1f5f6b, #0b3e48);
+  box-shadow: 0 0.5rem 0.75rem -0.25rem rgb(0 0 0 / 0.55);
+}
+
+.canopy::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 100%;
+  block-size: calc(var(--product-h) * 0.6);
+  background:
+    linear-gradient(rgb(215 245 248 / 0.5), rgb(215 245 248 / 0.5)) 0 0 / 100% 2px no-repeat,
+    linear-gradient(rgb(159 227 234 / 0.13), rgb(159 227 234 / 0));
+}
+
 .track {
+  position: relative; /* the stock stands in front of the light */
   display: flex;
   align-items: flex-end;
   gap: var(--gap);
@@ -171,12 +197,27 @@
 
 /* The store's screenshots, whole and all one size: the same card, rounded like the store's. */
 .product {
+  position: relative;
   display: block;
   inline-size: auto;
   max-inline-size: none;
   block-size: var(--product-h);
   border-radius: 8% / 3.7%;
+  background: rgb(159 227 234 / 0.08); /* the product's place, until its picture arrives */
   box-shadow: 0 1rem 1.5rem -1rem rgb(0 0 0 / 0.8);
+}
+
+/* Behind each screen, the rest of its stock: the next one in the row, set back — a little
+   higher and smaller, in the shade of the shelf above. */
+.facing::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 calc(var(--board) / 2 + var(--rail));
+  border-radius: 8% / 3.7%;
+  background: linear-gradient(#2a6f7b, #0f4550 40%);
+  translate: 0 -0.75rem;
+  scale: 0.94;
+  transform-origin: 50% 0;
 }
 
 /* Where it stands, a soft contact shadow on the shelf. */
