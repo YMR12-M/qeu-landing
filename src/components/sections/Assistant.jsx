@@ -35,6 +35,9 @@ const FLIGHT_GAP = 110; // ms between two products taking off
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Checkpoints for the replay's start: every 5% of the phone, up to half of it.
+const IN_VIEW_STEPS = Array.from({ length: 11 }, (_, step) => step / 20);
+
 /**
  * Flies a copy of each product picture into the cart bar: straight across and up-and-over in
  * an arc — two animations on two nested boxes, so the path curves — shrinking as it lands.
@@ -117,7 +120,10 @@ export function Assistant() {
   const [added, setAdded] = useState(false);
   const [before, after] = assistant.title.split(assistant.name);
 
-  // Armed while the phone is below the fold, the replay starts once half of it is in view.
+  // Armed while the phone is below the fold, the replay starts once half of it is in view — or,
+  // on a screen shorter than that (a phone on its side), once it fills half the screen. Half of
+  // a phone taller than twice the screen is never in view at once: the replay would never start
+  // and the phone would stay empty.
   useEffect(() => {
     const section = sectionRef.current;
     const phone = phoneRef.current;
@@ -126,11 +132,13 @@ export function Assistant() {
     section.dataset.demo = 'ready';
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) return;
+        const screen = entry.rootBounds?.height ?? window.innerHeight;
+        const needed = Math.min(entry.boundingClientRect.height, screen) / 2 - 1; // 1px: rounding
+        if (!entry.isIntersecting || entry.intersectionRect.height < needed) return;
         section.dataset.demo = 'play';
         observer.disconnect();
       },
-      { threshold: 0.5 },
+      { threshold: IN_VIEW_STEPS },
     );
     observer.observe(phone);
     return () => observer.disconnect();
@@ -201,7 +209,7 @@ export function Assistant() {
 
                     if (message.id === 'list') {
                       return (
-                        <li key={message.id} className={styles.listItem}>
+                        <li key={message.id}>
                           <span className="visually-hidden">{SPEAKERS.qur}: </span>
                           <div className={styles.card} data-added={added || undefined} style={at}>
                             <div className={styles.cardHead}>

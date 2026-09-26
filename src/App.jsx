@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react';
+import { LogoSymbol } from './components/brand/Logo.jsx';
 import { Footer } from './components/layout/Footer.jsx';
 import { Header } from './components/layout/Header.jsx';
 import { SkipLink } from './components/layout/SkipLink.jsx';
@@ -20,6 +21,8 @@ const LAZY_PAGES = Object.fromEntries(
 export function App({ locale, page = 'home', Page = LAZY_PAGES[page] }) {
   return (
     <LocaleProvider locale={locale} page={page}>
+      {/* The wordmark, once: every logo on the page draws it from here. */}
+      <LogoSymbol />
       <SkipLink />
       {/* On the policy, the island's pill and receipt list the policy's own sections. */}
       <Header sections={page === 'policy' ? POLICY_CONTENTS : undefined} />

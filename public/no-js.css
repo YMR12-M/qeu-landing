@@ -1,8 +1,14 @@
 /*
- * Loaded only when JavaScript is off (index.html → <noscript>). Nothing then picks the open
- * benefit in «ليش كيو؟» or pauses the shelf, so every benefit is shown, unpinned, and the
- * pause button — which needs a script — is hidden. Everything else works without one.
+ * Loaded when JavaScript is off (index.html → <noscript>), and by the page itself if its script
+ * fails to load (src/entry-client.jsx). Nothing then picks the open benefit in «ليش كيو؟» or
+ * pauses the shelf, so every benefit is shown, unpinned, the shelf stands still (moving content
+ * needs a way to pause it, WCAG 2.2.2), and the controls that need a script are hidden.
+ * Everything else works without one.
  */
+
+[data-hero-drift] {
+  animation: none !important;
+}
 
 [data-why-track] {
   block-size: auto !important;

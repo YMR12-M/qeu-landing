@@ -1,4 +1,4 @@
-import { LOGO_PATHS, LOGO_VIEWBOX } from '../brand/logo-paths.js';
+import { LOGO_HREF } from '../brand/Logo.jsx';
 
 /**
  * The street of «كيف يشتغل», drawn flat in the delivery van's style: Qeu's store with its sign
@@ -22,11 +22,7 @@ export function Store({ className, ...props }) {
   return (
     <Svg viewBox="16 0 202 182" className={className} {...props}>
       <rect x="52" y="0" width="128" height="36" rx="7" fill="#17a2ae" />
-      <svg x="87" y="3" width="58" height="30" viewBox={LOGO_VIEWBOX} fill="#fff">
-        {LOGO_PATHS.map((d, index) => (
-          <path key={index} d={d} />
-        ))}
-      </svg>
+      <use href={LOGO_HREF} x="87" y="3" width="58" height="30" fill="#fff" />
       <rect x="70" y="36" width="5" height="14" fill="#9fb3b7" />
       <rect x="157" y="36" width="5" height="14" fill="#9fb3b7" />
       <rect x="20" y="50" width="194" height="10" rx="2" fill="#e2eaec" />
@@ -230,11 +226,7 @@ export function Bag({ className, ...props }) {
       <rect x="21" y="4" width="6" height="11" rx="2" fill="#f2c230" />
       <path d="M5 13h30l-2.5 33a2 2 0 0 1-2 1.8H9.5a2 2 0 0 1-2-1.8Z" fill="#17a2ae" />
       <path d="M29 13h6l-2.5 33a2 2 0 0 1-2 1.8h-3Z" fill="#000" fillOpacity="0.12" />
-      <svg x="10" y="22" width="18" height="10" viewBox={LOGO_VIEWBOX} fill="#fff">
-        {LOGO_PATHS.map((d, index) => (
-          <path key={index} d={d} />
-        ))}
-      </svg>
+      <use href={LOGO_HREF} x="10" y="22" width="18" height="10" fill="#fff" />
     </Svg>
   );
 }

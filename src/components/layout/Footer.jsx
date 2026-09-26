@@ -118,7 +118,10 @@ export function Footer() {
         <div className={styles.small}>
           <p>
             {interpolate(footer.legal, { year, company: site.company.legalName })}
-            <span aria-hidden="true"> · </span>
+            <span className={styles.dot} aria-hidden="true">
+              {' '}
+              ·{' '}
+            </span>
             <a
               className={styles.smallLink}
               href={policyPath}

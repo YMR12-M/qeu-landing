@@ -40,6 +40,11 @@ export const site = {
     smartDownload: 'https://link-to.app/qeu',
     // Source: App Store listing, Saudi storefront — captured 24 September 2026.
     appStore: 'https://apps.apple.com/sa/app/id6754709202',
+    // The App Store's campaign links need Qeu's provider token (App Store Connect → Analytics →
+    // Campaigns → "Generate a campaign link", the `pt` value). Until the client provides it the
+    // App Store buttons link plainly; once set, each carries its placement (`ct`) like the
+    // Google Play ones, and App Analytics reports installs per button.
+    appStoreProviderToken: null,
     googlePlay: 'https://play.google.com/store/apps/details?id=sa.qeu1.app',
   },
 

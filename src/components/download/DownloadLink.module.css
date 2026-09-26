@@ -9,12 +9,14 @@
   line-height: 1.2;
   white-space: nowrap;
   transition:
-    filter var(--duration-fast) ease,
+    background-color var(--duration-fast) ease,
     scale 150ms ease;
 }
 
+/* Hovered, the teal lights up (--brand with 15% white): the dark label gains contrast, 5.5:1,
+   where darkening the whole button took it under 4.5:1. */
 .button:hover {
-  filter: brightness(0.94);
+  background: #3ab0ba;
 }
 
 /* Pressed, it gives a little: the tap is felt before the store opens. */

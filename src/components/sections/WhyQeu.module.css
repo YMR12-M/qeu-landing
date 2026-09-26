@@ -104,6 +104,18 @@
   display: none;
 }
 
+/* The frame's edge, drawn over the screen: a store crop is white to its very edge (the chat,
+   the picks), and on the white section it would otherwise have no edge at all. */
+.frame::after,
+.shot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgb(4 40 47 / 0.1);
+  pointer-events: none;
+}
+
 /* ── Wide screens: pinned, one benefit open, its screen beside it ─── */
 
 /* Tall enough to pin, too: a phone on its side keeps the plain list (WhyQeu.jsx matches). */
@@ -184,6 +196,7 @@
     overflow: hidden;
     border-radius: var(--radius-lg);
     background: var(--screen-backdrop);
+    box-shadow: 0 1.25rem 2rem -1.5rem rgb(4 40 47 / 0.45);
   }
 
   /* The open benefit's sticker, on the frame's outer top corner: all four wait there, and
@@ -329,6 +342,7 @@
     overflow: hidden;
     border-radius: var(--radius-lg);
     background: var(--screen-backdrop);
+    box-shadow: 0 1.25rem 2rem -1.5rem rgb(4 40 47 / 0.45);
   }
 
   .shotScreen[data-kind='crop'] {

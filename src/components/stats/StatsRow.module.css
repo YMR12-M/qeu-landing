@@ -129,9 +129,11 @@
   font-weight: 500;
 }
 
-/* Computers: the linear label of a slim pack — the title block, a column per figure, the
-   price last, each part set off by its bar, and the small print along the bottom. */
-@media (min-width: 64em) {
+/* Wide screens: the linear label of a slim pack — the title block, a column per figure, the
+   price last, each part set off by its bar, and the small print along the bottom. Narrower
+   (small laptops, a tablet on its side) five columns would squeeze every line to a few words:
+   those keep the tall label. */
+@media (min-width: 80em) {
   .label {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
@@ -166,7 +168,7 @@
   .facts {
     display: grid;
     grid-area: facts;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
   .fact {

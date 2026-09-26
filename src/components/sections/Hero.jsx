@@ -72,7 +72,8 @@ export function Hero() {
         <div className={styles.aisle} aria-hidden="true">
           {/* The shelf above: its edge, and the strip of light under it. */}
           <span className={styles.canopy} />
-          <div className={styles.track} style={{ '--sets': SETS }}>
+          {/* data-hero-drift: without JavaScript there is no pause button, so no-js.css stops it. */}
+          <div className={styles.track} style={{ '--sets': SETS }} data-hero-drift>
             {STOCK.map(({ id, image }, index) => (
               <div key={index} className={styles.facing}>
                 <Picture

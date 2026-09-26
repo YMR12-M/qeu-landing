@@ -1,0 +1,16 @@
+/*
+ * Tajawal's Arabic separators, pulled in to the spacing of the digits around them. Measured in
+ * the font: «٫» is 0.525em wide with its ink between 0.202em and 0.367em, «٬» the same width
+ * with its ink between 0.222em and 0.311em. What is left on each side is about 0.05em, like a
+ * digit's own margin. Physical sides: a figure always runs left to right, even in Arabic.
+ */
+
+.decimal {
+  margin-left: -0.15em;
+  margin-right: -0.11em;
+}
+
+.group {
+  margin-left: -0.17em;
+  margin-right: -0.16em;
+}

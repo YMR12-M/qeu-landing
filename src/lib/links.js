@@ -8,6 +8,8 @@ import { site } from '../content/site.js';
  * Play Console reports store-listing traffic by utm_source and utm_campaign only, which is
  * why the campaign carries the placement. Google Play links also repeat the tags in
  * `referrer`: that is the value the app's install referrer (Firebase / GA4) receives.
+ * App Store links carry Apple's campaign tags instead — `pt` (Qeu's provider token), `ct`
+ * (the same landing_<placement> campaign) and `mt=8` — once the provider token is set.
  */
 
 function withParams(url, params) {
@@ -39,7 +41,11 @@ export function getStoreHref(store, placement, medium = 'button') {
       referrer: new URLSearchParams(tags).toString(),
     });
   }
-  if (store === 'appStore' && site.links.appStore) return site.links.appStore;
+  if (store === 'appStore' && site.links.appStore) {
+    const providerToken = site.links.appStoreProviderToken;
+    if (!providerToken) return site.links.appStore;
+    return withParams(site.links.appStore, { pt: providerToken, ct: tags.utm_campaign, mt: 8 });
+  }
   return withParams(site.links.smartDownload, tags);
 }
 

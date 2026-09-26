@@ -5,7 +5,10 @@
  */
 
 .hero {
-  --product-h: clamp(13rem, 60vw, 18rem); /* a store screenshot’s height on the shelf */
+  /* A store screenshot's height on the shelf. On a phone, small enough that the headline stays
+     the largest thing on the first screen, and so the page's LCP, painted with the first frame —
+     also in English, whose headline has a line less than the Arabic one. */
+  --product-h: clamp(11rem, 55vw, 18rem);
   --board: clamp(0.625rem, 0.8vw, 0.875rem); /* the shelf's top face, seen from just above */
   --rail: clamp(2.75rem, 3.2vw, 3.5rem); /* the price rail along its front edge */
   --gap: clamp(1rem, 2vw, 2.25rem); /* between products */
@@ -96,10 +99,10 @@
   color: var(--glow);
 }
 
-/* Phones: small enough that the last line keeps its words together. */
+/* Phones: small enough that the last line keeps its words together — down to a 320px screen. */
 @media (max-width: 47.99em) {
   .title {
-    font-size: clamp(1.75rem, 7.6vw, 2.125rem);
+    font-size: clamp(1.5rem, 7.6vw, 2.125rem);
   }
 }
 
@@ -109,6 +112,17 @@
   align-items: center;
   gap: 1rem clamp(1rem, 1.4583vw, 1.75rem);
   margin-block-start: clamp(1.75rem, 2.0833vw, 2.5rem);
+}
+
+/* Phones and tablets: the note under the button, from the first paint. Once the page runs, the
+   button names the visitor's store («حمّله مجاناً من Google Play»), longer than the
+   pre-rendered label: were the note beside it, it would drop to the next line then and push
+   the whole page down (a layout shift). */
+@media (max-width: 63.99em) {
+  .actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .note {

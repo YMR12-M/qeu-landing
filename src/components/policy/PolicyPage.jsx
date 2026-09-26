@@ -9,8 +9,8 @@ import { useSeenSections } from '../../hooks/useSeenSections.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { formatDate } from '../../lib/format.js';
-import { Logo } from '../brand/Logo.jsx';
-import { LOGO_PATHS, LOGO_VIEWBOX } from '../brand/logo-paths.js';
+import { Logo, LOGO_HREF } from '../brand/Logo.jsx';
+import { LOGO_VIEWBOX } from '../brand/logo-paths.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
 import { Landmark, PaymentCard, Van } from '../ui/icons.jsx';
 import { Picture } from '../ui/Picture.jsx';
@@ -255,8 +255,9 @@ function Block({ block }) {
 // upright, as on a company seal.
 const TOP_ARC = 'M 30 100 A 70 70 0 0 1 170 100';
 const BOTTOM_ARC = 'M 14 100 A 86 86 0 0 0 186 100';
+// The wordmark in the middle of the stamp: 76 units wide, centred just above the middle.
 const [, , logoWidth, logoHeight] = LOGO_VIEWBOX.split(' ').map(Number);
-const LOGO_SCALE = 76 / logoWidth;
+const STAMP_LOGO = { width: 76, height: (76 * logoHeight) / logoWidth, centreY: 90 };
 
 /** The company's round stamp: its name, the wordmark, the policy's date. Decorative. */
 function Stamp({ name, place, date }) {
@@ -287,16 +288,14 @@ function Stamp({ name, place, date }) {
         </text>
         <circle cx="16" cy="100" r="2.6" fill="currentColor" />
         <circle cx="184" cy="100" r="2.6" fill="currentColor" />
-        <g
-          transform={`translate(${100 - (logoWidth * LOGO_SCALE) / 2} ${
-            90 - (logoHeight * LOGO_SCALE) / 2
-          }) scale(${LOGO_SCALE})`}
+        <use
+          href={LOGO_HREF}
+          x={100 - STAMP_LOGO.width / 2}
+          y={STAMP_LOGO.centreY - STAMP_LOGO.height / 2}
+          width={STAMP_LOGO.width}
+          height={STAMP_LOGO.height}
           fill="currentColor"
-        >
-          {LOGO_PATHS.map((d, index) => (
-            <path key={index} d={d} />
-          ))}
-        </g>
+        />
         <text className={styles.stampDate} x="100" y="128" textAnchor="middle">
           {date}
         </text>

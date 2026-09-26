@@ -34,11 +34,16 @@ export function WhyQeu() {
   const [active, setActive] = useState(0);
   const count = why.items.length;
 
+  // Once per frame, and only while the section is on screen: scroll progress through the
+  // track picks the open benefit. Leaving the screen, it is read once more, so a quick scroll
+  // past still leaves the first or the last benefit open, as it should.
   useEffect(() => {
     const track = trackRef.current;
     const pinned = window.matchMedia(PINNED_QUERY);
+    let frame = 0;
 
     const sync = () => {
+      frame = 0;
       if (!pinned.matches) return;
       const { top, height } = track.getBoundingClientRect();
       const span = height - window.innerHeight;
@@ -49,14 +54,24 @@ export function WhyQeu() {
       // How far through the open benefit the reader is: its rule fills to match.
       track.style.setProperty('--step-fill', Math.min(1, position - index).toFixed(3));
     };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(sync);
+    };
 
-    const frame = requestAnimationFrame(sync);
-    window.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('resize', sync);
+    const onScreen = new IntersectionObserver(([entry]) => {
+      schedule();
+      if (entry.isIntersecting) window.addEventListener('scroll', schedule, { passive: true });
+      else window.removeEventListener('scroll', schedule);
+    });
+    onScreen.observe(track);
+    window.addEventListener('resize', schedule);
+    pinned.addEventListener('change', schedule);
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', sync);
-      window.removeEventListener('resize', sync);
+      onScreen.disconnect();
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      pinned.removeEventListener('change', schedule);
     };
   }, [count]);
 

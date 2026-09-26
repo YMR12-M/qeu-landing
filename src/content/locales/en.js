@@ -36,7 +36,7 @@ const en = {
     items: [
       { id: 'why', label: 'Why Q' },
       { id: 'assistant', label: 'Ask Q-ur' },
-      { id: 'inside', label: 'Inside the app' },
+      { id: 'inside', label: 'How it works' },
       { id: 'faq', label: 'FAQ' },
       { id: 'download', label: 'Download' },
     ],

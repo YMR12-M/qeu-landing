@@ -37,7 +37,7 @@ const ar = {
     items: [
       { id: 'why', label: 'ليش كيو' },
       { id: 'assistant', label: 'اسأل كيور' },
-      { id: 'inside', label: 'داخل التطبيق' },
+      { id: 'inside', label: 'كيف يشتغل' },
       { id: 'faq', label: 'الأسئلة' },
       { id: 'download', label: 'حمّل التطبيق' },
     ],

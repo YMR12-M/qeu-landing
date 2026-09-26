@@ -11,7 +11,7 @@
   z-index: 60;
   display: flex;
   justify-content: center;
-  padding: 0.75rem clamp(0.75rem, 3vw, 2rem) 0;
+  padding: 0.75rem max(clamp(0.75rem, 3vw, 2rem), var(--safe-inline)) 0;
   pointer-events: none; /* only the island itself takes clicks */
 }
 

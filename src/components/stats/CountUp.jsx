@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Numeral } from '../ui/Numeral.jsx';
 
 const DURATION = 1100;
 
@@ -57,7 +58,9 @@ export function CountUp({ value, format, className }) {
 
   return (
     <span ref={ref} className={className}>
-      <span aria-hidden="true">{format(current)}</span>
+      <span aria-hidden="true">
+        <Numeral>{format(current)}</Numeral>
+      </span>
       <span className="visually-hidden">{format(value)}</span>
     </span>
   );

@@ -16,6 +16,9 @@ npm run og        # redraw the link-preview images (after changing the hero; nee
 ```
 
 Node 22 (22.13 or later) or 24 — the versions every build tool here supports. Vercel builds on 24.
+Keep the working copy out of iCloud Drive (Desktop & Documents sync) and other synced folders:
+with "Optimize Mac Storage" they evict files from `node_modules` and `.git` to the cloud, and
+tools then read them as empty (ESLint crashes, builds break) or make conflict copies.
 
 ---
 
@@ -92,7 +95,8 @@ Content (claims v3 made that the sources don't support)
     benefit opens (`src/components/ui/Sticker.jsx`). The stickers only repeat the text.
   - The store figures are the app's nutrition-facts label, «القيمة الغذائية لتطبيق كيو»: the
     serving size, the heavy bars, a figure per line, the price — free — and, in the small print,
-    where and when the figures were read. Tall on a phone, a long linear label on a computer.
+    where and when the figures were read. Tall on phones, tablets and small laptops, a long
+    linear label from 1280px wide (narrower, five columns squeezed every line to a few words).
   - A yellow «مجاناً» starburst on the download stage; beside كيور, the steps on a taped-up
     shopping list, ticked off in pen as the conversation reaches them.
   - Each screen on the hero's shelf has its stock lined up behind it, and the shelf above
@@ -158,8 +162,10 @@ src/
     policy/               PolicyPage — the policy as a stamped document on a letterhead
     download/             DownloadLink, StorePills, AppStage, QrCard
     stats/                StatsRow, CountUp
-    brand/                Logo (vector wordmark from qeu.app), WithBrand
-    ui/                   Picture, Reveal, SectionHeading, Barcode (+ barcode-bars.js), icons
+    brand/                Logo (vector wordmark from qeu.app; LogoSymbol defines it once per
+                          page), WithBrand
+    ui/                   Picture, Reveal, SectionHeading, Sticker, Numeral, Barcode
+                          (+ barcode-bars.js), icons
   i18n/                   locales config, provider, useLocale()
   hooks/                  usePlatform, useCurrentYear (hydration-safe), useScrollReveal,
                           useActiveSection (the section being read), useSeenSections
@@ -215,24 +221,42 @@ translation and should be reviewed by the client.
   (`X-Robots-Tag`): the canonical site is qeu.app, and this copy shouldn't compete with it in
   search.
 - Without JavaScript the page still reads in full: `public/no-js.css` unpins «ليش كيو؟», opens
-  every benefit, and hides the controls that need a script.
+  every benefit, stops the hero's shelf and hides the controls that need a script. The page
+  loads the same stylesheet itself if its own script fails to arrive, so a dropped connection
+  leaves it readable rather than half-working.
 - Skip link, landmarks, visible focus, 44px touch targets, and descriptive alt text on every app
   screen (the drifting hero screens are decorative). Animation (drift, count-up, reveals,
   transitions) switches off under `prefers-reduced-motion`.
-- The drifting screens have a pause button (WCAG 2.2.2) and stop while the hero is out of view.
-  The كيور replay plays once and is over within five seconds, so it needs none; it can be
-  replayed. The pre-rendered page, reduced motion and a page without JavaScript all show the
-  conversation whole.
+- The drifting screens have a pause button (WCAG 2.2.2), stop while the hero is out of view, and
+  stand still without JavaScript (no button to pause them then). The كيور replay plays once and
+  is over within five seconds, so it needs none; it can be replayed. It starts once half the
+  phone is in view — or, on a screen shorter than that (a phone on its side), once the phone
+  fills half the screen. The pre-rendered page, reduced motion and a page without JavaScript
+  all show the conversation whole.
+- On a phone on its side the page runs under the notch and the rounded corners
+  (`viewport-fit=cover`), and every gutter grows to the safe-area insets, so no text goes under
+  them. The page opts out of browsers' automatic dark modes (`color-scheme: light only`): its
+  dark sections are part of the design.
 - Text meets WCAG AA contrast: `--brand-text` (#127d86) is the brand teal for text and focus
   rings; `--brand` stays for fills. Screen readers read the real figures, not the count-up.
 - The pinned section keeps all text in the DOM: collapsed items are clipped, not removed. It
   pins from tablet width up, with the screen always beside the list.
 - The hero headline is one block of text, so it — not a background screen — is the Largest
-  Contentful Paint, painted with the first frame.
-- Build output (gzipped): 90 KB of shared JS, most of it React; the page's own chunk (12.8 KB
+  Contentful Paint, painted with the first frame. On a phone the shelf's screens are sized to
+  stay smaller than the headline, which in English is a line shorter than in Arabic.
+- Nothing moves once the page runs (CLS ≈ 0): on phones and tablets the note sits under the
+  download button from the first paint, so the button naming the visitor's store once the page
+  runs («حمّله مجاناً من Google Play», longer than the pre-rendered label) pushes nothing down.
+- The wordmark is defined once per page (`<LogoSymbol>`) and every copy draws it with `<use>`:
+  the landing page's HTML is 20 KB gzipped instead of 31. Its paths were compacted without
+  changing the shape (zero-length segments dropped, relative coordinates).
+- Build output (gzipped): 89 KB of shared JS, most of it React; the page's own chunk (13 KB
   for the landing page, 6.5 KB for the policy, 0.7 KB for the 404); one 20 KB stylesheet for
-  the whole site, so no page waits for another's CSS; fonts of about 9–15 KB per file; ~62 KB
+  the whole site, so no page waits for another's CSS; fonts of about 9–15 KB per file; 60–70 KB
   of hero images on a phone, and lazy-loaded images below the fold.
+- Measured in Chrome with Lighthouse's mobile throttling settings (150 ms RTT, 1.6 Mbps, 4×
+  CPU), median of five runs: LCP 1.3 s in Arabic and 1.1 s in English (the headline, in both),
+  CLS about 0.001, TBT under 150 ms.
 
 ## Analytics
 
@@ -246,8 +270,15 @@ Store links carry `utm_source=website`, `utm_medium=button|qr`,
 `utm_campaign=landing_<placement>` and `utm_content=<placement>`. Play Console reports store
 traffic by `utm_source` and `utm_campaign` only, hence the placement in the campaign. Google
 Play links repeat the tags in `referrer`, the value the app's install referrer (Firebase / GA4)
-receives. On a computer, store links open in a new tab; on a phone, in the same tab, so the
-store app takes over.
+receives. App Store links carry Apple's campaign tags instead (`pt`, `ct=landing_<placement>`,
+`mt=8`), so App Analytics reports installs per button — once Qeu's provider token is set in
+`src/content/site.js` (`appStoreProviderToken`); until then they link plainly. On a computer,
+store links open in a new tab; on a phone, in the same tab, so the store app takes over.
+
+The QR code on the page encodes the smart link; should that link ever change, update it in
+`site.js`, run `npm run qr` and deploy. A QR code that is printed can't be updated like that:
+for print, point it at an address on qeu.app (a redirect in `vercel.json`, for instance), so
+the destination stays in Qeu's hands.
 
 ## Deploying
 
@@ -287,6 +318,10 @@ production. `vercel.json` carries the settings the dashboard would otherwise gue
 - [ ] A decision on ratings: the page quotes the Google Play rating (4.7 from phone users) and
       says so; the Saudi App Store rating is 3.1 from 995 ratings.
 - [ ] Confirmation that `link-to.app` keeps UTM parameters.
+- [ ] The App Store provider token (App Store Connect → Analytics → Campaigns, the `pt` value)
+      for campaign-tagged App Store links — see Analytics.
+- [ ] Optionally, an endpoint for Content-Security-Policy reports (`report-to`), to hear about
+      anything the policy blocks in visitors' browsers.
 - [ ] A GTM / GA4 container (and Snap / TikTok pixels) if campaigns will run — see Analytics
       for the matching CSP change.
 - [ ] Official App Store and Google Play badge artwork if brand-strict badges are required.

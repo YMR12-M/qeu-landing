@@ -314,6 +314,21 @@
   transition: color var(--duration-fast) ease;
 }
 
+/* Phones: the legal line doesn't leave room for the link, which takes a line of its own —
+   without the dot, which would otherwise be left hanging at the end of the line above — and,
+   no longer a link inside a sentence, a tap target of its own size. */
+@media (max-width: 47.99em) {
+  .dot {
+    display: none;
+  }
+
+  .smallLink {
+    display: block;
+    inline-size: fit-content;
+    padding-block: 0.3125rem;
+  }
+}
+
 .smallLink:hover {
   color: var(--glow);
 }

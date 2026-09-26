@@ -48,7 +48,10 @@
   --leading-body: 1.5;
 
   /* ── Layout ────────────────────────────────────────────────────── */
-  --gutter: clamp(1.25rem, 5vw, 3rem);
+  /* A phone on its side: the notch and the screen's rounded corners (index.html lets the page
+     run under them, viewport-fit=cover). The gutter never lets the content go under them. */
+  --safe-inline: max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  --gutter: max(clamp(1.25rem, 5vw, 3rem), var(--safe-inline));
   --header-height: clamp(4.5rem, 4.1667vw, 5rem); /* the floating nav island, with its margin */
   --header-pad: clamp(1.25rem, 4.1667vw, 5rem);
   --section-space: clamp(4rem, 5.8333vw, 7rem);
@@ -71,6 +74,6 @@
 /* v3 lays the page out with a 15rem gutter at 1920px — full width on tablets and phones. */
 @media (min-width: 64em) {
   :root {
-    --gutter: clamp(3rem, 12.5vw, 15rem);
+    --gutter: max(clamp(3rem, 12.5vw, 15rem), var(--safe-inline));
   }
 }
