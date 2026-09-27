@@ -21,6 +21,7 @@ const STORES = ['googlePlay', 'appStore'];
  * view. The sticker carries what a footer needs: the page's contents (each one ticked off
  * once it has been read), the ways to reach Qeu, and a barcode whose number is the app's
  * store id. The small print along the bottom keeps the legal line and the figures' source.
+ * On a phone the contents are left to the island's receipt, a tap away at the top.
  */
 export function Footer() {
   const { t, figures, config, locale, page, policyPath, sectionHref } = useLocale();
@@ -67,7 +68,7 @@ export function Footer() {
             </dl>
 
             <div className={styles.lists}>
-              <nav aria-labelledby="footer-contents">
+              <nav className={styles.contents} aria-labelledby="footer-contents">
                 <h2 id="footer-contents" className={styles.heading}>
                   {footer.more.title}
                 </h2>

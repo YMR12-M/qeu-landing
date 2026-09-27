@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { media } from '../../content/media.js';
 import { useActiveSection } from '../../hooks/useActiveSection.js';
 import { useLocale } from '../../i18n/useLocale.js';
+import { formatNumber, interpolate } from '../../lib/format.js';
 import { Logo } from '../brand/Logo.jsx';
 import { DownloadLink } from '../download/DownloadLink.jsx';
 import { Globe, Receipt } from '../ui/icons.jsx';
@@ -32,15 +33,16 @@ function toneAt(x, y) {
  *
  * At the top, and whenever the reader scrolls back up, it is open: the brand, the sections
  * (a liquid "you are here" marker stretches from one to the next) and the store button.
- * Reading down, it folds into a small pill that names the section being read; that pill
- * opens the sections as a receipt. On phones it is always the pill.
+ * Reading down, it folds into a small pill that names the section being read, and how far
+ * down the page it is («٣ من ٧»); that pill opens the sections as a receipt. On phones it is
+ * always the pill.
  *
  * `sections` are the page's own sections, for the pill and the receipt — the home page's by
  * default; the privacy policy passes its contents. The open island always links to the home
  * page's sections, from any page.
  */
 export function Header({ sections }) {
-  const { t, config, alternate, page, sectionHref } = useLocale();
+  const { t, locale, config, alternate, page, sectionHref } = useLocale();
   const links = t.nav.items;
   const items = sections ?? links;
   const islandRef = useRef(null);
@@ -77,11 +79,14 @@ export function Header({ sections }) {
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     window.addEventListener('load', update); // settles it once everything has laid out
+    // A switch can turn a section's wall without a scroll (the kitchen's tabs): read it again.
+    document.addEventListener('change', schedule);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
       window.removeEventListener('load', update);
+      document.removeEventListener('change', schedule);
     };
   }, []);
 
@@ -133,6 +138,10 @@ export function Header({ sections }) {
     menuRef.current.open = false;
   };
   const current = (id) => (active === id ? 'location' : undefined);
+  const progress = interpolate(t.nav.progress, {
+    n: formatNumber(activeIndex + 1, { locale }),
+    total: formatNumber(items.length, { locale }),
+  });
   // The language link: this very page in the other language — or, from the policy (which has
   // no other language), the site.
   const switchLabel = page === 'home' ? t.a11y.switchLocale : t.a11y.switchSite;
@@ -182,6 +191,7 @@ export function Header({ sections }) {
             {activeIndex >= 0 && <span className="visually-hidden">{t.a11y.sectionsMenu}: </span>}
             <span key={active ?? 'none'} className={styles.nowLabel}>
               {activeIndex >= 0 ? items[activeIndex].label : t.a11y.sectionsMenu}
+              {activeIndex >= 0 && <span className={styles.nowCount}> {progress}</span>}
             </span>
             <Receipt className={styles.nowIcon} />
           </summary>

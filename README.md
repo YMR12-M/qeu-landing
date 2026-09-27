@@ -24,19 +24,21 @@ tools then read them as empty (ESLint crashes, builds break) or make conflict co
 
 ## What the page is
 
-| Section                                                                                                                                                                                                                                                                              | Source                                                                                |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| Navigation island floating over the page: takes each section's colour, folds to a "you are here" pill while reading, opens the sections as a receipt                                                                                                                                 | **new**: replaces v3's header bar                                                     |
-| «رف العروض» — the hero as a supermarket shelf, lit from the shelf above: the six Google Play screenshots stand on it in the store's order, their stock lined up behind them, over yellow offer labels, gliding slowly past; the headline on display with its own price label, "free" | v3 copy, store screenshots; shelf **new**                                             |
-| «ليش كيو؟» — pinned, scroll-driven benefits with the matching screen, each with its supermarket promo sticker (a «١+١» starburst, a red «أقل سعر» label…) slapped onto the frame; on phones, a row of cards to swipe through                                                         | v3; stickers and phone cards **new**                                                  |
-| «اسأل كيور» — the assistant, live: its kabsa conversation from the store screenshot replays in a phone, and «أضف الكل» works — the products fly into a cart that counts them in; beside it, the steps on a shopping list, ticked off as it goes                                      | **new**: the conversation is the screenshot's, word for word                          |
-| «كيف يشتغل / عروضنا تجيك وبنفس السعر» — three steps on the order's route, drawn as a street: Qeu's store, the pin where the order is placed, a Jeddah house with its rawshan; Qeu's van drives from the store to the door on scroll, and the bag is waiting when it arrives          | **kept** from the earlier proposal (takes v3's "inside the app" slot); street **new** |
-| «عندك سؤال؟» — FAQ printed on a till receipt, with a take-a-number ticket for anything it doesn't answer                                                                                                                                                                             | **new**: answers restate the page and the Google Play listing only                    |
-| Google Play figures (count up on scroll), printed as the app's nutrition-facts label, «القيمة الغذائية»                                                                                                                                                                              | v3 figures; label **new**                                                             |
-| «حمّل كيو» with the app-icon stage, phone and QR card, and a «مجاناً» starburst on the stage                                                                                                                                                                                         | v3 text + **kept** stage from the earlier proposal                                    |
-| Footer as the bag the order comes in: the brand printed on it, a delivery sticker with the contents (ticked off as they are read) and the contact links                                                                                                                              | v3, with the missing legal and contact details added; bag **new**                     |
-| `/policy` — the privacy policy as an official document: the company letterhead, the policy word for word, an index card that ticks each section off as it is read, and the company stamp pressed on at the end                                                                       | qeu.app/policy text; page **new**                                                     |
-| 404 — the hero's shelf, emptied: clear dividers with nothing between them and one label left, «نفد», with the way back home                                                                                                                                                          | **new**                                                                               |
+| Section                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Source                                                                                |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Navigation island floating over the page: takes each section's colour, folds to a "you are here" pill while reading — with how far down the page it is, «٣ من ٧» — and opens the sections as a receipt                                                                                                                                                                                                                                                                                                                                                                                                                                                            | **new**: replaces v3's header bar                                                     |
+| «رف العروض» — the hero as a supermarket shelf, lit from the shelf above: the six Google Play screenshots stand on it in the store's order, their stock lined up behind them, over yellow offer labels, gliding slowly past; the headline on display with its own price label, "free"                                                                                                                                                                                                                                                                                                                                                                              | v3 copy, store screenshots; shelf **new**                                             |
+| «ليش كيو؟» — pinned, scroll-driven benefits with the matching screen, each with its supermarket promo sticker (a «١+١» starburst, a red «أقل سعر» label…) slapped onto the frame; a click opens a closed benefit; on phones, a row of cards to swipe through                                                                                                                                                                                                                                                                                                                                                                                                      | v3; stickers and phone cards **new**                                                  |
+| «أقسام كيو» — the store's aisles: a sign hangs from the ceiling rail for each of the app's six departments; choosing one swings it and lights it up, and the gondola under the signs is restocked with that department's categories — the app's own picture of each, on one shelf over its label, moved along by arrows on a computer and swiped on a phone — with the way to it in the app under the shelf                                                                                                                                                                                                                                                       | **new**: the app's departments and categories (home screen)                           |
+| «اسأل كيور» — the assistant, live: its kabsa conversation from the store screenshot replays in a phone, and «أضف الكل» works — the products fly into a cart that counts them in; beside it, the steps on a shopping list, ticked off as it goes                                                                                                                                                                                                                                                                                                                                                                                                                   | **new**: the conversation is the screenshot's, word for word                          |
+| «كيو فودز» and «كيو كوفي» — one section with the app's two tabs, a switch showing one at a time; the section takes that one's wall. Qeu Foods is a double-door display fridge under Qeu's lit sign: as it comes into view its light flickers on, the glass doors swing open and the cold spills out; the packs stand on its shelves over yellow deal labels, and a «من تحضير كيو» rosette is slapped on its corner. Qeu Coffee is a café corner: the menu board under a neon of the wordmark, and the counter beside it, where the drink picked from the board is poured into a 16 oz cup of ice — the milk, then the shot running down through it — and labelled | **new**: the app's «كيو فودز» and «كيو كوفي» tabs — their products, sizes and prices  |
+| «كيف يشتغل / عروضنا تجيك وبنفس السعر» — three steps on the order's route, drawn as a street: Qeu's store, the pin where the order is placed, a Jeddah house with its rawshan, each step written under its stop; Qeu's van drives from the store to the door on scroll, and the bag is waiting when it arrives                                                                                                                                                                                                                                                                                                                                                     | **kept** from the earlier proposal (takes v3's "inside the app" slot); street **new** |
+| «عندك سؤال؟» — FAQ printed on a till receipt — its first four questions, and «اطبع باقي الأسئلة» for the rest — with a take-a-number ticket for anything it doesn't answer (a slip under the receipt on phones and tablets)                                                                                                                                                                                                                                                                                                                                                                                                                                       | **new**: answers restate the page and the Google Play listing only                    |
+| Google Play figures (count up on scroll), printed as the app's nutrition-facts label, «القيمة الغذائية»                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | v3 figures; label **new**                                                             |
+| «حمّل كيو» with the app-icon stage, phone and QR card, and a «مجاناً» starburst on the stage (left out on phones, which have the store buttons)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | v3 text + **kept** stage from the earlier proposal                                    |
+| Footer as the bag the order comes in: the brand printed on it, a delivery sticker with the contents (ticked off as they are read; on phones, left to the island's receipt) and the contact links                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | v3, with the missing legal and contact details added; bag **new**                     |
+| `/policy` — the privacy policy as an official document: the company letterhead, the policy word for word, an index card that ticks each section off as it is read, and the company stamp pressed on at the end                                                                                                                                                                                                                                                                                                                                                                                                                                                    | qeu.app/policy text; page **new**                                                     |
+| 404 — the hero's shelf, emptied: clear dividers with nothing between them and one label left, «نفد», with the way back home                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | **new**                                                                               |
 
 ### Changed from v3
 
@@ -107,19 +109,84 @@ Content (claims v3 made that the sources don't support)
     drives the road from the store to the door, drawing the route behind it; when it arrives,
     Qeu's bag is at the door and «طلبك وصل» — the footer sticker's words — shows over the
     house. Still a CSS scroll-driven animation, and where it can't run the van is parked at
-    the door.
+    the door. Each step — its title and one line — is written under its stop, as a tracker
+    labels its own; the app screens that used to hang below them were dropped to keep the
+    section short (their files are still in `src/assets/images`, unused).
+- «أقسام كيو», after «ليش كيو؟»: the app's six departments — «المقاضي» to «كيو تيك» — and the
+  categories in each, 45 on the app's home screen (`src/content/departments.js`), as the
+  store's aisles. A sign hangs from the ceiling rail for each department (the app's icon and
+  the name); below them, a gondola with a pegboard back holds the chosen department's
+  categories, the app's own picture of each standing on one shelf over its label, and under it
+  the way to that aisle in the app («الأقسام › …»). Choosing another sign
+  swings it on its wires and lights it up, and the shelf is restocked, every category dropped
+  into place. The signs are a radio group that needs no script (the checked aisle's bay is
+  shown with `:has()`); the script only folds the signs up against the ceiling below the fold,
+  so they flip down one after another when the aisles come into view. Only the shown bay's
+  pictures load. The shelf is one row, four categories to a view: arrows at its ends move it
+  along a shelf's width at a time on a wider screen (the one at an end dimmed), and on phones
+  it is swiped, like the signs along the rail. Without JavaScript the arrows are left out and a
+  wide screen stacks the row into shelves again. The heading counts the departments and rounds the categories down ("more than 40"):
+  the departments showing eight may hold more behind the app's «عرض الكل». The pictures were
+  cut from the screenshots like Qeu Foods' (below), with three put right by hand: the green of
+  the app's card that came away with the rice and the phone case, and the Areon card Vision
+  left out of «المعطرات». The icons are cut from their white background.
+- The navigation island lists seven sections (Qeu Foods and Qeu Coffee share one): its links
+  close up a little at 1024px, and the list may grow to 58rem.
+- «كيو فودز» and «كيو كوفي»: Qeu's own food and coffee — two tabs under «المنتجات الطازجة» in the
+  app — share a section, after «اسأل كيور» (don't feel like cooking the kabsa? Qeu Foods) and
+  before «كيف يشتغل» (`src/components/sections/Kitchen.jsx`). A switch at its top, the app's two
+  tabs, shows one at a time — a radio group, so it needs no script — and the section takes that
+  one's wall, white for the fridge or espresso brown for the café; the navigation island turns
+  with it. Their products, sizes and prices are the app's, from screenshots of the
+  two tabs (`src/content/menu.js`); the prices are deal prices, so the date they were read is
+  printed beside them, and the page adds that they may change. That Qeu prepares the meals
+  itself comes from the brief; the sandwiches' packs carry the wordmark.
+  - «كيو فودز» is the fridge the meals are sold from: Qeu's lit sign on top, two glass doors, the
+    packs on the shelves two deep, each over a yellow deal label with its name, size and price
+    (the old price struck through, read out as «بدل»). Below the fold the fridge waits shut and
+    dark; in view, its light flickers on, the doors swing open (a CSS 3D turn), the cold spills
+    out at the bottom, the labels drop onto the shelf edge and the «من تحضير كيو» rosette is
+    slapped on. The shelves the app lists but the screenshots don't show («مقبلات وغموس»,
+    «سلطات») are named in a line beside it, with the way to the tab in the app.
+  - «كيو كوفي» is a café corner, in espresso brown with a warm neon of the wordmark over its menu
+    board. The menu is a radio group (`fieldset`, arrow keys, screen readers): a two-by-two grid
+    of cards, each with the app's photo of its drink, and under them the box from «مشروبات
+    للجمعات», tagged with its shelf; the tab's other shelves are named in a line under the board.
+    Picking a drink pours it at the counter beside the board
+    (`src/components/illustrations/IcedCup.jsx`): a 16 oz cup packed with ice is set down, the
+    milk rises through the ice, the shot runs down into it, the café's label is slapped on and
+    the cup beads with cold — each drink in its colours, the pistachio latte with its sauce
+    down the sides. It needs no script: the stylesheet shows the checked drink's cup (`:has()`),
+    and a cup that appears plays its pour from the start. The script only holds the first pour
+    (an empty cup of ice) until the counter is in view. On phones the counter is a strip over
+    the menu — a small cup, and the hint beside it — so the pour is seen while picking.
+  - The product photos are cut from the screenshots: upscaled 4× with macOS's own
+    super-resolution model (VideoToolbox), separated from the app's grey card and its + button
+    with Vision's subject lifting, and cleaned of the grey at their edges so no halo shows on
+    the dark menu board. The meal tray's corner was under the + button; it is mirrored from the
+    opposite corner.
 - «ليش كيو؟» on phones showed no screens at all; each benefit is now a card with its screen and
   sticker, in a row that snaps as it is swiped, with a bar under it that fills as it goes (drawn
   by the browser from the row's scroll position, no script). Pinned, the open benefit's rule
-  fills as the reader scrolls through it.
+  fills as the reader scrolls through it, over a 180vh track — a fifth of a screen's scroll per
+  benefit — and a click on a closed benefit scrolls to it.
 - A product's place on the hero's shelf shows before its picture loads; buttons give a little
   when pressed. Nothing follows the pointer and nothing shines: the motion is the shelf's drift,
-  the scroll-linked van and the one-off replays.
+  the scroll-linked van and the one-off replays (the chat, the fridge opening, the pour).
 - Moving between the Arabic, English and policy pages cross-fades, and the navigation island
   glides to its new shape (cross-document view transitions, where the browser supports them).
 - Folded while reading down, the navigation island glides from the middle to the start of the
   page's content — the right, in Arabic — in line with the sections' text, in the same move as
   the fold; reading back up, it opens in the middle again.
+- A page that reads shorter: about 9 screens on a computer and 9.7 on a phone (it was 12.2
+  and 14.4). The sections sit closer together, Qeu Foods and Qeu Coffee share one, the FAQ
+  prints four questions and the rest on demand, each section's intro is one line, «كيف يشتغل»
+  writes its steps under the street's stops, the aisles keep one shelf, and the café's menu is
+  a grid of cards. Phones leave out what they don't need: the download stage, the café's big
+  cup and the footer's contents. The «حمّل كيو» pill is kept for
+  the hero, the island and the download section; the sections between end with a quieter link.
+  Content that fades in on scroll does it in half a second, and the island's pill says how far
+  down the page the reader is.
 
 ## Stack, and why
 
@@ -153,12 +220,17 @@ src/
     figures.js            those facts formatted per locale, for the copy's {tokens}
     locales/ar.js, en.js  all copy, same shape in both files
     assistant-chat.js     the conversation with كيور, word for word from the store screenshot
+    departments.js        the app's departments and their categories, in the app's order
+    menu.js               Qeu Foods' and Qeu Coffee's products and prices, as the app lists them,
+                          and the day they were read
     policy.js             the privacy policy, word for word from qeu.app/policy (Arabic only)
     policy-contents.js    its title and section list — all the header needs of it
     media.js              every image + its responsive sizes
   components/
     layout/               Header, Footer, SkipLink
-    sections/             Hero, WhyQeu, Assistant, HowItWorks, Faq, Download
+    sections/             Hero, WhyQeu, Aisles, Assistant, Kitchen (its tabs: Foods, Coffee),
+                          HowItWorks, Faq, Download
+    illustrations/        Street (the street of «كيف يشتغل»), IcedCup (the cup «كيو كوفي» pours)
     policy/               PolicyPage — the policy as a stamped document on a letterhead
     download/             DownloadLink, StorePills, AppStage, QrCard
     stats/                StatsRow, CountUp
@@ -187,6 +259,8 @@ The copy quotes the store figures as `{tokens}` (`{downloads}`, `{months}`, `{al
 `{androidMin}`, `{iosMin}`): after a new capture of the Google Play listing, update `capturedAt`,
 `downloads` and `ratings` in `site.js` and rebuild — both languages follow, with Arabic numerals
 and plural forms handled. The build reminds you when the capture is more than 60 days old.
+When the app's prices for Qeu Foods or Qeu Coffee change, update them and `capturedAt` in
+`src/content/menu.js`: the fridge's labels, the menu board and the date beside them follow.
 
 ## Content sources
 
@@ -204,6 +278,13 @@ Everything on the page comes from Qeu's own material, captured September 2026:
   requirement (iPhone only, iOS 15.0 or later).
 - **Qeu's store screenshots** — «عروضنا تجيك وبنفس السعر» (van livery), the kabsa conversation with
   Q-ur (replayed in «اسأل كيور», with the three products cropped from it).
+- **Screenshots of the app's home screen**, provided 27 Sep 2026 — its six departments with
+  their icons, and the categories in each with their pictures («أقسام كيو»). Names cut short
+  on a card are written out from elsewhere in the app («الأجبان ومشتقات الحليب», from its tab).
+- **Screenshots of the app**, provided 26 Sep 2026 — the «كيو فودز» and «كيو كوفي» tabs under
+  «المنتجات الطازجة»: their shelves (the app's chips), the products with their sizes and prices, and
+  the product photos cut out for the two sections. The coffee box's name runs past its card in
+  the app («بوكس قهوة اليوم بارد ا…»), so the page uses only the words that show.
 
 The English copy is quoted from qeu.app/english where a line exists there; the rest is a
 translation and should be reviewed by the client.
@@ -248,10 +329,13 @@ translation and should be reviewed by the client.
   download button from the first paint, so the button naming the visitor's store once the page
   runs («حمّله مجاناً من Google Play», longer than the pre-rendered label) pushes nothing down.
 - The wordmark is defined once per page (`<LogoSymbol>`) and every copy draws it with `<use>`:
-  the landing page's HTML is 20 KB gzipped instead of 31. Its paths were compacted without
-  changing the shape (zero-length segments dropped, relative coordinates).
-- Build output (gzipped): 89 KB of shared JS, most of it React; the page's own chunk (13 KB
-  for the landing page, 6.5 KB for the policy, 0.7 KB for the 404); one 20 KB stylesheet for
+  with its paths in each of its ten copies, the landing page's HTML was 31 KB gzipped, and
+  drawn from the one symbol it was 20. The page now draws it 19 times, Qeu Foods and Qeu
+  Coffee included, in 29 KB (the aisles' 45 pictures and 12 icons take about 5 of them). Its
+  paths were compacted without changing the shape (zero-length segments dropped, relative
+  coordinates).
+- Build output (gzipped): 89 KB of shared JS, most of it React; the page's own chunk (18 KB
+  for the landing page, 6.5 KB for the policy, 0.7 KB for the 404); one 27 KB stylesheet for
   the whole site, so no page waits for another's CSS; fonts of about 9–15 KB per file; 60–70 KB
   of hero images on a phone, and lazy-loaded images below the fold.
 - Measured in Chrome with Lighthouse's mobile throttling settings (150 ms RTT, 1.6 Mbps, 4×
@@ -326,3 +410,10 @@ production. `vercel.json` carries the settings the dashboard would otherwise gue
       for the matching CSP change.
 - [ ] Official App Store and Google Play badge artwork if brand-strict badges are required.
 - [ ] A review of the English copy.
+- [ ] «أقسام كيو»: confirmation that the six departments are all of them, and the full list
+      of categories for the three that show eight on the home screen (there may be more
+      behind «عرض الكل»); the heading says "more than 40" until then.
+- [ ] Qeu Foods and Qeu Coffee: confirmation that the meals are prepared by Qeu (the brief says
+      so; the page says «تحضّرها كيو بنفسها»), the coffee box's full name, and — when the app's
+      prices change — the new ones for `src/content/menu.js`. Photos of the salads and dips would
+      fill the fridge's other shelves.

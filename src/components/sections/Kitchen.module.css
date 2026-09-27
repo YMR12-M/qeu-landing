@@ -1,0 +1,147 @@
+/*
+ * The kitchen: «كيو فودز» and «كيو كوفي» in one section, one tab at a time. The section is the
+ * wall behind the open tab — the fresh aisle's white, or the café's espresso brown — so the
+ * navigation island, which reads the colour of the section under it, turns with it.
+ */
+
+.section {
+  position: relative;
+  overflow: clip; /* the fridge's open doors and the café's light never widen the page */
+  padding-block: var(--section-space);
+  border-block-end: 1px solid var(--line); /* the white wall meets «كيف يشتغل»'s pale one */
+  background-color: var(--white);
+}
+
+/* The café's wall: espresso brown with a faint grain of coffee dots, as the other dark sections
+   have theirs (its colours: Coffee.module.css). */
+.section:has([value='coffee']:checked) {
+  --focus-ring: #e9b97a;
+  background-color: #1c120c;
+  background-image: radial-gradient(
+    circle,
+    rgb(233 185 122 / 0.06) 0.07rem,
+    rgb(233 185 122 / 0) 0.1rem
+  );
+  background-size: 1.5rem 1.5rem;
+}
+
+/* ── The switch: the app's two tabs ─────────────────────────────── */
+
+.switch {
+  display: flex;
+  justify-content: center;
+  min-inline-size: 0;
+  margin: 0 0 clamp(2rem, 3.5vw, 3rem);
+  padding: 0;
+  border: 0;
+}
+
+.tabs {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.3125rem;
+  border-radius: var(--pill);
+  background: #eef5f5;
+  box-shadow: inset 0 0 0 1px #d2e0e3;
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  padding-inline: 1.125rem 1.375rem;
+  border-radius: var(--pill);
+  color: var(--muted); /* 5.1:1 on the switch */
+  font-size: clamp(0.9375rem, 1.0417vw, 1.125rem);
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) ease,
+    color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease;
+}
+
+/* The radio is the whole tab: unseen, over it. */
+.radio {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  border-radius: inherit;
+  opacity: 0;
+  cursor: pointer;
+  appearance: none;
+}
+
+.icon {
+  flex: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.tab:hover {
+  color: var(--deep);
+}
+
+.tab:has(:checked) {
+  background: var(--brand-text); /* white type: 4.9:1 */
+  color: var(--white);
+  box-shadow: 0 0.5rem 1rem -0.625rem rgb(4 40 47 / 0.6);
+}
+
+.tab:has(:focus-visible) {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* In the café: brass on espresso, as its menu board is lettered. */
+.section:has([value='coffee']:checked) .tabs {
+  background: rgb(255 255 255 / 0.04);
+  box-shadow: inset 0 0 0 1px rgb(233 185 122 / 0.3);
+}
+
+.section:has([value='coffee']:checked) .tab {
+  color: #cdb8a1; /* 9:1 on the wall */
+}
+
+.section:has([value='coffee']:checked) .tab:hover {
+  color: #f7eee3;
+}
+
+.section:has([value='coffee']:checked) .tab:has(:checked) {
+  background: #e9b97a;
+  color: #1c120c;
+  box-shadow: 0 0.5rem 1rem -0.5rem rgb(0 0 0 / 0.7);
+}
+
+/* ── The tabs' panels: the checked one shown ────────────────────── */
+
+.section:has([value='foods']:checked) .panel[data-panel='coffee'],
+.section:has([value='coffee']:checked) .panel[data-panel='foods'] {
+  display: none;
+}
+
+/* Where :has() isn't known, the switch couldn't work: it's left out, and the fridge stays. */
+@supports not selector(:has(*)) {
+  .switch,
+  .panel[data-panel='coffee'] {
+    display: none;
+  }
+}
+
+/* A tab that opens comes in with a short fade, the section's wall already turned. */
+@media (prefers-reduced-motion: no-preference) {
+  .panel {
+    animation: panel-in 400ms var(--ease-out);
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+}

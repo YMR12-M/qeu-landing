@@ -206,7 +206,10 @@
 }
 
 .cta {
-  margin-block-start: clamp(1.75rem, 2.5vw, 2.5rem);
+  --link: var(--white);
+  --link-badge: var(--glow);
+  --link-arrow: var(--night);
+  margin-block-start: clamp(1.25rem, 2vw, 2rem);
 }
 
 /* ── The stage and the phone ────────────────────────────────────── */

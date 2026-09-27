@@ -1,0 +1,588 @@
+/*
+ * «أقسام كيو» — the store's aisles: signs hanging from a ceiling rail, one per department, over
+ * a gondola shelf with its pegboard back, stocked with the chosen department's categories.
+ */
+
+.section {
+  --focus-ring: var(--brand-text);
+  position: relative;
+  overflow-x: clip; /* a sign swung or a sticker slapped on never widens the page */
+  padding-block: var(--section-space);
+  background: #eef5f5;
+}
+
+/* One column that never grows to fit its content: the row of signs scrolls on a phone. */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 3.5vw, 3rem);
+}
+
+/* ── The heading, and the starburst beside it ───────────────────── */
+
+.intro {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.heading {
+  max-inline-size: 44rem;
+}
+
+/* As the other sections': a short rule, then the words. */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  font-size: var(--text-nav);
+  font-weight: 700;
+  color: var(--brand-text);
+}
+
+.eyebrow::before {
+  content: '';
+  flex: none;
+  inline-size: 2.5rem;
+  block-size: 1px;
+  background: currentColor;
+}
+
+.title {
+  margin-block-start: 1rem;
+  font-size: clamp(2.25rem, 3.6vw, 4.25rem);
+  line-height: 1.15;
+}
+
+.accent {
+  display: block;
+  color: var(--brand-text);
+}
+
+.brand {
+  display: inline-block;
+  block-size: 0.98em;
+  inline-size: auto;
+  margin-inline: 0.06em;
+  vertical-align: -0.2em;
+}
+
+.lead {
+  max-inline-size: 32em;
+  margin-block-start: 1.25rem;
+  font-size: var(--text-lead);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.sticker {
+  --size: clamp(6.25rem, 9vw, 8.5rem);
+  flex: none;
+  margin-inline-end: clamp(0rem, 4vw, 4rem);
+}
+
+/* Phones: the starburst stands off the heading's corner. */
+@media (max-width: 47.99em) {
+  .sticker {
+    --size: 5.5rem;
+    position: absolute;
+    inset-block-start: -1rem;
+    inset-inline-end: -0.25rem;
+    margin: 0;
+  }
+
+  .heading {
+    padding-inline-end: 4.5rem; /* the title clears the starburst */
+  }
+}
+
+/* ── The signs ──────────────────────────────────────────────────── */
+
+.store {
+  --wire: 1.75rem; /* from the rail down to a sign */
+}
+
+.signs {
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* The ceiling rail, drawn with the row so it runs on as the row scrolls on a phone. */
+.rail {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(0.5rem, 1.1vw, 1rem);
+  padding-block: 0.4rem 1.5rem;
+  background: linear-gradient(#e6eef0, #bfced2) 0 0 / 100% 0.45rem repeat-x local;
+}
+
+.sign {
+  position: relative;
+  display: block;
+  padding-block-start: var(--wire);
+  cursor: pointer;
+  perspective: 40rem;
+}
+
+/* Its two wires. */
+.sign::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 24%;
+  block-size: var(--wire);
+  border-inline: 1.5px solid #9db2b6;
+}
+
+/* The radio is the whole sign: unseen, over it. */
+.radio {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  appearance: none;
+}
+
+.hanger {
+  display: block;
+  transform-origin: 50% 0;
+}
+
+.board {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 0.3rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.875rem;
+  background: var(--white);
+  box-shadow:
+    inset 0 0 0 1px #d2e0e3,
+    0 0.75rem 1.25rem -1rem rgb(4 40 47 / 0.45);
+  text-align: center;
+  transform-origin: 50% calc(var(--wire) * -1); /* it swings from where the wires hold it */
+  transition:
+    rotate 450ms var(--ease-out),
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.signIcon {
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  margin-block: 0.1rem;
+  object-fit: contain;
+  filter: drop-shadow(0 0.2rem 0.2rem rgb(4 40 47 / 0.18));
+}
+
+/* Two lines kept for every name, so the signs line up. */
+.signName {
+  display: grid;
+  place-items: center;
+  min-block-size: 2.5em;
+  font-size: clamp(0.875rem, 1vw, 1.0625rem);
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--deep);
+}
+
+/* A touch sets a sign swinging a little on its wires. */
+@media (hover: hover) {
+  .sign:hover .board {
+    rotate: -2deg;
+  }
+}
+
+/* The chosen aisle: its sign lit up, and the light it throws down on the shelf. */
+.sign:has(:checked) .board {
+  background: var(--brand-text); /* white type: 4.5:1 */
+  box-shadow:
+    0 0 0 3px rgb(23 162 174 / 0.28),
+    0 1rem 1.5rem -1rem rgb(4 40 47 / 0.6);
+}
+
+.sign:has(:checked) .signName {
+  color: var(--white);
+}
+
+.sign:has(:checked)::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 100%;
+  left: 50%;
+  inline-size: 150%;
+  block-size: 2.25rem;
+  background: radial-gradient(closest-side at 50% 0, rgb(23 162 174 / 0.3), rgb(23 162 174 / 0));
+  translate: -50% 0;
+  pointer-events: none;
+}
+
+.sign:has(:focus-visible) .board {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* Phones: the signs are a row to scroll through, under the rail that runs on with them. */
+@media (max-width: 47.99em) {
+  .rail {
+    display: flex;
+    gap: 0.625rem;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: var(--gutter);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sign {
+    flex: 0 0 7.75rem;
+    scroll-snap-align: start;
+  }
+
+  .signIcon {
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+  }
+}
+
+/* ── The gondola ────────────────────────────────────────────────── */
+
+.gondola {
+  overflow: hidden;
+  border-radius: 1.25rem 1.25rem 0.625rem 0.625rem;
+  background: var(--white);
+  box-shadow:
+    0 0 0 1px #d4e1e4,
+    0 2rem 3rem -2.25rem rgb(4 40 47 / 0.5);
+}
+
+/* Only the chosen aisle's bay is on the shelf — and its name in the way to it, under the
+   shelf. Showing another restocks it from the start: no script needed. Where :has() isn't
+   known, the first aisle stays on the shelf. */
+.bay,
+.pathName {
+  display: none;
+}
+
+.section:has([value='groceries']:checked) .bay[data-aisle='groceries'],
+.section:has([value='fresh']:checked) .bay[data-aisle='fresh'],
+.section:has([value='drinks']:checked) .bay[data-aisle='drinks'],
+.section:has([value='home']:checked) .bay[data-aisle='home'],
+.section:has([value='care']:checked) .bay[data-aisle='care'],
+.section:has([value='tech']:checked) .bay[data-aisle='tech'] {
+  display: block;
+}
+
+.section:has([value='groceries']:checked) .pathName[data-aisle='groceries'],
+.section:has([value='fresh']:checked) .pathName[data-aisle='fresh'],
+.section:has([value='drinks']:checked) .pathName[data-aisle='drinks'],
+.section:has([value='home']:checked) .pathName[data-aisle='home'],
+.section:has([value='care']:checked) .pathName[data-aisle='care'],
+.section:has([value='tech']:checked) .pathName[data-aisle='tech'] {
+  display: inline;
+}
+
+@supports not selector(:has(*)) {
+  .bay[data-aisle='groceries'] {
+    display: block;
+  }
+
+  .pathName[data-aisle='groceries'] {
+    display: inline;
+  }
+}
+
+/* One shelf: products stand on its glass, labels clipped to its edge, against the pegboard
+   back — in a single row that slides sideways (Aisles.jsx), four categories to a view on a
+   wider screen, a little over two and a half on a phone. The shelf's edge and the pegboard
+   travel with the products. */
+.shelf {
+  --row: clamp(10rem, 12.5vw, 11.5rem); /* the shelf, and the room above it */
+  --edge: 2.75rem; /* its front edge, where the labels go */
+  --top: 0.75rem; /* the pegboard above the shelf */
+  position: relative;
+}
+
+.shelves {
+  display: flex;
+  margin: 0;
+  padding: var(--top) clamp(0.25rem, 1.5vw, 1rem) 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  list-style: none;
+  background:
+    repeating-linear-gradient(
+        transparent 0 calc(var(--row) - var(--edge)),
+        #fbfdfd calc(var(--row) - var(--edge)) calc(var(--row) - var(--edge) + 0.3rem),
+        #e3ebed calc(var(--row) - var(--edge) + 0.3rem) calc(var(--row) - 0.2rem),
+        #c3d0d3 calc(var(--row) - 0.2rem) var(--row)
+      )
+      0 var(--top) / 100% 100% no-repeat,
+    radial-gradient(circle, #d6e1e3 0.1rem, rgb(214 225 227 / 0) 0.13rem) 50% 0 / 1.25rem 1.25rem,
+    #f3f7f7;
+  background-attachment: local;
+}
+
+.shelves::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shelves {
+    scroll-behavior: smooth;
+  }
+}
+
+.item {
+  display: flex;
+  flex: 0 0 25%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  block-size: var(--row);
+  scroll-snap-align: start;
+}
+
+.product {
+  inline-size: auto;
+  max-inline-size: 86%;
+  block-size: auto;
+  max-block-size: calc(var(--row) - var(--edge) - 1.25rem);
+  object-fit: contain;
+  filter: drop-shadow(0 0.35rem 0.3rem rgb(4 40 47 / 0.22));
+}
+
+/* The category's label, clipped to the shelf edge under it. */
+.label {
+  display: grid;
+  place-items: center;
+  block-size: calc(var(--edge) - 0.55rem);
+  max-inline-size: 92%;
+  margin-block: 0.3rem 0.25rem;
+  padding-inline: 0.625rem;
+  border-radius: 0.3rem;
+  background: var(--white);
+  box-shadow:
+    inset 0 2px 0 var(--brand),
+    0 1px 2px rgb(4 40 47 / 0.22);
+  font-size: clamp(0.75rem, 0.85vw, 0.875rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--deep);
+  text-align: center;
+}
+
+/* The arrows at the shelf's ends, over its product line, the row kept clear of them. The icon
+   points right: towards the end in English, towards the start in Arabic. */
+.arrow {
+  display: none;
+}
+
+.arrowIcon {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.arrow[data-to='start'] .arrowIcon,
+.arrow:dir(rtl)[data-to='end'] .arrowIcon {
+  scale: -1 1;
+}
+
+.arrow:dir(rtl)[data-to='start'] .arrowIcon {
+  scale: 1 1;
+}
+
+@media (min-width: 48em) {
+  .shelves {
+    padding-inline: 3.5rem;
+    scroll-padding-inline: 3.5rem;
+  }
+
+  .arrow {
+    position: absolute;
+    z-index: 2;
+    inset-block-start: calc(var(--top) + (var(--row) - var(--edge)) / 2);
+    display: grid;
+    place-items: center;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--deep);
+    box-shadow:
+      0 0 0 1px #d2e0e3,
+      0 0.5rem 1rem -0.5rem rgb(4 40 47 / 0.45);
+    cursor: pointer;
+    translate: 0 -50%;
+    transition:
+      background-color var(--duration-fast) ease,
+      color var(--duration-fast) ease,
+      opacity var(--duration-fast) ease;
+  }
+
+  .arrow[data-to='start'] {
+    inset-inline-start: 0.5rem;
+  }
+
+  .arrow[data-to='end'] {
+    inset-inline-end: 0.5rem;
+  }
+
+  .arrow:hover {
+    background: var(--brand-text);
+    color: var(--white);
+  }
+
+  .arrow:active {
+    scale: 0.94;
+  }
+
+  /* At an end already: still there, dimmed. */
+  .arrow[aria-disabled] {
+    background: var(--white);
+    color: var(--deep);
+    opacity: 0.35;
+    cursor: default;
+  }
+}
+
+/* The kick plate under the shelf. */
+.kick {
+  display: block;
+  block-size: 1.25rem;
+  background: linear-gradient(#5b7176, #3c5055);
+}
+
+/* Under the shelf: the way to the chosen aisle in the app. */
+.where {
+  margin-block-start: 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: center;
+}
+
+.path {
+  font-weight: 800;
+  color: var(--deep);
+}
+
+.chevron {
+  margin-inline: 0.4em;
+  color: var(--brand-text);
+}
+
+/* Phones: the row is swiped, the next category showing at the edge. */
+@media (max-width: 47.99em) {
+  .shelf {
+    --row: 10rem;
+    --edge: 3.25rem;
+  }
+
+  .item {
+    flex-basis: 36%;
+  }
+
+  .label {
+    padding-inline: 0.375rem;
+    font-size: 0.6875rem;
+  }
+}
+
+.cta {
+  justify-self: center;
+}
+
+/* ── Motion ─────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Choosing a sign sets it swinging on its wires. */
+  .sign:has(:checked) .board {
+    animation: swing 1100ms ease-out;
+  }
+
+  /* A bay that appears is restocked: each category dropped onto the shelf, then labelled. */
+  .item {
+    animation: restock 550ms cubic-bezier(0.3, 1.35, 0.5, 1) calc(var(--j) * 70ms + 80ms) both;
+  }
+
+  .label {
+    animation: label-on 350ms ease calc(var(--j) * 70ms + 380ms) both;
+  }
+
+  /* Waiting below the fold (useScrollReveal): the signs folded up against the ceiling, the
+     shelf bare… */
+  .store[data-reveal='pending'] .hanger {
+    transform: rotateX(-90deg);
+  }
+
+  .store[data-reveal='pending'] :is(.item, .label) {
+    opacity: 0;
+    animation: none;
+  }
+
+  /* …then, in view: the signs flip down one after another, and the shelf is stocked. */
+  .store[data-reveal='shown'] .hanger {
+    animation: flip-down 900ms cubic-bezier(0.3, 1.5, 0.45, 1) calc(var(--i) * 90ms) both;
+  }
+}
+
+@keyframes swing {
+  20% {
+    rotate: 5deg;
+  }
+
+  45% {
+    rotate: -3.5deg;
+  }
+
+  70% {
+    rotate: 1.5deg;
+  }
+}
+
+@keyframes restock {
+  0% {
+    opacity: 0;
+    translate: 0 -2rem;
+  }
+
+  60% {
+    opacity: 1;
+    translate: 0 0.25rem;
+  }
+
+  100% {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes label-on {
+  from {
+    opacity: 0;
+    translate: 0 0.35rem;
+  }
+}
+
+@keyframes flip-down {
+  from {
+    transform: rotateX(-90deg);
+  }
+}

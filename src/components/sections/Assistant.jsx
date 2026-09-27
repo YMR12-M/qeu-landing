@@ -389,7 +389,12 @@ export function Assistant() {
               })}
             </ol>
           </div>
-          <DownloadLink placement="assistant" labels={t.hero.cta} className={styles.cta}>
+          <DownloadLink
+            placement="assistant"
+            variant="link"
+            labels={t.hero.cta}
+            className={styles.cta}
+          >
             {assistant.cta}
           </DownloadLink>
         </div>

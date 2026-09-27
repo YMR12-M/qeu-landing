@@ -1,0 +1,643 @@
+/*
+ * «كيو فودز» — a double-door display fridge under Qeu's lit sign, against the pale tiles of
+ * the supermarket's fresh aisle (the kitchen's white wall: Kitchen.module.css). Everything in
+ * the fridge is sized in em from its width (30em across), so it scales as one drawing, like
+ * the street of «كيف يشتغل».
+ */
+
+/* Phones: the heading, the fridge, then its shelves' names and the link. Wider: the fridge
+   beside the heading and the rest, which meet in the middle of its height. */
+.layout {
+  --tile: #e3eeef;
+  --deal: #c62828; /* the app's deal red: 5.6:1 on white */
+  display: grid;
+  grid-template-areas: 'intro' 'stage' 'more';
+  gap: clamp(2.5rem, 5vw, 4rem);
+}
+
+.intro {
+  grid-area: intro;
+}
+
+.stage {
+  grid-area: stage;
+}
+
+.more {
+  grid-area: more;
+}
+
+@media (min-width: 56em) {
+  .layout {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    grid-template-areas:
+      'stage intro'
+      'stage more';
+    column-gap: clamp(2rem, 5vw, 6rem);
+    row-gap: clamp(2rem, 3vw, 3rem);
+  }
+
+  .intro {
+    align-self: end;
+  }
+
+  .more {
+    align-self: start;
+  }
+}
+
+/* ── The heading ────────────────────────────────────────────────── */
+
+.title {
+  font-size: clamp(2.25rem, 3.6vw, 4.25rem);
+  line-height: 1.15;
+}
+
+/* The answer, on its own line in the brand's teal. */
+.accent {
+  display: block;
+  color: var(--brand-text);
+}
+
+/* The brand's name in the heading is its wordmark, sized to the letters around it. */
+.brand {
+  display: inline-block;
+  block-size: 0.98em;
+  inline-size: auto;
+  margin-inline: 0.06em;
+  vertical-align: -0.2em;
+}
+
+.lead {
+  max-inline-size: 26em;
+  margin-block-start: 1.25rem;
+  font-size: var(--text-lead);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* ── The shelves' names, the way to them, and the link ──────────── */
+
+/* The tab's other shelves, named in a line: the fridge shows two of the four. */
+.also {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.alsoItems {
+  font-weight: 700;
+  color: var(--deep);
+}
+
+.where {
+  margin-block-start: 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.path {
+  font-weight: 700;
+  color: var(--deep);
+}
+
+.chevron {
+  margin-inline: 0.4em;
+  color: var(--brand-text);
+}
+
+.cta {
+  margin-block-start: clamp(1rem, 2vw, 1.75rem);
+}
+
+/* ── The stage: the fridge against the tiled wall ───────────────── */
+
+.stage {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+  margin: 0;
+  padding-block-start: clamp(1.5rem, 3vw, 2.5rem); /* the rosette stands off the sign */
+  container-type: inline-size;
+}
+
+/* The wall: pale tiles around the fridge, fading out at their edges. */
+.stage::before {
+  content: '';
+  position: absolute;
+  inset: -6% -20% 0;
+  background-image:
+    linear-gradient(var(--tile) 1px, transparent 1px),
+    linear-gradient(90deg, var(--tile) 1px, transparent 1px);
+  background-position: 50% 0;
+  background-size: 3.5rem 1.75rem;
+  mask-image: radial-gradient(closest-side, #000 55%, transparent);
+  pointer-events: none;
+}
+
+.fridge {
+  --fw: min(26rem, 90cqi);
+  --glass-frame: #e6eff1;
+  position: relative;
+  inline-size: var(--fw);
+  font-size: calc(var(--fw) / 30);
+}
+
+/* Beside the heading, the fridge leaves room at each side for a door swung open; on a
+   phone it takes the width, and the doors open past the edges of the screen. */
+@media (min-width: 56em) {
+  .fridge {
+    --fw: min(26rem, 78cqi);
+  }
+}
+
+/* Its shadow on the floor. */
+.fridge::after {
+  content: '';
+  position: absolute;
+  inset-inline: 2%;
+  inset-block-end: -1.4em;
+  z-index: -1;
+  block-size: 2.6em;
+  background: radial-gradient(closest-side, rgb(4 40 47 / 0.3), rgb(4 40 47 / 0));
+}
+
+/* ── The sign: a lightbox with the wordmark, as on Qeu's store ──── */
+
+.sign {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  block-size: 4.6em;
+  border-radius: 1.3em 1.3em 0 0;
+  background:
+    radial-gradient(60% 120% at 50% 0%, rgb(255 255 255 / 0.28), rgb(255 255 255 / 0)),
+    linear-gradient(#1eb3bf, var(--brand));
+  color: var(--white);
+  box-shadow:
+    inset 0 0.18em 0 rgb(255 255 255 / 0.3),
+    inset 0 -0.3em 0 rgb(4 40 47 / 0.14);
+}
+
+.signLogo {
+  inline-size: auto;
+  block-size: 2.3em;
+  filter: drop-shadow(0 0 0.35em rgb(255 255 255 / 0.45));
+}
+
+.signWord {
+  font-size: 2.1em;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 0 0.3em rgb(255 255 255 / 0.4);
+}
+
+/* ── The cabinet and what's in it ───────────────────────────────── */
+
+.cabinet {
+  position: relative;
+  padding: 1em 1.1em 1.2em;
+  border-radius: 0 0 0.5em 0.5em;
+  background: linear-gradient(90deg, #e9f0f1, #fbfdfd 10%, #fbfdfd 90%, #e9f0f1);
+  box-shadow: inset 0 0 0 1px #d9e4e6;
+}
+
+/* Lit from a strip along its top, the back wall ribbed. */
+.interior {
+  position: relative;
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  overflow: hidden;
+  border-radius: 0.3em;
+  background:
+    radial-gradient(90% 45% at 50% 0%, rgb(255 255 255 / 0.85), rgb(255 255 255 / 0)),
+    repeating-linear-gradient(
+      90deg,
+      rgb(255 255 255 / 0.4) 0 0.08em,
+      rgb(255 255 255 / 0) 0.08em 1.5em
+    ),
+    linear-gradient(#dcf0f3, #c4e2e7);
+  box-shadow: inset 0 0.5em 1em -0.5em rgb(4 40 47 / 0.3);
+}
+
+.interior::before {
+  content: '';
+  position: absolute;
+  inset-inline: 1em;
+  inset-block-start: 0.35em;
+  z-index: 1;
+  block-size: 0.3em;
+  border-radius: var(--pill);
+  background: var(--white);
+  box-shadow: 0 0 1em 0.3em rgb(255 255 255 / 0.9);
+}
+
+/* A shelf: its products stand on its glass, over the strip their labels clip onto. */
+.shelf {
+  --below: 7em; /* the strip and the labels hanging from it */
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  margin: 0;
+  padding: 1.6em 0.6em var(--below);
+  list-style: none;
+}
+
+/* The glass, seen edge on… */
+.shelf::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: calc(var(--below) - 0.2em);
+  block-size: 0.35em;
+  background: linear-gradient(rgb(255 255 255 / 0.95), rgb(160 200 207 / 0.9));
+  box-shadow: 0 0.35em 0.6em -0.2em rgb(4 40 47 / 0.3);
+}
+
+/* …and the strip along its edge. */
+.shelf::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: calc(var(--below) - 1.5em);
+  block-size: 1.3em;
+  background: linear-gradient(#f4f8f9, #d8e5e8);
+  box-shadow: inset 0 -1px 0 rgb(4 40 47 / 0.12);
+}
+
+.product {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.facing {
+  position: relative;
+  z-index: 1;
+  display: block;
+  block-size: 11.5em;
+}
+
+.pack {
+  position: relative;
+  inline-size: auto;
+  block-size: 100%;
+  filter: drop-shadow(0 0.35em 0.3em rgb(4 40 47 / 0.3));
+}
+
+/* The same pack again, a row back: a little smaller, in the shelf's shade. */
+.stock {
+  position: absolute;
+  inset-block-end: 0.9em;
+  inset-inline-end: -2.8em;
+  inline-size: auto;
+  block-size: 92%;
+  filter: brightness(0.84) saturate(0.9);
+}
+
+/* The meal: trays two deep, the second standing just behind and to the side. */
+.product[data-product='meal'] .facing {
+  block-size: 11em;
+}
+
+.product[data-product='meal'] .stock {
+  inset-inline-end: -4.4em;
+}
+
+/* ── The labels on the shelf edge ───────────────────────────────── */
+
+.tag {
+  position: absolute;
+  inset-block-start: calc(100% + 0.25em);
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'flag text'
+    'flag prices';
+  inline-size: 12.6em;
+  overflow: hidden;
+  border-radius: 0.3em;
+  background: var(--white);
+  color: var(--deep);
+  line-height: 1.25;
+  box-shadow: 0 0.2em 0.35em rgb(4 40 47 / 0.25);
+  translate: -50% 0;
+}
+
+/* The yellow flag every label on the hero's shelf carries: a deal. */
+.flag {
+  display: grid;
+  grid-area: flag;
+  place-items: center;
+  padding-inline: 0.45em;
+  background: var(--star);
+  color: var(--night);
+  font-size: max(1em, 0.625rem);
+  font-weight: 800;
+}
+
+/* The name (the tuna club's takes two lines) and the size under it… */
+.tagText {
+  display: grid;
+  grid-area: text;
+  align-content: center;
+  min-block-size: 3.9em; /* one size for every label, whatever the name's length */
+  padding: 0.35em 0.6em 0.2em;
+}
+
+.tagName {
+  font-size: max(1.02em, 0.625rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.tagSize {
+  font-size: max(0.88em, 0.625rem);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* …and the prices: the app's, and the one it replaces, struck through. */
+.tagPrices {
+  display: flex;
+  grid-area: prices;
+  align-items: baseline;
+  gap: 0.45em;
+  padding: 0.1em 0.6em 0.3em;
+  border-block-start: 1px dashed #d5e1e3;
+}
+
+.price {
+  font-size: max(1.4em, 0.9375rem);
+  font-weight: 800;
+  color: var(--deal);
+  white-space: nowrap;
+}
+
+.was {
+  font-size: max(1em, 0.6875rem);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* ── The doors ──────────────────────────────────────────────────── */
+
+/* Glass in a pale frame, hinged at the fridge's sides, with the handles meeting in the middle.
+   Open (as they are on the page as served) they stand swung out towards the viewer. */
+.doors {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  perspective: 130em;
+  pointer-events: none;
+}
+
+.door {
+  --swing: 104deg;
+  position: absolute;
+  inset-block: 0.55em 0.75em;
+  inline-size: calc(50% - 0.55em);
+  border: 0.95em solid var(--glass-frame);
+  border-radius: 0.45em;
+  outline: 1px solid rgb(4 40 47 / 0.14);
+  outline-offset: -1px;
+  background:
+    linear-gradient(
+      112deg,
+      rgb(255 255 255 / 0) 18%,
+      rgb(255 255 255 / 0.45) 24%,
+      rgb(255 255 255 / 0) 31%,
+      rgb(255 255 255 / 0) 55%,
+      rgb(255 255 255 / 0.25) 59%,
+      rgb(255 255 255 / 0) 64%
+    ),
+    linear-gradient(rgb(255 255 255 / 0) 72%, rgb(236 247 249 / 0.7)), rgb(205 234 239 / 0.14);
+  box-shadow:
+    inset 0 0 0 1px rgb(4 40 47 / 0.1),
+    0 0 0 1px rgb(4 40 47 / 0.08);
+  transition: transform 1.25s cubic-bezier(0.2, 0.85, 0.25, 1.04) 0.45s;
+}
+
+.door[data-side='left'] {
+  left: 0.55em;
+  transform: rotateY(calc(var(--swing) * -1));
+  transform-origin: left center;
+}
+
+.door[data-side='right'] {
+  right: 0.55em;
+  transform: rotateY(var(--swing));
+  transform-origin: right center;
+}
+
+.handle {
+  position: absolute;
+  inset-block-start: 36%;
+  block-size: 26%;
+  inline-size: 0.55em;
+  border-radius: var(--pill);
+  background: linear-gradient(90deg, #b9c8cb, #f8fbfb 45%, #a7b8bc);
+  box-shadow: 0 0.12em 0.25em rgb(4 40 47 / 0.35);
+}
+
+.door[data-side='left'] .handle {
+  right: 0.3em;
+}
+
+.door[data-side='right'] .handle {
+  left: 0.3em;
+}
+
+/* The cold, spilling out at the bottom as the doors open. */
+.mist {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: -1.5em;
+  z-index: 3;
+  block-size: 9em;
+  pointer-events: none;
+}
+
+.mist i {
+  position: absolute;
+  inset-block-end: 0;
+  inline-size: 55%;
+  block-size: 70%;
+  border-radius: 50%;
+  /* Cold air: a pale blue haze, so it still shows against the white wall. */
+  background: radial-gradient(closest-side, rgb(206 234 240 / 0.95), rgb(206 234 240 / 0));
+  opacity: 0;
+}
+
+.mist i:nth-child(1) {
+  --dx: -6em;
+  left: -8%;
+}
+
+.mist i:nth-child(2) {
+  --dx: 0em;
+  left: 22%;
+  block-size: 85%;
+}
+
+.mist i:nth-child(3) {
+  --dx: 6em;
+  right: -8%;
+}
+
+/* The base: a kick plate with its vents, on two feet. */
+.base {
+  position: relative;
+  block-size: 2.4em;
+  margin-inline: 0.5em;
+  border-radius: 0 0 0.45em 0.45em;
+  background:
+    repeating-linear-gradient(90deg, rgb(0 0 0 / 0) 0 0.8em, rgb(0 0 0 / 0.32) 0.8em 1.15em) 50%
+      50% / 62% 0.8em no-repeat,
+    linear-gradient(#5b7176, #3c5055);
+}
+
+.base::before,
+.base::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 100%;
+  inline-size: 2.6em;
+  block-size: 0.55em;
+  border-radius: 0 0 0.25em 0.25em;
+  background: #2d3d41;
+}
+
+.base::before {
+  left: 1.5em;
+}
+
+.base::after {
+  right: 1.5em;
+}
+
+/* «من تحضير كيو», on the sign's corner. */
+.seal {
+  --size: 7.5em;
+  position: absolute;
+  inset-block-start: -2.8em;
+  inset-inline-start: -2.4em;
+  z-index: 4;
+}
+
+/* It's slapped on once the doors have opened. */
+@media (prefers-reduced-motion: no-preference) {
+  .seal > [data-state] {
+    animation-delay: 1.5s;
+  }
+}
+
+.dim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: rgb(4 40 47 / 0.32);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.source {
+  position: relative;
+  max-inline-size: 30em;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ── Opening ────────────────────────────────────────────────────── */
+
+/* Waiting below the fold (Foods.jsx): shut, the light off, the labels not yet up… */
+.fridge[data-door='closed'] .door {
+  transform: none;
+  transition: none;
+}
+
+.fridge[data-door='closed'] .dim {
+  opacity: 1;
+}
+
+.fridge[data-door='closed'] .tag {
+  opacity: 0;
+  translate: -50% -0.75em;
+  transition: none;
+}
+
+.fridge[data-door='closed'] .seal {
+  display: none;
+}
+
+/* …then, in view: the light flickers on, the doors swing open, the cold spills out, and the
+   labels drop onto the shelf edge one by one. */
+.fridge[data-door='open'] .dim {
+  animation: flicker 700ms linear both;
+}
+
+.fridge[data-door='open'] .mist i {
+  animation: mist 2.2s ease-out 0.55s both;
+}
+
+.fridge[data-door='open'] .mist i:nth-child(2) {
+  animation-delay: 0.7s;
+}
+
+.fridge[data-door='open'] .tag {
+  transition:
+    opacity 350ms ease calc(1.2s + var(--i) * 150ms),
+    translate 550ms cubic-bezier(0.3, 1.5, 0.5, 1) calc(1.2s + var(--i) * 150ms);
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+
+  14% {
+    opacity: 0.25;
+  }
+
+  22% {
+    opacity: 0.85;
+  }
+
+  32% {
+    opacity: 0.1;
+  }
+
+  42% {
+    opacity: 0.6;
+  }
+
+  55%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes mist {
+  0% {
+    opacity: 0;
+    transform: translate(0, -2em) scale(0.5);
+  }
+
+  30% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), 1.5em) scale(1.6, 1.2);
+  }
+}

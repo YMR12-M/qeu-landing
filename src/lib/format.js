@@ -18,6 +18,15 @@ export function formatNumber(value, { locale = 'en', decimals = 0, grouping = tr
     .replace(/\./g, '٫');
 }
 
+/**
+ * A price in riyals, in the locale's digits and its `template` ("{n} ر.س" / "SAR {n}"):
+ * 9.8 → "٩٫٨٠ ر.س", "SAR 9.80". Whole riyals are written without halalas: 16 → "١٦".
+ */
+export function formatPrice(value, { locale, template = '{n}' }) {
+  const n = formatNumber(value, { locale, decimals: Number.isInteger(value) ? 0 : 2 });
+  return interpolate(template, { n });
+}
+
 /** Fills `{name}` placeholders in a copy string: interpolate('{n} stars', { n: 5 }). */
 export function interpolate(template, values) {
   return template.replace(/\{(\w+)\}/g, (match, key) =>

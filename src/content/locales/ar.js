@@ -36,7 +36,9 @@ const ar = {
   nav: {
     items: [
       { id: 'why', label: 'ليش كيو' },
+      { id: 'departments', label: 'الأقسام' },
       { id: 'assistant', label: 'اسأل كيور' },
+      { id: 'kitchen', label: 'فودز وكوفي' },
       { id: 'inside', label: 'كيف يشتغل' },
       { id: 'faq', label: 'الأسئلة' },
       { id: 'download', label: 'حمّل التطبيق' },
@@ -44,6 +46,8 @@ const ar = {
     download: 'حمّل كيو',
     switchLocale: 'EN',
     here: 'أنت هنا',
+    // Beside the section's name in the folded island: how far down the page the reader is.
+    progress: '{n} من {total}',
   },
 
   hero: {
@@ -73,7 +77,7 @@ const ar = {
 
   why: {
     title: 'ليش {brand}؟',
-    lead: 'لأن كيو يجمع لك أفضل العروض، أقل الأسعار، والتشكيلات الجاهزة في تجربة واحدة بسيطة وواضحة — تسوّق أسرع، وأسهل، وأوفر.',
+    lead: 'لأنه يجمع لك أفضل العروض وأقل الأسعار في تجربة وحدة بسيطة.',
     items: [
       {
         id: 'deals',
@@ -109,13 +113,109 @@ const ar = {
     ],
   },
 
+  // «أقسام كيو»: the store's aisles — a hanging sign for each of the app's departments, and the
+  // shelf under them stocked with the chosen one's categories (src/content/departments.js).
+  // Every name is the app's, written out in full where its card cuts it short.
+  aisles: {
+    eyebrow: 'أقسام كيو',
+    title: 'كل اللي تبيه،',
+    titleAccent: 'تلقاه في {brand}',
+    lead: '{departments} أقسام وأكثر من {categories} فئة — من الرز والخضار لحد السماعات.',
+    // The starburst by the heading: the categories, rounded down to the ten, and this word.
+    sticker: 'فئة',
+    legend: 'اختر القسم',
+    // The arrows at the ends of the shelf, on a wider screen.
+    shelf: { previous: 'الفئات السابقة', next: 'فئات أكثر' },
+    // The way to a department in the app: its «الأقسام» tab, then the department.
+    where: 'في التطبيق:',
+    tab: 'الأقسام',
+    cta: 'حمّل كيو وتسوّق من كل الأقسام',
+    departments: {
+      groceries: {
+        name: 'المقاضي',
+        categories: {
+          frozen: 'الأطعمة المجمدة',
+          rice: 'الأرز والحبوب',
+          pasta: 'المعكرونة والنودلز',
+          cooking: 'مستلزمات الطبخ',
+          sauces: 'الصلصات والتتبيلات',
+          spices: 'البهارات والتوابل',
+          canned: 'التونة والمعلبات',
+          breakfast: 'منتجات الإفطار',
+        },
+      },
+      fresh: {
+        name: 'المنتجات الطازجة',
+        categories: {
+          bakery: 'المخبوزات',
+          seafood: 'المأكولات البحرية',
+          fruit: 'الفواكه',
+          vegetables: 'الخضروات',
+          meat: 'الدجاج واللحوم الطازجة',
+          dairy: 'البيض ومنتجات الحليب',
+          cheese: 'الأجبان ومشتقات الحليب',
+          qfoods: 'كيو فودز',
+        },
+      },
+      drinks: {
+        name: 'المشروبات والمفرحات',
+        categories: {
+          cakes: 'الكيك والبسكويت',
+          'specialty-coffee': 'القهوة المختصة',
+          water: 'المياه والثلج',
+          juices: 'العصائر',
+          'soft-drinks': 'المشروبات الغازية',
+          tea: 'المشروبات الفورية والشاي',
+          sweets: 'الحلويات والسناكات',
+          'ice-cream': 'الآيس كريم',
+        },
+      },
+      home: {
+        name: 'العناية بالمنزل',
+        categories: {
+          cleaners: 'منظفات ومطهرات',
+          laundry: 'غسيل الملابس',
+          fresheners: 'المعطرات',
+          tissues: 'المناديل الورقية والمعطرة',
+          paper: 'الورقيات والمواد البلاستيكية',
+          household: 'المنتجات المنزلية',
+          pets: 'مستلزمات الحيوانات',
+        },
+      },
+      care: {
+        name: 'كيو كير',
+        categories: {
+          skin: 'العناية بالبشرة',
+          hair: 'العناية بالشعر',
+          body: 'العناية بالجسم',
+          personal: 'العناية الشخصية',
+          baby: 'منتجات الأطفال',
+          health: 'المستلزمات الصحية',
+          makeup: 'مكياج',
+        },
+      },
+      tech: {
+        name: 'كيو تيك',
+        categories: {
+          phone: 'إكسسوارات الجوال',
+          appliances: 'أجهزة منزلية صغيرة',
+          audio: 'السماعات',
+          electrical: 'مستلزمات كهربائية',
+          qhome: 'كيو هوم',
+          office: 'مستلزمات مكتبية',
+          qtoys: 'كيو تويز',
+        },
+      },
+    },
+  },
+
   // «اسأل كيور»: the section around the replayed conversation (src/content/assistant-chat.js).
   // It says only what the FAQ's answer about كيور says, from the same screenshot.
   assistant: {
     eyebrow: 'المساعد الذكي في كيو',
     name: 'كيور', // drawn in the assistant's colours wherever the title names it
     title: 'اسأل كيور عن طبختك',
-    lead: 'اسأله عن طبخة مثل الكبسة، ويجهّز لك مكوناتها في قائمة وحدة تضيفها للسلة بزر «أضف الكل».',
+    lead: 'اسأله عن طبخة مثل الكبسة، ويجهّز لك مكوناتها في قائمة وحدة.',
     steps: ['اسأل عن الطبخة', 'كيور يجهّز مكوناتها', 'أضف الكل للسلة بضغطة'],
     cta: 'حمّل كيو وجرّب كيور',
     demoLabel: 'محادثة مع كيور في تطبيق كيو',
@@ -127,33 +227,112 @@ const ar = {
     replay: 'أعد المحادثة',
   },
 
+  // The kitchen: «كيو فودز» and «كيو كوفي» in one section, as the app's two tabs under
+  // «المنتجات الطازجة». `title` names the section for screen readers; the switch shows the tabs.
+  kitchen: {
+    title: 'كيو فودز وكيو كوفي',
+    legend: 'اعرض',
+    tabs: { foods: 'كيو فودز', coffee: 'كيو كوفي' },
+  },
+
+  // «كيو فودز»: Qeu's own sandwiches and meals, in the fridge they're sold from. Its shelves
+  // hold what the app's screenshot of the tab shows — names and sizes as the app writes them,
+  // prices from src/content/menu.js. "Made by Qeu" is the client's own word for these meals.
+  foods: {
+    title: 'ما تبي تطبخ اليوم؟',
+    titleAccent: 'خلّها على {brand} فودز',
+    lead: 'وجبات وساندويتشات تحضّرها كيو بنفسها، وتطلبها مع مقاضيك.',
+    fridgeLabel: 'ثلاجة كيو فودز',
+    // The fridge's lit sign: the wordmark, then this word — as the app names the tab.
+    sign: 'فودز',
+    seal: { main: 'من تحضير', sub: 'كيو' },
+    offer: 'عرض',
+    products: {
+      omelette: {
+        name: 'كلوب أومليت',
+        size: '١٣٠ جم',
+        imageAlt: 'ساندويتش كلوب أومليت في علبة عليها شعار كيو',
+      },
+      tuna: {
+        name: 'كلوب تونة حارة بالجرجير',
+        size: 'قطعة واحدة',
+        imageAlt: 'ساندويتش كلوب تونة حارة بالجرجير في علبة عليها شعار كيو',
+      },
+      meal: {
+        name: 'داود باشا مع الرز',
+        size: '١٥٠×١٥٠ جم',
+        imageAlt: 'علبة داود باشا مع الرز: رز أبيض، وكرات لحم بصلصة الطماطم',
+      },
+    },
+    // The tab's other shelves in the app, which the fridge doesn't show.
+    also: { label: 'وكمان في التطبيق:', items: ['مقبلات وغموس', 'سلطات'] },
+    where: 'تلقاها في التطبيق:',
+    path: ['المنتجات الطازجة', 'كيو فودز'],
+    cta: 'حمّل كيو واطلب وجبتك',
+  },
+
+  // «كيو كوفي»: the menu board of Qeu's coffee, and a cup poured with the drink picked from
+  // it. The drinks, their size and prices are the app's (src/content/menu.js).
+  coffee: {
+    title: 'كيف تبي قهوتك؟',
+    titleAccent: '{brand} كوفي تجهّزها لك',
+    lead: 'قهوتك الباردة بأسعار عروض، وتوصلك مع مقاضيك.',
+    // The menu board's sign: the wordmark, then this word.
+    sign: 'كوفي',
+    menu: {
+      legend: 'اختر مشروبك',
+      cold: 'قهوة باردة',
+      gatherings: 'مشروبات للجمعات', // the box's shelf, tagged on its line
+    },
+    drinks: {
+      spanish: { name: 'لاتيه إسباني مثلج', size: '١٦ أونصة' },
+      latte: { name: 'لاتيه مثلج', size: '١٦ أونصة' },
+      pistachio: { name: 'لاتيه فستق مثلج', size: '١٦ أونصة' },
+      americano: { name: 'أمريكانو مثلج', size: '١٦ أونصة' },
+    },
+    // Its name runs past the app's card («بوكس قهوة اليوم بارد ا…»): only what shows is used.
+    box: {
+      name: 'بوكس قهوة اليوم بارد',
+      size: '١٫٢ لتر',
+      imageAlt: 'بوكس قهوة اليوم: كرتون قهوة بصنبور، مع أكواب وكوب ثلج',
+    },
+    hint: 'اختر من القائمة، ونصبّها لك',
+    // The tab's other shelves in the app, which the board doesn't show.
+    also: { label: 'وكمان في التطبيق:', items: ['شاي مثلج', 'قهوة اليوم'] },
+    where: 'تلقاها في التطبيق:',
+    path: ['المنتجات الطازجة', 'كيو كوفي'],
+    cta: 'حمّل كيو واطلب قهوتك',
+  },
+
+  // The prices on the fridge's labels and the coffee menu (src/content/menu.js).
+  prices: {
+    price: '{n} ر.س',
+    was: 'بدل', // read before the struck-through price: «٤٫٨٠ ر.س، بدل ١٠»
+    source: 'الأسعار كما في تطبيق كيو بتاريخ {date}، وقد تتغير.',
+  },
+
   inside: {
     eyebrow: 'كيف يشتغل',
     // Over the house when the van arrives: the footer's sticker says it too.
     arrived: 'طلبك وصل',
     title: 'عروضنا تجيك وبنفس السعر',
-    lead: 'نقدّم تجربة شراء بسيطة وواضحة، مع خيارات دفع آمنة وتوصيل سريع ومنظّم لحد باب بيتك.',
+    lead: 'تجربة شراء بسيطة، وخيارات دفع آمنة، وتوصيل لحد باب بيتك.',
     steps: [
+      // Each is written under its stop on the street: a title, and one line.
       {
         id: 'offers',
         title: 'تصفّح العروض',
-        text: 'تشكيلة واسعة من المنتجات، وعروض للتاريخ وأسعار ما تلاقيها إلا في كيو.',
-        imageAlt:
-          'الشاشة الرئيسية في تطبيق كيو: عرض خمسة حبات كوكاكولا، وقسم «أسعار ما تلاقيها إلا في كيو»',
+        text: 'عروض للتاريخ، وأسعار ما تلاقيها إلا في كيو.',
       },
       {
         id: 'picks',
         title: 'اختار واطلب',
-        text: 'أضف اللي تبيه للسلة واطلب خلال ثواني، مع خيارات دفع آمنة.',
-        imageAlt:
-          'قسم «اختياراتنا لك» في تطبيق كيو: منتجات بسعرها قبل الخصم وبعده، وزر إضافة لكل منتج',
+        text: 'أضف اللي تبيه للسلة، واطلب خلال ثواني.',
       },
       {
         id: 'delivery',
         title: 'استلم لحد بابك',
         text: 'توصيل سريع ومنظّم، وتتابع طلبك خطوة بخطوة.',
-        imageAlt:
-          'شاشة مراجعة الطلب في تطبيق كيو، وسيارة توصيل كيو مكتوب عليها «عروضنا تجيك وبنفس السعر»',
       },
     ],
   },
@@ -185,6 +364,9 @@ const ar = {
       total: 'الإجمالي',
       totalValue: 'مجاناً',
       thanks: 'شكراً لاختيارك كيو',
+      // The receipt prints the first questions; the rest print on demand, and fold back up.
+      more: 'اطبع باقي الأسئلة ({n})',
+      less: 'اطوِ الأسئلة',
     },
     items: [
       {
@@ -253,7 +435,7 @@ const ar = {
     subtitle: 'مجاناً على جوالك',
     // The yellow starburst on the app's stage.
     sticker: 'مجاناً',
-    text: 'متوفر للآيفون والأندرويد. امسح الكود أو اختار متجرك — التطبيق مجاني، والعروض تبدأ من أول شاشة.',
+    text: 'متوفر للآيفون والأندرويد، والعروض تبدأ من أول شاشة.',
     stageAlt:
       'الشاشة الرئيسية في تطبيق كيو: عرض السوبر «أرز الفخامة + زيت الفخامة مجاناً»، وقسم «أسعار ما تلاقيها إلا في كيو!»',
   },

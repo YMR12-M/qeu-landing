@@ -35,7 +35,9 @@ const en = {
   nav: {
     items: [
       { id: 'why', label: 'Why Q' },
+      { id: 'departments', label: 'Departments' },
       { id: 'assistant', label: 'Ask Q-ur' },
+      { id: 'kitchen', label: 'Foods & Coffee' },
       { id: 'inside', label: 'How it works' },
       { id: 'faq', label: 'FAQ' },
       { id: 'download', label: 'Download' },
@@ -43,6 +45,7 @@ const en = {
     download: 'Get Q',
     switchLocale: 'ع',
     here: 'You’re here',
+    progress: '{n} of {total}',
   },
 
   hero: {
@@ -73,7 +76,7 @@ const en = {
 
   why: {
     title: 'Why Q?',
-    lead: 'Because Q brings together the best deals, the lowest prices and ready-made collections in one simple, clear experience — shop faster, easier and for less.',
+    lead: 'Because it brings you the best deals and the lowest prices in one simple experience.',
     items: [
       {
         id: 'deals',
@@ -109,12 +112,110 @@ const en = {
     ],
   },
 
+  // The departments and categories are translated; the way to them (`inApp`) stays in Arabic,
+  // as the app writes it.
+  aisles: {
+    eyebrow: 'Departments',
+    title: 'Everything you want —',
+    titleAccent: 'it’s all in Q',
+    lead: '{departments} departments and over {categories} categories — from rice and vegetables to headphones.',
+    sticker: 'categories',
+    legend: 'Choose a department',
+    shelf: { previous: 'Previous categories', next: 'More categories' },
+    where: 'In the app:',
+    tab: 'الأقسام',
+    cta: 'Get Q and shop every department',
+    departments: {
+      groceries: {
+        name: 'Groceries',
+        inApp: 'المقاضي',
+        categories: {
+          frozen: 'Frozen food',
+          rice: 'Rice & grains',
+          pasta: 'Pasta & noodles',
+          cooking: 'Cooking essentials',
+          sauces: 'Sauces & dressings',
+          spices: 'Spices & seasonings',
+          canned: 'Tuna & canned food',
+          breakfast: 'Breakfast',
+        },
+      },
+      fresh: {
+        name: 'Fresh',
+        inApp: 'المنتجات الطازجة',
+        categories: {
+          bakery: 'Bakery',
+          seafood: 'Seafood',
+          fruit: 'Fruit',
+          vegetables: 'Vegetables',
+          meat: 'Fresh chicken & meat',
+          dairy: 'Eggs & milk products',
+          cheese: 'Cheese & dairy products',
+          qfoods: 'Q Foods',
+        },
+      },
+      drinks: {
+        name: 'Drinks & treats',
+        inApp: 'المشروبات والمفرحات',
+        categories: {
+          cakes: 'Cakes & biscuits',
+          'specialty-coffee': 'Specialty coffee',
+          water: 'Water & ice',
+          juices: 'Juices',
+          'soft-drinks': 'Soft drinks',
+          tea: 'Instant drinks & tea',
+          sweets: 'Sweets & snacks',
+          'ice-cream': 'Ice cream',
+        },
+      },
+      home: {
+        name: 'Home care',
+        inApp: 'العناية بالمنزل',
+        categories: {
+          cleaners: 'Cleaners & disinfectants',
+          laundry: 'Laundry',
+          fresheners: 'Air fresheners',
+          tissues: 'Tissues & scented wipes',
+          paper: 'Paper & plastic goods',
+          household: 'Household products',
+          pets: 'Pet supplies',
+        },
+      },
+      care: {
+        name: 'Q Care',
+        inApp: 'كيو كير',
+        categories: {
+          skin: 'Skin care',
+          hair: 'Hair care',
+          body: 'Body care',
+          personal: 'Personal care',
+          baby: 'Baby products',
+          health: 'Health essentials',
+          makeup: 'Makeup',
+        },
+      },
+      tech: {
+        name: 'Q Tech',
+        inApp: 'كيو تيك',
+        categories: {
+          phone: 'Phone accessories',
+          appliances: 'Small home appliances',
+          audio: 'Headphones',
+          electrical: 'Electrical supplies',
+          qhome: 'Q Home',
+          office: 'Office supplies',
+          qtoys: 'Q Toys',
+        },
+      },
+    },
+  },
+
   // The section around the replayed conversation, which stays in Arabic: so is the app.
   assistant: {
     eyebrow: 'The smart assistant in Q',
     name: 'Q-ur',
     title: 'Ask Q-ur about your dish',
-    lead: 'Ask it about a dish like kabsa, and it puts the ingredients in one list you add to your cart with “Add all”.',
+    lead: 'Ask it about a dish like kabsa, and it puts the ingredients in one list.',
     steps: ['Ask about a dish', 'Q-ur lists the ingredients', 'Add them all in one tap'],
     cta: 'Get Q and try Q-ur',
     demoLabel: 'A chat with Q-ur in the Q app, in Arabic like the app',
@@ -125,32 +226,99 @@ const en = {
     replay: 'Replay the chat',
   },
 
+  kitchen: {
+    title: 'Q Foods and Q Coffee',
+    legend: 'Show',
+    tabs: { foods: 'Q Foods', coffee: 'Q Coffee' },
+  },
+
+  // The app is Arabic, so its signs stay Arabic (the fridge's, the menu board's) and so does
+  // the way to the tab (`path`); the products are translated.
+  foods: {
+    title: 'Not cooking today?',
+    titleAccent: 'Leave it to Q Foods',
+    lead: 'Meals and sandwiches made by Q itself, ordered with your groceries.',
+    fridgeLabel: 'The Q Foods fridge',
+    sign: 'فودز',
+    seal: { main: 'Made by', sub: 'Q' },
+    offer: 'Deal',
+    products: {
+      omelette: {
+        name: 'Omelette club',
+        size: '130 g',
+        imageAlt: 'An omelette club sandwich in a pack printed with the Q logo',
+      },
+      tuna: {
+        name: 'Spicy tuna club with arugula',
+        size: '1 piece',
+        imageAlt: 'A spicy tuna club sandwich with arugula in a pack printed with the Q logo',
+      },
+      meal: {
+        name: 'Dawood Basha with rice',
+        size: '150×150 g',
+        imageAlt: 'A tray of Dawood Basha with rice: white rice, and meatballs in tomato sauce',
+      },
+    },
+    also: { label: 'Also in the app:', items: ['Appetizers & dips', 'Salads'] },
+    where: 'In the app, under:',
+    path: ['المنتجات الطازجة', 'كيو فودز'],
+    cta: 'Get Q and order your meal',
+  },
+
+  coffee: {
+    title: 'How do you take your coffee?',
+    titleAccent: 'Q Coffee makes it for you',
+    lead: 'Your iced coffee at deal prices, delivered with your groceries.',
+    sign: 'كوفي',
+    menu: {
+      legend: 'Pick your drink',
+      cold: 'Iced coffee',
+      gatherings: 'Drinks for gatherings',
+    },
+    drinks: {
+      spanish: { name: 'Iced Spanish latte', size: '16 oz' },
+      latte: { name: 'Iced latte', size: '16 oz' },
+      pistachio: { name: 'Iced pistachio latte', size: '16 oz' },
+      americano: { name: 'Iced Americano', size: '16 oz' },
+    },
+    box: {
+      name: 'Coffee of the day box, iced',
+      size: '1.2 L',
+      imageAlt: 'The coffee of the day box: a coffee carton with a tap, cups and a cup of ice',
+    },
+    hint: 'Pick from the menu — we’ll pour it',
+    also: { label: 'Also in the app:', items: ['Iced tea', 'Coffee of the day'] },
+    where: 'In the app, under:',
+    path: ['المنتجات الطازجة', 'كيو كوفي'],
+    cta: 'Get Q and order your coffee',
+  },
+
+  prices: {
+    price: 'SAR {n}',
+    was: 'was',
+    source: 'Prices as shown in the Q app on {date}; they may change.',
+  },
+
   inside: {
     eyebrow: 'How it works',
     arrived: 'Your order’s here',
     title: 'Our deals come to you — at the same price',
-    lead: 'A simple, clear shopping experience with secure payment options and fast, organized delivery right to your door.',
+    lead: 'Simple shopping, secure payment options, and delivery right to your door.',
     steps: [
       {
         id: 'offers',
         title: 'Browse the deals',
-        text: 'A wide range of products, with standout deals and prices you’ll only find on Q.',
-        imageAlt:
-          'The Q app home screen: a five-can Coca-Cola deal and the “prices you’ll only find on Q” section',
+        text: 'Standout deals, and prices you’ll only find on Q.',
       },
       {
         id: 'picks',
         title: 'Choose and order',
-        text: 'Add what you need to your cart and order in seconds, with secure payment options.',
-        imageAlt:
-          'The “Our picks for you” section of the Q app: products with their price before and after the discount, each with an add button',
+        text: 'Add what you need to your cart, and order in seconds.',
       },
       {
         id: 'delivery',
         title: 'Get it at your door',
         text: 'Fast, organized delivery — and you track your order step by step.',
-        imageAlt:
-          'The order review screen in the Q app, next to a Q delivery van reading “Our deals come to you at the same price”',
       },
     ],
   },
@@ -173,6 +341,8 @@ const en = {
       total: 'Total',
       totalValue: 'Free',
       thanks: 'Thanks for choosing Q',
+      more: 'Print the other questions ({n})',
+      less: 'Fold the questions back',
     },
     items: [
       {
@@ -248,7 +418,7 @@ const en = {
     title: 'Get Q',
     subtitle: 'Free on your phone',
     sticker: 'FREE',
-    text: 'Available for iPhone and Android. Scan the code or pick your store — the app is free, and the deals start on the very first screen. The app itself is in Arabic.',
+    text: 'For iPhone and Android, and the deals start on the very first screen. The app itself is in Arabic.',
     stageAlt:
       'The Q app home screen: a super deal on Al Fakhama rice with Al Fakhama oil free, and the “prices you’ll only find on Q” section',
   },

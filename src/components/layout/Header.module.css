@@ -172,10 +172,12 @@
   list-style: none;
 }
 
+/* Eight sections side by side: the links close up a little on the narrowest screens that show
+   them all (1024px), and open out as the screen widens. */
 .link {
   display: inline-flex;
   align-items: center;
-  padding: 0.6875rem clamp(0.75rem, 1vw, 1.0625rem);
+  padding: 0.6875rem clamp(0.5rem, 1.1vw - 0.25rem, 1.0625rem);
   border-radius: var(--pill);
   font-size: var(--text-nav);
   font-weight: 500;
@@ -225,6 +227,39 @@
   from {
     translate: 0 70%;
     opacity: 0;
+  }
+}
+
+/* How far down the page: «٣ من ٧», quieter than the name. */
+.nowCount {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--island-soft);
+}
+
+.nowCount:lang(ar) {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.menu[open] .nowCount {
+  color: inherit;
+}
+
+/* Narrow phones: the pill closes up a little, so the count still fits beside the name… */
+@media (max-width: 23.4375em) {
+  .now {
+    gap: 0.375rem;
+    padding-inline: 0.75rem 0.625rem;
+  }
+}
+
+/* …and the narrowest keep the icon and the store button whole: the name is enough there. */
+@media (max-width: 22.49em) {
+  .nowCount {
+    display: none;
   }
 }
 
@@ -333,8 +368,9 @@
     max-inline-size: 5rem;
   }
 
+  /* Room for all eight sections at their widest (about 54rem, on a 1920px screen). */
   .directory {
-    max-inline-size: 48rem;
+    max-inline-size: 58rem;
   }
 
   .locale {

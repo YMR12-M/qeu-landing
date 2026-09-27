@@ -6,9 +6,10 @@ import { useEffect } from 'react';
  *
  * Pre-rendered HTML is always visible: nothing is hidden before JavaScript runs, nothing
  * already on screen is touched, and reduced motion skips it all — so there is no flash and
- * nothing is lost without JS.
+ * nothing is lost without JS. It shows once the element is a little way into the screen —
+ * soon enough that the reader never waits for it.
  */
-export function useScrollReveal(ref, rootMargin = '0px 0px -12% 0px') {
+export function useScrollReveal(ref, rootMargin = '0px 0px -8% 0px') {
   useEffect(() => {
     const element = ref.current;
     if (!element || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;

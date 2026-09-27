@@ -1,7 +1,15 @@
 .section {
   overflow-x: clip; /* a sticker standing off a corner never widens the page */
-  padding-block: clamp(3.5rem, 5.4167vw, 6.5rem);
+  padding-block: var(--section-space);
   background: var(--surface);
+}
+
+/* On a computer the QR card hangs 1.75rem under the app (AppStage.module.css): the space
+   under the section starts at the card, as it starts at every other section's last thing. */
+@media (min-width: 64em) and (hover: hover) {
+  .section {
+    padding-block-end: calc(var(--section-space) + 1.75rem);
+  }
 }
 
 .stats {
@@ -52,4 +60,11 @@
 
 .pills {
   margin-block-start: clamp(1.75rem, 2.0833vw, 2.5rem);
+}
+
+/* Phones: no picture of a phone on a phone — the store buttons are the way in. */
+@media (max-width: 47.99em) {
+  .stage {
+    display: none;
+  }
 }

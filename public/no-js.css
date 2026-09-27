@@ -22,6 +22,7 @@
 
 [data-why-step] {
   opacity: 1 !important;
+  cursor: auto !important; /* a click can't open one without a script */
 }
 
 [data-why-body] {
@@ -31,4 +32,14 @@
 
 [data-needs-js] {
   display: none !important;
+}
+
+/* The aisles' shelf is moved along by its arrows on a wider screen: without them, it stacks
+   into shelves again. */
+@media (min-width: 48em) {
+  [data-shelf] {
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+    padding-inline: 1rem !important;
+  }
 }

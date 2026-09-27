@@ -3,12 +3,16 @@ import { site } from '../../content/site.js';
 import { useScrollReveal } from '../../hooks/useScrollReveal.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
-import { formatPlural, interpolate } from '../../lib/format.js';
+import { formatNumber, formatPlural, interpolate } from '../../lib/format.js';
 import { Logo } from '../brand/Logo.jsx';
 import { Barcode } from '../ui/Barcode.jsx';
+import { Receipt } from '../ui/icons.jsx';
 import styles from './Faq.module.css';
 
 const EMAIL = site.contact.email;
+
+// The questions printed from the start; the rest are printed on demand.
+const PRINTED = 4;
 
 const twoDigits = (value) => String(value).padStart(2, '0');
 
@@ -26,6 +30,23 @@ function withEmailLink(text) {
   ));
 }
 
+/** One line of the receipt: the question, and its answer printed out under it. */
+function Question({ item, number, figures }) {
+  return (
+    <details className={styles.item} name="faq">
+      <summary className={styles.question}>
+        <span className={styles.number} aria-hidden="true">
+          {twoDigits(number)}
+        </span>
+        <span className={styles.questionText}>{item.question}</span>
+        <span className={styles.leader} aria-hidden="true" />
+        <span className={styles.mark} aria-hidden="true" />
+      </summary>
+      <p className={styles.answer}>{withEmailLink(interpolate(item.answer, figures))}</p>
+    </details>
+  );
+}
+
 /**
  * «عندك سؤال؟» — the FAQ, printed on a till receipt that feeds out of a printer slot as it
  * scrolls into view: dashed rules, a torn edge, a barcode, and a total that comes to "free".
@@ -34,12 +55,19 @@ function withEmailLink(text) {
  *
  * Each question is a native <details> (one open at a time), so the answers work before
  * hydration and without JavaScript, with the browser's own keyboard and screen-reader
- * behaviour — and find-in-page opens the answer it lands in.
+ * behaviour — and find-in-page opens the answer it lands in. The receipt prints the first
+ * questions; «اطبع باقي الأسئلة», a <details> of its own, prints the rest under them (and
+ * find-in-page opens it too).
+ *
+ * On phones and tablets, where the ticket comes after the receipt, it is a slip — the next
+ * number, the question and the way to ask it — without the dispenser around it.
  */
 export function Faq() {
   const { t, figures, locale } = useLocale();
   const { faq } = t;
   const { receipt, ticket } = faq;
+  const printed = faq.items.slice(0, PRINTED);
+  const onDemand = faq.items.slice(PRINTED);
   const feedRef = useRef(null);
   const queueRef = useRef(null);
   useScrollReveal(feedRef);
@@ -74,21 +102,31 @@ export function Faq() {
                   <span>{receipt.columns.answer}</span>
                 </p>
 
-                {faq.items.map((item, index) => (
-                  <details key={item.id} className={styles.item} name="faq">
-                    <summary className={styles.question}>
-                      <span className={styles.number} aria-hidden="true">
-                        {twoDigits(index + 1)}
-                      </span>
-                      <span className={styles.questionText}>{item.question}</span>
-                      <span className={styles.leader} aria-hidden="true" />
-                      <span className={styles.mark} aria-hidden="true" />
-                    </summary>
-                    <p className={styles.answer}>
-                      {withEmailLink(interpolate(item.answer, figures))}
-                    </p>
-                  </details>
+                {printed.map((item, index) => (
+                  <Question key={item.id} item={item} number={index + 1} figures={figures} />
                 ))}
+
+                {onDemand.length > 0 && (
+                  <details className={styles.more}>
+                    <summary className={styles.moreToggle}>
+                      <Receipt className={styles.moreIcon} />
+                      <span className={styles.whenClosed}>
+                        {interpolate(receipt.more, {
+                          n: formatNumber(onDemand.length, { locale }),
+                        })}
+                      </span>
+                      <span className={styles.whenOpen}>{receipt.less}</span>
+                    </summary>
+                    {onDemand.map((item, index) => (
+                      <Question
+                        key={item.id}
+                        item={item}
+                        number={PRINTED + index + 1}
+                        figures={figures}
+                      />
+                    ))}
+                  </details>
+                )}
 
                 <p className={styles.total}>
                   <span>{receipt.total}</span>

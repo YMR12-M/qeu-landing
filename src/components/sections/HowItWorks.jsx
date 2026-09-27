@@ -1,8 +1,6 @@
-import { media } from '../../content/media.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { Logo } from '../brand/Logo.jsx';
 import { Bag, House, Palm, Pin, Skyline, Store } from '../illustrations/Street.jsx';
-import { Picture } from '../ui/Picture.jsx';
 import { Reveal } from '../ui/Reveal.jsx';
 import { SectionHeading } from '../ui/SectionHeading.jsx';
 import styles from './HowItWorks.module.css';
@@ -57,8 +55,8 @@ function DeliveryVan() {
 
 /**
  * «كيف يشتغل» — the order's route, as a street. Three steps from the Google Play description,
- * each with its screen, hanging from a stop: Qeu's store at the first, the pin where the order
- * is placed at the second, your house at the third. As the section scrolls by, Qeu's van drives
+ * each written under its stop, as a tracker labels its own: Qeu's store at the first, the pin
+ * where the order is placed at the second, your house at the third. As the section scrolls by, Qeu's van drives
  * from the store to your door, drawing the route behind it and lighting each stop it reaches —
  * the way the app tracks an order step by step — and the bag is at the door when it arrives.
  * The motion is a CSS scroll-driven animation: no JavaScript, off the main thread, and where
@@ -108,23 +106,13 @@ export function HowItWorks() {
               key={step.id}
               className={styles.step}
               data-step={step.id}
-              delay={index * 120}
+              delay={index * 80}
             >
-              <div className={styles.frame}>
-                <Picture
-                  image={media.steps[step.id]}
-                  alt={step.imageAlt}
-                  sizes="(min-width: 64em) 26vw, (min-width: 48em) 30vw, 9rem"
-                  className={styles.image}
-                />
-              </div>
-              <div className={styles.copy}>
-                <span className={styles.number} aria-hidden="true">
-                  {stepNumber(index)}
-                </span>
-                <h3 className={styles.title}>{step.title}</h3>
-                <p className={styles.text}>{step.text}</p>
-              </div>
+              <span className={styles.number} aria-hidden="true">
+                {stepNumber(index)}
+              </span>
+              <h3 className={styles.title}>{step.title}</h3>
+              <p className={styles.text}>{step.text}</p>
             </Reveal>
           ))}
         </ol>

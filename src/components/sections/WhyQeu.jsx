@@ -20,8 +20,9 @@ const STICKERS = {
 
 /**
  * v3 «ليه كيو؟»: on wide screens the section pins while the reader scrolls through a
- * 250vh track; scroll progress picks the open benefit and the matching app screen, and the
- * open benefit's rule fills as the reader moves through it. Each benefit comes with its
+ * 180vh track; scroll progress picks the open benefit and the matching app screen, and the
+ * open benefit's rule fills as the reader moves through it. A click on a closed benefit
+ * scrolls to it, for a reader who'd rather not scroll through the others. Each benefit comes with its
  * supermarket promo sticker — a «١+١» starburst, a red «أقل سعر» label… — slapped onto the
  * screen's frame as the benefit opens.
  * On phones every benefit is a card with its own screen and sticker, in a row the reader
@@ -75,6 +76,16 @@ export function WhyQeu() {
     };
   }, [count]);
 
+  // Pinned, a closed benefit opens on a click: the page scrolls to the start of its stretch of
+  // the track. (Its text is in the DOM already, for the keyboard and screen readers.)
+  const open = (index) => {
+    const track = trackRef.current;
+    if (index === active || !window.matchMedia(PINNED_QUERY).matches) return;
+    const span = track.offsetHeight - window.innerHeight;
+    const top = track.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: top + (span * (index + 0.1)) / count });
+  };
+
   return (
     <section id="why" className={styles.section} aria-labelledby="why-title">
       {/* qeu.app's old anchor for this section, so links to it still land here. */}
@@ -97,6 +108,7 @@ export function WhyQeu() {
                       className={styles.step}
                       data-why-step
                       data-active={index === active || undefined}
+                      onClick={() => open(index)}
                     >
                       {/* Phones: the benefit's own screen, on its card. Pinned, the frame
                           beside the list shows it instead, and this copy is never loaded. */}

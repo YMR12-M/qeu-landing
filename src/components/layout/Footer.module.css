@@ -12,7 +12,7 @@
   /* Sideways only: the sticker, lifted and turned before it lands, must not widen the page
      (phones would zoom out to fit it). The teeth still show above the bag. */
   overflow-x: clip;
-  padding-block: calc(var(--hem) + clamp(3rem, 5vw, 5.5rem)) clamp(2rem, 3vw, 3rem);
+  padding-block: calc(var(--hem) + var(--section-space)) clamp(2rem, 3vw, 3rem);
   background:
     linear-gradient(rgb(159 227 234 / 0.2), rgb(159 227 234 / 0.2)) 0 var(--hem) / 100% 1px
       no-repeat,
@@ -212,6 +212,18 @@
 @media (min-width: 30em) {
   .lists {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Phones: the page's contents are the island's receipt, a tap away at the top — the sticker
+   keeps the ways to reach Qeu. */
+@media (max-width: 47.99em) {
+  .contents {
+    display: none;
+  }
+
+  .lists {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

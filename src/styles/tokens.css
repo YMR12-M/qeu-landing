@@ -54,7 +54,7 @@
   --gutter: max(clamp(1.25rem, 5vw, 3rem), var(--safe-inline));
   --header-height: clamp(4.5rem, 4.1667vw, 5rem); /* the floating nav island, with its margin */
   --header-pad: clamp(1.25rem, 4.1667vw, 5rem);
-  --section-space: clamp(4rem, 5.8333vw, 7rem);
+  --section-space: clamp(2.5rem, 3.75vw, 4.5rem);
 
   /* ── Shape & depth ─────────────────────────────────────────────── */
   --pill: 1000px;

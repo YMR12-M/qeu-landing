@@ -5,7 +5,10 @@ import { StorePills } from '../download/StorePills.jsx';
 import { StatsRow } from '../stats/StatsRow.jsx';
 import styles from './Download.module.css';
 
-/** v3 «حمّل كيو»: the store figures, then the call to download beside the kept app stage. */
+/**
+ * v3 «حمّل كيو»: the store figures, then the call to download beside the kept app stage — on a
+ * computer or a tablet. On a phone the reader is holding one already: the store buttons do it.
+ */
 export function Download() {
   const { t } = useLocale();
   const { download } = t;
@@ -25,7 +28,7 @@ export function Download() {
             <StorePills placement="download" className={styles.pills} />
           </div>
 
-          <AppStage />
+          <AppStage className={styles.stage} />
         </div>
       </div>
     </section>

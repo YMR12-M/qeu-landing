@@ -120,9 +120,11 @@
 
 /* Tall enough to pin, too: a phone on its side keeps the plain list (WhyQeu.jsx matches). */
 @media (min-width: 48.0625em) and (min-height: 36em) {
+  /* Long enough to pin through four benefits at a steady pace — a fifth of a screen each —
+     without holding the reader for more than a screen's scroll. */
   .track {
     position: relative;
-    block-size: 250vh;
+    block-size: 180vh;
   }
 
   .pin {
@@ -152,6 +154,15 @@
     position: relative;
     padding-block: clamp(1rem, 1.3542vw, 1.625rem);
     opacity: 1;
+  }
+
+  /* A closed benefit opens on a click too: the page scrolls to it (WhyQeu.jsx). */
+  .step:not([data-active]) {
+    cursor: pointer;
+  }
+
+  .step:not([data-active]):hover {
+    opacity: 0.9;
   }
 
   /* The open benefit's rule fills as the reader scrolls through it (--step-fill, WhyQeu.jsx),

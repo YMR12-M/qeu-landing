@@ -138,6 +138,35 @@ export function ArrowUp(props) {
   );
 }
 
+/** Points right, onwards in English; the stylesheet using it mirrors it for Arabic. */
+export function ArrowForward(props) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </StrokeIcon>
+  );
+}
+
+/** «كيو فودز»: the display fridge its meals are sold from. */
+export function Fridge(props) {
+  return (
+    <StrokeIcon {...props}>
+      <rect x="5" y="2.5" width="14" height="19" rx="2.5" />
+      <path d="M5 10h14M8.5 5.5v1.5M8.5 13v3" />
+    </StrokeIcon>
+  );
+}
+
+/** «كيو كوفي»: an iced coffee in its cold cup, with a straw. */
+export function IcedCoffee(props) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="M5.5 8h13l-1.6 12a1.8 1.8 0 0 1-1.8 1.5H8.9a1.8 1.8 0 0 1-1.8-1.5Z" />
+      <path d="M4.5 8h15M12.5 8l2-5.5h2.5" />
+    </StrokeIcon>
+  );
+}
+
 export function Check(props) {
   return (
     <StrokeIcon strokeWidth="2.6" {...props}>
