@@ -464,11 +464,13 @@
     scale 150ms ease;
 }
 
-/* A bigger target than it looks: 44px tall. */
+/* A bigger target than it looks: at least 44px tall however small the phone is drawn (the
+   card head's padding has room for it), and never less than half an em over each edge. */
 .addAll::before {
   content: '';
   position: absolute;
   inset: -0.5em -0.25em;
+  inset-block: min(-0.5em, (100% - 2.75rem) / 2);
 }
 
 .addAll:active {

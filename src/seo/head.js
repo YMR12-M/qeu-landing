@@ -1,8 +1,9 @@
 import { figuresFor } from '../content/figures.js';
 import { dictionaries } from '../content/locales/index.js';
-import { policy } from '../content/policy.js';
+import { policy as policyAr } from '../content/policy.js';
+import { policy as policyEn } from '../content/policy-en.js';
 import { site } from '../content/site.js';
-import { LOCALES, POLICY_PATH } from '../i18n/locales.js';
+import { LOCALES, pagePath } from '../i18n/locales.js';
 import { interpolate } from '../lib/format.js';
 
 /**
@@ -13,6 +14,9 @@ import { interpolate } from '../lib/format.js';
 // The link-preview images, one per language (scripts/og-images.js draws them from the hero).
 const OG_IMAGES = { ar: '/og-image.jpg', en: '/og-image-en.jpg' };
 const OG_SIZE = { width: 1200, height: 630 };
+
+// The privacy policy, in each language.
+const POLICIES = { ar: policyAr, en: policyEn };
 
 const escapeHtml = (value) =>
   String(value).replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
@@ -48,8 +52,9 @@ const website = {
 };
 
 /** The privacy policy: a page of the site, about the company, with its own date. */
-function policyData() {
-  const url = absolute(POLICY_PATH);
+function policyData(locale) {
+  const policy = POLICIES[locale];
+  const url = absolute(pagePath('policy', locale));
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -61,14 +66,19 @@ function policyData() {
         url,
         name: policy.meta.title,
         description: policy.meta.description,
-        inLanguage: LOCALES.ar.hreflang,
+        inLanguage: LOCALES[locale].hreflang,
         dateModified: policy.updatedAt,
         isPartOf: { '@id': websiteId },
         about: { '@id': organizationId },
         breadcrumb: {
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: organization.name, item: absolute('/') },
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: dictionaries[locale].meta.siteName,
+              item: absolute(LOCALES[locale].path),
+            },
             { '@type': 'ListItem', position: 2, name: policy.title, item: url },
           ],
         },
@@ -80,7 +90,7 @@ function policyData() {
 function structuredData(locale) {
   const { meta, faq } = dictionaries[locale];
   const config = LOCALES[locale];
-  const tokens = { ...figuresFor(locale), email: site.contact.email };
+  const tokens = { ...figuresFor(locale, dictionaries[locale]), email: site.contact.email };
 
   return {
     '@context': 'https://schema.org',
@@ -129,21 +139,20 @@ export function renderHead(locale, page = 'home', { assetOrigin = site.origin } 
   }
   const config = LOCALES[locale];
   const isPolicy = page === 'policy';
-  // The policy has one language, so no alternates; the home page has one per locale.
-  const title = isPolicy ? policy.meta.title : meta.title;
-  const description = isPolicy ? policy.meta.description : meta.description;
-  const url = absolute(isPolicy ? POLICY_PATH : config.path);
-  const others = isPolicy ? [] : Object.values(LOCALES).filter((l) => l.code !== locale);
-  const alternates = isPolicy
-    ? []
-    : [
-        ...Object.values(LOCALES).map(
-          (l) => `<link rel="alternate" hreflang="${l.hreflang}" href="${absolute(l.path)}" />`,
-        ),
-        `<link rel="alternate" hreflang="x-default" href="${absolute('/')}" />`,
-      ];
+  // The home page and the policy are each served in both languages: every language's URL is
+  // an alternate, and the Arabic one — the site's default — stands for any other language.
+  const { title, description } = isPolicy ? POLICIES[locale].meta : meta;
+  const url = absolute(pagePath(page, locale));
+  const others = Object.values(LOCALES).filter((l) => l.code !== locale);
+  const alternates = [
+    ...Object.values(LOCALES).map(
+      (l) =>
+        `<link rel="alternate" hreflang="${l.hreflang}" href="${absolute(pagePath(page, l.code))}" />`,
+    ),
+    `<link rel="alternate" hreflang="x-default" href="${absolute(pagePath(page, 'ar'))}" />`,
+  ];
   const image = new URL(OG_IMAGES[locale], assetOrigin).href;
-  const data = isPolicy ? policyData() : structuredData(locale);
+  const data = isPolicy ? policyData(locale) : structuredData(locale);
   const jsonLd = JSON.stringify(data).replace(/</g, '\\u003c');
 
   return [

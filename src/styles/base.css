@@ -30,6 +30,7 @@ body {
   overflow-x: clip;
   font-family: var(--font-sans);
   font-size: var(--text-body);
+  font-weight: 500; /* the lightest weight the site loads (fonts.css) */
   line-height: var(--leading-body);
   color: var(--text);
   background: var(--white);

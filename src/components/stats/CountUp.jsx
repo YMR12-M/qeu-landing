@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { cx } from '../../lib/cx.js';
 import { Numeral } from '../ui/Numeral.jsx';
+import styles from './CountUp.module.css';
 
 const DURATION = 1100;
 
@@ -10,7 +12,8 @@ const DURATION = 1100;
  * screen is reset to zero (in an observer callback, so never visibly) and then counted
  * up; one already on screen keeps its value. Nothing moves under reduced motion.
  * Screen readers (and crawlers) always get the real number: the moving one is hidden
- * from them.
+ * from them. The final figure, unseen, holds its place and the count runs over it
+ * (CountUp.module.css), so it moves nothing around it: no layout shift while it counts.
  */
 export function CountUp({ value, format, className }) {
   const ref = useRef(null);
@@ -57,8 +60,11 @@ export function CountUp({ value, format, className }) {
   }, [value]);
 
   return (
-    <span ref={ref} className={className}>
-      <span aria-hidden="true">
+    <span ref={ref} className={cx(styles.countUp, className)}>
+      <span className={styles.final} aria-hidden="true">
+        <Numeral>{format(value)}</Numeral>
+      </span>
+      <span className={styles.current} aria-hidden="true">
         <Numeral>{format(current)}</Numeral>
       </span>
       <span className="visually-hidden">{format(value)}</span>

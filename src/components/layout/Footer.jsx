@@ -126,7 +126,6 @@ export function Footer() {
             <a
               className={styles.smallLink}
               href={policyPath}
-              hrefLang={locale === 'ar' ? undefined : 'ar'}
               aria-current={page === 'policy' ? 'page' : undefined}
             >
               {footer.more.privacy}

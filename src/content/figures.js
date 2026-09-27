@@ -1,5 +1,4 @@
 import { formatCompact, formatNumber, formatPlural } from '../lib/format.js';
-import { dictionaries } from './locales/index.js';
 import { site } from './site.js';
 
 const DAY = 86_400_000;
@@ -16,9 +15,10 @@ const monthsBetween = (from, to) =>
  *   {allRatings} "١٫٣ ألف" / "1.3K"
  *   {package}    "sa.qeu1.app"          {androidMin} "٧٫٠" / "7.0"
  *                                        {iosMin}     "١٥٫٠" / "15.0"
+ * `copy` is the locale's copy (src/content/locales), for its words for numbers.
  */
-export function figuresFor(locale) {
-  const { numbers } = dictionaries[locale];
+export function figuresFor(locale, copy) {
+  const { numbers } = copy;
   const months = monthsBetween(site.app.releasedAt, site.capturedAt);
   // A version is written as the store writes it: "7.0", not "7".
   const version = (value) =>

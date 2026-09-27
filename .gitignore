@@ -1,4 +1,6 @@
 node_modules
 dist
+# The build output kept out of iCloud Drive: `dist` as a link to it (README → Deploying).
+dist.nosync
 .DS_Store
 *.log

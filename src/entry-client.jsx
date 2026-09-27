@@ -4,10 +4,10 @@ import './styles/index.css';
 import { StrictMode } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { App } from './App.jsx';
-import { dictionaries } from './content/locales/index.js';
+import { loadDictionary } from './content/locales/load.js';
 import { POLICY_META } from './content/policy-contents.js';
 import { LOCALES, localeFromLang, resolveLocale, resolvePage } from './i18n/locales.js';
-import { PAGES } from './pages/index.js';
+import { pageModule, PAGES } from './pages/index.js';
 
 const container = document.getElementById('root');
 const prerendered = container.firstElementChild !== null;
@@ -23,12 +23,13 @@ const page = prerendered
   ? (document.documentElement.dataset.page ?? 'home')
   : resolvePage(window.location.pathname);
 
-// The page's own chunk is loaded first, so React finds everything it hydrates in place.
-PAGES[page]()
-  .then(({ default: Page }) => {
+// The page's own chunk and its language's copy are loaded first (the HTML preloads both), so
+// React finds everything it hydrates in place.
+Promise.all([PAGES[pageModule(page, locale)](), loadDictionary[locale]()])
+  .then(([{ default: Page }, copy]) => {
     const app = (
       <StrictMode>
-        <App locale={locale} page={page} Page={Page} />
+        <App locale={locale} page={page} copy={copy} Page={Page} />
       </StrictMode>
     );
 
@@ -39,7 +40,7 @@ PAGES[page]()
       // Development: nothing was pre-rendered, so set up the document and render from scratch.
       const { lang, dir } = LOCALES[locale];
       Object.assign(document.documentElement, { lang, dir });
-      document.title = page === 'policy' ? POLICY_META.title : dictionaries[locale].meta.title;
+      document.title = page === 'policy' ? POLICY_META[locale].title : copy.meta.title;
       createRoot(container).render(app);
     }
   })

@@ -15,7 +15,11 @@ import styles from './StatsRow.module.css';
 export function StatsRow({ className }) {
   const { t, figures, locale } = useLocale();
   const { stats, dates } = t;
-  const format = (decimals) => (value) => formatNumber(value, { locale, decimals });
+  // A figure as the label prints it: its prefix («+») is part of it, and moves with its digits.
+  const format =
+    (decimals, prefix = '') =>
+    (value) =>
+      prefix + formatNumber(value, { locale, decimals });
   const downloads = toCompact(site.downloads); // 100_000 → 100 + the thousands unit
 
   const facts = [
@@ -71,8 +75,7 @@ export function StatsRow({ className }) {
             <dt className={styles.name}>{fact.name}</dt>
             <dd className={styles.figure}>
               <span className={styles.number}>
-                {fact.prefix}
-                <CountUp value={fact.value} format={format(fact.decimals ?? 0)} />
+                <CountUp value={fact.value} format={format(fact.decimals ?? 0, fact.prefix)} />
               </span>
               {fact.unit && <span className={styles.unit}>{fact.unit}</span>}
               {fact.star && (

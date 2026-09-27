@@ -23,17 +23,26 @@ export const LOCALES = {
 
 const DEFAULT_LOCALE = 'ar';
 
-/** The privacy policy: one page, in Arabic (the policy has no other language). */
-export const POLICY_PATH = '/policy';
+/**
+ * The privacy policy in each language. Both are the URLs qeu.app already has: the Arabic
+ * policy, which the store listings link to, and its English translation.
+ */
+export const POLICY_PATHS = {
+  ar: '/policy',
+  en: '/policy-english',
+};
 
-/** Maps a URL path to a page, on the dev server: /policy → policy, everything else → home. */
+/** Whether a URL path is `path` or under it: /policy, /policy/ — but not /policy-english. */
+const isAt = (pathname, path) => pathname === path || pathname.startsWith(`${path}/`);
+
+/** Maps a URL path to a page, on the dev server: either policy → policy, anything else → home. */
 export function resolvePage(pathname) {
-  return /^\/policy(\/|$)/.test(pathname) ? 'policy' : 'home';
+  return Object.values(POLICY_PATHS).some((path) => isAt(pathname, path)) ? 'policy' : 'home';
 }
 
-/** Maps a URL path to a locale code: /english → en, everything else → ar. */
+/** Maps a URL path to a locale code: /english and /policy-english → en, anything else → ar. */
 export function resolveLocale(pathname) {
-  return /^\/english(\/|$)/.test(pathname) ? 'en' : DEFAULT_LOCALE;
+  return isAt(pathname, LOCALES.en.path) || isAt(pathname, POLICY_PATHS.en) ? 'en' : DEFAULT_LOCALE;
 }
 
 /** Maps an <html lang> value back to its locale code: 'en' → en, anything unknown → ar. */
@@ -44,4 +53,12 @@ export function localeFromLang(lang) {
 /** The locale the language switch points to. */
 export function alternateLocale(code) {
   return code === 'ar' ? LOCALES.en : LOCALES.ar;
+}
+
+/**
+ * Where a page is served in a locale: the home page and the policy each have one per
+ * language. A page that has no other language (the 404) stands for the home page.
+ */
+export function pagePath(page, code) {
+  return page === 'policy' ? POLICY_PATHS[code] : LOCALES[code].path;
 }

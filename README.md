@@ -1,17 +1,17 @@
 # Qeu — landing page (كيو | Q)
 
 Marketing site for the Qeu grocery-deals app: Arabic at `/` (default, RTL) and English at
-`/english` (LTR), plus the privacy policy at `/policy`. Built on the **Qeu Landing v3** design,
-with two blocks kept from the earlier proposal and every image and claim checked against Qeu's
-own sources.
+`/english` (LTR), plus the privacy policy at `/policy` and its English translation at
+`/policy-english`. Built on the **Qeu Landing v3** design, with two blocks kept from the earlier
+proposal and every image and claim checked against Qeu's own sources.
 
 ```bash
 npm install
-npm run dev       # http://localhost:5173 (Arabic) · /english · /policy
+npm run dev       # http://localhost:5173 (Arabic) · /english · /policy · /policy-english
 npm run build     # static site → dist/client
 npm run preview   # serve the production build
 npm run lint      # ESLint
-npm run qr        # regenerate the download QR code (after changing the smart link)
+npm run qr        # regenerate the download QR code and its redirects (after changing a store link)
 npm run og        # redraw the link-preview images (after changing the hero; needs Chrome)
 ```
 
@@ -37,7 +37,7 @@ tools then read them as empty (ESLint crashes, builds break) or make conflict co
 | Google Play figures (count up on scroll), printed as the app's nutrition-facts label, «القيمة الغذائية»                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | v3 figures; label **new**                                                             |
 | «حمّل كيو» with the app-icon stage, phone and QR card, and a «مجاناً» starburst on the stage (left out on phones, which have the store buttons)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | v3 text + **kept** stage from the earlier proposal                                    |
 | Footer as the bag the order comes in: the brand printed on it, a delivery sticker with the contents (ticked off as they are read; on phones, left to the island's receipt) and the contact links                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | v3, with the missing legal and contact details added; bag **new**                     |
-| `/policy` — the privacy policy as an official document: the company letterhead, the policy word for word, an index card that ticks each section off as it is read, and the company stamp pressed on at the end                                                                                                                                                                                                                                                                                                                                                                                                                                                    | qeu.app/policy text; page **new**                                                     |
+| `/policy` — the privacy policy as an official document: the company letterhead, the policy word for word, an index card that ticks each section off as it is read, and the company stamp pressed on at the end; `/policy-english`, Qeu's English translation of it, the same document left to right                                                                                                                                                                                                                                                                                                                                                               | qeu.app/policy and /policy-english text; pages **new**                                |
 | 404 — the hero's shelf, emptied: clear dividers with nothing between them and one label left, «نفد», with the way back home                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | **new**                                                                               |
 
 ### Changed from v3
@@ -60,8 +60,9 @@ Content (claims v3 made that the sources don't support)
 - The copy said "on Google Play" while offering an App Store button; it now names both.
 - v3's hero and header buttons sent everyone, iPhone users included, to Google Play. Buttons now
   open the visitor's own store, and on a computer they jump to the download section.
-- v3's QR code opened Google Play only, so it was useless on an iPhone. The new QR code encodes the
-  smart link, which works for both.
+- v3's QR code opened Google Play only, so it was useless on an iPhone. The new QR code encodes
+  qeu.app/get, which sends an iPhone to the App Store and an Android phone to Google Play (see
+  Analytics).
 - "بلّغ عن مشكلة" linked to the store page; it now emails support. Added the support email, the
   privacy policy link, and the legal entity and address.
 - v3 translated the text in place (brand "Que"). There is now a real `/english` page (brand "Q",
@@ -193,10 +194,12 @@ Content (claims v3 made that the sources don't support)
 - **React 19 + Vite 8, pre-rendered (SSG).** Pages are written as React components and rendered
   to static HTML at build time (`scripts/prerender.js`). Crawlers and the first paint get the
   whole page, and React hydrates it for the small amount of interaction.
-- **One chunk per page.** The header, footer and React are shared; each page (`src/pages`) is
-  its own chunk, which its HTML preloads, so the policy doesn't download the landing page and
-  the other way round. The HTML carries no inline script: every boundary is rendered in place,
-  and the build fails if an inline `<script>` ever appears (the CSP would block it).
+- **One chunk per page, and per language.** The header, footer and React are shared; each page
+  (`src/pages`) is its own chunk, which its HTML preloads, so the policy doesn't download the
+  landing page and the other way round — and each language's copy is a chunk of its own, so a
+  page downloads only the language it shows (the policy's text too: one page per language).
+  The HTML carries no inline script: every boundary is rendered in place, and the build fails
+  if an inline `<script>` ever appears (the CSP would block it).
 - **No server and no database.** The content is static and changes rarely, so `dist/client` is
   plain files for any static host or CDN. Node is used only for the build. A server or MySQL
   would add cost and attack surface without adding anything here.
@@ -211,20 +214,22 @@ Content (claims v3 made that the sources don't support)
 ```
 src/
   App.jsx                 the frame every page shares: navigation island, the page, footer
-  entry-client.jsx        load the page's chunk, then hydrate (prod) / render (dev)
+  entry-client.jsx        load the page's chunk and its copy, then hydrate (prod) / render (dev)
   entry-server.jsx        render one page to HTML — used by the prerender
-  pages/                  Home (the landing page), Policy, NotFound (404) — one chunk each;
-                          index.js maps page names to them
+  pages/                  Home (the landing page), Policy and PolicyEnglish, NotFound (404) —
+                          one chunk each; index.js maps page names to them
   content/
     site.js               facts: ratings, downloads, links, company — single source of truth
     figures.js            those facts formatted per locale, for the copy's {tokens}
-    locales/ar.js, en.js  all copy, same shape in both files
+    locales/ar.js, en.js  all copy, same shape in both files; load.js loads one per page in the
+                          browser, index.js has both for the build
     assistant-chat.js     the conversation with كيور, word for word from the store screenshot
     departments.js        the app's departments and their categories, in the app's order
     menu.js               Qeu Foods' and Qeu Coffee's products and prices, as the app lists them,
                           and the day they were read
-    policy.js             the privacy policy, word for word from qeu.app/policy (Arabic only)
-    policy-contents.js    its title and section list — all the header needs of it
+    policy.js             the privacy policy, word for word from qeu.app/policy
+    policy-en.js          its English translation, word for word from qeu.app/policy-english
+    policy-contents.js    its titles and section lists — all the header needs of them
     media.js              every image + its responsive sizes
   components/
     layout/               Header, Footer, SkipLink
@@ -246,8 +251,8 @@ src/
   styles/                 fonts, tokens, base, layout
 scripts/
   prerender.js            writes dist/client/index.html, english.html (+ english/index.html),
-                          policy.html (+ policy/index.html) and 404.html
-  generate-qr.js          src/assets/qr/download-qr.svg
+                          policy.html, policy-english.html (+ their folder copies) and 404.html
+  generate-qr.js          src/assets/qr/download-qr.svg, and its redirects in vercel.json
   og-images.js            public/og-image.jpg and og-image-en.jpg
 public/                   favicons, manifest, robots.txt, sitemap.xml, the link-preview images,
                           no-js.css (the page without JavaScript)
@@ -271,6 +276,9 @@ Everything on the page comes from Qeu's own material, captured September 2026:
   with two corrections to flag to the client: its complaints address read `support@que.app`
   (the support address everywhere else is `support@qeu.app`), and «[•] يوم عمل» was never filled
   in, so the page reads «خلال المدة المحددة نظامًا» until the client gives a number.
+- **qeu.app/policy-english**, captured 27 Sep 2026 — Qeu's English translation of it, at the
+  same address, word for word, with the same two corrections ("within [•] business days" reads
+  "within the period required by law").
 - **Google Play (`sa.qeu1.app`)** — rating 4.7 from 1,252 phone ratings (1.3K overall), the
   star distribution, 100K+ downloads, first release 25 Jan 2026 (≈8 months to the capture date),
   the description (secure payment, fast delivery, order tracking), the screenshots and the icon.
@@ -291,10 +299,11 @@ translation and should be reviewed by the client.
 
 ## SEO, accessibility, performance
 
-- One `h1`; `lang` and `dir` set per page; hreflang, a canonical URL, Open Graph and schema.org
-  data (Organization, WebSite, MobileApplication, and FAQPage from the same copy as the FAQ
-  section; WebPage and a breadcrumb on the policy). The data carries no `aggregateRating`: Google
-  doesn't allow marking up ratings collected on another site.
+- One `h1`; `lang` and `dir` set per page; hreflang (the home pages to each other, the two
+  policies to each other), a canonical URL, Open Graph and schema.org data (Organization,
+  WebSite, MobileApplication, and FAQPage from the same copy as the FAQ section; WebPage and a
+  breadcrumb on the policy). The data carries no `aggregateRating`: Google doesn't allow marking
+  up ratings collected on another site.
 - Link previews use a 1200×630 image per language, drawn from the hero (`npm run og`). On
   Vercel the image URL names the project's production domain (`VERCEL_PROJECT_PRODUCTION_URL`),
   so previews work on the `.vercel.app` address now and switch to qeu.app with the first deploy
@@ -319,28 +328,44 @@ translation and should be reviewed by the client.
   them. The page opts out of browsers' automatic dark modes (`color-scheme: light only`): its
   dark sections are part of the design.
 - Text meets WCAG AA contrast: `--brand-text` (#127d86) is the brand teal for text and focus
-  rings; `--brand` stays for fills. Screen readers read the real figures, not the count-up.
+  rings; `--brand` stays for fills. On the aisles' wall (#eef5f5, darker than the white it is
+  set for) it is a shade deeper, #117a83, to keep 4.6:1. Screen readers read the real figures,
+  not the count-up.
 - The pinned section keeps all text in the DOM: collapsed items are clipped, not removed. It
   pins from tablet width up, with the screen always beside the list.
 - The hero headline is one block of text, so it — not a background screen — is the Largest
   Contentful Paint, painted with the first frame. On a phone the shelf's screens are sized to
-  stay smaller than the headline, which in English is a line shorter than in Arabic.
-- Nothing moves once the page runs (CLS ≈ 0): on phones and tablets the note sits under the
-  download button from the first paint, so the button naming the visitor's store once the page
-  runs («حمّله مجاناً من Google Play», longer than the pre-rendered label) pushes nothing down.
+  stay smaller than the headline, which in English is a line shorter than in Arabic (on a
+  computer the English page's LCP is a shelf screen, at about 0.3 s).
+- Nothing scrolls by itself as the page loads: Chrome ends its LCP at the first scroll, and a
+  phone would report none at all. The rows that snap as they are swiped (the benefits' cards,
+  the aisles' signs and shelf) keep their scroll padding equal to their padding, so their first
+  item already stands where the snap would put it.
+- Nothing moves once the page runs, nor as it is scrolled (CLS ≈ 0): on phones and tablets the
+  note sits under the download button from the first paint, so the button naming the visitor's
+  store once the page runs («حمّله مجاناً من Google Play», longer than the pre-rendered label)
+  pushes nothing down; the nutrition label's figures count up over the final figure, which
+  holds their place (Tajawal's Arabic digits differ in width, so a count in the flow would
+  rewrap the label); the island's pill keeps the width of the longest name it can show (every
+  name is stacked in it, unseen), and a name too long for a phone is cut short rather than
+  pushing the store button off the screen; and the island glides to its folded place with a
+  translate alone. Scrolled through, a phone measures 0.001; a computer 0.03, from the folding
+  island's contents and «ليش كيو؟» opening one benefit after another.
 - The wordmark is defined once per page (`<LogoSymbol>`) and every copy draws it with `<use>`:
   with its paths in each of its ten copies, the landing page's HTML was 31 KB gzipped, and
   drawn from the one symbol it was 20. The page now draws it 19 times, Qeu Foods and Qeu
   Coffee included, in 29 KB (the aisles' 45 pictures and 12 icons take about 5 of them). Its
   paths were compacted without changing the shape (zero-length segments dropped, relative
   coordinates).
-- Build output (gzipped): 89 KB of shared JS, most of it React; the page's own chunk (18 KB
-  for the landing page, 6.5 KB for the policy, 0.7 KB for the 404); one 27 KB stylesheet for
-  the whole site, so no page waits for another's CSS; fonts of about 9–15 KB per file; 60–70 KB
-  of hero images on a phone, and lazy-loaded images below the fold.
+- Build output (gzipped): 85 KB of shared JS, most of it React; the page's language, 5 KB
+  (Arabic) or 4.7 KB (English); the page's own chunk (18.6 KB for the landing page, 6.5 KB for
+  the policy and 6 KB for its English, 0.7 KB for the 404); one 27.6 KB stylesheet for the whole
+  site, so no page waits for another's CSS; seven font files of about 9–15 KB (73 KB on the
+  landing page); 60–70 KB of hero images on a phone, and lazy-loaded images below the fold.
+  The landing page's first visit on a phone is about 390 KB in all.
 - Measured in Chrome with Lighthouse's mobile throttling settings (150 ms RTT, 1.6 Mbps, 4×
-  CPU), median of five runs: LCP 1.3 s in Arabic and 1.1 s in English (the headline, in both),
-  CLS about 0.001, TBT under 150 ms.
+  CPU), median of five runs: LCP about 1.2 s in both languages (the headline), 0.9 s on the
+  policy pages; TBT 0; CLS 0 as the page loads.
 
 ## Analytics
 
@@ -359,10 +384,17 @@ receives. App Store links carry Apple's campaign tags instead (`pt`, `ct=landing
 `src/content/site.js` (`appStoreProviderToken`); until then they link plainly. On a computer,
 store links open in a new tab; on a phone, in the same tab, so the store app takes over.
 
-The QR code on the page encodes the smart link; should that link ever change, update it in
-`site.js`, run `npm run qr` and deploy. A QR code that is printed can't be updated like that:
-for print, point it at an address on qeu.app (a redirect in `vercel.json`, for instance), so
-the destination stays in Qeu's hands.
+The QR code on the page encodes **qeu.app/get**, an address on Qeu's own domain: `vercel.json`
+redirects an iPhone from there to the App Store and an Android phone to Google Play, each
+tagged `utm_medium=qr`, `landing_desktop`, and anything else (an iPad browsing as a Mac) to the
+download section. The current qeu.app sends its buttons through a smart link,
+`link-to.app/qeu`, instead — which, checked on 27 Sep 2026, replaces the tags with its own
+(`utm_campaign=1link.io`) on Android and drops them on iPhone, so installs from it can't be told
+apart. The redirects are written from the store links in `src/content/site.js` by
+`npm run qr` (which also redraws the code), and the build fails if `vercel.json` no longer
+matches them — after changing a store link or the provider token, run `npm run qr` and deploy.
+The same address suits a printed code: where it leads can change without reprinting. It works
+once qeu.app is served by this site.
 
 ## Deploying
 
@@ -377,7 +409,14 @@ production. `vercel.json` carries the settings the dashboard would otherwise gue
   style attributes aside — React writes a few), no framing, `nosniff`, a strict referrer
   policy, `Cross-Origin-Opener-Policy`, and a `Permissions-Policy` that turns off the camera,
   microphone, location, payment and USB;
-- `X-Robots-Tag: noindex` on `*.vercel.app` hosts only — it drops away by itself on qeu.app.
+- `X-Robots-Tag: noindex` on `*.vercel.app` hosts only — it drops away by itself on qeu.app;
+- the QR code's redirects from `/get` to the stores (see Analytics).
+
+The build fails, with the files named, if iCloud Drive has left a conflict copy ("name 2.ext")
+in `public/` or `src/`: one in `public/` would be published. In this working copy the build's
+own output is kept out of iCloud as `dist.nosync`, with `dist` a link to it (iCloud skips
+`.nosync` names), because it kept copying the build's files — moving the whole working copy out
+of iCloud remains the real fix.
 
 **Any other static host:** upload `dist/client`. Things to check:
 
@@ -386,22 +425,24 @@ production. `vercel.json` carries the settings the dashboard would otherwise gue
    `english/index.html` answers `/english/`. On nginx: `try_files $uri $uri.html $uri/index.html`.
    Should a host still send the Arabic page for `/english`, it hydrates as Arabic instead of
    mixing languages.
-2. `/policy` is served from `policy.html` in the same way. It is the site's own page now, so
+2. `/policy` and `/policy-english` are served from `policy.html` and `policy-english.html` in
+   the same way. They are the site's own pages now, at the addresses the Framer site had, so
    nothing needs to move over from Framer.
 3. Serve `404.html` for unknown addresses, with status 404.
 4. Give `/assets/*` a long cache lifetime, and carry over the headers above.
+5. Redirect `/get` as `vercel.json` does (by user agent), or the QR code leads nowhere.
 
 ## Needed from the client
 
 - [ ] The response time for data requests in the privacy policy (the original left
-      «[•] يوم عمل» blank), and confirmation of the corrected complaints address.
+      «[•] يوم عمل» blank, and its English "[•] business days"), and confirmation of the
+      corrected complaints address, in both languages.
 - [ ] The stores' privacy labels. The App Store ("Data Not Collected") and Google Play's Data
       safety section both say the app collects no data, while the privacy policy lists the ID
       number, payment card details, location and IP address. That is fixed in App Store Connect
       and the Play Console, not on this site.
 - [ ] A decision on ratings: the page quotes the Google Play rating (4.7 from phone users) and
       says so; the Saudi App Store rating is 3.1 from 995 ratings.
-- [ ] Confirmation that `link-to.app` keeps UTM parameters.
 - [ ] The App Store provider token (App Store Connect → Analytics → Campaigns, the `pt` value)
       for campaign-tagged App Store links — see Analytics.
 - [ ] Optionally, an endpoint for Content-Security-Policy reports (`report-to`), to hear about

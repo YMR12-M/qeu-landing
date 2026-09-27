@@ -95,6 +95,7 @@
 
 .brand {
   display: flex;
+  flex: none; /* the app icon stays whole: where room is short, the pill's name gives way */
   align-items: center;
   min-block-size: 2.75rem;
   padding-inline: 0.3125rem;
@@ -194,10 +195,20 @@
 
 /* ── The pill: where you are, and the way into the receipt ──────── */
 
+/* The pill may narrow (its name then cut short); the store button beside it never does. */
+.menu {
+  min-inline-size: 0;
+}
+
+.download {
+  flex: none;
+}
+
 .now {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-inline-size: 0;
   min-block-size: 2.75rem;
   padding-inline: 1rem 0.875rem;
   border-radius: var(--pill);
@@ -217,10 +228,39 @@
   display: none;
 }
 
+/* The pill's name keeps one width for the whole page: every name it can show is stacked here,
+   unseen (Header.jsx), and the widest sets it — so the island never moves as the reader goes
+   from one section to the next (each move would be a layout shift). Where a phone hasn't room
+   even for that, the slot narrows and a long name is cut short, rather than the store button
+   being pushed off the screen. */
+.nowSlot {
+  display: grid;
+  grid-template-columns: minmax(0, auto);
+  min-inline-size: 0;
+  overflow-x: clip;
+}
+
+.nowRoom,
+.nowLabel {
+  display: flex;
+  grid-area: 1 / 1;
+  column-gap: 0.28em; /* a space's width: the name and its count */
+  min-inline-size: 0;
+}
+
+.nowRoom {
+  visibility: hidden;
+}
+
 /* Each new section name rolls up into place, like a departure board. */
 .nowLabel {
-  display: inline-block;
   animation: roll-in 450ms var(--ease-out);
+}
+
+.nowName {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @keyframes roll-in {
@@ -232,6 +272,7 @@
 
 /* How far down the page: «٣ من ٧», quieter than the name. */
 .nowCount {
+  flex: none;
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   font-weight: 500;
@@ -316,26 +357,30 @@
 @media (min-width: 64em) {
   /* The island places itself: centred while open, and as it folds it glides — with the same
      timing as the fold — to the start of the page's content (the right, in Arabic), in line
-     with the text of every section. */
+     with the text of every section. It stands at that start in both states and the glide is
+     its translate alone: a translate moves nothing in the layout, so the island's glide is no
+     layout shift (only its contents, reflowing as it folds, still count — a tenth of what
+     moving the island itself did). The header is the container its centre is measured on. */
   .header {
     display: block;
+    padding: 0;
+    container-type: inline-size;
   }
 
   .island {
     --flip: 1;
+    --start: max(var(--gutter), (100cqi - 90rem) / 2);
     position: absolute;
     inset-block-start: 0.75rem;
-    inset-inline-start: 50%;
+    inset-inline-start: var(--start);
     inline-size: max-content;
-    translate: calc(-50% * var(--flip)) 0;
+    /* Open: from the start to the middle, less half its own width. */
+    translate: calc(var(--flip) * (50cqi - 50% - var(--start))) 0;
     transition:
       background-color 450ms ease,
       border-color 450ms ease,
       color 450ms ease,
       box-shadow 450ms ease,
-      inset-inline-start 520ms var(--ease-out),
-      left 520ms var(--ease-out),
-      right 520ms var(--ease-out),
       translate 520ms var(--ease-out);
   }
 
@@ -344,7 +389,6 @@
   }
 
   .header[data-folded] .island {
-    inset-inline-start: max(var(--gutter), (100% - 90rem) / 2);
     translate: 0 0;
   }
 

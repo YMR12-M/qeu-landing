@@ -35,9 +35,12 @@ export const site = {
   },
 
   links: {
-    // Source: qeu.app — every download button on the current site points here, for both
-    // iPhone and Android, so it routes each visitor to the right store.
-    smartDownload: 'https://link-to.app/qeu',
+    // The download QR code's address, on Qeu's own domain: vercel.json sends each phone on to
+    // its store, with the QR's campaign tags (`npm run qr` writes those redirects from the
+    // links below). The current qeu.app sends its buttons through a third-party smart link,
+    // link-to.app/qeu, instead — which replaces the tags with its own (checked 27 September
+    // 2026), so installs from it can't be told apart.
+    qr: '/get',
     // Source: App Store listing, Saudi storefront — captured 24 September 2026.
     appStore: 'https://apps.apple.com/sa/app/id6754709202',
     // The App Store's campaign links need Qeu's provider token (App Store Connect → Analytics →

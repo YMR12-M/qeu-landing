@@ -4,6 +4,10 @@
  */
 
 .section {
+  /* The text teal a shade deeper on this wall: #eef5f5 is darker than the white and --surface
+     --brand-text is set for, and it would read 4.4:1 here; this keeps 4.6:1 (and white type on
+     the lit sign 5.1:1). */
+  --brand-text: #117a83;
   --focus-ring: var(--brand-text);
   position: relative;
   overflow-x: clip; /* a sign swung or a sticker slapped on never widens the page */
@@ -201,7 +205,7 @@
 
 /* The chosen aisle: its sign lit up, and the light it throws down on the shelf. */
 .sign:has(:checked) .board {
-  background: var(--brand-text); /* white type: 4.5:1 */
+  background: var(--brand-text); /* white type: 5.1:1 */
   box-shadow:
     0 0 0 3px rgb(23 162 174 / 0.28),
     0 1rem 1.5rem -1rem rgb(4 40 47 / 0.6);
@@ -316,9 +320,15 @@
 }
 
 .shelves {
+  --pad: clamp(0.25rem, 1.5vw, 1rem); /* the row's inline padding */
   display: flex;
   margin: 0;
-  padding: var(--top) clamp(0.25rem, 1.5vw, 1rem) 0;
+  padding: var(--top) var(--pad) 0;
+  /* The first category's snap position is where the padding already has it, so the row never
+     scrolls by itself as the page loads: a scroll then — even this one, by a few pixels — ends
+     Chrome's Largest Contentful Paint before the headline is painted, and phones would report
+     none at all. */
+  scroll-padding-inline: var(--pad);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
@@ -408,8 +418,7 @@
 
 @media (min-width: 48em) {
   .shelves {
-    padding-inline: 3.5rem;
-    scroll-padding-inline: 3.5rem;
+    --pad: 3.5rem;
   }
 
   .arrow {

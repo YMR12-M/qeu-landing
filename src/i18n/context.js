@@ -1,4 +1,7 @@
 import { createContext } from 'react';
 
-/** Holds { locale, t, figures, config, alternate } — provided by <LocaleProvider>. */
+/**
+ * Holds { locale, page, t, figures, config, alternate, alternatePath, policyPath, sectionHref }
+ * — provided by <LocaleProvider>.
+ */
 export const LocaleContext = createContext(null);

@@ -1,16 +1,17 @@
 import { StrictMode } from 'react';
 import { prerenderToNodeStream } from 'react-dom/static';
 import { App } from './App.jsx';
-import { LOCALES, POLICY_PATH } from './i18n/locales.js';
+import { dictionaries } from './content/locales/index.js';
+import { LOCALES, POLICY_PATHS } from './i18n/locales.js';
 import { renderHead } from './seo/head.js';
 
 /**
- * Every page the build writes: the home page in each locale, the (Arabic) policy, and the
+ * Every page the build writes: the home page and the privacy policy in each locale, and the
  * page hosts serve for a URL that doesn't exist.
  */
 export const routes = [
   ...Object.values(LOCALES).map(({ code, path }) => ({ locale: code, page: 'home', path })),
-  { locale: 'ar', page: 'policy', path: POLICY_PATH },
+  ...Object.entries(POLICY_PATHS).map(([code, path]) => ({ locale: code, page: 'policy', path })),
   { locale: 'ar', page: 'notFound', path: '/404' },
 ];
 
@@ -27,7 +28,7 @@ export async function render(locale, page = 'home', { assetOrigin } = {}) {
   const { lang, dir } = LOCALES[locale];
   const { prelude } = await prerenderToNodeStream(
     <StrictMode>
-      <App locale={locale} page={page} />
+      <App locale={locale} page={page} copy={dictionaries[locale]} />
     </StrictMode>,
     { progressiveChunkSize: Number.POSITIVE_INFINITY },
   );

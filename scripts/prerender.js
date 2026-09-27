@@ -6,19 +6,57 @@
  *   /english   → dist/client/english.html        (English — what hosts and `vite preview`
  *                dist/client/english/index.html   serve for /english; the folder copy
  *                                                  answers /english/)
- *   /policy    → dist/client/policy.html          (the privacy policy, Arabic only)
+ *   /policy    → dist/client/policy.html          (the privacy policy)
  *                dist/client/policy/index.html
+ *   /policy-english → dist/client/policy-english.html   (its English translation)
+ *                     dist/client/policy-english/index.html
  *   (404)      → dist/client/404.html            (what hosts serve for a missing page)
  * Crawlers and the first paint get the full page; React then hydrates it in the browser.
- * Each page's own chunk is preloaded next to the main script, so hydration never waits.
+ * Each page's own chunk, and its language's copy, are preloaded next to the main script, so
+ * hydration never waits.
  */
 import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { DICTIONARY_MODULES } from '../src/content/locales/load.js';
 import { site } from '../src/content/site.js';
-import { PAGE_MODULES } from '../src/pages/index.js';
+import { qrRedirects } from '../src/lib/links.js';
+import { PAGE_MODULES, pageModule } from '../src/pages/index.js';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
+
+// iCloud Drive keeps a file it couldn't sync as a copy, "name 2.ext" (README: keep the working
+// copy out of it). One in public/ would be published with the site, and one in src/ means an
+// edit may be in the copy rather than the file: either way, the conflict is resolved first.
+const conflicts = [];
+for (const folder of ['public', 'src']) {
+  for (const file of await readdir(path.join(root, folder), { recursive: true })) {
+    if (/ \d+(\.[^./\\]+)?$/.test(file)) conflicts.push(path.join(folder, file));
+  }
+}
+if (conflicts.length) {
+  throw new Error(
+    `iCloud conflict copies — keep the right version of each, delete the other:\n  ${conflicts.join('\n  ')}`,
+  );
+}
+
+// The download QR code encodes site.links.qr, which only vercel.json's redirects send on to the
+// stores: they must be the ones src/lib/links.js makes from site.js, tags and all.
+const canonical = (value) =>
+  JSON.stringify(value, (key, item) =>
+    item && typeof item === 'object' && !Array.isArray(item)
+      ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => a.localeCompare(b)))
+      : item,
+  );
+const vercel = JSON.parse(await readFile(path.join(root, 'vercel.json'), 'utf8'));
+const qrWritten = (vercel.redirects ?? []).filter((redirect) => redirect.source === site.links.qr);
+if (canonical(qrWritten) !== canonical(qrRedirects())) {
+  throw new Error(
+    `vercel.json's redirects for ${site.links.qr} (the download QR code) don't match the store ` +
+      'links in src/content/site.js: run `npm run qr`.',
+  );
+}
+
 const clientDir = path.join(root, 'dist', 'client');
 const serverEntry = path.join(root, 'dist', 'server', 'entry-server.js');
 
@@ -75,12 +113,12 @@ const fontFile = (name) =>
 const fontPreload = (file) =>
   `<link rel="preload" href="/assets/${file}" as="font" type="font/woff2" crossorigin />`;
 
-/** A page's chunk and the chunks it imports — all but the main one, which index.html loads. */
-function pageChunks(key, seen = new Set()) {
+/** A chunk and the chunks it imports — all but the main one, which index.html loads. */
+function chunksOf(key, seen = new Set()) {
   const chunk = manifest[key];
   if (!chunk || chunk.isEntry || seen.has(key)) return [];
   seen.add(key);
-  return [chunk.file, ...(chunk.imports ?? []).flatMap((imported) => pageChunks(imported, seen))];
+  return [chunk.file, ...(chunk.imports ?? []).flatMap((imported) => chunksOf(imported, seen))];
 }
 const modulePreload = (file) => `<link rel="modulepreload" crossorigin href="/${file}" />`;
 
@@ -98,8 +136,13 @@ const outputFiles = (route) => {
 for (const route of routes) {
   const rendered = await render(route.locale, route.page, { assetOrigin });
   const { html, head, lang, dir, page: pageId } = rendered;
-  const chunks = pageChunks(PAGE_MODULES[pageId]);
-  if (!chunks.length) throw new Error(`No chunk for the ${pageId} page in the build manifest.`);
+  const pageKey = pageModule(pageId, route.locale);
+  const seen = new Set();
+  const chunks = chunksOf(PAGE_MODULES[pageKey], seen);
+  if (!chunks.length) throw new Error(`No chunk for the ${pageKey} page in the build manifest.`);
+  const copyChunks = chunksOf(DICTIONARY_MODULES[route.locale], seen);
+  if (!copyChunks.length) throw new Error(`No chunk for the ${route.locale} copy in the manifest.`);
+  chunks.push(...copyChunks);
   const fonts = FIRST_PAINT_FONTS[route.locale].map(fontFile).filter(Boolean).map(fontPreload);
 
   // Replacer functions insert the markup verbatim ("$&", "$'"… are not patterns there). The

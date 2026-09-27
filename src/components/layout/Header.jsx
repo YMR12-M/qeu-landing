@@ -42,7 +42,7 @@ function toneAt(x, y) {
  * page's sections, from any page.
  */
 export function Header({ sections }) {
-  const { t, locale, config, alternate, page, sectionHref } = useLocale();
+  const { t, locale, config, alternate, alternatePath, page, sectionHref } = useLocale();
   const links = t.nav.items;
   const items = sections ?? links;
   const islandRef = useRef(null);
@@ -142,9 +142,16 @@ export function Header({ sections }) {
     n: formatNumber(activeIndex + 1, { locale }),
     total: formatNumber(items.length, { locale }),
   });
-  // The language link: this very page in the other language — or, from the policy (which has
-  // no other language), the site.
-  const switchLabel = page === 'home' ? t.a11y.switchLocale : t.a11y.switchSite;
+  // Every name the pill can show, with the count at its widest: unseen, they give the pill
+  // one width for the whole page (Header.module.css → .nowSlot).
+  const lastProgress = interpolate(t.nav.progress, {
+    n: formatNumber(items.length, { locale }),
+    total: formatNumber(items.length, { locale }),
+  });
+  const pillNames = [[t.a11y.sectionsMenu], ...items.map((item) => [item.label, lastProgress])];
+  // The language link: this very page in the other language — the home page or the policy —
+  // or, from a page that has no other language (the 404), the site.
+  const switchLabel = page === 'notFound' ? t.a11y.switchSite : t.a11y.switchLocale;
 
   return (
     <header className={styles.header} data-tone={tone} data-folded={folded || undefined}>
@@ -189,9 +196,19 @@ export function Header({ sections }) {
         >
           <summary className={styles.now}>
             {activeIndex >= 0 && <span className="visually-hidden">{t.a11y.sectionsMenu}: </span>}
-            <span key={active ?? 'none'} className={styles.nowLabel}>
-              {activeIndex >= 0 ? items[activeIndex].label : t.a11y.sectionsMenu}
-              {activeIndex >= 0 && <span className={styles.nowCount}> {progress}</span>}
+            <span className={styles.nowSlot}>
+              {pillNames.map(([name, count]) => (
+                <span key={name} className={styles.nowRoom} aria-hidden="true">
+                  {name}
+                  {count && <span className={styles.nowCount}> {count}</span>}
+                </span>
+              ))}
+              <span key={active ?? 'none'} className={styles.nowLabel}>
+                <span className={styles.nowName}>
+                  {activeIndex >= 0 ? items[activeIndex].label : t.a11y.sectionsMenu}
+                </span>
+                {activeIndex >= 0 && <span className={styles.nowCount}> {progress}</span>}
+              </span>
             </span>
             <Receipt className={styles.nowIcon} />
           </summary>
@@ -223,7 +240,7 @@ export function Header({ sections }) {
               </ul>
               <a
                 className={styles.receiptLocale}
-                href={alternate.path}
+                href={alternatePath}
                 hrefLang={alternate.hreflang}
                 lang={alternate.lang}
               >
@@ -234,13 +251,13 @@ export function Header({ sections }) {
           </div>
         </details>
 
-        <DownloadLink placement="header" size="sm">
+        <DownloadLink placement="header" size="sm" className={styles.download}>
           {t.nav.download}
         </DownloadLink>
 
         <a
           className={styles.locale}
-          href={alternate.path}
+          href={alternatePath}
           hrefLang={alternate.hreflang}
           lang={alternate.lang}
           aria-label={switchLabel}

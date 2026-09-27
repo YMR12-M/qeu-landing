@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { media } from '../../content/media.js';
-import { policy } from '../../content/policy.js';
 import { POLICY_CONTENTS } from '../../content/policy-contents.js';
 import { site } from '../../content/site.js';
 import { useActiveSection } from '../../hooks/useActiveSection.js';
@@ -16,8 +15,8 @@ import { Landmark, PaymentCard, Van } from '../ui/icons.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import styles from './PolicyPage.module.css';
 
-const IDS = POLICY_CONTENTS.map((section) => section.id);
-const LABELS = Object.fromEntries(POLICY_CONTENTS.map(({ id, label }) => [id, label]));
+// The sections' ids are the same in both languages (src/content/policy-contents.js).
+const IDS = POLICY_CONTENTS.ar.map((section) => section.id);
 const ICONS = { delivery: Van, payment: PaymentCard, government: Landmark };
 const twoDigits = (value) => String(value).padStart(2, '0');
 
@@ -26,13 +25,15 @@ const twoDigits = (value) => String(value).padStart(2, '0');
  * cover, on the company's letterhead, with an index card beside it that ticks each section
  * off once it has been read — and, reaching the end, the company's stamp is pressed onto it.
  *
- * The text is the policy's own, word for word (src/content/policy.js). The lists it contains
- * are drawn as what they are — the data as a packing list, the three recipients, the
- * retention as a route, the six rights — but always in the policy's words.
+ * The text is the policy's own, word for word: `policy` is its Arabic (src/content/policy.js)
+ * or its English (policy-en.js), each page passing its own. The lists it contains are drawn
+ * as what they are — the data as a packing list, the three recipients, the retention as a
+ * route, the six rights — but always in the policy's words.
  */
-export function PolicyPage() {
+export function PolicyPage({ policy }) {
   const { t, locale } = useLocale();
   const { labels } = policy;
+  const contents = Object.fromEntries(POLICY_CONTENTS[locale].map(({ id, label }) => [id, label]));
   const active = useActiveSection(IDS);
   const seen = useSeenSections(IDS);
   const stampRef = useRef(null);
@@ -79,7 +80,7 @@ export function PolicyPage() {
                     aria-current={active === section.id ? 'location' : undefined}
                   >
                     <span className={styles.tick} aria-hidden="true" />
-                    {LABELS[section.id]}
+                    {contents[section.id]}
                   </a>
                 </li>
               ))}

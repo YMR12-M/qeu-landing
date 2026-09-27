@@ -32,5 +32,20 @@
       "has": [{ "type": "host", "value": { "suf": ".vercel.app" } }],
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/get",
+      "has": [{ "type": "header", "key": "user-agent", "value": ".*(iPhone|iPad|iPod).*" }],
+      "destination": "https://apps.apple.com/sa/app/id6754709202",
+      "permanent": false
+    },
+    {
+      "source": "/get",
+      "has": [{ "type": "header", "key": "user-agent", "value": ".*Android.*" }],
+      "destination": "https://play.google.com/store/apps/details?id=sa.qeu1.app&utm_source=website&utm_medium=qr&utm_campaign=landing_desktop&utm_content=desktop&referrer=utm_source%3Dwebsite%26utm_medium%3Dqr%26utm_campaign%3Dlanding_desktop%26utm_content%3Ddesktop",
+      "permanent": false
+    },
+    { "source": "/get", "destination": "/#download", "permanent": false }
   ]
 }

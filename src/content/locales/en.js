@@ -454,7 +454,7 @@ const en = {
     },
     more: {
       title: 'Contents',
-      privacy: 'Privacy policy (in Arabic)',
+      privacy: 'Privacy policy',
     },
     sourceLine: 'Q · {package}',
     legal: '© {year} {company} — Al-Rehab District, Jeddah',

@@ -28,7 +28,7 @@ function campaign(placement, medium) {
 }
 
 /**
- * @param {'appStore' | 'googlePlay' | 'smart'} store
+ * @param {'appStore' | 'googlePlay'} store
  * @param {string} placement where the button sits: hero, header, download, footer, desktop (QR)
  * @param {'button' | 'qr'} [medium]
  */
@@ -41,12 +41,30 @@ export function getStoreHref(store, placement, medium = 'button') {
       referrer: new URLSearchParams(tags).toString(),
     });
   }
-  if (store === 'appStore' && site.links.appStore) {
-    const providerToken = site.links.appStoreProviderToken;
-    if (!providerToken) return site.links.appStore;
-    return withParams(site.links.appStore, { pt: providerToken, ct: tags.utm_campaign, mt: 8 });
-  }
-  return withParams(site.links.smartDownload, tags);
+  const providerToken = site.links.appStoreProviderToken;
+  if (!providerToken) return site.links.appStore;
+  return withParams(site.links.appStore, { pt: providerToken, ct: tags.utm_campaign, mt: 8 });
+}
+
+/**
+ * The redirects behind the download QR code, for vercel.json: its address (site.links.qr)
+ * sends an iPhone to the App Store and an Android phone to Google Play — each tagged as a scan
+ * of the download section's code (placement `desktop`, medium `qr`) — and anything else (an
+ * iPad browsing as a Mac, say) to the download section, which has both. `npm run qr` writes
+ * them into vercel.json, and the build checks they are still these (scripts/prerender.js).
+ */
+export function qrRedirects() {
+  const redirect = (destination, userAgent) => ({
+    source: site.links.qr,
+    ...(userAgent && { has: [{ type: 'header', key: 'user-agent', value: userAgent }] }),
+    destination,
+    permanent: false,
+  });
+  return [
+    redirect(getStoreHref('appStore', 'desktop', 'qr'), '.*(iPhone|iPad|iPod).*'),
+    redirect(getStoreHref('googlePlay', 'desktop', 'qr'), '.*Android.*'),
+    redirect('/#download'),
+  ];
 }
 
 /**

@@ -1,0 +1,25 @@
+/*
+ * The final figure holds the figure's place — unseen, it lays the line out exactly as it will
+ * be — and the count runs over it, out of the flow, so nothing beside it moves while it counts.
+ * (Tajawal's Arabic digits differ in width: «٩٣» is wider than «١٠٠». Were the count in the
+ * flow, the line would widen and narrow as it ran, the label's lines rewrap, and the section
+ * under it jump.)
+ */
+
+.countUp {
+  position: relative;
+  display: inline-block;
+}
+
+.final {
+  visibility: hidden;
+}
+
+/* Anchored at the figure's end, beside its unit: a count wider than the final figure spills
+   towards the figure's start, into the room between it and the label's text. */
+.current {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  white-space: nowrap;
+}

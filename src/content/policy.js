@@ -1,6 +1,6 @@
 /**
  * The privacy policy — word for word from qeu.app/policy (last updated 21 December 2025,
- * captured 24 September 2026). The policy exists in Arabic only.
+ * captured 24 September 2026). Qeu's English translation is policy-en.js (/policy-english).
  *
  * Only the typography is the site's own (Arabic-Indic digits, «» quotes), with two
  * corrections to the source, both flagged for the client:
@@ -16,7 +16,7 @@
 import { POLICY_META } from './policy-contents.js';
 
 export const policy = {
-  meta: POLICY_META,
+  meta: POLICY_META.ar,
 
   title: 'سياسة الخصوصية',
   subtitle: 'لتطبيق {brand}',
