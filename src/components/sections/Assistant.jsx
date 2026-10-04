@@ -26,12 +26,39 @@ const SPEAKERS = { user: 'كيمو', qur: 'كيور' };
 // is over within five seconds, so it needs no pause control (WCAG 2.2.2).
 const AT = { hello: 0.15, greeting: 0.9, ask: 1.6, reply: 2.25, list: 2.75, salad: 3.65 };
 const HINT_AT = 4.3;
-// The steps on the shopping list beside the phone are ticked off with it: the question, then
-// the list (the last, «أضف الكل», when the reader presses it).
-const STEPS_AT = [AT.ask, AT.list];
 
-const FLIGHT = 700; // ms: one product's flight into the cart
-const FLIGHT_GAP = 110; // ms between two products taking off
+/**
+ * A pen arrow, drawn in the phone's own grid — ems of its font, 24 across and 48 down (see
+ * Assistant.module.css → --u) — so it lands on the same spot of the screen at any size: a curve
+ * from a note to the part of the screen it explains, and a head on the end, along the curve.
+ */
+function penArrow([x0, y0], [c1x, c1y], [c2x, c2y], [x1, y1]) {
+  const angle = Math.atan2(y1 - c2y, x1 - c2x);
+  const barb = (turn) => {
+    const a = angle + Math.PI + turn;
+    return `${(x1 + 0.95 * Math.cos(a)).toFixed(2)} ${(y1 + 0.95 * Math.sin(a)).toFixed(2)}`;
+  };
+  return {
+    shaft: `M${x0} ${y0}C${c1x} ${c1y} ${c2x} ${c2y} ${x1} ${y1}`,
+    head: `M${barb(-0.55)}L${x1} ${y1}L${barb(0.5)}`,
+  };
+}
+
+// The steps, as notes round the phone, each pointing at its part of the screen (the screen is
+// right to left in both languages, so the parts are always where they are): the question in
+// your bubble, كيور's list, its «أضف الكل» — and the way to get the app, at the box to ask
+// كيور in. Each is written in as the conversation reaches it; the ends are measured from the
+// screen as it is drawn.
+const NOTES = [
+  { id: 'ask', at: AT.ask, arrow: penArrow([-4, 15.3], [-2.3, 15.5], [-0.5, 16.8], [1.05, 18.75]) },
+  { id: 'list', at: AT.list, arrow: penArrow([28, 34], [26.2, 33.9], [24.3, 33], [22.95, 31.2]) },
+  { id: 'add', at: HINT_AT, arrow: penArrow([-4, 30.6], [-2.1, 30.5], [0.1, 28.9], [1.95, 26.05]) },
+];
+const CTA_AT = HINT_AT + 0.5;
+const CTA_ARROW = penArrow([28, 42.9], [26.3, 43], [24.7, 44], [23.45, 45.2]);
+
+const FLIGHT = 900; // ms: one product's flight into the cart
+const FLIGHT_GAP = 150; // ms between two products taking off
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -100,11 +127,16 @@ function Words({ text }) {
 }
 
 /**
- * «اسأل كيور» — the app's assistant, live. Its conversation about kabsa, word for word from
- * Qeu's store screenshot, replays in a phone as the section scrolls into view: the question,
- * كيور typing, its answer streaming in, then the list of ingredients. And «أضف الكل» works:
- * the products fly into a cart that slides up and counts them in. The steps beside the phone,
- * on a shopping list, are ticked off as the conversation reaches them.
+ * «اسأل كيور» — the app's assistant, live, as a poster shows a feature: the phone in the middle,
+ * its title one line broken by it — «اسأل كيور» before the phone, «عن طبختك» after it — and the
+ * steps written round it as notes, each with a pen arrow pointing at the part of the screen it
+ * explains. Its conversation about kabsa, word for word from Qeu's store screenshot, replays in
+ * the phone as the section scrolls into view: the question, كيور typing, its answer streaming
+ * in, then the list of ingredients — each note written in as the conversation reaches its part.
+ * And «أضف الكل» works: the products fly into a cart that slides up and counts them in. The
+ * last note is the way to get the app, pointing at the box where you would ask كيور yourself.
+ * On a phone the title is over the screen, and the notes are listed under it, their numbers
+ * pinned on the parts they explain.
  *
  * The pre-rendered page shows the conversation whole — as does reduced motion, or a phone
  * already on screen when the page loads — and only the replay is scripted.
@@ -180,223 +212,254 @@ export function Assistant() {
       </svg>
 
       <div className={cx('container', styles.layout)}>
-        <div className={styles.intro}>
-          <p className={styles.eyebrow}>{assistant.eyebrow}</p>
-          <h2 id="assistant-title" className={styles.title}>
-            {before}
-            <span className={styles.name}>{assistant.name}</span>
-            {after}
-          </h2>
-          <p className={styles.lead}>{assistant.lead}</p>
-        </div>
-
         <div className={styles.stage}>
-          <figure className={styles.demo} aria-label={assistant.demoLabel}>
-            <div ref={phoneRef} className={styles.phone} lang="ar" dir="rtl">
-              <div className={styles.screen}>
-                <span className={styles.island} aria-hidden="true" />
-                <div className={styles.chatHead}>
-                  <ChevronBack className={styles.back} />
-                  <p className={styles.chatTitle}>{chat.title}</p>
-                  <p className={styles.newChat} aria-hidden="true">
-                    {chat.newChat}
-                  </p>
-                </div>
+          <div className={styles.board}>
+            {/* On a computer the title is one line broken by the phone: its first half before
+                the phone, its second after it, both level with the top of the screen. */}
+            <h2 id="assistant-title" className={styles.title}>
+              <span className={styles.titleStart}>
+                {before}
+                <span className={styles.name}>{assistant.name}</span>
+              </span>{' '}
+              <span className={styles.titleEnd}>{after.trim()}</span>
+            </h2>
+            <p className={styles.lead}>{assistant.lead}</p>
 
-                <ol className={styles.thread} role="list">
-                  {chat.messages.map((message) => {
-                    const at = { '--at': `${AT[message.id]}s` };
+            <figure className={styles.demo} aria-label={assistant.demoLabel}>
+              <div ref={phoneRef} className={styles.phone} lang="ar" dir="rtl">
+                <div className={styles.screen}>
+                  <span className={styles.island} aria-hidden="true" />
+                  <div className={styles.chatHead}>
+                    <ChevronBack className={styles.back} />
+                    <p className={styles.chatTitle}>{chat.title}</p>
+                    <p className={styles.newChat} aria-hidden="true">
+                      {chat.newChat}
+                    </p>
+                  </div>
 
-                    if (message.id === 'list') {
-                      return (
-                        <li key={message.id}>
-                          <span className="visually-hidden">{SPEAKERS.qur}: </span>
-                          <div className={styles.card} data-added={added || undefined} style={at}>
-                            <div className={styles.cardHead}>
-                              <Sparkle className={styles.cardMark} />
-                              <div className={styles.cardTitles}>
-                                <p className={styles.cardTitle}>{list.title}</p>
-                                <p className={styles.cardMeta}>
-                                  <span>
-                                    {list.count} {list.countUnit}
-                                  </span>
-                                  <span>
-                                    {list.total} {list.currency}
-                                  </span>
-                                </p>
-                              </div>
-                              <button
-                                type="button"
-                                className={styles.addAll}
-                                aria-disabled={added || undefined}
-                                onClick={addAll}
-                              >
-                                {added ? (
-                                  <Check className={styles.addIcon} />
-                                ) : (
-                                  <span className={styles.plus} aria-hidden="true">
-                                    +
-                                  </span>
-                                )}
-                                {added ? list.added : list.addAll}
-                              </button>
-                            </div>
+                  <ol className={styles.thread} role="list">
+                    {chat.messages.map((message) => {
+                      const at = { '--at': `${AT[message.id]}s` };
 
-                            <ul ref={productsRef} className={styles.products} role="list">
-                              {list.products.map((product, index) => (
-                                <li
-                                  key={product.id}
-                                  className={styles.product}
-                                  style={{ '--i': index }}
-                                >
-                                  <span className={styles.productImage}>
-                                    <Picture
-                                      image={media.assistant[product.id]}
-                                      alt=""
-                                      sizes="6rem"
-                                      className={styles.productImg}
-                                    />
-                                    <span className={styles.productAdded} aria-hidden="true">
-                                      <Check />
-                                    </span>
-                                  </span>
-                                  <p className={styles.price}>
-                                    {product.price}{' '}
-                                    <span className={styles.currency}>{list.currency}</span>{' '}
-                                    <s className={styles.was}>{product.was}</s>
-                                  </p>
-                                  <p className={styles.productName}>{product.name}</p>
-                                  <p className={styles.size}>{product.size}</p>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </li>
-                      );
-                    }
-
-                    if (message.from === 'user') {
-                      return (
-                        <li key={message.id} className={styles.user} style={at}>
-                          <span className="visually-hidden">{SPEAKERS.user}: </span>
-                          {message.text}
-                        </li>
-                      );
-                    }
-
-                    return (
-                      <li key={message.id} className={styles.qur} style={at}>
-                        <div className={styles.qurBody}>
-                          <p className={styles.qurText}>
+                      if (message.id === 'list') {
+                        return (
+                          <li key={message.id}>
                             <span className="visually-hidden">{SPEAKERS.qur}: </span>
-                            <Words text={message.text} />
-                          </p>
-                          {message.reactions && (
-                            <span className={styles.reactions} aria-hidden="true">
-                              <Copy />
-                              <ThumbUp />
-                              <ThumbDown />
-                            </span>
-                          )}
-                        </div>
-                        <Sparkle gradient={GRADIENT} className={styles.qurMark} />
-                        <span className={styles.typing} aria-hidden="true">
-                          <i />
-                          <i />
-                          <i />
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ol>
+                            <div className={styles.card} data-added={added || undefined} style={at}>
+                              <div className={styles.cardHead}>
+                                <Sparkle className={styles.cardMark} />
+                                <div className={styles.cardTitles}>
+                                  <p className={styles.cardTitle}>{list.title}</p>
+                                  <p className={styles.cardMeta}>
+                                    <span>
+                                      {list.count} {list.countUnit}
+                                    </span>
+                                    <span>
+                                      {list.total} {list.currency}
+                                    </span>
+                                  </p>
+                                </div>
+                                <button
+                                  type="button"
+                                  className={styles.addAll}
+                                  aria-disabled={added || undefined}
+                                  onClick={addAll}
+                                >
+                                  {added ? (
+                                    <Check className={styles.addIcon} />
+                                  ) : (
+                                    <span className={styles.plus} aria-hidden="true">
+                                      +
+                                    </span>
+                                  )}
+                                  <span className={styles.addAllLabel}>
+                                    {added ? list.added : list.addAll}
+                                  </span>
+                                </button>
+                              </div>
 
-                <div ref={composerRef} className={styles.composer} aria-hidden="true">
-                  <span>{chat.composer}</span>
-                  <span className={styles.send}>
-                    <ArrowUp />
-                  </span>
-                </div>
+                              <ul ref={productsRef} className={styles.products} role="list">
+                                {list.products.map((product, index) => (
+                                  <li
+                                    key={product.id}
+                                    className={styles.product}
+                                    style={{ '--i': index }}
+                                  >
+                                    <span className={styles.productImage}>
+                                      <Picture
+                                        image={media.assistant[product.id]}
+                                        alt=""
+                                        sizes="6rem"
+                                        className={styles.productImg}
+                                      />
+                                      <span className={styles.productAdded} aria-hidden="true">
+                                        <Check />
+                                      </span>
+                                    </span>
+                                    <p className={styles.price}>
+                                      {product.price}{' '}
+                                      <span className={styles.currency}>{list.currency}</span>{' '}
+                                      <s className={styles.was}>{product.was}</s>
+                                    </p>
+                                    <p className={styles.productName}>{product.name}</p>
+                                    <p className={styles.size}>{product.size}</p>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </li>
+                        );
+                      }
 
-                {/* The cart the products land in: the card's own count and total, counted up. */}
-                <div
-                  className={styles.cart}
-                  data-open={added || undefined}
-                  style={{ '--qty-to': list.count, '--sar-to': list.total }}
-                  aria-hidden="true"
-                >
-                  <Basket className={styles.cartIcon} />
-                  <span className={styles.cartLabel}>{chat.cart}</span>
-                  <span className={styles.cartFigures}>
-                    <span className={styles.cartQty} /> {list.countUnit}
-                    <span className={styles.cartDot}>·</span>
-                    <span className={styles.cartSar} /> {list.currency}
-                  </span>
+                      if (message.from === 'user') {
+                        return (
+                          <li key={message.id} className={styles.user} style={at}>
+                            <span className="visually-hidden">{SPEAKERS.user}: </span>
+                            {message.text}
+                          </li>
+                        );
+                      }
+
+                      return (
+                        <li key={message.id} className={styles.qur} style={at}>
+                          <div className={styles.qurBody}>
+                            <p className={styles.qurText}>
+                              <span className="visually-hidden">{SPEAKERS.qur}: </span>
+                              <Words text={message.text} />
+                            </p>
+                            {message.reactions && (
+                              <span className={styles.reactions} aria-hidden="true">
+                                <Copy />
+                                <ThumbUp />
+                                <ThumbDown />
+                              </span>
+                            )}
+                          </div>
+                          <Sparkle gradient={GRADIENT} className={styles.qurMark} />
+                          <span className={styles.typing} aria-hidden="true">
+                            <i />
+                            <i />
+                            <i />
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ol>
+
+                  <div ref={composerRef} className={styles.composer} aria-hidden="true">
+                    <span>{chat.composer}</span>
+                    <span className={styles.send}>
+                      <ArrowUp />
+                    </span>
+                  </div>
+
+                  {/* The cart the products land in: the card's own count and total, counted up. */}
+                  <div
+                    className={styles.cart}
+                    data-open={added || undefined}
+                    style={{ '--qty-to': list.count, '--sar-to': list.total }}
+                    aria-hidden="true"
+                  >
+                    <Basket className={styles.cartIcon} />
+                    <span className={styles.cartLabel}>{chat.cart}</span>
+                    <span className={styles.cartFigures}>
+                      <span className={styles.cartQty} /> {list.countUnit}
+                      <span className={styles.cartDot}>·</span>
+                      <span className={styles.cartSar} /> {list.currency}
+                    </span>
+                  </div>
                 </div>
               </div>
+              <p className="visually-hidden" aria-live="polite">
+                {added ? assistant.added : ''}
+              </p>
+
+              {/* The pen's arrows from the notes to the screen, and — for the list on a phone —
+                  each note's number pinned on its part. */}
+              <svg
+                className={styles.arrows}
+                viewBox="-18 0 60 48"
+                aria-hidden="true"
+                focusable="false"
+              >
+                {[...NOTES, { id: 'cta', at: CTA_AT, arrow: CTA_ARROW }].map(
+                  ({ id, at, arrow }) => (
+                    <g
+                      key={id}
+                      className={styles.arrow}
+                      data-note={id}
+                      style={{ '--at': `${at}s` }}
+                    >
+                      <path d={arrow.shaft} pathLength="1" />
+                      <path className={styles.arrowHead} d={arrow.head} pathLength="1" />
+                    </g>
+                  ),
+                )}
+              </svg>
+              {NOTES.map(({ id, at }, index) => (
+                <span
+                  key={id}
+                  className={styles.pin}
+                  data-note={id}
+                  style={{ '--at': `${at}s` }}
+                  aria-hidden="true"
+                >
+                  <span className={styles.pinNumber}>{index + 1}</span>
+                </span>
+              ))}
+            </figure>
+
+            <div className={styles.controls} data-needs-js>
+              <p className={styles.hint} style={{ '--at': `${HINT_AT}s` }}>
+                {added ? (
+                  <>
+                    <Check className={styles.hintIcon} />
+                    {assistant.done}
+                  </>
+                ) : (
+                  <>
+                    {assistant.hint}{' '}
+                    <bdi lang="ar" className={styles.hintButton}>
+                      {list.addAll}
+                    </bdi>
+                    {assistant.hintAfter && ` ${assistant.hintAfter}`}
+                  </>
+                )}
+              </p>
+              <button type="button" className={styles.replay} onClick={replay}>
+                <Replay className={styles.replayIcon} />
+                <span className={styles.replayLabel}>{assistant.replay}</span>
+              </button>
             </div>
-            <p className="visually-hidden" aria-live="polite">
-              {added ? assistant.added : ''}
-            </p>
-          </figure>
 
-          <div className={styles.controls} data-needs-js>
-            <p className={styles.hint} style={{ '--at': `${HINT_AT}s` }}>
-              {added ? (
-                <>
-                  <Check className={styles.hintIcon} />
-                  {assistant.done}
-                </>
-              ) : (
-                <>
-                  {assistant.hint}{' '}
-                  <bdi lang="ar" className={styles.hintButton}>
-                    {list.addAll}
-                  </bdi>
-                  {assistant.hintAfter && ` ${assistant.hintAfter}`}
-                </>
-              )}
-            </p>
-            <button type="button" className={styles.replay} onClick={replay}>
-              <Replay className={styles.replayIcon} />
-              {assistant.replay}
-            </button>
-          </div>
-        </div>
-
-        <div className={styles.more}>
-          {/* The steps, on a shopping list taped up beside the phone: each is ticked off as
-              the conversation reaches it, and the last one when «أضف الكل» is pressed. */}
-          <div className={styles.note}>
-            <ol className={styles.steps} role="list">
-              {assistant.steps.map((step, index) => {
-                const last = index === assistant.steps.length - 1;
-                return (
-                  <li
-                    key={step}
-                    className={styles.step}
-                    style={last ? undefined : { '--at': `${STEPS_AT[index]}s` }}
-                    data-last={last || undefined}
-                    data-done={(last && added) || undefined}
-                  >
-                    <span className={styles.box} aria-hidden="true">
-                      <svg className={styles.tick} viewBox="0 0 24 24" focusable="false">
-                        <path d="M4.5 12.5 9.5 17.5 20.5 5" pathLength="1" />
-                      </svg>
-                    </span>
-                    {step}
-                  </li>
-                );
-              })}
+            {/* The steps, written round the phone — or, on a phone, under it. */}
+            <ol className={styles.notes} role="list">
+              {assistant.steps.map((step, index) => (
+                <li
+                  key={step}
+                  className={styles.note}
+                  data-note={NOTES[index].id}
+                  style={{ '--at': `${NOTES[index].at}s` }}
+                >
+                  <span className={styles.noteNumber} aria-hidden="true">
+                    {index + 1}
+                  </span>
+                  <span>{step}</span>
+                </li>
+              ))}
             </ol>
+
+            {/* The way to get the app, as the last note: at the box you'd ask كيور in. */}
+            <DownloadLink
+              placement="assistant"
+              variant="link"
+              arrow={false}
+              labels={t.hero.cta}
+              className={styles.cta}
+            >
+              {assistant.cta}
+            </DownloadLink>
           </div>
-          <DownloadLink
-            placement="assistant"
-            variant="link"
-            labels={t.hero.cta}
-            className={styles.cta}
-          >
-            {assistant.cta}
-          </DownloadLink>
         </div>
       </div>
     </section>

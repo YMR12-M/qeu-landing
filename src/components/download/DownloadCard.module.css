@@ -1,0 +1,140 @@
+/*
+ * The bar's download card, on a computer: a white sheet dropped from the «حمّل كيو» button,
+ * pointing at it, with the download QR code, both stores, and the price — free. It floats over
+ * the page on its shadow alone: no outline, no ring.
+ */
+
+.root {
+  position: relative;
+  flex: none;
+}
+
+/* The button keeps the bar's look (DownloadLink.module.css → .button, .sm). */
+.trigger {
+  cursor: pointer;
+}
+
+.trigger[aria-expanded='true'] {
+  background: var(--button-hover);
+}
+
+/* The button sits at the bar's end, so the card reaches back towards the middle of the page:
+   its end edge a little past the button's middle, where its point is. Opening, it drops a
+   short way into place. */
+.card {
+  --reach: 35%; /* the point, from the card's end edge: the button's middle */
+  --focus-ring: var(--brand-text);
+  position: absolute;
+  z-index: 1;
+  inset-block-start: calc(100% + 0.875rem);
+  inset-inline-end: 50%;
+  inline-size: 19.5rem;
+  padding: 1.5rem 1.375rem 1.25rem;
+  border-radius: var(--radius-md);
+  background: var(--white);
+  color: var(--text);
+  line-height: var(--leading-body);
+  text-align: center;
+  box-shadow: 0 2.5rem 4rem -1.25rem rgb(4 40 47 / 0.5);
+  translate: var(--reach) 0;
+  transform: translateY(-0.5rem);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 300ms ease,
+    transform 300ms var(--ease-out),
+    visibility 0s linear 300ms;
+}
+
+.card:dir(rtl) {
+  translate: calc(var(--reach) * -1) 0;
+}
+
+.card[data-open] {
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 300ms ease,
+    transform 300ms var(--ease-out),
+    visibility 0s;
+}
+
+/* Its point, up at the button. */
+.card::before {
+  content: '';
+  position: absolute;
+  inset-block-start: -0.5rem;
+  inset-inline-end: var(--reach);
+  inline-size: 1rem;
+  block-size: 1rem;
+  border-radius: 0.2rem;
+  background: var(--white);
+  translate: 50% 0;
+  rotate: 45deg;
+}
+
+.card:dir(rtl)::before {
+  translate: -50% 0;
+}
+
+/* A narrow window (a computer's, resized) has no room to reach back: the card hangs in the
+   middle, under the bar. */
+@media (max-width: 47.99em) {
+  .root {
+    position: static;
+  }
+
+  .card,
+  .card:dir(rtl) {
+    left: 50%;
+    right: auto;
+    inline-size: min(19.5rem, calc(100vw - 2rem));
+    translate: -50% 0;
+  }
+
+  .card::before {
+    display: none;
+  }
+}
+
+.title {
+  font-size: 1.3125rem;
+  font-weight: 900;
+  line-height: var(--leading-snug);
+  color: var(--night);
+}
+
+.text {
+  max-inline-size: 15rem;
+  margin: 0.375rem auto 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* The code on its own white, with the quiet zone a scanner needs around it. */
+.code {
+  display: grid;
+  place-items: center;
+  margin: 1rem auto 0;
+}
+
+.code img {
+  inline-size: 9.5rem;
+  block-size: 9.5rem;
+}
+
+.or {
+  margin-block: 1rem 0.625rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.note {
+  margin-block-start: 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--brand-text);
+}

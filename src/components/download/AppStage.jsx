@@ -1,36 +1,25 @@
 import { media } from '../../content/media.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
-import { Logo } from '../brand/Logo.jsx';
 import { Picture } from '../ui/Picture.jsx';
-import { Sticker } from '../ui/Sticker.jsx';
-import { QrCard } from './QrCard.jsx';
 import styles from './AppStage.module.css';
 
 /**
- * Kept from the previous design: the app icon blown up into a stage — its aqua and the
- * white wordmark — with the real home screen standing in front and the download QR code
- * pinned to the corner for visitors on a computer. A yellow «مجاناً» starburst is slapped on
- * its top corner as it scrolls into view: the one price the app has.
+ * The app's home screen, in its phone, standing at the end of the download section — set a
+ * little askew, as a phone is held out to someone — and reaching down past the teal into the
+ * footer's night (Download.module.css → .floor).
  */
 export function AppStage({ className }) {
   const { t } = useLocale();
 
   return (
     <div className={cx(styles.visual, className)}>
-      <div className={styles.stage}>
-        <Logo className={styles.logo} />
-        <Picture
-          image={media.stageScreen}
-          alt={t.download.stageAlt}
-          sizes="(min-width: 64em) 17rem, 56vw"
-          className={styles.phone}
-        />
-      </div>
-      <span className={styles.sticker}>
-        <Sticker shape="burst" main={t.download.sticker} style={{ '--tilt': '12deg' }} reveal />
-      </span>
-      <QrCard className={styles.qr} />
+      <Picture
+        image={media.stageScreen}
+        alt={t.download.stageAlt}
+        sizes="(min-width: 64em) 19rem, 44vw"
+        className={styles.phone}
+      />
     </div>
   );
 }

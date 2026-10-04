@@ -1,26 +1,25 @@
 import { useLocale } from '../../i18n/useLocale.js';
-import { Fridge, IcedCoffee } from '../ui/icons.jsx';
 import { CoffeePanel } from './Coffee.jsx';
 import { FoodsPanel } from './Foods.jsx';
 import styles from './Kitchen.module.css';
 
 // The app's two tabs under «المنتجات الطازجة», in its order.
 const TABS = [
-  { id: 'foods', Icon: Fridge, Panel: FoodsPanel },
-  { id: 'coffee', Icon: IcedCoffee, Panel: CoffeePanel },
+  { id: 'foods', Panel: FoodsPanel },
+  { id: 'coffee', Panel: CoffeePanel },
 ];
 
 /**
  * «كيو فودز» and «كيو كوفي» — the meals and the coffee Qeu makes itself — in one section, as
- * the app has them: two tabs under «المنتجات الطازجة». The switch at the top shows one at a
- * time, and the section takes on its surroundings: the fridge against the fresh aisle's white
- * wall, or the café corner's espresso-brown one. Each tab keeps its own drawing (Foods.jsx,
- * Coffee.jsx).
+ * the app has them: two tabs under «المنتجات الطازجة». The switch at the top is the two names,
+ * set large, the open one in full ink and underlined; the section takes that one's wall — the
+ * white of the fresh aisle, or the café's espresso brown. Each tab keeps its own layout
+ * (Foods.jsx, Coffee.jsx).
  *
- * The switch is a radio group, as the aisles' signs and the café's menu are, so it works with
- * a keyboard and a screen reader like any form, and without JavaScript: the stylesheet shows
- * the checked tab (:has()). Where :has() isn't known, the switch is left out and the fridge
- * stays.
+ * The switch is a radio group, as the aisles' directory and the café's menu are, so it works
+ * with a keyboard and a screen reader like any form, and without JavaScript: the stylesheet
+ * shows the checked tab (:has()). Where :has() isn't known, the switch is left out and Qeu
+ * Foods stays.
  */
 export function Kitchen() {
   const { t } = useLocale();
@@ -35,7 +34,7 @@ export function Kitchen() {
         <fieldset className={styles.switch}>
           <legend className="visually-hidden">{kitchen.legend}</legend>
           <div className={styles.tabs}>
-            {TABS.map(({ id, Icon }, index) => (
+            {TABS.map(({ id }, index) => (
               <label key={id} className={styles.tab}>
                 <input
                   className={styles.radio}
@@ -44,8 +43,7 @@ export function Kitchen() {
                   value={id}
                   defaultChecked={index === 0}
                 />
-                <Icon className={styles.icon} />
-                {kitchen.tabs[id]}
+                <span className={styles.tabName}>{kitchen.tabs[id]}</span>
               </label>
             ))}
           </div>

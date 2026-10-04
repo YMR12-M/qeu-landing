@@ -1,82 +1,65 @@
 /*
- * The navigation island: a capsule floating over the page, tinted by the section beneath
- * it, open at the top and folded into a "you are here" pill while reading. No bar, no rule:
- * the sections run straight up under it.
+ * The bar across the top: no box, no rule, no glass — it is painted the colour of the wall
+ * under it (Header.jsx → --wall), so the sections run straight up into it. Its words and its
+ * marks turn dark or light with that wall.
  */
 
 .header {
+  /* On a light wall — the teal, the white, the yellow — night ink; on a dark one, white. */
+  --ink: var(--night);
+  --accent: var(--night); /* the mark under the section, the reading progress */
+  --button-bg: var(--night);
+  --button-fg: var(--white);
+  --button-hover: var(--deep);
   position: fixed;
   inset-block-start: 0;
   inset-inline: 0;
   z-index: 60;
-  display: flex;
-  justify-content: center;
-  padding: 0.75rem max(clamp(0.75rem, 3vw, 2rem), var(--safe-inline)) 0;
-  pointer-events: none; /* only the island itself takes clicks */
-}
-
-.island {
-  --island-bg: rgb(252 253 253 / 0.84);
-  --island-fg: var(--text);
-  --island-brand: var(--deep);
-  --island-soft: var(--muted);
-  --island-line: rgb(4 40 47 / 0.1);
-  --island-blob: #e2f2f3; /* a teal tint: the marker reads on the pale glass */
-  --island-accent: var(--brand-text);
-  --island-shadow: 0 0.75rem 2rem -1.25rem rgb(4 40 47 / 0.4);
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  max-inline-size: 100%;
-  padding: 0.3125rem;
-  border: 1px solid var(--island-line);
-  border-radius: var(--pill);
-  background: var(--island-bg);
-  color: var(--island-fg);
-  box-shadow: var(--island-shadow);
-  backdrop-filter: blur(18px) saturate(1.5);
-  pointer-events: auto;
-  view-transition-name: qeu-island; /* carried across page loads (base.css) */
+  background-color: var(--wall, transparent);
+  color: var(--ink);
+  view-transition-name: qeu-bar; /* carried across page loads (base.css) */
   transition:
-    background-color 450ms ease,
-    border-color 450ms ease,
-    color 450ms ease,
-    box-shadow 450ms ease;
+    background-color var(--duration-base) ease,
+    color var(--duration-base) ease;
 }
 
-/* Over a dark section it turns to dark glass, so it reads as part of that section. */
-.header[data-tone='dark'] .island {
-  --island-bg: rgb(4 40 47 / 0.8);
-  --island-fg: var(--white);
-  --island-brand: var(--white);
-  --island-soft: rgb(159 227 234 / 0.82);
-  --island-line: rgb(159 227 234 / 0.18);
-  --island-blob: rgb(159 227 234 / 0.16);
-  --island-accent: var(--glow);
-  --island-shadow: 0 0.75rem 2rem -1rem rgb(0 0 0 / 0.55);
+.header[data-tone='dark'] {
+  --ink: var(--white);
+  --accent: var(--star);
+  --button-bg: var(--star);
+  --button-fg: var(--night);
+  --button-hover: #ffd36b;
   --focus-ring: var(--glow);
 }
 
-/* Reading progress, drawn along the island's lower edge as the page scrolls. */
+.bar {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1.5vw, 1.5rem);
+  block-size: var(--header-height);
+  max-inline-size: calc(90rem + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Reading progress, drawn along the bar's lower edge as the page scrolls: the part read, and
+   nothing where there is still page to come. */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    .island::after {
+    .header::after {
       content: '';
       position: absolute;
-      inset-inline: 1.75rem;
-      inset-block-end: -1px;
-      block-size: 2px;
-      border-radius: var(--pill);
-      background: var(--island-accent);
+      inset-inline: 0;
+      inset-block-end: 0;
+      block-size: 3px;
+      background: var(--accent);
       transform-origin: left;
-      animation-name: read;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
+      transition: background-color var(--duration-base) ease;
+      animation: read linear both;
       animation-timeline: scroll(root);
     }
 
-    .header:dir(rtl) .island::after {
+    .header:dir(rtl)::after {
       transform-origin: right;
     }
   }
@@ -86,36 +69,37 @@
   from {
     scale: 0 1;
   }
-  to {
-    scale: 1 1;
-  }
 }
 
 /* ── Brand ──────────────────────────────────────────────────────── */
 
+/* The wordmark alone, in the bar's ink. On a phone it is sized so the section's name beside
+   it keeps room for every name, with how far down the page it is (the longest, «حمّل التطبيق
+   7 من 7», at 360px). */
 .brand {
   display: flex;
-  flex: none; /* the app icon stays whole: where room is short, the pill's name gives way */
+  flex: none; /* the wordmark stays whole: where room is short, the name beside it gives way */
   align-items: center;
   min-block-size: 2.75rem;
-  padding-inline: 0.3125rem;
-  color: var(--island-brand);
-}
-
-.icon {
-  inline-size: 2.25rem;
-  block-size: auto;
-  border-radius: 28%;
-}
-
-.wordmarkBox {
-  display: none;
+  color: var(--ink);
+  transition: color var(--duration-base) ease;
 }
 
 .wordmark {
-  inline-size: 3.5rem;
+  inline-size: 2.875rem;
   block-size: auto;
-  margin-inline: 0.625rem 0.375rem;
+}
+
+@media (min-width: 48em) {
+  .wordmark {
+    inline-size: 3.375rem;
+  }
+}
+
+@media (min-width: 64em) {
+  .wordmark {
+    inline-size: 4.25rem;
+  }
 }
 
 /* ── The sections, open (computers) ─────────────────────────────── */
@@ -128,75 +112,85 @@
   position: relative;
 }
 
-/* "You are here": a liquid marker. The end moving towards the new link sets off first,
-   the other follows a beat later — it stretches across, then settles. */
-.blob {
+/* The mark under the section being read. The end moving towards the new link sets off first,
+   the other follows a beat later: it stretches across, then settles. */
+.mark {
   position: absolute;
-  inset-block: 0;
-  left: var(--blob-left, 0);
-  right: var(--blob-right, 100%);
+  inset-block-end: 0.5rem;
+  left: var(--mark-left, 0);
+  right: var(--mark-right, 100%);
+  block-size: 3px;
   border-radius: var(--pill);
-  background: var(--island-blob);
+  background: var(--accent);
   opacity: 0;
   transition:
-    left 420ms var(--ease-out),
-    right 420ms var(--ease-out),
-    opacity var(--duration-fast) ease,
-    background-color 450ms ease;
+    left 700ms var(--ease-out),
+    right 700ms var(--ease-out),
+    opacity var(--duration-base) ease,
+    background-color var(--duration-base) ease;
 }
 
-.track[data-moving='right'] .blob {
+.track[data-moving='right'] .mark {
   transition:
-    left 420ms var(--ease-out) 110ms,
-    right 420ms var(--ease-out),
-    opacity var(--duration-fast) ease,
-    background-color 450ms ease;
+    left 700ms var(--ease-out) 160ms,
+    right 700ms var(--ease-out),
+    opacity var(--duration-base) ease,
+    background-color var(--duration-base) ease;
 }
 
-.track[data-moving='left'] .blob {
+.track[data-moving='left'] .mark {
   transition:
-    left 420ms var(--ease-out),
-    right 420ms var(--ease-out) 110ms,
-    opacity var(--duration-fast) ease,
-    background-color 450ms ease;
+    left 700ms var(--ease-out),
+    right 700ms var(--ease-out) 160ms,
+    opacity var(--duration-base) ease,
+    background-color var(--duration-base) ease;
 }
 
-.track[data-blob] .blob {
+.track[data-mark] .mark {
   opacity: 1;
 }
 
 .links {
-  position: relative;
   display: flex;
+  gap: clamp(0.875rem, 1.9vw - 0.35rem, 2.25rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* Eight sections side by side: the links close up a little on the narrowest screens that show
-   them all (1024px), and open out as the screen widens. */
+/* Every link in one weight, the one being read marked from under it: bolding it would widen
+   it, and move its neighbours every time the reader crossed into a section. */
 .link {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  padding: 0.6875rem clamp(0.5rem, 1.1vw - 0.25rem, 1.0625rem);
-  border-radius: var(--pill);
+  min-block-size: var(--header-height);
   font-size: var(--text-nav);
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.4;
   white-space: nowrap;
-  color: var(--island-soft);
-  transition: color var(--duration-fast) ease;
+  color: var(--ink);
 }
 
-.link:hover,
-.link[aria-current] {
-  color: var(--island-fg);
+.linkText {
+  text-box: var(--label-box);
 }
 
-/* ── The pill: where you are, and the way into the receipt ──────── */
+.link:hover .linkText {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.45em;
+}
 
-/* The pill may narrow (its name then cut short); the store button beside it never does. */
+.link[aria-current]:hover .linkText {
+  text-decoration: none;
+}
+
+/* ── The section's name, and the way into the list (phones) ─────── */
+
+/* The name may narrow (then cut short); the store button beside it never does. */
 .menu {
+  flex: 1 1 auto;
   min-inline-size: 0;
 }
 
@@ -207,32 +201,30 @@
 .now {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.375rem;
+  inline-size: fit-content;
+  max-inline-size: 100%;
   min-inline-size: 0;
   min-block-size: 2.75rem;
-  padding-inline: 1rem 0.875rem;
-  border-radius: var(--pill);
-  background: var(--island-blob);
-  color: var(--island-fg);
+  margin-inline: auto;
+  padding-inline: 0.5rem;
+  color: var(--ink);
   font-size: 0.9375rem;
-  font-weight: 700;
+  font-weight: 800;
   white-space: nowrap;
   cursor: pointer;
   list-style: none;
-  transition:
-    background-color 450ms ease,
-    color 450ms ease;
 }
 
 .now::-webkit-details-marker {
   display: none;
 }
 
-/* The pill's name keeps one width for the whole page: every name it can show is stacked here,
-   unseen (Header.jsx), and the widest sets it — so the island never moves as the reader goes
-   from one section to the next (each move would be a layout shift). Where a phone hasn't room
-   even for that, the slot narrows and a long name is cut short, rather than the store button
-   being pushed off the screen. */
+/* The name keeps one width for the whole page: every name it can show is stacked here, unseen
+   (Header.jsx), and the widest sets it — so nothing in the bar moves as the reader goes from
+   one section to the next (each move would be a layout shift). Where a phone hasn't room even
+   for that, the slot narrows and a long name is cut short, rather than the store button being
+   pushed off the screen. */
 .nowSlot {
   display: grid;
   grid-template-columns: minmax(0, auto);
@@ -254,11 +246,22 @@
 
 /* Each new section name rolls up into place, like a departure board. */
 .nowLabel {
-  animation: roll-in 450ms var(--ease-out);
+  animation: roll-in var(--duration-slow) var(--ease-out);
+}
+
+/* Centred on the middle of their letters (tokens.css → --label-box). Cut short with an
+   ellipsis, the name clips whatever overflows its box, and trimmed to the letters' middle that
+   box is shorter than the letters: its clip reaches past it, above and below, as far as the
+   tallest mark and the deepest tail. */
+.nowName,
+.nowCount {
+  text-box: var(--label-box);
 }
 
 .nowName {
   min-inline-size: 0;
+  margin-block: -0.45em -0.4em;
+  padding-block: 0.45em 0.4em;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -270,34 +273,21 @@
   }
 }
 
-/* How far down the page: «٣ من ٧», quieter than the name. */
+/* How far down the page: «3 من 7», lighter than the name. */
 .nowCount {
   flex: none;
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--island-soft);
 }
 
 .nowCount:lang(ar) {
   font-family: var(--font-sans);
   font-size: 0.875rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
-.menu[open] .nowCount {
-  color: inherit;
-}
-
-/* Narrow phones: the pill closes up a little, so the count still fits beside the name… */
-@media (max-width: 23.4375em) {
-  .now {
-    gap: 0.375rem;
-    padding-inline: 0.75rem 0.625rem;
-  }
-}
-
-/* …and the narrowest keep the icon and the store button whole: the name is enough there. */
+/* The narrowest keep the wordmark and the store button whole: the name is enough there. */
 @media (max-width: 22.49em) {
   .nowCount {
     display: none;
@@ -308,16 +298,11 @@
   flex: none;
   inline-size: 1.125rem;
   block-size: 1.125rem;
-  color: var(--island-accent);
-}
-
-.menu[open] .now {
-  background: var(--island-accent);
-  color: var(--night);
+  transition: rotate var(--duration-base) var(--ease-out);
 }
 
 .menu[open] .nowIcon {
-  color: var(--night);
+  rotate: 180deg;
 }
 
 /* ── Language ───────────────────────────────────────────────────── */
@@ -327,17 +312,12 @@
   align-items: center;
   gap: 0.4rem;
   min-block-size: 2.75rem;
-  padding-inline: 0.75rem 0.875rem;
+  padding-inline: 0.25rem;
   font-family: var(--font-mono);
   font-size: var(--text-mono);
   font-weight: 500;
   white-space: nowrap;
-  color: var(--island-soft);
-  transition: color var(--duration-fast) ease;
-}
-
-.locale:hover {
-  color: var(--island-fg);
+  color: var(--ink);
 }
 
 .locale:lang(ar) {
@@ -346,216 +326,127 @@
   font-weight: 700;
 }
 
+.locale span {
+  text-box: var(--label-box);
+}
+
+/* Capitals, «EN»: centred on their own height. */
+.locale:lang(en) span {
+  text-box: trim-both cap alphabetic;
+}
+
+.locale:hover span {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+
 .globe {
   flex: none;
   inline-size: 1.125em;
   block-size: 1.125em;
 }
 
-/* ── Computers: open at the top, folding while reading down ─────── */
+/* ── Computers: always open ─────────────────────────────────────── */
 
+/* The bar keeps one size and one place all the way down: the wordmark, every section in the
+   middle, the language and the store button at the end. */
 @media (min-width: 64em) {
-  /* The island places itself: centred while open, and as it folds it glides — with the same
-     timing as the fold — to the start of the page's content (the right, in Arabic), in line
-     with the text of every section. It stands at that start in both states and the glide is
-     its translate alone: a translate moves nothing in the layout, so the island's glide is no
-     layout shift (only its contents, reflowing as it folds, still count — a tenth of what
-     moving the island itself did). The header is the container its centre is measured on. */
-  .header {
-    display: block;
-    padding: 0;
-    container-type: inline-size;
-  }
-
-  .island {
-    --flip: 1;
-    --start: max(var(--gutter), (100cqi - 90rem) / 2);
-    position: absolute;
-    inset-block-start: 0.75rem;
-    inset-inline-start: var(--start);
-    inline-size: max-content;
-    /* Open: from the start to the middle, less half its own width. */
-    translate: calc(var(--flip) * (50cqi - 50% - var(--start))) 0;
-    transition:
-      background-color 450ms ease,
-      border-color 450ms ease,
-      color 450ms ease,
-      box-shadow 450ms ease,
-      translate 520ms var(--ease-out);
-  }
-
-  .header:dir(rtl) .island {
-    --flip: -1;
-  }
-
-  .header[data-folded] .island {
-    translate: 0 0;
-  }
-
-  .wordmarkBox,
-  .directory,
-  .locale,
-  .menu {
-    display: block;
-    overflow: hidden;
-    transition:
-      max-inline-size 520ms var(--ease-out),
-      opacity 320ms ease,
-      visibility 0s linear;
+  .directory {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    min-inline-size: 0;
   }
 
   .locale {
     display: inline-flex;
   }
 
-  .wordmarkBox {
-    max-inline-size: 5rem;
-  }
-
-  /* Room for all eight sections at their widest (about 54rem, on a 1920px screen). */
-  .directory {
-    max-inline-size: 58rem;
-  }
-
-  .locale {
-    max-inline-size: 6rem;
-  }
-
+  /* The name and its list are the way into the sections on phones and tablets. */
   .menu {
-    max-inline-size: 0;
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  /* Folded: only the icon, the pill naming the section, and the store button remain. */
-  .header[data-folded] :is(.wordmarkBox, .directory, .locale) {
-    max-inline-size: 0;
-    opacity: 0;
-    visibility: hidden;
-    transition:
-      max-inline-size 520ms var(--ease-out),
-      opacity 200ms ease,
-      visibility 0s linear 520ms;
-  }
-
-  .header[data-folded] .menu {
-    max-inline-size: 20rem;
-    opacity: 1;
-    visibility: visible;
+    display: none;
   }
 }
 
-/* ── The receipt: the sections, printed out from under the island ── */
+/* ── The list of sections, dropped from under the bar (phones) ──── */
 
-.feed {
-  position: absolute;
-  inset-block-start: calc(100% + 0.625rem);
-  left: 50%;
-  inline-size: min(21rem, calc(100vw - 1.5rem));
-  translate: -50% 0;
-  clip-path: inset(0 -2rem -3rem);
-  filter: drop-shadow(0 1.25rem 1.5rem rgb(4 40 47 / 0.3));
+/* The night wall, whatever the bar's colour: the sections in large type, numbered, the one
+   being read marked in yellow. */
+.sheet {
+  --focus-ring: var(--glow);
+  position: fixed;
+  inset-inline: 0;
+  inset-block-start: var(--header-height);
+  max-block-size: calc(100dvh - var(--header-height));
+  overflow-y: auto;
+  padding: 0.5rem var(--gutter) 1.5rem;
+  background: var(--night);
+  color: var(--white);
+  box-shadow: 0 2rem 2.5rem -1.5rem rgb(0 0 0 / 0.55); /* a layer over the page, even on night */
+  overscroll-behavior: contain;
 }
 
-.receipt {
-  --tooth: 1rem; /* one tooth of the torn edge */
-  --rule: #b9cbce;
-  --focus-ring: var(--brand-text);
-  padding: 1rem 1.25rem calc(1rem + var(--tooth) / 2);
-  background: var(--white);
-  color: var(--text);
-  font-family: var(--font-mono);
-  font-size: var(--text-mono);
-  /* Torn bottom edge, as on the FAQ's receipt. */
-  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% /
-    var(--tooth) 100%;
-}
-
-.receiptTitle {
-  padding-block-end: 0.75rem;
-  border-block-end: 1.5px dashed var(--rule);
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-align: center;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.receiptTitle:lang(ar) {
-  font-family: var(--font-sans);
-  font-size: 0.9375rem;
-  font-weight: 700;
-  letter-spacing: normal;
-}
-
-.receiptList {
+.sheetList {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.receiptLink {
+.sheetLink {
   display: flex;
   align-items: baseline;
-  gap: 0.75rem;
-  padding-block: 0.875rem;
-  border-block-end: 1.5px dashed var(--rule);
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  font-weight: 700;
-  color: var(--text);
+  gap: 1rem;
+  padding-block: 0.8125rem;
+  font-size: clamp(1.5rem, 6.5vw, 2rem);
+  font-weight: 800;
+  line-height: var(--leading-snug);
+  color: var(--white);
 }
 
-.receiptLink[aria-current] {
-  color: var(--deep);
+.sheetNumber {
+  flex: none;
+  inline-size: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--glow);
 }
 
-.leader {
-  flex: 1 1 0;
-  min-inline-size: 0;
-  border-block-end: 2px dotted var(--rule);
+.sheetLink[aria-current] .sheetName {
+  color: var(--star);
 }
 
-/* "You are here", stamped on the line being read. */
+/* "You are here", beside the section being read. */
 .here {
   flex: none;
   align-self: center;
-  padding: 0.125rem 0.625rem;
-  border-radius: var(--pill);
-  background: var(--brand);
-  color: var(--on-brand);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.here:lang(ar) {
-  font-family: var(--font-sans);
+  margin-inline-start: auto;
+  font-size: 0.875rem;
   font-weight: 700;
+  color: var(--star);
 }
 
-.receiptLocale {
+.sheetLocale {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5rem;
   min-block-size: 2.75rem;
-  margin-block-start: 0.5rem;
-  font-family: var(--font-sans);
+  margin-block-start: 1rem;
   font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--muted);
+  font-weight: 700;
+  color: var(--glow);
 }
 
-/* Opening, the receipt prints: it feeds down out from under the island. */
+/* Opening, it drops from under the bar: uncovered from the top down. */
 @media (prefers-reduced-motion: no-preference) {
-  .menu[open] .receipt {
-    transition: translate 450ms var(--ease-out);
+  .menu[open] .sheet {
+    transition: clip-path 700ms var(--ease-out);
   }
 
   @starting-style {
-    .menu[open] .receipt {
-      translate: 0 -100%;
+    .menu[open] .sheet {
+      clip-path: inset(0 0 100% 0);
     }
   }
 }

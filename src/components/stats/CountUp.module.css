@@ -1,9 +1,9 @@
 /*
  * The final figure holds the figure's place — unseen, it lays the line out exactly as it will
  * be — and the count runs over it, out of the flow, so nothing beside it moves while it counts.
- * (Tajawal's Arabic digits differ in width: «٩٣» is wider than «١٠٠». Were the count in the
- * flow, the line would widen and narrow as it ran, the label's lines rewrap, and the section
- * under it jump.)
+ * (Digits differ in width in a proportional face: «93» can be wider than «100». Were the count
+ * in the flow, the line would widen and narrow as it ran, the label's lines rewrap, and the
+ * section under it jump.)
  */
 
 .countUp {

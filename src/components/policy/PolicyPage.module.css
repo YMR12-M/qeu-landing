@@ -1,61 +1,35 @@
 /*
- * The privacy policy: an official document on the dark desk of the cover — the company's
- * letterhead, the policy's own sections, the round stamp at the end — with an index card
- * beside it that ticks each section off as it is read.
+ * The privacy policy: its title on Qeu's teal, as the home page opens, then the document on the
+ * white of the page — the letterhead, the policy's own sections, the round stamp at the end —
+ * with its contents beside it, ticked in pen as they are read. No sheet and no card: what the
+ * policy lists is told apart by space and weight, and set on a pale wash where it stands apart.
  */
 
-.cover,
-.desk {
-  --overlap: clamp(3rem, 7vw, 7.5rem); /* how far the sheet reaches up onto the desk */
-}
-
-/* ── The cover: the desk the document lies on ────────────────────── */
+/* ── The cover ───────────────────────────────────────────────────── */
 
 .cover {
-  --focus-ring: var(--glow);
-  padding-block: calc(var(--header-height) + clamp(2.5rem, 5vw, 4.5rem))
-    calc(var(--overlap) + clamp(2.5rem, 4.5vw, 4rem));
-  background:
-    radial-gradient(60% 90% at 88% 0, rgb(159 227 234 / 0.1), rgb(159 227 234 / 0) 70%),
-    var(--night);
-  color: var(--white);
+  --focus-ring: var(--night);
+  padding-block: calc(var(--header-height) + clamp(2.5rem, 5vw, 4.5rem)) clamp(2.5rem, 5vw, 4.5rem);
+  background: var(--brand);
+  color: var(--night);
 }
 
-.cover:dir(ltr) {
-  background:
-    radial-gradient(60% 90% at 12% 0, rgb(159 227 234 / 0.1), rgb(159 227 234 / 0) 70%),
-    var(--night);
-}
-
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  font-size: var(--text-nav);
-  font-weight: 700;
-  color: var(--glow);
-}
-
-.eyebrow::before {
-  content: '';
-  flex: none;
-  inline-size: 2.5rem;
-  block-size: 1px;
-  background: currentColor;
+.runningHead {
+  font-size: var(--text-small);
+  font-weight: 800;
 }
 
 .title {
-  margin-block-start: 1.25rem;
-  font-size: clamp(2.75rem, 5.2vw, 6rem);
+  margin-block-start: clamp(1rem, 1.8vw, 1.75rem);
+  font-size: clamp(2.75rem, 6vw, 7rem);
   line-height: 1.05;
-  color: var(--white);
+  color: var(--night);
 }
 
 .subtitle {
   margin-block-start: 0.75rem;
   font-size: var(--text-h3);
-  font-weight: 700;
-  color: var(--glow);
+  font-weight: 800;
 }
 
 .brand {
@@ -66,10 +40,11 @@
   vertical-align: -0.24em;
 }
 
+/* The date and the law, as two lines of the document's own details. */
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.5rem clamp(1.5rem, 3vw, 3rem);
   margin-block-start: clamp(1.75rem, 2.5vw, 2.5rem);
 }
 
@@ -77,52 +52,45 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.25rem 0.625rem;
-  padding: 0.625rem 1.125rem;
-  border: 1px solid rgb(159 227 234 / 0.25);
-  border-radius: var(--pill);
-  background: rgb(159 227 234 / 0.06);
+  gap: 0.25rem 0.5rem;
 }
 
 .chip dt {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 500;
-  color: rgb(159 227 234 / 0.8);
 }
 
 .chip dd {
   margin: 0;
-  font-weight: 700;
-  color: var(--white);
+  font-weight: 800;
 }
 
-/* ── The desk: the index card and the sheet ──────────────────────── */
+/* ── The desk: the contents and the document ─────────────────────── */
 
 .desk {
-  display: flow-root; /* the sheet's lift stays its own: it rises onto the cover */
   /* Sideways only: the stamp, lifted and turned before it lands, must not widen the page
-     (phones would zoom out to fit it). Clip, not hidden, so the index card still sticks. */
+     (phones would zoom out to fit it). Clip, not hidden, so the contents still stick. */
   overflow-x: clip;
-  padding-block-end: var(--section-space);
-  background: var(--surface);
+  padding-block: clamp(2.5rem, 5vw, 5rem) var(--section-space);
+  background: var(--white);
 }
 
 .layout {
   display: grid;
   gap: clamp(2rem, 3vw, 3.5rem);
-  margin-block-start: calc(var(--overlap) * -1);
 }
 
-/* The index card takes a column only where the sheet keeps a full reading measure beside it;
-   narrower, the navigation island's receipt lists the same contents. */
+/* The contents take a column only where the document keeps a full reading measure beside them;
+   narrower, the bar's list at the top lists the same contents. */
 @media (min-width: 80em) {
   .layout {
-    grid-template-columns: 16.5rem minmax(0, 1fr);
+    grid-template-columns: 15rem minmax(0, 1fr);
+    column-gap: clamp(3rem, 5vw, 6rem);
     align-items: start;
   }
 }
 
-/* The index card: the contents, each ticked once read; the one being read stands out. */
+/* The contents: each ticked once read; the one being read in full ink. */
 .index {
   display: none;
 }
@@ -130,28 +98,20 @@
 @media (min-width: 80em) {
   .index {
     position: sticky;
-    inset-block-start: calc(var(--header-height) + 1rem);
+    inset-block-start: calc(var(--header-height) + 1.5rem);
     display: block;
-    padding: 1.25rem 1.25rem 1rem;
-    border-radius: 1rem;
-    background: var(--white);
-    box-shadow:
-      0 1.5rem 2.5rem -1.75rem rgb(4 40 47 / 0.45),
-      0 0.25rem 0.75rem -0.25rem rgb(4 40 47 / 0.12);
   }
 }
 
 .indexTitle {
-  padding-block-end: 0.75rem;
-  border-block-end: 1.5px dashed #b9cbce;
   font-size: 1.0625rem;
-  font-weight: 800;
-  color: var(--deep);
+  font-weight: 900;
+  color: var(--night);
 }
 
 .indexList {
   display: grid;
-  margin: 0.5rem 0 0;
+  margin: 0.75rem 0 0;
   padding: 0;
   list-style: none;
 }
@@ -161,102 +121,66 @@
   align-items: center;
   gap: 0.625rem;
   min-block-size: 2.25rem;
-  padding-inline: 0.5rem;
-  border-radius: 0.5rem;
   font-size: 0.9375rem;
   font-weight: 700;
   line-height: 1.3;
   color: var(--muted);
-  transition:
-    color var(--duration-fast) ease,
-    background-color var(--duration-fast) ease;
+  transition: color var(--duration-fast) ease;
 }
 
-.indexList a:hover {
-  color: var(--deep);
+.indexList a:hover,
+.indexList a[aria-current] {
+  color: var(--night);
 }
 
 .indexList a[aria-current] {
-  background: rgb(23 162 174 / 0.1);
-  color: var(--deep);
+  font-weight: 800;
 }
 
-/* A packing-list box, as on the bag's sticker below: ticked once its section is read. */
+/* Beside each section, the tick it gets once read — in pen, as in the footer. */
 .tick {
-  position: relative;
+  --pen: 2.5px;
   flex: none;
-  inline-size: 1rem;
-  block-size: 1rem;
-  border: 1.5px solid currentColor;
-  border-radius: 0.25rem;
-  transition:
-    background-color var(--duration-fast) ease,
-    border-color var(--duration-fast) ease;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  color: var(--brand-text);
 }
 
-.tick::after {
-  content: '';
-  position: absolute;
-  top: 10%;
-  left: 33%;
-  width: 30%;
-  height: 58%;
-  border: solid var(--white);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg) scale(0);
-  transition: transform var(--duration-base) var(--ease-out);
-}
-
-[data-seen] .tick {
-  border-color: var(--deep);
-  background: var(--deep);
-}
-
-[data-seen] .tick::after {
-  transform: rotate(45deg) scale(1);
+[data-seen] {
+  --drawn: 1;
 }
 
 .indexFoot {
-  margin-block-start: 0.75rem;
-  padding-block-start: 0.75rem;
-  border-block-start: 1.5px dashed #b9cbce;
+  margin-block-start: 1rem;
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--muted);
 }
 
-/* ── The sheet ───────────────────────────────────────────────────── */
+/* ── The document ────────────────────────────────────────────────── */
 
 .sheet {
   --focus-ring: var(--brand-text);
-  --rule: #b9cbce;
   position: relative;
   min-inline-size: 0;
-  padding: clamp(1.5rem, 4.5vw, 4.25rem) clamp(1.25rem, 5vw, 4.75rem) clamp(2rem, 5vw, 4.5rem);
-  border-radius: 1rem;
-  background: var(--white);
+  max-inline-size: 58rem;
   color: var(--text);
-  box-shadow:
-    0 2.5rem 4rem -2.5rem rgb(4 40 47 / 0.5),
-    0 0.5rem 1rem -0.5rem rgb(4 40 47 / 0.15);
 }
 
-/* Letterhead: the mark on one side, the company's details on the other, a double rule. */
+/* Letterhead: the mark on one side, the company's details on the other. */
 .letterhead {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1.25rem 2rem;
-  padding-block-end: 1.5rem;
-  border-block-end: 3px double var(--brand-text);
 }
 
 .mark {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: var(--deep);
+  color: var(--night);
 }
 
 .markIcon {
@@ -276,20 +200,20 @@
   font-size: 0.9375rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 1.5;
+  line-height: 1.45;
   color: var(--muted);
 }
 
 .senderLabel {
   font-size: 0.8125rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--brand-text);
 }
 
 .sender strong {
   font-size: 1.0625rem;
   font-weight: 800;
-  color: var(--deep);
+  color: var(--night);
 }
 
 .sender a {
@@ -303,24 +227,13 @@
   justify-self: start;
 }
 
-/* The document's own title, set between two rules. */
+/* The document's own title. */
 .docTitle {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-block: clamp(1.75rem, 3vw, 2.5rem) 0;
-  font-size: clamp(1.0625rem, 1.3vw, 1.375rem);
-  font-weight: 800;
-  color: var(--deep);
-  text-align: center;
-}
-
-.docTitle::before,
-.docTitle::after {
-  content: '';
-  flex: 1;
-  block-size: 1px;
-  background: var(--rule);
+  margin-block: clamp(2.25rem, 4vw, 3.5rem) 0;
+  font-size: clamp(1.375rem, 1.9vw, 2rem);
+  font-weight: 900;
+  line-height: var(--leading-snug);
+  color: var(--night);
 }
 
 .intro p,
@@ -329,37 +242,36 @@
   margin-block-start: 1rem;
   font-size: clamp(1rem, 1.05vw, 1.1875rem);
   font-weight: 500;
-  line-height: 1.95;
+  line-height: 1.7;
 }
 
 .intro p:first-child {
-  margin-block-start: clamp(1.25rem, 2vw, 1.75rem);
+  margin-block-start: clamp(1rem, 1.6vw, 1.5rem);
   font-size: clamp(1.0625rem, 1.2vw, 1.3125rem);
-  color: var(--deep);
+  color: var(--night);
 }
 
+/* When it was last updated: a line of the document's own, its label in the teal — no box. */
 .updated {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.25rem 1rem;
   margin-block-start: 1.75rem;
-  padding: 0.875rem 1.25rem;
-  border: 1.5px dashed var(--rule);
-  border-radius: 0.75rem;
-  font-weight: 500;
+  font-weight: 700;
+  color: var(--night);
 }
 
 .updatedLabel {
   font-size: 0.875rem;
   font-weight: 800;
-  color: var(--brand-text);
+  color: #10747c; /* 5.5:1 on the white */
 }
 
 /* ── The sections ────────────────────────────────────────────────── */
 
 .section {
-  padding-block-start: clamp(2.25rem, 3.5vw, 3.5rem);
+  padding-block-start: clamp(2.75rem, 4.5vw, 4.5rem);
   scroll-margin-block-start: calc(var(--header-height) + 1.25rem);
 }
 
@@ -367,11 +279,10 @@
   display: flex;
   align-items: baseline;
   gap: 0.875rem;
-  padding-block-end: 0.875rem;
-  border-block-end: 1.5px dashed var(--rule);
-  font-size: clamp(1.3125rem, 1.6vw, 1.75rem);
-  line-height: 1.4;
-  color: var(--deep);
+  font-size: clamp(1.4375rem, 1.9vw, 2.125rem);
+  font-weight: 900;
+  line-height: 1.25;
+  color: var(--night);
 }
 
 .sectionNumber {
@@ -394,37 +305,27 @@
   list-style: none;
   font-size: clamp(1rem, 1.05vw, 1.1875rem);
   font-weight: 500;
-  line-height: 1.8;
+  line-height: 1.65;
 }
 
 .ticks li,
 .dots li,
 .numbered li {
   position: relative;
-  padding-inline-start: 2.125rem;
+  padding-inline-start: 2rem;
 }
 
-/* Every use, ticked off like a list of errands. */
+/* Every use, ticked off like a list of errands. The tick is a glyph: drawn the same way in
+   both reading directions. */
 .ticks li::before {
   content: '';
   position: absolute;
-  inset-block-start: 0.45em;
-  inset-inline-start: 0;
-  inline-size: 1.125rem;
-  block-size: 1.125rem;
-  border-radius: 0.3rem;
-  background: var(--deep);
-}
-
-.ticks li::after {
-  content: '';
-  position: absolute;
-  inset-block-start: calc(0.45em + 0.2rem);
-  inset-inline-start: 0.4rem;
-  inline-size: 0.32rem;
-  block-size: 0.6rem;
-  border: solid var(--white);
-  border-width: 0 2px 2px 0;
+  inset-block-start: 0.3em;
+  inset-inline-start: 0.35rem;
+  inline-size: 0.45rem;
+  block-size: 0.85rem;
+  border: solid var(--brand-text);
+  border-width: 0 2.5px 2.5px 0;
   rotate: 45deg;
 }
 
@@ -448,39 +349,27 @@
 }
 
 .numbered li::before {
-  content: counter(basis, arabic-indic);
+  content: counter(basis);
   position: absolute;
-  inset-block-start: 0.2em;
-  inset-inline-start: 0;
-  display: grid;
-  place-items: center;
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  border: 1.5px solid var(--brand-text);
-  border-radius: 50%;
-  font-size: 0.8125rem;
-  font-weight: 800;
-  line-height: 1;
+  inset-block-start: 0;
+  inset-inline-start: 0.25rem;
+  font-size: 1.125em;
+  font-weight: 900;
+  line-height: inherit;
   color: var(--brand-text);
 }
 
-.numbered:dir(ltr) li::before {
-  content: counter(basis);
-}
-
-/* The data collected: a packing list, one labelled box per kind of data. */
+/* The data collected, and the rights: a name in full ink over what it covers, told apart by
+   the room between them. */
 .data,
 .rights {
   display: grid;
-  gap: 0.75rem;
-  margin: 1.25rem 0 0;
+  gap: 1.5rem 2.5rem;
+  margin: 1.5rem 0 0;
 }
 
 @media (min-width: 40em) {
-  .data {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
+  .data,
   .rights {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -492,28 +381,21 @@
   }
 }
 
-.term {
-  padding: 1rem 1.125rem 1.125rem;
-  border: 1px solid var(--line);
-  border-radius: 0.875rem;
-  background: var(--surface);
-}
-
 .term dt {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 1.0625rem;
   font-weight: 800;
-  color: var(--deep);
+  color: var(--night);
 }
 
 .data .term dt::before {
   content: '';
   flex: none;
-  inline-size: 0.625rem;
-  block-size: 0.625rem;
-  border-radius: 0.15rem;
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: 50%;
   background: var(--brand);
 }
 
@@ -521,14 +403,8 @@
   margin: 0.375rem 0 0;
   font-size: 1rem;
   font-weight: 500;
-  line-height: 1.75;
+  line-height: 1.6;
   color: var(--muted);
-}
-
-/* Each right on its own coupon, cut out along a dashed line. */
-.rights .term {
-  border: 1.5px dashed var(--rule);
-  background: var(--white);
 }
 
 .rights .term dt {
@@ -538,7 +414,7 @@
 /* Direct and indirect collection, side by side. */
 .groups {
   display: grid;
-  gap: 1.25rem 2.5rem;
+  gap: 1.5rem 3rem;
   margin-block-start: 1.25rem;
 }
 
@@ -548,16 +424,10 @@
   }
 }
 
-.group {
-  padding: 1.125rem 1.25rem 1.25rem;
-  border-radius: 0.875rem;
-  background: var(--surface);
-}
-
 .groupTitle {
   font-size: 1.0625rem;
   font-weight: 800;
-  color: var(--deep);
+  color: var(--night);
 }
 
 .group .dots {
@@ -565,29 +435,34 @@
   font-size: 1rem;
 }
 
-/* The one promise the disclosure section makes, set apart. */
+/* The one promise the disclosure section makes, set larger and marked with the yellow
+   highlighter the landing page marks its promises with — a stroke under each line, no box. */
 .callout {
-  max-inline-size: 46em;
-  margin-block-start: 1.25rem;
-  padding: 1rem 1.25rem;
-  border-inline-start: 4px solid var(--brand);
-  border-radius: 0.25rem 0.75rem 0.75rem 0.25rem;
-  background: rgb(23 162 174 / 0.08);
-  font-size: clamp(1.0625rem, 1.2vw, 1.25rem);
+  max-inline-size: 40em;
+  margin-block-start: 1.5rem;
+  font-size: clamp(1.1875rem, 1.45vw, 1.5rem);
   font-weight: 800;
-  line-height: 1.7;
-  color: var(--deep);
+  line-height: 1.6;
+  color: var(--night);
 }
 
-.callout:dir(rtl) {
-  border-radius: 0.75rem 0.25rem 0.25rem 0.75rem;
+.calloutText {
+  margin-inline: -0.12em;
+  padding-inline: 0.12em;
+  background: url('../../assets/marks/marker.svg') no-repeat right 0 bottom 0.05em / 100% 0.55em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.calloutText:dir(ltr) {
+  background-position: left 0 bottom 0.05em;
 }
 
 /* The only three who may be given the data. */
 .recipients {
   display: grid;
-  gap: 0.75rem;
-  margin: 1rem 0 0;
+  gap: 1.5rem;
+  margin: 1.25rem 0 0;
   padding: 0;
   list-style: none;
 }
@@ -595,6 +470,7 @@
 @media (min-width: 48em) {
   .recipients {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem;
   }
 }
 
@@ -602,13 +478,10 @@
   display: grid;
   align-content: start;
   gap: 0.75rem;
-  padding: 1.125rem;
-  border: 1px solid var(--line);
-  border-radius: 0.875rem;
   font-size: 1rem;
   font-weight: 700;
-  line-height: 1.6;
-  color: var(--deep);
+  line-height: 1.5;
+  color: var(--night);
 }
 
 .recipientIcon {
@@ -617,7 +490,7 @@
   inline-size: 2.75rem;
   block-size: 2.75rem;
   border-radius: 50%;
-  background: var(--deep);
+  background: var(--night);
   color: var(--glow);
 }
 
@@ -628,6 +501,7 @@
 
 /* How long the data is kept, drawn as a route: from the active account to its deletion. */
 .retention {
+  --rule: #b9cbce;
   display: grid;
   gap: 1rem;
   margin: 1.5rem 0 0.5rem;
@@ -640,8 +514,8 @@
   padding-inline-start: 2.25rem;
   font-size: 1rem;
   font-weight: 700;
-  line-height: 1.6;
-  color: var(--deep);
+  line-height: 1.5;
+  color: var(--night);
 }
 
 .retention li::before {
@@ -651,23 +525,22 @@
   inset-inline-start: 0.25rem;
   inline-size: 0.875rem;
   block-size: 0.875rem;
-  border: 3px solid var(--brand);
   border-radius: 50%;
-  background: var(--white);
+  background: var(--brand);
+  box-shadow: 0 0 0 3px var(--white);
 }
 
 .retention li:last-child::before {
-  border-color: var(--deep);
-  background: var(--deep);
+  background: var(--night);
 }
 
-/* The dashed road between the stops. */
+/* The dotted road between the stops. */
 .retention li:not(:last-child)::after {
   content: '';
   position: absolute;
   inset-block: calc(0.35em + 1rem) -0.75rem;
   inset-inline-start: calc(0.25rem + 0.4375rem - 1px);
-  border-inline-start: 2px dashed var(--rule);
+  border-inline-start: 2px dotted var(--rule);
 }
 
 @media (min-width: 48em) {
@@ -690,27 +563,21 @@
     inset-block: 0.4375rem auto;
     inset-inline: 1.25rem -1.25rem;
     border-inline-start: 0;
-    border-block-start: 2px dashed var(--rule);
+    border-block-start: 2px dotted var(--rule);
   }
 }
 
 /* Complaints: the two ways to reach support, then the authority above them. */
 .channels {
   display: grid;
-  gap: 0.75rem;
-  margin: 1rem 0 0;
+  gap: 1.25rem 2.5rem;
+  margin: 1.25rem 0 0;
 }
 
 @media (min-width: 40em) {
   .channels {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
-
-.channel {
-  padding: 1rem 1.125rem;
-  border-radius: 0.875rem;
-  background: var(--surface);
 }
 
 .channel dt {
@@ -721,9 +588,9 @@
 
 .channel dd {
   margin: 0.25rem 0 0;
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   font-weight: 800;
-  color: var(--deep);
+  color: var(--night);
 }
 
 .channel a {
@@ -736,30 +603,27 @@
   text-underline-offset: 0.25em;
 }
 
+/* Above them, the authority: an arrow up from the channels to it. */
 .escalation {
   position: relative;
   max-inline-size: 46em;
-  margin-block-start: 1rem;
-  padding: 1rem 1.25rem 1rem 1.25rem;
-  padding-inline-start: 3.25rem;
-  border: 1.5px dashed var(--rule);
-  border-radius: 0.875rem;
+  margin-block-start: 1.5rem;
+  padding-inline-start: 2rem;
   font-size: clamp(1rem, 1.05vw, 1.1875rem);
   font-weight: 700;
-  line-height: 1.8;
-  color: var(--deep);
+  line-height: 1.65;
+  color: var(--night);
 }
 
-/* An arrow up from the support channels to the authority. */
 .escalation::before {
   content: '';
   position: absolute;
-  inset-block-start: 1.35rem;
-  inset-inline-start: 1.35rem;
+  inset-block-start: 0.5em;
+  inset-inline-start: 0.25rem;
   inline-size: 0.75rem;
   block-size: 0.75rem;
   border: solid var(--brand-text);
-  border-width: 2px 2px 0 0;
+  border-width: 2.5px 2.5px 0 0;
   rotate: -45deg;
 }
 
@@ -768,7 +632,7 @@
 .stampSpot {
   display: flex;
   justify-content: flex-end;
-  margin-block-start: clamp(1rem, 2vw, 1.75rem);
+  margin-block-start: clamp(1.5rem, 2.5vw, 2.5rem);
   pointer-events: none;
 }
 
@@ -804,7 +668,7 @@
 
 .stampSpot[data-reveal='shown'] .stamp {
   transition:
-    opacity 0.18s ease,
-    scale 0.42s cubic-bezier(0.3, 1.4, 0.5, 1),
-    rotate 0.42s var(--ease-out);
+    opacity 0.3s ease,
+    scale 0.8s var(--ease-settle),
+    rotate 0.8s var(--ease-out);
 }

@@ -1,13 +1,13 @@
-/* Quick, and only a short way up: the content is there as the reader reaches it, not after. */
+/* Unhurried, and only a short way up: the content settles into place as the reader reaches it. */
 .reveal[data-reveal='pending'] {
   opacity: 0;
-  transform: translateY(1rem);
+  transform: translateY(1.5rem);
 }
 
 .reveal[data-reveal='shown'] {
   opacity: 1;
   transform: none;
   transition:
-    opacity 500ms var(--ease-out) var(--reveal-delay, 0ms),
-    transform 500ms var(--ease-out) var(--reveal-delay, 0ms);
+    opacity var(--duration-reveal) ease var(--reveal-delay, 0ms),
+    transform var(--duration-reveal) var(--ease-out) var(--reveal-delay, 0ms);
 }

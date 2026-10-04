@@ -2,10 +2,11 @@
  * The link-preview images (Open Graph, 1200×630): public/og-image.jpg for the Arabic pages,
  * public/og-image-en.jpg for the English one.
  *
- * They are drawn like the hero: the night shelf, three of the store screenshots standing on
- * it with their offer labels, the headline, the download button and the app's own price
- * label. Copy, logo, fonts and screenshots are the site's own, so after changing any of them
- * in the hero, run `npm run og` and commit the two images.
+ * They are drawn like the hero: Qeu's teal wall, the headline in night ink with its promise
+ * marked in yellow, the download button, the app's price circled in pen, and three of the store
+ * screenshots with their offer flags, standing half on the teal and half on the white floor.
+ * Copy, logo, fonts, the marker and the screenshots are the site's own, so after changing any
+ * of them in the hero, run `npm run og` and commit the two images.
  *
  * Renders with headless Google Chrome over the DevTools protocol (set CHROME to use another
  * Chrome or Chromium binary) and encodes with sharp, which vite-imagetools already installs.
@@ -17,7 +18,6 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import sharp from 'sharp';
 import { LOGO_PATHS, LOGO_VIEWBOX } from '../src/components/brand/logo-paths.js';
-import { barsFor } from '../src/components/ui/barcode-bars.js';
 import { dictionaries } from '../src/content/locales/index.js';
 import { LOCALES } from '../src/i18n/locales.js';
 
@@ -29,7 +29,7 @@ const OUTPUT = { ar: 'og-image.jpg', en: 'og-image-en.jpg' };
 // Three of the six store screenshots, the one nearest the headline first — the hero's labels.
 const PRODUCTS = ['offers', 'picks', 'assistant'];
 // The headline's size: the English line is longer, and has one line fewer.
-const TITLE_SIZE = { ar: 54, en: 50 };
+const TITLE_SIZE = { ar: 52, en: 52 };
 
 const CHROME =
   process.env.CHROME ??
@@ -50,7 +50,7 @@ const image = (name, type) => dataUri(path.join(root, 'src', 'assets', 'images',
 // files are inlined, so the page needs nothing from disk (fonts from file: URLs are blocked).
 const fontsDir = path.join(root, 'node_modules', '@fontsource', 'tajawal');
 let fontCss = '';
-for (const weight of [500, 700, 800]) {
+for (const weight of [500, 700, 800, 900]) {
   const css = await readFile(path.join(fontsDir, `${weight}.css`), 'utf8');
   const sources = [...css.matchAll(/src: url\(\.\/files\/([\w-]+\.woff2)\)[^;]*;/g)];
   let inlined = css;
@@ -61,11 +61,12 @@ for (const weight of [500, 700, 800]) {
   fontCss += inlined;
 }
 
-function barcode(seed, count) {
-  const { bars, width } = barsFor(seed, count);
-  const rects = bars.map(({ x, width: w }) => `<rect x="${x}" width="${w}" height="1"/>`).join('');
-  return `<svg class="barcode" viewBox="0 0 ${width} 1" preserveAspectRatio="none" fill="currentColor">${rects}</svg>`;
-}
+// The hero's highlighter stroke and the pen's loop, as the page draws them.
+const marker = await dataUri(
+  path.join(root, 'src', 'assets', 'marks', 'marker.svg'),
+  'image/svg+xml',
+);
+const LOOP = 'M54 13C94 1 162 5 185 29C205 50 181 84 114 89C50 94 3 76 6 46C9 19 51 6 99 11';
 
 const CSS = `
 * { box-sizing: border-box; margin: 0; }
@@ -74,67 +75,46 @@ body {
   position: relative;
   overflow: hidden;
   font-family: 'Tajawal', sans-serif;
-  color: #fff;
-  background:
-    radial-gradient(75% 70% at 50% 0, rgb(159 227 234 / 0.13), rgb(159 227 234 / 0) 70%),
-    radial-gradient(circle, rgb(159 227 234 / 0.09) 1.1px, rgb(159 227 234 / 0) 1.6px) 50% 0 / 24px 24px,
-    #04282f;
+  color: #04282f;
+  /* The teal wall, and the white floor the screens stand on. */
+  background: linear-gradient(#17a2ae 0 540px, #fff 540px);
 }
 
 /* The brand, in the corner the page reads from. */
-.brand { position: absolute; inset-block-start: 50px; inset-inline-start: 64px; display: flex; align-items: center; gap: 14px; }
-.icon { inline-size: 58px; block-size: 58px; border-radius: 28%; }
+.brand { position: absolute; inset-block-start: 46px; inset-inline-start: 64px; display: flex; align-items: center; gap: 14px; }
+.icon { inline-size: 56px; block-size: 56px; border-radius: 28%; }
 .wordmark { block-size: 38px; inline-size: auto; aspect-ratio: 65 / 34; }
 
-/* The headline and the button, standing at the head of the shelf. */
-.display { position: absolute; inset-inline-start: 64px; inset-block-end: 162px; inline-size: 600px; }
-.title { font-size: var(--title, 54px); font-weight: 800; line-height: 1.16; text-wrap: balance; }
-.accent { color: #9fe3ea; }
-.actions { display: flex; align-items: center; gap: 22px; margin-block-start: 32px; }
-.cta { padding: 13px 34px 15px; border-radius: 999px; background: #17a2ae; color: #052f38; font-size: 25px; font-weight: 700; line-height: 1.2; white-space: nowrap; }
-.stores { font-size: 20px; font-weight: 500; color: #9fe3ea; white-space: nowrap; }
+/* The headline and the button. */
+.display { position: absolute; inset-inline-start: 64px; inset-block-start: 150px; inline-size: 640px; }
+.title { font-size: var(--title, 58px); font-weight: 900; line-height: 1.15; text-wrap: balance; }
+.accent {
+  margin-inline: -0.12em; padding-inline: 0.12em;
+  background: url("${marker}") no-repeat right 0 bottom 0.02em / 100% 0.62em;
+}
+:dir(ltr) .accent { background-position: left 0 bottom 0.02em; }
+.actions { display: flex; align-items: center; gap: 24px; margin-block-start: 34px; }
+.cta { padding: 16px 34px 17px; border-radius: 14px; background: #04282f; color: #fff; font-size: 24px; font-weight: 800; line-height: 1.2; white-space: nowrap; }
+.stores { font-size: 20px; font-weight: 700; white-space: nowrap; }
 
-/* The shelf: top face lit from above, the edge catching the light, the price rail. */
-.edge {
-  position: absolute; inset-inline: 0; inset-block-start: 520px; block-size: 70px;
-  background:
-    linear-gradient(rgb(159 227 234 / 0.45), rgb(159 227 234 / 0.45)) 0 14px / 100% 1px no-repeat,
-    linear-gradient(#1c5864, #10424c) 0 0 / 100% 14px no-repeat,
-    linear-gradient(#0b4a57, #073842) 0 14px / 100% 56px no-repeat;
-  box-shadow: 0 24px 32px -16px rgb(0 0 0 / 0.65);
-}
+/* The app's price at the far end, circled in white pen. */
+.price { position: absolute; inset-block-start: 44px; inset-inline-end: 64px; display: grid; justify-items: center; gap: 2px; rotate: -6deg; }
+:dir(ltr) .price { rotate: 6deg; }
+.priceName { font-size: 19px; font-weight: 800; }
+.priceValue { position: relative; font-size: 58px; font-weight: 900; line-height: 1.1; }
+.loop { position: absolute; inset: -12px -26px -7px; inline-size: calc(100% + 52px); block-size: calc(100% + 19px); overflow: visible; fill: none; stroke: #fff; stroke-width: 4px; stroke-linecap: round; }
+:dir(ltr) .loop { scale: -1 1; }
 
-/* The products: whole store screenshots on the middle of the top face. */
-.aisle {
-  position: absolute; z-index: 1; inset-inline-end: 0; inset-block-end: ${HEIGHT - 527}px;
-  inline-size: 520px; display: flex; align-items: flex-end; gap: 28px; padding-inline-start: 28px;
-  overflow-x: clip; /* the last product runs off the picture, as down an aisle */
-}
-.aisle::before {
-  content: ''; position: absolute; inset-inline-start: 0; inset-block-end: 0;
-  inline-size: 3px; block-size: 262px; border-radius: 2px 2px 0 0;
-  background: linear-gradient(to top, rgb(159 227 234 / 0.55), rgb(159 227 234 / 0.06));
-}
-.facing { position: relative; flex: none; }
-.product { display: block; block-size: 372px; inline-size: auto; border-radius: 8% / 3.7%; box-shadow: 0 16px 24px -16px rgb(0 0 0 / 0.8); }
-.facing::after {
-  content: ''; position: absolute; inset-inline: 4%; inset-block-end: -5px; block-size: 10px;
-  background: radial-gradient(closest-side, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0));
-}
-
-/* Labels in the rail: a yellow offer flag, then the name; the app's own label says its price. */
-.label, .priceTag {
-  position: absolute; display: flex; align-items: stretch; block-size: 40px; overflow: hidden;
-  border-radius: 4px; background: #fff; color: #04282f; white-space: nowrap;
-  box-shadow: 0 2px 4px rgb(0 0 0 / 0.4);
-}
-.label { inset-block-start: calc(100% + 15px); inset-inline: 4px; }
-.flag { display: grid; place-items: center; padding-inline: 10px; background: #ffc43d; font-size: 17px; font-weight: 800; }
-.name { align-self: center; padding-inline: 10px; font-size: 15px; font-weight: 700; color: #0b4a57; }
-.priceTag { inset-block-start: 542px; inset-inline-start: 64px; align-items: center; gap: 14px; padding-inline: 14px; }
-.priceName { font-size: 15px; font-weight: 700; color: #3e6e78; }
-.price { font-size: 25px; font-weight: 800; line-height: 1; color: #0b4a57; }
-.barcode { inline-size: 46px; block-size: 22px; color: #04282f; }
+/* Three screens, set down by hand, half on the teal and half on the floor. */
+.stock { position: absolute; z-index: 1; inset-inline-end: 56px; inset-block-start: 250px; display: flex; gap: 26px; }
+.facing { display: grid; justify-items: start; gap: 12px; }
+.facing:nth-child(1) { rotate: -2deg; }
+.facing:nth-child(2) { rotate: 1.5deg; translate: 0 12px; }
+.facing:nth-child(3) { rotate: -1deg; }
+.product { display: block; block-size: 290px; inline-size: auto; border-radius: 8% / 3.7%; box-shadow: 0 24px 32px -20px rgb(4 40 47 / 0.55); }
+.label { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.flag { padding: 6px 8px 7px; border-radius: 5px; background: #ffc43d; font-size: 15px; font-weight: 900; line-height: 1; }
+.name { font-size: 15px; font-weight: 800; }
 `;
 
 async function page(locale) {
@@ -163,6 +143,10 @@ async function page(locale) {
     <img class="icon" src="${await image('app-icon.png', 'image/png')}" alt="">
     <svg class="wordmark" viewBox="${LOGO_VIEWBOX}" fill="currentColor">${LOGO_PATHS.map((d) => `<path d="${d}"/>`).join('')}</svg>
   </div>
+  <p class="price">
+    <span class="priceName">${escapeHtml(hero.shelf.app)}</span>
+    <span class="priceValue">${escapeHtml(hero.shelf.price)}<svg class="loop" viewBox="0 0 200 100" preserveAspectRatio="none"><path d="${LOOP}" vector-effect="non-scaling-stroke"/></svg></span>
+  </p>
   <div class="display">
     <h1 class="title">${title.join('<br>')}</h1>
     <div class="actions">
@@ -170,13 +154,7 @@ async function page(locale) {
       <span class="stores">${escapeHtml(meta.ogImage.stores)}</span>
     </div>
   </div>
-  <div class="edge"></div>
-  <div class="aisle">${products}</div>
-  <span class="priceTag">
-    <span class="priceName">${escapeHtml(hero.shelf.app)}</span>
-    <span class="price">${escapeHtml(hero.shelf.price)}</span>
-    ${barcode('QEU APP', 18)}
-  </span>
+  <div class="stock">${products}</div>
 </body>
 </html>`;
 }

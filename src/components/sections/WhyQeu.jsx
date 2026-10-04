@@ -4,29 +4,24 @@ import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
 import { Picture } from '../ui/Picture.jsx';
-import { Sticker } from '../ui/Sticker.jsx';
 import styles from './WhyQeu.module.css';
 
 // Matches the CSS: narrower (or shorter) than this, the section is a plain list (no pinning).
 const PINNED_QUERY = '(min-width: 48.0625em) and (min-height: 36em)';
 
-// Each benefit's promo sticker: its shape, and the angle it was slapped on at.
-const STICKERS = {
-  deals: { shape: 'burst', tilt: '-10deg' },
-  search: { shape: 'round', tilt: '8deg' },
-  prices: { shape: 'tag', tilt: '-7deg' },
-  picks: { shape: 'seal', tilt: '6deg' },
-};
+// A promise whose first word runs longer than this is set a size smaller («اخترناها لك»).
+const isLong = (sticker) => sticker.main.length > 5 || undefined;
 
 /**
- * v3 «ليه كيو؟»: on wide screens the section pins while the reader scrolls through a
- * 180vh track; scroll progress picks the open benefit and the matching app screen, and the
- * open benefit's rule fills as the reader moves through it. A click on a closed benefit
- * scrolls to it, for a reader who'd rather not scroll through the others. Each benefit comes with its
- * supermarket promo sticker — a «١+١» starburst, a red «أقل سعر» label… — slapped onto the
- * screen's frame as the benefit opens.
- * On phones every benefit is a card with its own screen and sticker, in a row the reader
- * swipes through. All text stays in the DOM (collapsed items are clipped, not removed).
+ * «ليش كيو؟» — four benefits, and the app's screen for each. On wide screens the section pins
+ * while the reader scrolls through a 180vh track: scroll progress picks the open benefit and
+ * its screen, and a line fills under the open benefit's title as the reader moves through it.
+ * A click on a closed benefit scrolls to it, for a reader who'd rather not scroll through the
+ * others. Behind the screen, the benefit's promise is set as a poster sets it — «1+1 مجاناً»,
+ * «أقل سعر» — huge, in the deal yellow, and it changes with the screen.
+ *
+ * On phones every benefit is a slide — its screen, its promise, its words — in a row the
+ * reader swipes through. All text stays in the DOM (collapsed items are clipped, not removed).
  */
 export function WhyQeu() {
   const { t } = useLocale();
@@ -52,7 +47,7 @@ export function WhyQeu() {
       const position = progress * count;
       const index = Math.min(count - 1, Math.floor(position));
       setActive(index);
-      // How far through the open benefit the reader is: its rule fills to match.
+      // How far through the open benefit the reader is: the line under its title fills to match.
       track.style.setProperty('--step-fill', Math.min(1, position - index).toFixed(3));
     };
     const schedule = () => {
@@ -93,94 +88,77 @@ export function WhyQeu() {
       <div ref={trackRef} className={styles.track} data-why-track>
         <div className={styles.pin} data-why-pin>
           <div className={cx('container', styles.inner)}>
-            <h2 id="why-title" className={styles.title}>
-              <WithBrand text={why.title} name={t.meta.siteName} className={styles.brand} />
-            </h2>
-            <p className={styles.lead}>{why.lead}</p>
+            <div className={styles.intro}>
+              <h2 id="why-title" className={styles.title}>
+                <WithBrand text={why.title} name={t.meta.siteName} className={styles.brand} />
+              </h2>
+              <p className={styles.lead}>{why.lead}</p>
+            </div>
 
-            <div className={styles.body}>
-              <ol className={styles.steps} role="list">
-                {why.items.map((item, index) => {
-                  const { image, kind, focus } = media.why[item.id];
-                  return (
-                    <li
-                      key={item.id}
-                      className={styles.step}
-                      data-why-step
-                      data-active={index === active || undefined}
-                      onClick={() => open(index)}
+            <ol className={styles.steps} role="list">
+              {why.items.map((item, index) => (
+                <li
+                  key={item.id}
+                  className={styles.step}
+                  data-why-step
+                  data-active={index === active || undefined}
+                  onClick={() => open(index)}
+                >
+                  {/* Phones: the benefit's own screen, over its promise. Pinned, the stage
+                      beside the list shows them instead, and this copy is never loaded. */}
+                  <div className={styles.shot}>
+                    <span
+                      className={styles.shotPoster}
+                      data-long={isLong(item.sticker)}
+                      aria-hidden="true"
                     >
-                      {/* Phones: the benefit's own screen, on its card. Pinned, the frame
-                          beside the list shows it instead, and this copy is never loaded. */}
-                      <div className={styles.shot}>
-                        <Picture
-                          image={image}
-                          alt={item.imageAlt}
-                          sizes={`${PINNED_QUERY} 1px, min(78vw, 19rem)`}
-                          className={styles.shotScreen}
-                          style={focus ? { '--focus': focus } : undefined}
-                          data-kind={kind}
-                        />
-                      </div>
-                      <span className={styles.cardSticker}>
-                        <Sticker
-                          shape={STICKERS[item.id].shape}
-                          main={item.sticker.main}
-                          sub={item.sticker.sub}
-                          style={{ '--tilt': STICKERS[item.id].tilt }}
-                          reveal
-                        />
-                      </span>
-                      <div className={styles.stepHead}>
-                        <span className={styles.number} aria-hidden="true">
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        <h3 className={styles.stepTitle}>{item.title}</h3>
-                      </div>
-                      <div className={styles.stepBody} data-why-body>
-                        <div>
-                          <p className={styles.stepText}>{item.text}</p>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ol>
-              {/* Phones: how far along the row of cards the reader has swiped. */}
-              <span className={styles.swipe} aria-hidden="true" />
-
-              <div className={styles.visual}>
-                <div className={styles.frameBox}>
-                  <div className={styles.frame}>
-                    {why.items.map((item, index) => {
-                      const { image, kind, focus } = media.why[item.id];
-                      return (
-                        <Picture
-                          key={item.id}
-                          image={image}
-                          alt={item.imageAlt}
-                          sizes="(min-width: 48.0625em) and (min-height: 36em) 45vh, 1px"
-                          className={styles.screen}
-                          style={focus ? { '--focus': focus } : undefined}
-                          data-kind={kind}
-                          data-active={index === active || undefined}
-                        />
-                      );
-                    })}
-                  </div>
-                  {/* The open benefit's sticker, slapped onto the frame's corner. */}
-                  {why.items.map((item, index) => (
-                    <span key={item.id} className={styles.frameSticker}>
-                      <Sticker
-                        shape={STICKERS[item.id].shape}
-                        main={item.sticker.main}
-                        sub={item.sticker.sub}
-                        style={{ '--tilt': STICKERS[item.id].tilt }}
-                        data-state={index === active ? 'slap' : 'off'}
-                      />
+                      <span>{item.sticker.main}</span> <span>{item.sticker.sub}</span>
                     </span>
-                  ))}
-                </div>
+                    <Picture
+                      image={media.why[item.id]}
+                      alt={item.imageAlt}
+                      sizes={`${PINNED_QUERY} 1px, 11rem`}
+                      className={styles.screen}
+                    />
+                  </div>
+                  <h3 className={styles.stepTitle}>
+                    <span className={styles.stepTitleText}>{item.title}</span>
+                  </h3>
+                  <div className={styles.stepBody} data-why-body>
+                    <div>
+                      <p className={styles.stepText}>{item.text}</p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            {/* Phones: how far along the row of slides the reader has swiped. */}
+            <span className={styles.swipe} aria-hidden="true" />
+
+            {/* Pinned: the open benefit's promise, set huge, and its screen standing on it. */}
+            <div className={styles.stage}>
+              {why.items.map((item, index) => (
+                <p
+                  key={item.id}
+                  className={styles.poster}
+                  data-long={isLong(item.sticker)}
+                  data-active={index === active || undefined}
+                  aria-hidden="true"
+                >
+                  <span>{item.sticker.main}</span> <span>{item.sticker.sub}</span>
+                </p>
+              ))}
+              <div className={styles.phone}>
+                {why.items.map((item, index) => (
+                  <Picture
+                    key={item.id}
+                    image={media.why[item.id]}
+                    alt={item.imageAlt}
+                    sizes="(min-width: 48.0625em) and (min-height: 36em) 30vh, 1px"
+                    className={styles.screen}
+                    data-active={index === active || undefined}
+                  />
+                ))}
               </div>
             </div>
           </div>

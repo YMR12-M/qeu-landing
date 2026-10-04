@@ -1,76 +1,65 @@
 import { useEffect, useRef, useState } from 'react';
-import { media } from '../../content/media.js';
 import { useActiveSection } from '../../hooks/useActiveSection.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { formatNumber, interpolate } from '../../lib/format.js';
 import { Logo } from '../brand/Logo.jsx';
-import { DownloadLink } from '../download/DownloadLink.jsx';
-import { Globe, Receipt } from '../ui/icons.jsx';
-import { Picture } from '../ui/Picture.jsx';
+import { DownloadCard } from '../download/DownloadCard.jsx';
+import { ChevronDown, Globe } from '../ui/icons.jsx';
 import styles from './Header.module.css';
 
 /**
- * 'dark' or 'light': the colour of the section under a point. It reads the section's own
- * background, not a card or picture inside it (the FAQ's white receipt sits on a dark
- * section), and walks further up only while that background is see-through.
+ * The wall under a point: its colour, and whether it is 'dark' or 'light'. Of everything at
+ * that point, top to bottom, it takes the first section — or part of one painted as a wall of
+ * its own (`data-wall`: the floors the hero's screens and the download's phone stand on) — whose
+ * background shows; the pictures and the words in front of it don't count.
  */
-function toneAt(x, y) {
-  const hit = document.elementFromPoint(x, y);
-  for (let node = hit?.closest('main > *, footer') ?? hit; node; node = node.parentElement) {
-    const [r, g, b, alpha = 1] = getComputedStyle(node)
-      .backgroundColor.match(/[\d.]+/g)
-      .map(Number);
+function wallAt(x, y) {
+  for (const node of document.elementsFromPoint(x, y)) {
+    if (!node.matches('[data-wall], main > *, footer')) continue;
+    const color = getComputedStyle(node).backgroundColor;
+    const [r, g, b, alpha = 1] = color.match(/[\d.]+/g).map(Number);
     if (alpha < 0.5) continue;
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b < 128 ? 'dark' : 'light';
+    return { color, tone: 0.2126 * r + 0.7152 * g + 0.0722 * b < 128 ? 'dark' : 'light' };
   }
-  return 'light';
+  return { color: 'rgb(255, 255, 255)', tone: 'light' };
 }
 
 /**
- * The navigation is an island, not a bar: the page runs up under it, and it takes the colour
- * of whatever section it floats over — dark glass on dark sections, light on light — so
- * nothing separates it from the page.
+ * The bar across the top of the page. It has no colour of its own: it takes the colour of the
+ * wall right under it — the hero's teal, the aisles' aqua, Q-ur's night — so nothing
+ * separates it from the page, and its words turn dark or light with the wall.
  *
- * At the top, and whenever the reader scrolls back up, it is open: the brand, the sections
- * (a liquid "you are here" marker stretches from one to the next) and the store button.
- * Reading down, it folds into a small pill that names the section being read, and how far
- * down the page it is («٣ من ٧»); that pill opens the sections as a receipt. On phones it is
- * always the pill.
+ * On a computer it is always open, at one size: the wordmark, the sections (a mark under the
+ * one being read slides from one to the next), the language, and the store button — which
+ * opens a card with the download QR code and both stores (DownloadCard). Its lower edge fills
+ * with how far down the page the reader is. On phones and tablets it names the section being
+ * read, and how far down the page it is («3 من 7»); that name opens the sections.
  *
- * `sections` are the page's own sections, for the pill and the receipt — the home page's by
- * default; the privacy policy passes its contents. The open island always links to the home
+ * `sections` are the page's own sections, for the name and the list — the home page's by
+ * default; the privacy policy passes its contents. The open bar always links to the home
  * page's sections, from any page.
  */
 export function Header({ sections }) {
   const { t, locale, config, alternate, alternatePath, page, sectionHref } = useLocale();
   const links = t.nav.items;
   const items = sections ?? links;
-  const islandRef = useRef(null);
+  const barRef = useRef(null);
   const trackRef = useRef(null);
   const menuRef = useRef(null);
-  const [tone, setTone] = useState('dark'); // every page opens on the dark hero
-  const [folded, setFolded] = useState(false);
+  // Every page opens on its hero: the home page's teal. Read again as soon as the page runs.
+  const [wall, setWall] = useState({ color: null, tone: 'light' });
   const [menuOpen, setMenuOpen] = useState(false);
   const active = useActiveSection(items.map((item) => item.id));
   const activeIndex = items.findIndex((item) => item.id === active);
 
-  // Once per scroll frame: the colour under the island sets its tone, and the scroll
-  // direction folds it (reading down) or opens it (going back up, or near the top).
+  // Once per scroll frame: the wall just under the bar gives it its colour.
   useEffect(() => {
-    let lastY = window.scrollY;
     let frame = 0;
     const update = () => {
       frame = 0;
-      const y = window.scrollY;
-      const island = islandRef.current.getBoundingClientRect();
-      setTone(toneAt(Math.max(2, island.left / 2), island.top + island.height / 2));
-      if (y < 120) {
-        setFolded(false);
-        lastY = y;
-      } else if (Math.abs(y - lastY) > 8) {
-        setFolded(y > lastY);
-        lastY = y;
-      }
+      const bar = barRef.current.getBoundingClientRect();
+      const next = wallAt(bar.left + bar.width / 2, bar.bottom + 1);
+      setWall((current) => (current.color === next.color ? current : next));
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -90,9 +79,9 @@ export function Header({ sections }) {
     };
   }, []);
 
-  // The liquid marker: its two ends travel to the active link one after the other — the
-  // leading end first, the trailing end catching up — so it stretches, then settles. It only
-  // shows on the page whose sections the island lists.
+  // The mark under the section being read: its two ends travel to the new link one after the
+  // other — the leading end first, the trailing end catching up — so it stretches, then
+  // settles. It only shows on the page whose sections the bar lists.
   useEffect(() => {
     const track = trackRef.current;
     const place = () => {
@@ -100,13 +89,13 @@ export function Header({ sections }) {
       const link = target || track.querySelector('a');
       const box = track.getBoundingClientRect();
       const rect = link.getBoundingClientRect();
-      const left = rect.left - box.left - track.clientLeft;
-      const right = box.left + track.clientLeft + track.clientWidth - rect.right;
-      const previous = parseFloat(track.style.getPropertyValue('--blob-left'));
+      const left = rect.left - box.left;
+      const right = box.right - rect.right;
+      const previous = parseFloat(track.style.getPropertyValue('--mark-left'));
       track.dataset.moving = left >= previous || Number.isNaN(previous) ? 'right' : 'left';
-      track.style.setProperty('--blob-left', `${left}px`);
-      track.style.setProperty('--blob-right', `${right}px`);
-      track.toggleAttribute('data-blob', Boolean(target));
+      track.style.setProperty('--mark-left', `${left}px`);
+      track.style.setProperty('--mark-right', `${right}px`);
+      track.toggleAttribute('data-mark', Boolean(target));
     };
     place();
     const observer = new ResizeObserver(place);
@@ -114,7 +103,7 @@ export function Header({ sections }) {
     return () => observer.disconnect();
   }, [active]);
 
-  // An open receipt closes on Escape (focus back on its pill) or on a tap anywhere else.
+  // The open list closes on Escape (focus back on its button) or on a tap anywhere else.
   useEffect(() => {
     if (!menuOpen) return;
     const menu = menuRef.current;
@@ -142,8 +131,8 @@ export function Header({ sections }) {
     n: formatNumber(activeIndex + 1, { locale }),
     total: formatNumber(items.length, { locale }),
   });
-  // Every name the pill can show, with the count at its widest: unseen, they give the pill
-  // one width for the whole page (Header.module.css → .nowSlot).
+  // Every name the button can show, with the count at its widest: unseen, they give it one
+  // width for the whole page (Header.module.css → .nowSlot).
   const lastProgress = interpolate(t.nav.progress, {
     n: formatNumber(items.length, { locale }),
     total: formatNumber(items.length, { locale }),
@@ -154,24 +143,20 @@ export function Header({ sections }) {
   const switchLabel = page === 'notFound' ? t.a11y.switchSite : t.a11y.switchLocale;
 
   return (
-    <header className={styles.header} data-tone={tone} data-folded={folded || undefined}>
-      <div ref={islandRef} className={styles.island}>
+    <header
+      className={styles.header}
+      data-tone={wall.tone}
+      style={wall.color ? { '--wall': wall.color } : undefined}
+    >
+      <div ref={barRef} className={styles.bar}>
+        {/* The brand is its name alone, the wordmark, on every screen. */}
         <a className={styles.brand} href={config.path} aria-label={t.a11y.home}>
-          <Picture
-            image={media.appIcon}
-            alt=""
-            sizes="2.25rem"
-            loading="eager"
-            className={styles.icon}
-          />
-          <span className={styles.wordmarkBox}>
-            <Logo className={styles.wordmark} />
-          </span>
+          <Logo className={styles.wordmark} />
         </a>
 
         <nav className={styles.directory} aria-label={t.a11y.primaryNav}>
           <div ref={trackRef} className={styles.track}>
-            <span className={styles.blob} aria-hidden="true" />
+            <span className={styles.mark} aria-hidden="true" />
             <ul className={styles.links} role="list">
               {links.map((item) => (
                 <li key={item.id}>
@@ -181,7 +166,7 @@ export function Header({ sections }) {
                     data-id={item.id}
                     aria-current={current(item.id)}
                   >
-                    {item.label}
+                    <span className={styles.linkText}>{item.label}</span>
                   </a>
                 </li>
               ))}
@@ -199,7 +184,7 @@ export function Header({ sections }) {
             <span className={styles.nowSlot}>
               {pillNames.map(([name, count]) => (
                 <span key={name} className={styles.nowRoom} aria-hidden="true">
-                  {name}
+                  <span className={styles.nowName}>{name}</span>
                   {count && <span className={styles.nowCount}> {count}</span>}
                 </span>
               ))}
@@ -210,50 +195,43 @@ export function Header({ sections }) {
                 {activeIndex >= 0 && <span className={styles.nowCount}> {progress}</span>}
               </span>
             </span>
-            <Receipt className={styles.nowIcon} />
+            <ChevronDown className={styles.nowIcon} />
           </summary>
-          <div className={styles.feed}>
-            {/* Named apart from the island's own list: two landmarks, two names. */}
-            <nav className={styles.receipt} aria-label={t.a11y.sectionsMenu}>
-              <p className={styles.receiptTitle} aria-hidden="true">
-                {t.a11y.sectionsMenu}
-              </p>
-              <ul className={styles.receiptList} role="list">
-                {items.map((item) => (
-                  <li key={item.id}>
-                    <a
-                      className={styles.receiptLink}
-                      href={sections ? `#${item.id}` : sectionHref(item.id)}
-                      aria-current={current(item.id)}
-                      onClick={closeMenu}
-                    >
-                      <span>{item.label}</span>
-                      <span className={styles.leader} aria-hidden="true" />
-                      {active === item.id && (
-                        <span className={styles.here} aria-hidden="true">
-                          {t.nav.here}
-                        </span>
-                      )}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <a
-                className={styles.receiptLocale}
-                href={alternatePath}
-                hrefLang={alternate.hreflang}
-                lang={alternate.lang}
-              >
-                <Globe className={styles.globe} />
-                {switchLabel}
-              </a>
-            </nav>
-          </div>
+          {/* Named apart from the bar's own list: two landmarks, two names. */}
+          <nav className={styles.sheet} aria-label={t.a11y.sectionsMenu}>
+            <ol className={styles.sheetList} role="list">
+              {items.map((item, index) => (
+                <li key={item.id}>
+                  <a
+                    className={styles.sheetLink}
+                    href={sections ? `#${item.id}` : sectionHref(item.id)}
+                    aria-current={current(item.id)}
+                    onClick={closeMenu}
+                  >
+                    <span className={styles.sheetNumber} aria-hidden="true">
+                      {formatNumber(index + 1, { locale })}
+                    </span>
+                    <span className={styles.sheetName}>{item.label}</span>
+                    {active === item.id && (
+                      <span className={styles.here} aria-hidden="true">
+                        {t.nav.here}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ol>
+            <a
+              className={styles.sheetLocale}
+              href={alternatePath}
+              hrefLang={alternate.hreflang}
+              lang={alternate.lang}
+            >
+              <Globe className={styles.globe} />
+              {switchLabel}
+            </a>
+          </nav>
         </details>
-
-        <DownloadLink placement="header" size="sm" className={styles.download}>
-          {t.nav.download}
-        </DownloadLink>
 
         <a
           className={styles.locale}
@@ -265,6 +243,10 @@ export function Header({ sections }) {
           <Globe className={styles.globe} />
           <span>{t.nav.switchLocale}</span>
         </a>
+
+        <DownloadCard placement="header" className={styles.download}>
+          {t.nav.download}
+        </DownloadCard>
       </div>
     </header>
   );

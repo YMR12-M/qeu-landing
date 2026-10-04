@@ -11,6 +11,14 @@
   transform: translateY(-200%);
 }
 
+/* Its words centred on their letters, not on their line box (tokens.css → --label-box). */
+@supports (text-box: trim-both ex alphabetic) {
+  .skipLink {
+    padding-block: 1.125rem;
+    text-box: var(--label-box);
+  }
+}
+
 .skipLink:focus-visible {
   transform: none;
   outline-color: var(--glow);

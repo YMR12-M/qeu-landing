@@ -55,8 +55,14 @@ h2,
 h3 {
   font-weight: 800;
   line-height: var(--leading-heading);
-  color: var(--deep);
+  color: var(--night);
   text-wrap: balance;
+}
+
+/* The display titles — the hero's and every section's — are set heavy, as a poster sets them. */
+h1,
+h2 {
+  font-weight: 900;
 }
 
 /* Arabic letters join, so tracking is only ever tightened on Latin text. */
@@ -103,9 +109,10 @@ button {
   outline-offset: 3px;
 }
 
+/* Selected text is marked as the page marks a deal: in the offer yellow. */
 ::selection {
-  background: var(--glow);
-  color: var(--text);
+  background: var(--star);
+  color: var(--night);
 }
 
 [id] {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { CATEGORY_COUNT, DEPARTMENTS } from '../../content/departments.js';
 import { media } from '../../content/media.js';
 import { useScrollReveal } from '../../hooks/useScrollReveal.js';
@@ -6,203 +6,173 @@ import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { formatNumber, interpolate } from '../../lib/format.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
-import { DownloadLink } from '../download/DownloadLink.jsx';
-import { ChevronBack } from '../ui/icons.jsx';
 import { Picture } from '../ui/Picture.jsx';
-import { Sticker } from '../ui/Sticker.jsx';
+import { Scribble } from '../ui/Scribble.jsx';
 import styles from './Aisles.module.css';
 
 // "More than" this many categories: their count, rounded down to the ten.
 const AT_LEAST = Math.floor(CATEGORY_COUNT / 10) * 10;
 
-// A category stands in a quarter of the shelf (a little over a third on a phone), a little
-// narrower than it.
-const PRODUCT_SIZES = '(min-width: 64em) 11rem, (min-width: 48em) 20vw, 32vw';
+// A category takes a quarter of the products' width on a computer and a tablet, and a little
+// over a third of the screen on a phone, where they are swiped.
+const PRODUCT_SIZES = '(min-width: 64em) 11rem, (min-width: 48em) 20vw, 34vw';
 
-/**
- * One department's shelf: its categories in a single row that slides sideways — swiped on a
- * phone; on a wider screen, moved along a shelf's width at a time by the arrows at its ends,
- * the one at an end it has reached dimmed. Without JavaScript the arrows are left out, and a
- * wide screen stacks the row into shelves again (public/no-js.css).
- */
-function Shelf({ department, copy, labels }) {
-  const shelfRef = useRef(null);
-  const [ends, setEnds] = useState({ start: true, end: false });
+// Behind the categories, the chosen department's name is set as wide as the products' column.
+// CSS can't fit type to a width by itself, so here is how many ems wide each name's longest
+// line is in Tajawal 900 (measured in the browser), and on how many lines it is set — a long
+// name a word to a line, its last word on the second. Measure again if a name changes.
+const POSTER = {
+  ar: {
+    groceries: { em: 4.084, lines: 1 }, // المقاضي
+    fresh: { em: 4.221, lines: 2 }, // المنتجات / الطازجة
+    drinks: { em: 5.228, lines: 2 }, // المشروبات / والمفرحات
+    home: { em: 3.478, lines: 2 }, // العناية / بالمنزل
+    care: { em: 3.119, lines: 1 }, // كيو كير
+    tech: { em: 3.507, lines: 1 }, // كيو تيك
+  },
+  en: {
+    groceries: { em: 4.283, lines: 1 },
+    fresh: { em: 2.475, lines: 1 },
+    drinks: { em: 3.73, lines: 2 }, // Drinks & / treats
+    home: { em: 4.889, lines: 1 },
+    care: { em: 2.958, lines: 1 },
+    tech: { em: 2.998, lines: 1 },
+  },
+};
 
-  useEffect(() => {
-    const shelf = shelfRef.current;
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      // Right to left, scrollLeft runs negative from the start: its size is what counts.
-      const scrolled = Math.abs(shelf.scrollLeft);
-      const room = shelf.scrollWidth - shelf.clientWidth;
-      setEnds({ start: scrolled < 2, end: scrolled > room - 2 });
-    };
-    const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
-    shelf.addEventListener('scroll', schedule, { passive: true });
-    // Read once it has a size, and again whenever it changes: a bay shown, a screen turned.
-    const resize = new ResizeObserver(schedule);
-    resize.observe(shelf);
-    return () => {
-      cancelAnimationFrame(frame);
-      shelf.removeEventListener('scroll', schedule);
-      resize.disconnect();
-    };
-  }, []);
-
-  // A shelf's width at a time — the room between the arrows — towards its end (1) or back
-  // towards its start (-1). The row snaps to a category's edge as it stops.
-  const slide = (towards) => {
-    const shelf = shelfRef.current;
-    const style = getComputedStyle(shelf);
-    const width =
-      shelf.clientWidth - parseFloat(style.paddingInlineStart) - parseFloat(style.paddingInlineEnd);
-    shelf.scrollBy({ left: towards * width * (style.direction === 'rtl' ? -1 : 1) });
-  };
-
-  return (
-    <div className={styles.shelf}>
-      <ul ref={shelfRef} className={styles.shelves} role="list" data-shelf>
-        {department.categories.map((category, index) => (
-          <li key={category} className={styles.item} style={{ '--j': index }}>
-            <Picture
-              image={media.departments[department.id][category]}
-              alt=""
-              sizes={PRODUCT_SIZES}
-              className={styles.product}
-            />
-            <span className={styles.label}>{copy.categories[category]}</span>
-          </li>
-        ))}
-      </ul>
-      {[
-        ['start', -1, labels.previous],
-        ['end', 1, labels.next],
-      ].map(([end, towards, label]) => (
-        <button
-          key={end}
-          type="button"
-          className={styles.arrow}
-          data-to={end}
-          aria-label={label}
-          aria-disabled={ends[end] || undefined}
-          onClick={() => slide(towards)}
-          data-needs-js
-        >
-          <ChevronBack className={styles.arrowIcon} />
-        </button>
-      ))}
-    </div>
-  );
+/** A department's name as the poster sets it: on one line, or its last word on a second. */
+function posterLines(name, lines) {
+  if (lines === 1) return [name];
+  const words = name.split(' ');
+  return [words.slice(0, -1).join(' '), words.at(-1)];
 }
 
 /**
- * «أقسام كيو» — the store's aisles. A sign hangs from the ceiling rail for each of the app's
- * departments, and the shelf under them is stocked with the chosen department's categories:
- * the app's own picture of each, standing on the shelf over its label, and the way to that
- * aisle in the app under it. Choosing another sign swings it and lights it up, and the shelf
- * is restocked — every category dropped into its place — for that aisle.
+ * «أقسام كيو» — the store's aisles, on the deal yellow, as a poster. At the start, the store
+ * directory set as a list of names: the app's six departments, each with its aisle number and
+ * the app's own icon, the chosen one circled in pen. Beside it, from the top of the heading to
+ * the foot of the directory, the chosen department's categories — the app's own picture of
+ * each, standing straight on the yellow over its name, two rows of four, all in view at once —
+ * and behind them the department's name, set huge in a deeper yellow, as wide as the column:
+ * choose another and the name changes with the products. Under them, the way to that aisle in
+ * the app.
  *
- * The signs are a radio group, so choosing works with a keyboard and a screen reader like any
- * form, and without JavaScript: the stylesheet shows the checked aisle's shelf (:has()), and a
- * shelf that appears restocks from the start. The one scripted part is the first reveal: while
- * the aisles wait below the fold, the signs are folded up against the ceiling; in view, they
- * flip down one after another as the shelf is stocked.
+ * The directory is a radio group, so choosing works with a keyboard and a screen reader like
+ * any form, and without JavaScript: the stylesheet shows the checked aisle's categories
+ * (:has()), and a department that appears is set out from the start. The one scripted part is
+ * the first reveal: while the aisles wait below the fold, the names are held back and the
+ * categories unset; in view, the names come in one after another as the products are set out.
  */
 export function Aisles() {
   const { t, locale } = useLocale();
   const { aisles } = t;
   const storeRef = useRef(null);
-  useScrollReveal(storeRef, '0px 0px -25% 0px');
+  useScrollReveal(storeRef, '0px 0px -20% 0px');
   const number = (value) => formatNumber(value, { locale });
 
   return (
     <section id="departments" className={styles.section} aria-labelledby="departments-title">
-      <div className={cx('container', styles.layout)}>
+      <div ref={storeRef} className={cx('container', styles.layout)}>
         <div className={styles.intro}>
-          <div className={styles.heading}>
-            <p className={styles.eyebrow}>{aisles.eyebrow}</p>
-            <h2 id="departments-title" className={styles.title}>
-              {aisles.title}{' '}
-              <span className={styles.accent}>
-                <WithBrand
-                  text={aisles.titleAccent}
-                  name={t.meta.siteName}
-                  className={styles.brand}
-                />
-              </span>
-            </h2>
-            <p className={styles.lead}>
-              {interpolate(aisles.lead, {
-                departments: number(DEPARTMENTS.length),
-                categories: number(AT_LEAST),
-              })}
-            </p>
-          </div>
-          <span className={styles.sticker}>
-            <Sticker
-              shape="burst"
-              main={`+${number(AT_LEAST)}`}
-              sub={aisles.sticker}
-              reveal
-              style={{ '--tilt': '-9deg' }}
-            />
-          </span>
+          <h2 id="departments-title" className={styles.title}>
+            {aisles.title}{' '}
+            <span className={styles.accent}>
+              <WithBrand
+                text={aisles.titleAccent}
+                name={t.meta.siteName}
+                className={styles.brand}
+              />
+            </span>
+          </h2>
+          <p className={styles.lead}>
+            {interpolate(aisles.lead, {
+              departments: number(DEPARTMENTS.length),
+              categories: number(AT_LEAST),
+            })}
+          </p>
         </div>
 
-        <div ref={storeRef} className={styles.store}>
-          {/* The signs, hanging from the ceiling rail: one per department, the chosen one lit. */}
-          <fieldset className={styles.signs}>
-            <legend className="visually-hidden">{aisles.legend}</legend>
-            <div className={styles.rail}>
-              {DEPARTMENTS.map((department, index) => {
-                const copy = aisles.departments[department.id];
-                return (
-                  <label key={department.id} className={styles.sign} style={{ '--i': index }}>
-                    <input
-                      className={styles.radio}
-                      type="radio"
-                      name="aisle"
-                      value={department.id}
-                      defaultChecked={index === 0}
-                    />
-                    <span className={styles.hanger}>
-                      <span className={styles.board}>
-                        <Picture
-                          image={media.departmentIcons[department.id]}
-                          alt=""
-                          sizes="2.5rem"
-                          className={styles.signIcon}
-                        />
-                        <span className={styles.signName}>{copy.name}</span>
-                      </span>
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
-          </fieldset>
-
-          {/* The shelf under them: one bay per department, the checked one shown. */}
-          <div className={styles.gondola}>
-            {DEPARTMENTS.map((department) => {
-              const copy = aisles.departments[department.id];
-              return (
-                <div key={department.id} className={styles.bay} data-aisle={department.id}>
-                  {/* The lit sign names the aisle: its name is here for screen readers. */}
-                  <h3 className="visually-hidden">{copy.name}</h3>
-                  <Shelf department={department} copy={copy} labels={aisles.shelf} />
-                </div>
-              );
-            })}
-            <span className={styles.kick} aria-hidden="true" />
+        {/* The store directory: a numbered line per department, the chosen one circled. */}
+        <fieldset className={styles.directory}>
+          <legend className="visually-hidden">{aisles.legend}</legend>
+          <p className={styles.directoryTitle} aria-hidden="true">
+            {aisles.directory}
+          </p>
+          <div className={styles.lines}>
+            {DEPARTMENTS.map((department, index) => (
+              <label key={department.id} className={styles.line} style={{ '--i': index }}>
+                <input
+                  className={styles.radio}
+                  type="radio"
+                  name="aisle"
+                  value={department.id}
+                  defaultChecked={index === 0}
+                />
+                <span className={styles.aisleNumber} aria-hidden="true">
+                  {number(index + 1)}
+                </span>
+                <Picture
+                  image={media.departmentIcons[department.id]}
+                  alt=""
+                  sizes="2.75rem"
+                  className={styles.icon}
+                />
+                <span className={styles.name}>
+                  {aisles.departments[department.id].name}
+                  <Scribble shape="circle" draw="parent" className={styles.circle} />
+                  <Scribble shape="arrow" draw="parent" className={styles.toAisle} />
+                </span>
+              </label>
+            ))}
           </div>
+        </fieldset>
 
-          {/* Under the shelf: the way to the chosen aisle in the app, as the app writes it (the
-              chevron is mirrored right to left: ‹). */}
+        {/* The chosen department's categories: one set per department, the checked one shown,
+            its name set huge behind them. */}
+        <div className={styles.products}>
+          {DEPARTMENTS.map((department) => {
+            const { em, lines } = POSTER[locale][department.id];
+            return (
+              <p
+                key={department.id}
+                className={styles.poster}
+                data-aisle={department.id}
+                style={{ '--em': em }}
+                aria-hidden="true"
+              >
+                {posterLines(aisles.departments[department.id].name, lines).map((line) => (
+                  <span key={line}>{line}</span>
+                ))}
+              </p>
+            );
+          })}
+          {DEPARTMENTS.map((department) => {
+            const copy = aisles.departments[department.id];
+            return (
+              <div key={department.id} className={styles.bay} data-aisle={department.id}>
+                {/* The circled line names the aisle: its name is here for screen readers. */}
+                <h3 className="visually-hidden">{copy.name}</h3>
+                <ul className={styles.items} role="list">
+                  {department.categories.map((category, index) => (
+                    <li key={category} className={styles.item} style={{ '--j': index }}>
+                      <Picture
+                        image={media.departments[department.id][category]}
+                        alt=""
+                        sizes={PRODUCT_SIZES}
+                        className={styles.product}
+                      />
+                      <span className={styles.label}>{copy.categories[category]}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* The way to the chosen aisle in the app, as the app writes it (the chevron is mirrored
+            right to left: ‹). */}
+        <div className={styles.foot}>
           <p className={styles.where}>
             {aisles.where}{' '}
             <bdi className={styles.path} lang="ar" dir="rtl">
@@ -221,15 +191,6 @@ export function Aisles() {
             </bdi>
           </p>
         </div>
-
-        <DownloadLink
-          placement="departments"
-          variant="link"
-          labels={t.hero.cta}
-          className={styles.cta}
-        >
-          {aisles.cta}
-        </DownloadLink>
       </div>
     </section>
   );

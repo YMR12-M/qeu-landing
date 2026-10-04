@@ -1,10 +1,15 @@
 /*
  * Loaded when JavaScript is off (index.html → <noscript>), and by the page itself if its script
- * fails to load (src/entry-client.jsx). Nothing then picks the open benefit in «ليش كيو؟» or
- * pauses the shelf, so every benefit is shown, unpinned, the shelf stands still (moving content
- * needs a way to pause it, WCAG 2.2.2), and the controls that need a script are hidden.
- * Everything else works without one.
+ * fails to load (src/entry-client.jsx). Nothing then picks the open benefit in «ليش كيو؟»,
+ * pauses the hero's screens or paints the bar at the top the colour of the wall under it, so
+ * every benefit is shown, unpinned and in full ink, the screens stand still (moving content
+ * needs a way to pause it, WCAG 2.2.2), the bar keeps Qeu's teal all the way down, and the
+ * controls that need a script are hidden. Everything else works without one.
  */
+
+#root > header {
+  background-color: #17a2ae !important;
+}
 
 [data-hero-drift] {
   animation: none !important;
@@ -21,7 +26,7 @@
 }
 
 [data-why-step] {
-  opacity: 1 !important;
+  color: #04282f !important;
   cursor: auto !important; /* a click can't open one without a script */
 }
 
@@ -32,14 +37,4 @@
 
 [data-needs-js] {
   display: none !important;
-}
-
-/* The aisles' shelf is moved along by its arrows on a wider screen: without them, it stacks
-   into shelves again. */
-@media (min-width: 48em) {
-  [data-shelf] {
-    flex-wrap: wrap !important;
-    overflow: visible !important;
-    padding-inline: 1rem !important;
-  }
 }

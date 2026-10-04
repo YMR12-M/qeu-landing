@@ -1,67 +1,51 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { media } from '../../content/media.js';
 import { MENU } from '../../content/menu.js';
+import { useScrollReveal } from '../../hooks/useScrollReveal.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
-import { formatDate, formatPrice, interpolate } from '../../lib/format.js';
-import { Logo } from '../brand/Logo.jsx';
+import { formatDate, interpolate } from '../../lib/format.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
-import { DownloadLink } from '../download/DownloadLink.jsx';
 import { Picture } from '../ui/Picture.jsx';
-import { Sticker } from '../ui/Sticker.jsx';
+import { Price } from '../ui/Price.jsx';
+import { Scribble } from '../ui/Scribble.jsx';
 import styles from './Foods.module.css';
 
-// The fridge's shelves, top to bottom, and the products on each (src/content/menu.js).
-const SHELVES = ['sandwiches', 'meals'].map((shelf) =>
-  MENU.foods.filter((product) => product.shelf === shelf),
-);
-
-// Each pack is drawn at most this wide: a sandwich takes about a third of the fridge, and the
-// fridge is 30em — as wide as 26rem on a computer, and nearly the screen on a phone.
-const PACK_SIZES = '(min-width: 56em) 8.5rem, 30vw';
-
-const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Each pack is drawn at most this wide: a quarter of the page on a computer, a third of it on a
+// tablet, and nearly half the screen on a phone.
+const PACK_SIZES = '(min-width: 64em) 19rem, (min-width: 48em) 30vw, 45vw';
 
 /**
  * «كيو فودز», the first of the kitchen's two tabs (Kitchen.jsx) — Qeu's own sandwiches and
- * ready meals, in the fridge they're sold from: a double-door display fridge under Qeu's lit
- * sign, the packs standing on its shelves over their yellow deal labels, and a «من تحضير كيو»
- * rosette on its corner. The fridge is closed while it waits below the fold; as it comes into
- * view its light flickers on, both glass doors swing open and the cold spills out.
+ * ready meal, set out on the white wall as a flyer sets out its offers: the headline in a column
+ * of its own at the start, «تطبخ» crossed out in red pen — no cooking today — and beside it the
+ * three offers filling the rest of the page, «من تحضير كيو» circled over them like a flyer's
+ * stamp: each pack large, a yellow price sticker slapped on its corner — the deal price in red,
+ * the one it replaces struck through — and its name and size under it.
  *
- * The pre-rendered page — like reduced motion, or a fridge already on screen — shows it open:
- * only the opening is scripted, and it only plays once.
+ * The packs are put out one after another as they come into view, each sticker slapped on after
+ * its pack; the pre-rendered page — like reduced motion, or packs already on screen — shows them
+ * in place.
  */
 export function FoodsPanel() {
   const { t, locale } = useLocale();
   const { foods, prices } = t;
-  const fridgeRef = useRef(null);
+  const productsRef = useRef(null);
+  useScrollReveal(productsRef, '0px 0px -15% 0px');
   const date = formatDate(MENU.capturedAt, { locale, dates: t.dates });
-
-  useEffect(() => {
-    const fridge = fridgeRef.current;
-    if (reducedMotion() || fridge.getBoundingClientRect().top < window.innerHeight) return;
-
-    fridge.dataset.door = 'closed';
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        fridge.dataset.door = 'open';
-        observer.disconnect();
-      },
-      // Once most of it is in view: the doors open where they are seen.
-      { rootMargin: '0px 0px -35% 0px' },
-    );
-    observer.observe(fridge);
-    return () => observer.disconnect();
-  }, []);
+  const [before, after] = foods.title.split(foods.struck);
 
   return (
     <div className={cx('container', styles.layout)}>
       {/* The kitchen's switch names the tab: the heading goes straight to the question. */}
       <div className={styles.intro}>
         <h3 className={styles.title}>
-          {foods.title}{' '}
+          {before}
+          <span className={styles.struck}>
+            {foods.struck}
+            <Scribble shape="strike" delay={500} className={styles.strike} />
+          </span>
+          {after}{' '}
           <span className={styles.accent}>
             <WithBrand text={foods.titleAccent} name={t.meta.siteName} className={styles.brand} />
           </span>
@@ -69,106 +53,54 @@ export function FoodsPanel() {
         <p className={styles.lead}>{foods.lead}</p>
       </div>
 
+      {/* «من تحضير كيو», written on the wall over the packs and circled, like a flyer's stamp. */}
+      <p className={styles.note} aria-hidden="true">
+        <span>{foods.seal.main}</span> <span className={styles.noteName}>{foods.seal.sub}</span>
+        <Scribble shape="circle" delay={900} className={styles.noteCircle} />
+      </p>
+
       <figure className={styles.stage} aria-label={foods.fridgeLabel}>
-        <div ref={fridgeRef} className={styles.fridge}>
-          {/* The lit sign: the wordmark and «فودز», as the app names the tab. */}
-          <div className={styles.sign} aria-hidden="true" dir="rtl">
-            <Logo className={styles.signLogo} />
-            <span className={styles.signWord} lang="ar">
-              {foods.sign}
-            </span>
-          </div>
+        <ul ref={productsRef} className={styles.products} role="list">
+          {MENU.foods.map((product, index) => {
+            const copy = foods.products[product.id];
+            return (
+              <li
+                key={product.id}
+                className={styles.product}
+                data-product={product.id}
+                style={{ '--i': index }}
+              >
+                <Picture
+                  image={media.foods[product.id]}
+                  alt={copy.imageAlt}
+                  sizes={PACK_SIZES}
+                  className={styles.pack}
+                />
+                <p className={styles.tag}>
+                  <span className={styles.name}>{copy.name}</span>
+                  <span className={styles.size}>{copy.size}</span>
+                </p>
+                {/* The flyer's sticker, slapped on the pack's corner: the offer and its price. */}
+                <p className={styles.sticker}>
+                  <span className={styles.flag}>{foods.offer}</span>
+                  <Price
+                    value={product.price}
+                    was={product.was}
+                    locale={locale}
+                    prices={prices}
+                    className={styles.price}
+                  />
+                </p>
+              </li>
+            );
+          })}
+        </ul>
 
-          <div className={styles.cabinet}>
-            <div className={styles.interior}>
-              {SHELVES.map((products, shelf) => (
-                <ul key={shelf} className={styles.shelf} role="list">
-                  {products.map((product, index) => {
-                    const copy = foods.products[product.id];
-                    return (
-                      <li
-                        key={product.id}
-                        className={styles.product}
-                        data-product={product.id}
-                        style={{ '--i': shelf * 2 + index }}
-                      >
-                        {/* The pack at the front, and its stock lined up behind it. */}
-                        <span className={styles.facing}>
-                          <Picture
-                            image={media.foods[product.id]}
-                            alt=""
-                            sizes={PACK_SIZES}
-                            className={styles.stock}
-                          />
-                          <Picture
-                            image={media.foods[product.id]}
-                            alt={copy.imageAlt}
-                            sizes={PACK_SIZES}
-                            className={styles.pack}
-                          />
-                        </span>
-                        {/* Its label on the shelf edge: a yellow deal flag, the name, the
-                              size and the price — the app's price, and the one it replaces. */}
-                        <p className={styles.tag}>
-                          <span className={styles.flag}>{foods.offer}</span>
-                          <span className={styles.tagText}>
-                            <span className={styles.tagName}>{copy.name}</span>
-                            <span className={styles.tagSize}>{copy.size}</span>
-                          </span>
-                          <span className={styles.tagPrices}>
-                            <span className={styles.price}>
-                              {formatPrice(product.price, { locale, template: prices.price })}
-                            </span>
-                            <s className={styles.was}>
-                              <span className="visually-hidden">{prices.was} </span>
-                              {formatPrice(product.was, { locale })}
-                            </s>
-                          </span>
-                        </p>
-                      </li>
-                    );
-                  })}
-                </ul>
-              ))}
-              {/* The fridge's light, off while its doors are shut. */}
-              <span className={styles.dim} aria-hidden="true" />
-            </div>
-
-            {/* The glass doors, hinged at the fridge's two sides, and the cold that spills
-                  out when they open. */}
-            <div className={styles.doors} aria-hidden="true">
-              <span className={styles.door} data-side="left">
-                <span className={styles.handle} />
-              </span>
-              <span className={styles.door} data-side="right">
-                <span className={styles.handle} />
-              </span>
-            </div>
-            <span className={styles.mist} aria-hidden="true">
-              <i />
-              <i />
-              <i />
-            </span>
-          </div>
-
-          <div className={styles.base} aria-hidden="true" />
-
-          {/* «من تحضير كيو», slapped on the sign's corner once the doors are open. */}
-          <span className={styles.seal}>
-            <Sticker
-              shape="seal"
-              main={foods.seal.main}
-              sub={foods.seal.sub}
-              data-state="slap"
-              style={{ '--tilt': '9deg' }}
-            />
-          </span>
-        </div>
         <figcaption className={styles.source}>{interpolate(prices.source, { date })}</figcaption>
       </figure>
 
       <div className={styles.more}>
-        {/* The tab's other shelves in the app, which the fridge doesn't show. */}
+        {/* The tab's other shelves in the app, which the page doesn't show. */}
         <p className={styles.also}>
           {foods.also.label}{' '}
           <span className={styles.alsoItems}>{foods.also.items.join(' · ')}</span>
@@ -190,9 +122,6 @@ export function FoodsPanel() {
             ))}
           </bdi>
         </p>
-        <DownloadLink placement="foods" variant="link" labels={t.hero.cta} className={styles.cta}>
-          {foods.cta}
-        </DownloadLink>
       </div>
     </div>
   );

@@ -102,11 +102,12 @@ const assets = await readdir(path.join(clientDir, 'assets'));
 const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
 const assetOrigin = productionHost ? `https://${productionHost}` : undefined;
 
-// Preload the two Tajawal files the first screen paints with (headline 800, body 500),
-// so the hero renders in the brand font without a visible swap.
+// Preload the three Tajawal files the first screen paints with (the headline 900, the button
+// and the flags 800, the bar's links and the note 700), so the hero renders in the brand font
+// without a visible swap.
 const FIRST_PAINT_FONTS = {
-  ar: ['tajawal-arabic-800-normal', 'tajawal-arabic-500-normal'],
-  en: ['tajawal-latin-800-normal', 'tajawal-latin-500-normal'],
+  ar: ['tajawal-arabic-900-normal', 'tajawal-arabic-800-normal', 'tajawal-arabic-700-normal'],
+  en: ['tajawal-latin-900-normal', 'tajawal-latin-800-normal', 'tajawal-latin-700-normal'],
 };
 const fontFile = (name) =>
   assets.find((file) => file.startsWith(`${name}-`) && file.endsWith('.woff2'));

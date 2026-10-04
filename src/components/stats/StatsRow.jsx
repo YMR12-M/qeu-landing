@@ -7,19 +7,21 @@ import styles from './StatsRow.module.css';
 
 /**
  * The four Google Play figures from v3, printed as the app's nutrition-facts label — the panel
- * on the side of every pack in the supermarket: its title and serving size, the heavy bars,
- * one figure per line, then the price, and where the figures come from in the small print.
- * Tall and narrow on a phone, as on a pack; one long strip on a computer, like the linear
- * label of a slim one. Every figure is read from src/content/site.js.
+ * on the side of every pack in the supermarket: its title and serving size, the heavy bars, one
+ * figure per line, then the price, and where the figures come from in the small print. In night
+ * ink on the teal wall, each figure as large as a headline: one long strip on a computer, like
+ * the linear label of a slim pack, and tall and narrow on a phone, as on a pack. Every figure is
+ * read from src/content/site.js.
  */
 export function StatsRow({ className }) {
   const { t, figures, locale } = useLocale();
   const { stats, dates } = t;
-  // A figure as the label prints it: its prefix («+») is part of it, and moves with its digits.
+  // A figure as the label prints it: its prefix («+») and suffix («%») are part of it, and move
+  // with its digits — «89%» is one figure, in both languages.
   const format =
-    (decimals, prefix = '') =>
+    (decimals, prefix = '', suffix = '') =>
     (value) =>
-      prefix + formatNumber(value, { locale, decimals });
+      prefix + formatNumber(value, { locale, decimals }) + suffix;
   const downloads = toCompact(site.downloads); // 100_000 → 100 + the thousands unit
 
   const facts = [
@@ -44,7 +46,7 @@ export function StatsRow({ className }) {
       id: 'fiveStar',
       name: stats.fiveStar.name,
       value: fiveStarShare,
-      unit: stats.fiveStar.unit,
+      suffix: stats.fiveStar.suffix,
       detail: interpolate(stats.fiveStar.detail, {
         count: formatNumber(site.ratings.distribution[5], { locale }),
       }),
@@ -61,7 +63,8 @@ export function StatsRow({ className }) {
     <figure className={cx(styles.label, className)} aria-labelledby="facts-title">
       <div className={styles.head}>
         <p id="facts-title" className={styles.title}>
-          {stats.title} <span className={styles.product}>{stats.product}</span>
+          <span className={styles.titleText}>{stats.title}</span>{' '}
+          <span className={styles.product}>{stats.product}</span>
         </p>
         <p className={styles.serving}>
           <span>{stats.serving.label}</span>
@@ -75,7 +78,10 @@ export function StatsRow({ className }) {
             <dt className={styles.name}>{fact.name}</dt>
             <dd className={styles.figure}>
               <span className={styles.number}>
-                <CountUp value={fact.value} format={format(fact.decimals ?? 0, fact.prefix)} />
+                <CountUp
+                  value={fact.value}
+                  format={format(fact.decimals ?? 0, fact.prefix, fact.suffix)}
+                />
               </span>
               {fact.unit && <span className={styles.unit}>{fact.unit}</span>}
               {fact.star && (

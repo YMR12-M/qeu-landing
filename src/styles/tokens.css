@@ -1,79 +1,109 @@
 /*
- * Design tokens — the Qeu Landing v3 design system.
+ * Design tokens — Qeu's page as a deals poster, not a stack of cards.
  *
- * Colours and type come straight from the v3 design file. v3 draws at 1920px and scales
- * everything with the viewport; here each size is a clamp() whose preferred value keeps
- * that exact proportion (k × 0.8333vw = k rem at 1920px) while the rem floor and ceiling
- * keep text readable on phones and resizable with browser zoom.
+ * Nothing on the page sits in a framed box: sections are told apart by their colour, things
+ * inside them by space, size and weight. The brand's teal is used at full strength as a wall,
+ * the deal yellow marks what is on offer, and the night teal carries the dark sections. Type
+ * does the rest: display titles are set large and heavy (Tajawal 900), and every size is a
+ * clamp() that holds its proportion on a computer and stays readable on a phone.
  */
 
 :root {
-  /* ── Colour · v3 ───────────────────────────────────────────────── */
-  --brand: #17a2ae;
-  --brand-text: #127d86; /* brand teal for text and focus rings: 4.5:1 on white and --surface (--brand is 2.9:1) */
-  --on-brand: #052f38; /* dark text on brand buttons — white fails contrast on #17A2AE */
-  --deep: #0b4a57; /* headings, footer */
+  /* ── Colour ────────────────────────────────────────────────────── */
+  --brand: #17a2ae; /* Qeu's teal: a wall (the hero, the download), never text on white */
+  --brand-text: #127d86; /* the teal for text and focus rings on white: 4.5:1 */
+  --on-brand: #04282f; /* text on a teal wall: night, 5:1 (white is 2.9:1 there) */
+  --deep: #0b4a57;
   --text: #12333a;
-  --muted: #3e6e78;
+  --muted: #3e6e78; /* 5.7:1 on white */
   --line: #dce5e6;
   --surface: #f4f7f7;
-  --header-bg: #fcfdfd;
-  --night: #04282f; /* hero */
-  --glow: #9fe3ea; /* hero accent line */
-  --star: #ffc43d;
+  --mist: #e3f2f3; /* the pale aqua of Qeu's store screenshots, as a wall */
+  --night: #04282f; /* the dark walls: Q-ur, the footer */
+  --glow: #9fe3ea; /* accent on night */
+  --star: #ffc43d; /* the deal yellow: offer flags, the marker, the price stickers */
+  --aqua: #92d6e0; /* the app's own «الأقسام» screen — its category circles: the aisles' wall */
+  --deal: #c62828; /* the app's deal red, for prices: 5.6:1 on white */
+  --espresso: #1c120c; /* the café's wall */
   --white: #ffffff;
 
   /* Kept from the previous design: the app-icon aqua and the screenshots' backdrop. */
   --icon-aqua: #74c7d0;
   --screen-backdrop: #b8dee4;
 
-  --focus-ring: var(--brand-text); /* sections on --night or --deep set --glow instead */
+  --focus-ring: var(--brand-text); /* dark walls set --glow instead */
 
   /* ── Type ──────────────────────────────────────────────────────── */
   --font-sans: 'Tajawal', system-ui, -apple-system, 'Segoe UI', 'Geeza Pro', Tahoma, sans-serif;
   --font-mono: 'IBM Plex Mono', 'Tajawal', ui-monospace, monospace;
 
-  --text-hero: clamp(2.125rem, 3.3333vw, 4rem);
-  --text-h2: clamp(1.875rem, 2.8125vw, 3.375rem);
-  --text-h3: clamp(1.3125rem, 1.875vw, 2.25rem);
-  --text-lead: clamp(1.0625rem, 1.4583vw, 1.75rem);
-  --text-cta: clamp(1rem, 1.25vw, 1.5rem);
+  /* Display: the hero's headline and every section's title — one size for all the titles, so
+     the page keeps one rhythm from wall to wall. */
+  --text-hero: clamp(2.25rem, 5.2vw, 6.25rem);
+  --text-h2: clamp(2.25rem, 4.1vw, 5rem);
+  --text-h3: clamp(1.3125rem, 1.75vw, 2.125rem);
+  --text-lead: clamp(1.0625rem, 1.3vw, 1.5rem);
+  --text-cta: clamp(1rem, 1.15vw, 1.3125rem);
   --text-body: clamp(1rem, 1.0417vw, 1.25rem);
-  --text-nav: clamp(0.9375rem, 0.9375vw, 1.125rem);
+  --text-small: clamp(0.875rem, 0.9vw, 1rem);
+  --text-nav: clamp(0.9375rem, 0.95vw, 1.0625rem);
   --text-mono: clamp(0.8125rem, 0.8333vw, 1rem);
-  --text-stat: clamp(2.25rem, 2.8125vw, 3.375rem);
+  --text-figure: clamp(2.75rem, 4.4vw, 5.25rem); /* a figure or a price, set as a headline */
 
-  --leading-hero: 1.125;
-  --leading-heading: 1.33;
-  --leading-body: 1.5;
+  /* Tajawal's line box is 1em tall and its letters are small in it, so it needs less leading
+     than most faces to read evenly: the tallest marks (a hamza over an alef) still clear the
+     line above at the heading's 1.2. */
+  --leading-hero: 1.15;
+  --leading-heading: 1.2;
+  --leading-snug: 1.3;
+  --leading-body: 1.4;
+
+  /* A label in a button, a tab or a pill is centred on the middle of its letters, not on its
+     line box: Tajawal sets its baseline 64% of the way down the line box (on a Mac or a phone;
+     lower still on Windows), so a label centred by its line box reads high. This trims the
+     label's box to the letters' x-height and their baseline — the same on every system,
+     whatever line box it gives the font — and the button centres that. A browser that can't
+     trim keeps the line box, as before. Used as `text-box: var(--label-box)`. */
+  --label-box: trim-both ex alphabetic;
 
   /* ── Layout ────────────────────────────────────────────────────── */
   /* A phone on its side: the notch and the screen's rounded corners (index.html lets the page
      run under them, viewport-fit=cover). The gutter never lets the content go under them. */
   --safe-inline: max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   --gutter: max(clamp(1.25rem, 5vw, 3rem), var(--safe-inline));
-  --header-height: clamp(4.5rem, 4.1667vw, 5rem); /* the floating nav island, with its margin */
-  --header-pad: clamp(1.25rem, 4.1667vw, 5rem);
-  --section-space: clamp(2.5rem, 3.75vw, 4.5rem);
+  --header-height: 4rem; /* the bar at the top: the page runs up under it */
+  --section-space: clamp(3.25rem, 5.75vw, 6.5rem);
 
   /* ── Shape & depth ─────────────────────────────────────────────── */
+  /* Controls are rounded like the app's own buttons; pictures carry their own shadow, never a
+     frame. */
   --pill: 1000px;
-  --radius-sm: 0.6875rem;
+  --radius-sm: 0.625rem;
+  --radius-control: 0.875rem;
   --radius-md: 1.25rem;
   --radius-lg: 1.75rem;
+  --shadow-lift: 0 1.75rem 2.5rem -1.5rem rgb(4 40 47 / 0.45);
   --shadow-float:
     0 2.25rem 4rem -1.75rem rgb(4 40 47 / 0.45), 0 0.75rem 1.5rem -0.75rem rgb(4 40 47 / 0.2);
 
   /* ── Motion ────────────────────────────────────────────────────── */
+  /* Unhurried: things settle into place rather than snap, and nothing bounces past its mark.
+     Hovers answer quickly; what opens, turns or arrives takes its time. */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration-fast: 200ms;
-  --duration-base: 450ms;
-  --drift-duration: 60s; /* hero shelf: one set of screenshots glides past, one full loop */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-settle: cubic-bezier(0.3, 1.15, 0.5, 1); /* a touch past its mark, then back: a landing */
+  --duration-fast: 250ms; /* hovers, presses */
+  --duration-base: 600ms; /* opening, closing, a state that turns */
+  --duration-slow: 900ms; /* something arriving on screen */
+  --duration-reveal: 1000ms; /* content fading up as it scrolls into view */
+  --duration-draw: 1200ms; /* a pen mark drawn in: a circle, an underline, a tick */
+  --drift-duration: 80s; /* hero: one set of screenshots glides past, one full loop */
 }
 
-/* v3 lays the page out with a 15rem gutter at 1920px — full width on tablets and phones. */
+/* Computers: a wider margin, and a taller bar. */
 @media (min-width: 64em) {
   :root {
-    --gutter: max(clamp(3rem, 12.5vw, 15rem), var(--safe-inline));
+    --gutter: max(clamp(3rem, 6.5vw, 7.5rem), var(--safe-inline));
+    --header-height: 4.75rem;
   }
 }

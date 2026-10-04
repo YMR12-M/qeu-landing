@@ -1,26 +1,19 @@
-const ARABIC_INDIC_DIGITS = '٠١٢٣٤٥٦٧٨٩';
-
 /**
- * Formats a number for the page's locale. Arabic uses Arabic-Indic digits with the Arabic
- * thousands (٬) and decimal (٫) separators, as the v3 design does; English uses 1,234.5.
+ * Formats a number for the page: digits 0–9 in both languages, with a comma between thousands
+ * and a point before decimals (1,252 · 4.7), as Qeu's app writes its prices and the stores
+ * their figures. Callers may pass their `locale`: only the words around a figure differ.
  */
-export function formatNumber(value, { locale = 'en', decimals = 0, grouping = true } = {}) {
-  const western = new Intl.NumberFormat('en-US', {
+export function formatNumber(value, { decimals = 0, grouping = true } = {}) {
+  return new Intl.NumberFormat('en-US', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
     useGrouping: grouping,
   }).format(value);
-
-  if (locale !== 'ar') return western;
-  return western
-    .replace(/\d/g, (digit) => ARABIC_INDIC_DIGITS[digit])
-    .replace(/,/g, '٬')
-    .replace(/\./g, '٫');
 }
 
 /**
- * A price in riyals, in the locale's digits and its `template` ("{n} ر.س" / "SAR {n}"):
- * 9.8 → "٩٫٨٠ ر.س", "SAR 9.80". Whole riyals are written without halalas: 16 → "١٦".
+ * A price in riyals, in the locale's `template` ("{n} ر.س" / "SAR {n}"): 9.8 → "9.80 ر.س",
+ * "SAR 9.80". Whole riyals are written without halalas: 16 → "16".
  */
 export function formatPrice(value, { locale, template = '{n}' }) {
   const n = formatNumber(value, { locale, decimals: Number.isInteger(value) ? 0 : 2 });
@@ -48,7 +41,7 @@ export function toCompact(count) {
   return { value, scale, decimals: Number.isInteger(value) ? 0 : 1 };
 }
 
-/** A count in the locale's short form (`numbers.thousand` / `numbers.million`): "١٠٠ ألف", "1.3K". */
+/** A count in the locale's short form (`numbers.thousand` / `numbers.million`): "100 ألف", "1.3K". */
 export function formatCompact(count, { locale, numbers }) {
   const { value, scale, decimals } = toCompact(count);
   const n = formatNumber(value, { locale, decimals });
@@ -62,7 +55,7 @@ export function formatPlural(count, forms, { locale }) {
 }
 
 /**
- * An ISO date (YYYY-MM-DD) with the locale's own month names: "٢٠ سبتمبر ٢٠٢٦".
+ * An ISO date (YYYY-MM-DD) with the locale's own month names: "20 سبتمبر 2026".
  * Deliberately not Intl.DateTimeFormat: pre-rendered and hydrated text must match exactly,
  * and its locale data (digits, month names) varies between engines and ICU versions.
  */

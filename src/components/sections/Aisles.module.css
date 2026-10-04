@@ -1,148 +1,127 @@
 /*
- * «أقسام كيو» — the store's aisles: signs hanging from a ceiling rail, one per department, over
- * a gondola shelf with its pegboard back, stocked with the chosen department's categories.
+ * «أقسام كيو» — the aisles as a poster, on the aqua of the app's own «الأقسام» screen (the colour
+ * of the circles its categories sit in): the store directory as a list of names at the start,
+ * the chosen one circled in red pen with an arrow to its aisle, and beside it, filling the
+ * column, the chosen department's categories — pictures standing on their own shadow, no shelf,
+ * no card — over the department's name set huge in a deeper aqua.
  */
 
 .section {
-  /* The text teal a shade deeper on this wall: #eef5f5 is darker than the white and --surface
-     --brand-text is set for, and it would read 4.4:1 here; this keeps 4.6:1 (and white type on
-     the lit sign 5.1:1). */
-  --brand-text: #117a83;
-  --focus-ring: var(--brand-text);
+  --focus-ring: var(--night);
+  --pen-red: #c8281e;
+  --poster-ink: #7bc9d5; /* the wall's aqua, a shade deeper: the name behind the products */
+  --title-teal: #0b5f6b; /* the app's teal for its departments' names, deepened: 4.5:1 */
   position: relative;
-  overflow-x: clip; /* a sign swung or a sticker slapped on never widens the page */
+  overflow-x: clip; /* a pen loop reaching past a name never widens the page */
   padding-block: var(--section-space);
-  background: #eef5f5;
+  background: var(--aqua);
+  color: var(--night);
 }
 
-/* One column that never grows to fit its content: the row of signs scrolls on a phone. */
+/* Phones and tablets: the heading, the directory, the products, the way in. Computers: the
+   heading and the directory at the start, the products beside them from the top of the one to
+   the foot of the other, the way in under all. */
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(2rem, 3.5vw, 3rem);
+  grid-template-areas: 'intro' 'directory' 'products' 'foot';
+  row-gap: clamp(2rem, 3.5vw, 3rem);
 }
 
-/* ── The heading, and the starburst beside it ───────────────────── */
+@media (min-width: 64em) {
+  .layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'intro products'
+      'directory products'
+      'foot foot';
+    column-gap: clamp(2.5rem, 6vw, 7rem);
+  }
+}
 
 .intro {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 2rem;
+  grid-area: intro;
 }
 
-.heading {
-  max-inline-size: 44rem;
+.directory {
+  grid-area: directory;
 }
 
-/* As the other sections': a short rule, then the words. */
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  font-size: var(--text-nav);
-  font-weight: 700;
-  color: var(--brand-text);
+.products {
+  grid-area: products;
 }
 
-.eyebrow::before {
-  content: '';
-  flex: none;
-  inline-size: 2.5rem;
-  block-size: 1px;
-  background: currentColor;
+.foot {
+  grid-area: foot;
 }
+
+/* ── The heading ────────────────────────────────────────────────── */
 
 .title {
-  margin-block-start: 1rem;
-  font-size: clamp(2.25rem, 3.6vw, 4.25rem);
-  line-height: 1.15;
+  font-size: var(--text-h2);
+  color: var(--night);
 }
 
+/* The answer, on its own line in the app's teal, as the app names its departments. */
 .accent {
   display: block;
-  color: var(--brand-text);
+  color: var(--title-teal);
 }
 
 .brand {
   display: inline-block;
-  block-size: 0.98em;
+  block-size: 1em;
   inline-size: auto;
   margin-inline: 0.06em;
   vertical-align: -0.2em;
 }
 
 .lead {
-  max-inline-size: 32em;
-  margin-block-start: 1.25rem;
+  max-inline-size: 24em;
+  margin-block-start: clamp(0.75rem, 1.2vw, 1.25rem);
   font-size: var(--text-lead);
   font-weight: 500;
-  color: var(--muted);
 }
 
-.sticker {
-  --size: clamp(6.25rem, 9vw, 8.5rem);
-  flex: none;
-  margin-inline-end: clamp(0rem, 4vw, 4rem);
-}
+/* ── The directory ──────────────────────────────────────────────── */
 
-/* Phones: the starburst stands off the heading's corner. */
-@media (max-width: 47.99em) {
-  .sticker {
-    --size: 5.5rem;
-    position: absolute;
-    inset-block-start: -1rem;
-    inset-inline-end: -0.25rem;
-    margin: 0;
-  }
-
-  .heading {
-    padding-inline-end: 4.5rem; /* the title clears the starburst */
-  }
-}
-
-/* ── The signs ──────────────────────────────────────────────────── */
-
-.store {
-  --wire: 1.75rem; /* from the rail down to a sign */
-}
-
-.signs {
+.directory {
   min-inline-size: 0;
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-/* The ceiling rail, drawn with the row so it runs on as the row scrolls on a phone. */
-.rail {
+.directoryTitle {
+  margin-block-end: 0.25rem;
+  font-size: var(--text-small);
+  font-weight: 800;
+}
+
+.lines {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: clamp(0.5rem, 1.1vw, 1rem);
-  padding-block: 0.4rem 1.5rem;
-  background: linear-gradient(#e6eef0, #bfced2) 0 0 / 100% 0.45rem repeat-x local;
 }
 
-.sign {
+/* One line: the aisle's number, the department's icon and its name. The whole line is the
+   radio's; the lines not chosen are set back. */
+.line {
   position: relative;
-  display: block;
-  padding-block-start: var(--wire);
+  display: grid;
+  grid-template-columns: 1.75rem 2.75rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.875rem;
+  min-block-size: 3.25rem;
+  opacity: 0.6; /* night over the aqua: 3.4:1, for names this large */
   cursor: pointer;
-  perspective: 40rem;
+  transition: opacity var(--duration-base) ease;
 }
 
-/* Its two wires. */
-.sign::before {
-  content: '';
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline: 24%;
-  block-size: var(--wire);
-  border-inline: 1.5px solid #9db2b6;
+.line:hover {
+  opacity: 0.85;
 }
 
-/* The radio is the whole sign: unseen, over it. */
+/* The radio is the whole line: unseen, over it. */
 .radio {
   position: absolute;
   inset: 0;
@@ -153,140 +132,198 @@
   appearance: none;
 }
 
-.hanger {
-  display: block;
-  transform-origin: 50% 0;
+.aisleNumber {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
-.board {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  gap: 0.3rem;
-  padding: 0.75rem 0.5rem;
-  border-radius: 0.875rem;
-  background: var(--white);
-  box-shadow:
-    inset 0 0 0 1px #d2e0e3,
-    0 0.75rem 1.25rem -1rem rgb(4 40 47 / 0.45);
-  text-align: center;
-  transform-origin: 50% calc(var(--wire) * -1); /* it swings from where the wires hold it */
-  transition:
-    rotate 450ms var(--ease-out),
-    background-color 300ms ease,
-    box-shadow 300ms ease;
-}
-
-.signIcon {
-  inline-size: 2.5rem;
-  block-size: 2.5rem;
-  margin-block: 0.1rem;
+.icon {
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
   object-fit: contain;
-  filter: drop-shadow(0 0.2rem 0.2rem rgb(4 40 47 / 0.18));
 }
 
-/* Two lines kept for every name, so the signs line up. */
-.signName {
-  display: grid;
-  place-items: center;
-  min-block-size: 2.5em;
-  font-size: clamp(0.875rem, 1vw, 1.0625rem);
+/* Centred on the middle of its letters, level with the number and the icon (tokens.css →
+   --label-box). */
+.name {
+  position: relative;
+  justify-self: start;
+  font-size: clamp(1.25rem, 1.7vw, 1.75rem);
   font-weight: 800;
-  line-height: 1.25;
-  color: var(--deep);
+  line-height: var(--leading-snug);
+  text-box: var(--label-box);
 }
 
-/* A touch sets a sign swinging a little on its wires. */
-@media (hover: hover) {
-  .sign:hover .board {
-    rotate: -2deg;
-  }
-}
-
-/* The chosen aisle: its sign lit up, and the light it throws down on the shelf. */
-.sign:has(:checked) .board {
-  background: var(--brand-text); /* white type: 5.1:1 */
-  box-shadow:
-    0 0 0 3px rgb(23 162 174 / 0.28),
-    0 1rem 1.5rem -1rem rgb(4 40 47 / 0.6);
-}
-
-.sign:has(:checked) .signName {
-  color: var(--white);
-}
-
-.sign:has(:checked)::after {
-  content: '';
+/* The pen's loop round the chosen name, drawn as it is chosen (Scribble → --drawn). */
+.circle {
+  --pen: 2.5px;
   position: absolute;
-  inset-block-start: 100%;
-  left: 50%;
-  inline-size: 150%;
-  block-size: 2.25rem;
-  background: radial-gradient(closest-side at 50% 0, rgb(23 162 174 / 0.3), rgb(23 162 174 / 0));
-  translate: -50% 0;
-  pointer-events: none;
+  inset-block: -0.7em;
+  inset-inline: -0.5em;
+  inline-size: calc(100% + 1em);
+  block-size: calc(100% + 1.4em);
+  color: var(--pen-red);
 }
 
-.sign:has(:focus-visible) .board {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 3px;
+/* From the circle, an arrow in the same pen to the aisle beside the directory — drawn from its
+   tail on, and turned round where the aisle is on the left. Computers only: on a phone and a
+   tablet the directory is a row of tiles over the aisle. */
+.toAisle {
+  --pen: 2.5px;
+  --wipe: right;
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: calc(100% + 0.85em);
+  inline-size: 2.4em;
+  block-size: 1.3em;
+  color: var(--pen-red);
+  translate: 0 -70%;
 }
 
-/* Phones: the signs are a row to scroll through, under the rail that runs on with them. */
-@media (max-width: 47.99em) {
-  .rail {
-    display: flex;
-    gap: 0.625rem;
-    margin-inline: calc(var(--gutter) * -1);
-    padding-inline: var(--gutter);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-padding-inline: var(--gutter);
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
+.toAisle:dir(rtl) {
+  scale: -1 1;
+}
+
+/* The chosen aisle: its line in full ink, its name circled. */
+.line:has(:checked) {
+  --drawn: 1;
+  opacity: 1;
+}
+
+/* Keyboard focus underlines the name — a line under the word, not a box round the line. */
+.line:has(:focus-visible) .name {
+  text-decoration: underline 2px var(--focus-ring);
+  text-underline-offset: 0.3em;
+}
+
+/* Phones and tablets: the lines become tiles — three to a row on a phone, all six on a tablet —
+   so every department is in view without scrolling. The chosen tile is filled in night. */
+@media (max-width: 63.99em) {
+  .lines {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.375rem;
   }
 
-  .rail::-webkit-scrollbar {
+  .line {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    align-content: start;
+    gap: 0.375rem;
+    min-block-size: 0;
+    padding: 0.75rem 0.375rem 0.625rem;
+    border-radius: var(--radius-control);
+    opacity: 1;
+    text-align: center;
+    transition:
+      background-color var(--duration-base) ease,
+      color var(--duration-base) ease;
+  }
+
+  .line:hover {
+    opacity: 1;
+  }
+
+  .line:has(:checked) {
+    background: var(--night);
+    color: var(--aqua);
+  }
+
+  .aisleNumber {
+    position: absolute;
+    inset-block-start: 0.5rem;
+    inset-inline-start: 0.625rem;
+    font-size: 0.6875rem;
+  }
+
+  .icon {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+  }
+
+  /* Two lines kept for every name, so the tiles line up. */
+  .name {
+    display: grid;
+    place-items: center;
+    justify-self: stretch;
+    min-block-size: calc(2em * 1.3);
+    font-size: 0.875rem;
+  }
+
+  /* Where the name can be trimmed to its letters' middle, it is a block that centres its lines
+     in the same room (a grid can't be trimmed). */
+  @supports (text-box: trim-both ex alphabetic) {
+    .name {
+      display: block;
+      align-content: center;
+    }
+  }
+
+  .circle,
+  .toAisle {
     display: none;
   }
+}
 
-  .sign {
-    flex: 0 0 7.75rem;
-    scroll-snap-align: start;
-  }
-
-  .signIcon {
-    inline-size: 2.25rem;
-    block-size: 2.25rem;
+@media (min-width: 48em) and (max-width: 63.99em) {
+  .lines {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
 
-/* ── The gondola ────────────────────────────────────────────────── */
+/* ── The products, and the name behind them ─────────────────────── */
 
-.gondola {
-  overflow: hidden;
-  border-radius: 1.25rem 1.25rem 0.625rem 0.625rem;
-  background: var(--white);
-  box-shadow:
-    0 0 0 1px #d4e1e4,
-    0 2rem 3rem -2.25rem rgb(4 40 47 / 0.5);
+/* The products and the department's name share one cell: the name behind, centred on the
+   products' height, sized from the column's width (cqi). */
+.products {
+  position: relative;
+  display: grid;
+  container-type: inline-size;
 }
 
-/* Only the chosen aisle's bay is on the shelf — and its name in the way to it, under the
-   shelf. Showing another restocks it from the start: no script needed. Where :has() isn't
-   known, the first aisle stays on the shelf. */
+.poster,
+.bay {
+  grid-area: 1 / 1;
+  min-inline-size: 0;
+}
+
+/* The chosen department's name, as wide as the column (Aisles.jsx → --em, its longest line in
+   ems), a long one on two lines. Decorative: the circled line in the directory names it. */
+.poster {
+  display: grid;
+  align-self: center;
+  justify-items: center;
+  margin: 0;
+  font-size: calc(100cqi / var(--em));
+  font-weight: 900;
+  line-height: 1.05;
+  white-space: nowrap;
+  color: var(--poster-ink);
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.bay {
+  position: relative; /* over the name */
+}
+
+/* Only the chosen aisle's categories are out — with its name behind them, and in the way to it.
+   Showing another sets it out from the start: no script needed. Where :has() isn't known, the
+   first aisle stays out. */
 .bay,
+.poster,
 .pathName {
   display: none;
 }
 
-.section:has([value='groceries']:checked) .bay[data-aisle='groceries'],
-.section:has([value='fresh']:checked) .bay[data-aisle='fresh'],
-.section:has([value='drinks']:checked) .bay[data-aisle='drinks'],
-.section:has([value='home']:checked) .bay[data-aisle='home'],
-.section:has([value='care']:checked) .bay[data-aisle='care'],
-.section:has([value='tech']:checked) .bay[data-aisle='tech'] {
-  display: block;
+.section:has([value='groceries']:checked) :is(.bay, .poster)[data-aisle='groceries'],
+.section:has([value='fresh']:checked) :is(.bay, .poster)[data-aisle='fresh'],
+.section:has([value='drinks']:checked) :is(.bay, .poster)[data-aisle='drinks'],
+.section:has([value='home']:checked) :is(.bay, .poster)[data-aisle='home'],
+.section:has([value='care']:checked) :is(.bay, .poster)[data-aisle='care'],
+.section:has([value='tech']:checked) :is(.bay, .poster)[data-aisle='tech'] {
+  display: grid;
 }
 
 .section:has([value='groceries']:checked) .pathName[data-aisle='groceries'],
@@ -299,8 +336,8 @@
 }
 
 @supports not selector(:has(*)) {
-  .bay[data-aisle='groceries'] {
-    display: block;
+  :is(.bay, .poster)[data-aisle='groceries'] {
+    display: grid;
   }
 
   .pathName[data-aisle='groceries'] {
@@ -308,273 +345,151 @@
   }
 }
 
-/* One shelf: products stand on its glass, labels clipped to its edge, against the pegboard
-   back — in a single row that slides sideways (Aisles.jsx), four categories to a view on a
-   wider screen, a little over two and a half on a phone. The shelf's edge and the pegboard
-   travel with the products. */
-.shelf {
-  --row: clamp(10rem, 12.5vw, 11.5rem); /* the shelf, and the room above it */
-  --edge: 2.75rem; /* its front edge, where the labels go */
-  --top: 0.75rem; /* the pegboard above the shelf */
-  position: relative;
-}
-
-.shelves {
-  --pad: clamp(0.25rem, 1.5vw, 1rem); /* the row's inline padding */
-  display: flex;
+/* Two rows of four: every category in view at once, each picture over its name. On a computer
+   the rows share the column's height between them, each picture standing at the foot of its
+   half. A department of seven sets its second row of three in the middle, under the four — a
+   poster's arrangement, not a grid with a gap at its end (eight half-columns, two to a
+   category). */
+.items {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.75rem, 3vw, 3rem) clamp(0.75rem, 2vw, 2rem);
   margin: 0;
-  padding: var(--top) var(--pad) 0;
-  /* The first category's snap position is where the padding already has it, so the row never
-     scrolls by itself as the page loads: a scroll then — even this one, by a few pixels — ends
-     Chrome's Largest Contentful Paint before the headline is painted, and phones would report
-     none at all. */
-  scroll-padding-inline: var(--pad);
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
+  padding: 0;
   list-style: none;
-  background:
-    repeating-linear-gradient(
-        transparent 0 calc(var(--row) - var(--edge)),
-        #fbfdfd calc(var(--row) - var(--edge)) calc(var(--row) - var(--edge) + 0.3rem),
-        #e3ebed calc(var(--row) - var(--edge) + 0.3rem) calc(var(--row) - 0.2rem),
-        #c3d0d3 calc(var(--row) - 0.2rem) var(--row)
-      )
-      0 var(--top) / 100% 100% no-repeat,
-    radial-gradient(circle, #d6e1e3 0.1rem, rgb(214 225 227 / 0) 0.13rem) 50% 0 / 1.25rem 1.25rem,
-    #f3f7f7;
-  background-attachment: local;
 }
 
-.shelves::-webkit-scrollbar {
-  display: none;
-}
+@media (min-width: 48em) {
+  .item {
+    grid-column: span 2;
+  }
 
-@media (prefers-reduced-motion: no-preference) {
-  .shelves {
-    scroll-behavior: smooth;
+  .item:nth-child(5):nth-last-child(3) {
+    grid-column: 2 / span 2;
   }
 }
 
 .item {
-  display: flex;
-  flex: 0 0 25%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  block-size: var(--row);
-  scroll-snap-align: start;
+  display: grid;
+  grid-template-rows: auto auto;
+  justify-items: center;
+  align-content: end;
+  row-gap: 0.75rem;
+  min-inline-size: 0;
 }
 
+/* Computers: the first row stands at the top of the column, level with the heading, the second
+   at its foot, level with the directory's last line — and the name shows in the band between. */
+@media (min-width: 64em) {
+  .item:nth-child(-n + 4) {
+    align-content: start;
+  }
+}
+
+/* Standing on the aqua, on a shadow of its own — large: the poster's picture. */
 .product {
   inline-size: auto;
-  max-inline-size: 86%;
-  block-size: auto;
-  max-block-size: calc(var(--row) - var(--edge) - 1.25rem);
+  max-inline-size: 100%;
+  block-size: clamp(9.75rem, 12.9vw, 15rem);
   object-fit: contain;
-  filter: drop-shadow(0 0.35rem 0.3rem rgb(4 40 47 / 0.22));
+  filter: drop-shadow(0 1rem 0.75rem rgb(4 58 68 / 0.26));
 }
 
-/* The category's label, clipped to the shelf edge under it. */
 .label {
-  display: grid;
-  place-items: center;
-  block-size: calc(var(--edge) - 0.55rem);
-  max-inline-size: 92%;
-  margin-block: 0.3rem 0.25rem;
-  padding-inline: 0.625rem;
-  border-radius: 0.3rem;
-  background: var(--white);
-  box-shadow:
-    inset 0 2px 0 var(--brand),
-    0 1px 2px rgb(4 40 47 / 0.22);
-  font-size: clamp(0.75rem, 0.85vw, 0.875rem);
+  max-inline-size: 11em;
+  font-size: clamp(0.875rem, 0.95vw, 1.0625rem);
   font-weight: 800;
-  line-height: 1.2;
-  color: var(--deep);
+  line-height: var(--leading-snug);
   text-align: center;
 }
 
-/* The arrows at the shelf's ends, over its product line, the row kept clear of them. The icon
-   points right: towards the end in English, towards the start in Arabic. */
-.arrow {
-  display: none;
-}
-
-.arrowIcon {
-  inline-size: 1.25rem;
-  block-size: 1.25rem;
-}
-
-.arrow[data-to='start'] .arrowIcon,
-.arrow:dir(rtl)[data-to='end'] .arrowIcon {
-  scale: -1 1;
-}
-
-.arrow:dir(rtl)[data-to='start'] .arrowIcon {
-  scale: 1 1;
-}
-
-@media (min-width: 48em) {
-  .shelves {
-    --pad: 3.5rem;
+/* Phones: the two rows are swiped, the next categories showing at the edge. */
+@media (max-width: 47.99em) {
+  .items {
+    grid-template-rows: repeat(2, auto);
+    grid-template-columns: none;
+    grid-auto-columns: 38%;
+    grid-auto-flow: column;
+    gap: 1.5rem 0.5rem;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    /* The first category's snap position is where the padding already has it, so the row never
+       scrolls by itself as the page loads: a scroll then — even this one, by a few pixels — ends
+       Chrome's Largest Contentful Paint before the headline is painted, and phones would report
+       none at all. */
+    scroll-padding-inline: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
   }
 
-  .arrow {
-    position: absolute;
-    z-index: 2;
-    inset-block-start: calc(var(--top) + (var(--row) - var(--edge)) / 2);
-    display: grid;
-    place-items: center;
-    inline-size: 2.5rem;
-    block-size: 2.5rem;
-    padding: 0;
-    border: 0;
-    border-radius: 50%;
-    background: var(--white);
-    color: var(--deep);
-    box-shadow:
-      0 0 0 1px #d2e0e3,
-      0 0.5rem 1rem -0.5rem rgb(4 40 47 / 0.45);
-    cursor: pointer;
-    translate: 0 -50%;
-    transition:
-      background-color var(--duration-fast) ease,
-      color var(--duration-fast) ease,
-      opacity var(--duration-fast) ease;
+  .items::-webkit-scrollbar {
+    display: none;
   }
 
-  .arrow[data-to='start'] {
-    inset-inline-start: 0.5rem;
+  .item {
+    scroll-snap-align: start;
   }
 
-  .arrow[data-to='end'] {
-    inset-inline-end: 0.5rem;
+  .product {
+    block-size: 7.5rem;
   }
 
-  .arrow:hover {
-    background: var(--brand-text);
-    color: var(--white);
-  }
-
-  .arrow:active {
-    scale: 0.94;
-  }
-
-  /* At an end already: still there, dimmed. */
-  .arrow[aria-disabled] {
-    background: var(--white);
-    color: var(--deep);
-    opacity: 0.35;
-    cursor: default;
+  .label {
+    font-size: 0.8125rem;
   }
 }
 
-/* The kick plate under the shelf. */
-.kick {
-  display: block;
-  block-size: 1.25rem;
-  background: linear-gradient(#5b7176, #3c5055);
-}
+/* ── Under them: the way to the aisle in the app ────────────────── */
 
-/* Under the shelf: the way to the chosen aisle in the app. */
 .where {
-  margin-block-start: 0.875rem;
-  font-size: 0.875rem;
+  font-size: var(--text-small);
   font-weight: 500;
-  color: var(--muted);
-  text-align: center;
 }
 
 .path {
   font-weight: 800;
-  color: var(--deep);
 }
 
 .chevron {
   margin-inline: 0.4em;
-  color: var(--brand-text);
-}
-
-/* Phones: the row is swiped, the next category showing at the edge. */
-@media (max-width: 47.99em) {
-  .shelf {
-    --row: 10rem;
-    --edge: 3.25rem;
-  }
-
-  .item {
-    flex-basis: 36%;
-  }
-
-  .label {
-    padding-inline: 0.375rem;
-    font-size: 0.6875rem;
-  }
-}
-
-.cta {
-  justify-self: center;
 }
 
 /* ── Motion ─────────────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Choosing a sign sets it swinging on its wires. */
-  .sign:has(:checked) .board {
-    animation: swing 1100ms ease-out;
-  }
-
-  /* A bay that appears is restocked: each category dropped onto the shelf, then labelled. */
+  /* A department that appears is set out: each category put down in its place, its name
+     rising behind them. */
   .item {
-    animation: restock 550ms cubic-bezier(0.3, 1.35, 0.5, 1) calc(var(--j) * 70ms + 80ms) both;
+    animation: restock var(--duration-slow) var(--ease-settle) calc(var(--j) * 70ms + 100ms) both;
   }
 
-  .label {
-    animation: label-on 350ms ease calc(var(--j) * 70ms + 380ms) both;
+  .poster {
+    animation: poster-in var(--duration-slow) var(--ease-out) both;
   }
 
-  /* Waiting below the fold (useScrollReveal): the signs folded up against the ceiling, the
-     shelf bare… */
-  .store[data-reveal='pending'] .hanger {
-    transform: rotateX(-90deg);
-  }
-
-  .store[data-reveal='pending'] :is(.item, .label) {
+  /* Waiting below the fold (useScrollReveal): the names held back, the products unset… */
+  .layout[data-reveal='pending'] :is(.line, .item, .poster) {
     opacity: 0;
     animation: none;
   }
 
-  /* …then, in view: the signs flip down one after another, and the shelf is stocked. */
-  .store[data-reveal='shown'] .hanger {
-    animation: flip-down 900ms cubic-bezier(0.3, 1.5, 0.45, 1) calc(var(--i) * 90ms) both;
-  }
-}
-
-@keyframes swing {
-  20% {
-    rotate: 5deg;
-  }
-
-  45% {
-    rotate: -3.5deg;
-  }
-
-  70% {
-    rotate: 1.5deg;
+  /* …then, in view: the names come in one after another as the products are set out. */
+  .layout[data-reveal='shown'] .line {
+    animation: line-in var(--duration-slow) var(--ease-out) calc(var(--i) * 90ms) both;
   }
 }
 
 @keyframes restock {
   0% {
     opacity: 0;
-    translate: 0 -2rem;
+    translate: 0 -1.25rem;
   }
 
-  60% {
+  50% {
     opacity: 1;
-    translate: 0 0.25rem;
   }
 
   100% {
@@ -583,15 +498,16 @@
   }
 }
 
-@keyframes label-on {
+@keyframes poster-in {
   from {
     opacity: 0;
-    translate: 0 0.35rem;
+    translate: 0 1.5rem;
   }
 }
 
-@keyframes flip-down {
+@keyframes line-in {
   from {
-    transform: rotateX(-90deg);
+    opacity: 0;
+    translate: 0 0.75rem;
   }
 }

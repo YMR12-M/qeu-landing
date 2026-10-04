@@ -1,64 +1,83 @@
 /*
- * The nutrition-facts label: ink on white inside a heavy frame, the thickest bar under the
- * title, a heavy one before the price and the small print, hairlines between the lines.
+ * The store's figures as the app's nutrition-facts label — «القيمة الغذائية», printed on every
+ * pack in the supermarket — in its own form: a heavy frame, the thickest bar after the title, a
+ * hairline between the figures, a heavy rule before the price and before the small print.
+ * Printed straight on the teal wall in night ink, as a pack prints it on its own colour, and as
+ * large as a headline: one strip across the page on a computer — the linear label of a slim
+ * pack — the title over the figures on a tablet, and the tall label, a figure a line, on a
+ * phone.
  */
 
 .label {
   --ink: var(--night);
-  --bar: 0.625rem; /* under the title */
-  --rule: 0.25rem; /* before the price and the small print */
-  inline-size: min(100%, 26rem);
-  margin-inline: auto;
-  padding: 0.5rem 0.875rem 0.75rem;
-  border: 0.1875rem solid var(--ink);
-  background: var(--white);
+  --frame: 0.25rem; /* round the label */
+  --bar: 0.75rem; /* after the title */
+  --rule: 0.3125rem; /* before the price and the small print */
+  --hairline: 1.5px; /* between the figures */
+  --pad: clamp(0.875rem, 1.3vw, 1.5rem);
+  --figure-size: var(--text-figure);
+  container-type: inline-size;
+  margin: 0;
+  padding: 0.125rem var(--pad) 0;
+  border: var(--frame) solid var(--ink);
   color: var(--ink);
-  line-height: 1.3;
+  line-height: var(--leading-snug);
 }
 
+/* ── The title, and the serving ─────────────────────────────────── */
+
 .head {
-  padding-block-end: 0.5rem;
+  padding-block: 0.625rem 0.75rem;
   border-block-end: var(--bar) solid var(--ink);
 }
 
 .title {
-  font-size: clamp(2rem, 3.2vw, 2.75rem);
-  font-weight: 800;
+  font-size: clamp(2rem, 3vw, 3.25rem);
+  font-weight: 900;
   line-height: 1.05;
+}
+
+.titleText {
+  display: block;
 }
 
 .product {
   display: block;
-  margin-block-start: 0.25rem;
-  font-size: 1.0625rem;
-  font-weight: 700;
+  margin-block-start: 0.375rem;
+  font-size: var(--text-lead);
+  font-weight: 800;
+  line-height: var(--leading-snug);
 }
 
 .serving {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 1rem;
-  margin-block-start: 0.5rem;
+  gap: 0 1rem;
+  margin-block-start: 0.625rem;
   padding-block-start: 0.5rem;
-  border-block-start: 1px solid var(--ink);
+  border-block-start: var(--hairline) solid var(--ink);
+  font-size: var(--text-small);
   font-weight: 800;
 }
+
+/* ── The figures: a line each ───────────────────────────────────── */
 
 .facts {
   margin: 0;
 }
 
-/* A line: its name and what it is, and the figure at the end. */
+/* A line: its name and what it is, and the figure at the end — a hairline under it. */
 .fact {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas:
     'name figure'
     'detail figure';
-  column-gap: 1rem;
   align-items: center;
-  padding-block: 0.625rem;
-  border-block-end: 1px solid var(--ink);
+  column-gap: 1rem;
+  padding-block: 0.875rem;
+  border-block-end: var(--hairline) solid var(--ink);
 }
 
 .fact:has(+ .price) {
@@ -67,16 +86,15 @@
 
 .name {
   grid-area: name;
-  font-size: 1.0625rem;
+  font-size: clamp(0.9375rem, 1.05vw, 1.1875rem);
   font-weight: 800;
 }
 
 .detail {
   grid-area: detail;
   margin: 0;
-  font-size: 0.875rem;
+  font-size: clamp(0.8125rem, 0.85vw, 0.9375rem);
   font-weight: 500;
-  color: var(--muted);
 }
 
 .figure {
@@ -85,120 +103,170 @@
   align-items: baseline;
   gap: 0.3rem;
   margin: 0;
+  white-space: nowrap;
 }
 
+/* Heavy and tight, as a pack's label prints its figures: the same in both languages. */
 .number {
-  font-family: var(--font-mono);
-  font-size: clamp(1.75rem, 2.4vw, 2.5rem);
-  font-weight: 500;
+  font-size: var(--figure-size);
+  font-weight: 900;
   line-height: 1;
 }
 
-/* Plex Mono has no Arabic-Indic digits or separators (٬ ٫): set Arabic figures in Tajawal. */
-.number:lang(ar) {
-  font-family: var(--font-sans);
-  font-weight: 800;
-}
-
-.unit {
-  font-size: 1.125rem;
-  font-weight: 800;
-}
-
+.unit,
 .star {
-  font-size: 1.125rem;
-  color: var(--star);
+  font-size: calc(var(--figure-size) * 0.4);
+  font-weight: 900;
 }
 
+/* What it all costs, after the heavy rule: the same size, and marked in yellow. */
 .price {
   border-block-start: var(--rule) solid var(--ink);
-  border-block-end: 0;
 }
 
 .free {
-  font-size: clamp(1.5rem, 2vw, 2rem);
-  font-weight: 800;
+  margin-inline: -0.1em;
+  padding-inline: 0.1em;
+  font-size: var(--figure-size);
+  font-weight: 900;
   line-height: 1;
+  background: url('../../assets/marks/marker.svg') no-repeat right 0 bottom 0.02em / 100% 0.55em;
 }
 
-/* The small print: where the figures were read, and when. */
+.free:dir(ltr) {
+  background-position: left 0 bottom 0.02em;
+}
+
+/* The small print, after the heavy rule: where the figures were read, and when. */
 .source {
-  padding-block-start: 0.5rem;
+  padding-block: 0.625rem 0.75rem;
   border-block-start: var(--rule) solid var(--ink);
   font-size: 0.8125rem;
   font-weight: 500;
 }
 
-/* Wide screens: the linear label of a slim pack — the title block, a column per figure, the
-   price last, each part set off by its bar, and the small print along the bottom. Narrower
-   (small laptops, a tablet on its side) five columns would squeeze every line to a few words:
-   those keep the tall label. */
-@media (min-width: 80em) {
+/* ── Tablets and computers: the figures side by side ────────────── */
+
+/* A column each, a hairline between them and the heavy rule before the price. Each figure is
+   as large as the headline type allows, and never so large that the five overflow the strip
+   (cqi: the label's width). */
+@media (min-width: 48em) {
   .label {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas:
-      'head facts'
-      'source source';
-    inline-size: 100%;
-    padding: 0.75rem 1rem 0.5rem;
+    --figure-size: min(var(--text-figure), 5.1cqi);
   }
 
-  .head {
-    display: flex;
-    grid-area: head;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-block-end: 0;
-    padding-inline-end: 1.5rem;
-    border-block-end: 0;
-    border-inline-end: var(--bar) solid var(--ink);
-  }
-
-  /* Its two words stacked, as on a pack: the figures get the room. */
-  .title {
-    max-inline-size: 4.5em;
-    font-size: clamp(2.25rem, 2.9vw, 2.75rem);
-  }
-
-  .detail {
-    font-size: 0.8125rem;
-  }
-
+  /* The columns share their rows (subgrid): every name on one line, every figure on the next,
+     even where a name runs to two lines. */
   .facts {
     display: grid;
-    grid-area: facts;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(min-content, 1fr));
+    grid-template-rows: auto auto auto;
+    row-gap: 0.5rem;
   }
 
   .fact {
+    grid-row: span 3;
     grid-template-columns: none;
+    grid-template-rows: subgrid;
     grid-template-areas:
       'name'
       'figure'
       'detail';
-    align-content: start;
     align-items: start;
-    row-gap: 0.5rem;
-    padding: 0.125rem 1.25rem;
+    padding: clamp(0.875rem, 1.3vw, 1.25rem) var(--pad);
     border-block-end: 0;
-    border-inline-end: 1px solid var(--ink);
+    border-inline-end: var(--hairline) solid var(--ink);
+  }
+
+  .name {
+    align-self: end;
+  }
+
+  .fact:first-child {
+    padding-inline-start: 0;
   }
 
   .fact:has(+ .price) {
     border-inline-end: 0;
   }
 
+  .detail {
+    max-inline-size: 14em;
+  }
+
   .price {
-    padding-inline-end: 0.25rem;
+    padding-inline-end: 0;
     border-block-start: 0;
     border-inline-start: var(--rule) solid var(--ink);
     border-inline-end: 0;
   }
 
+  /* Tablets: the title and the serving across the top, over the thick bar. */
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+  }
+
+  .serving {
+    margin-block-start: 0;
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+}
+
+/* Computers: the linear label — the title at the start, its words stacked as on a slim pack,
+   the thick bar standing between it and the figures, and the small print along the foot. */
+@media (min-width: 64em) {
+  .label {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'head facts'
+      'source source';
+  }
+
+  .head {
+    display: flex;
+    grid-area: head;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: space-between;
+    padding-block: clamp(0.875rem, 1.3vw, 1.25rem);
+    padding-inline-end: var(--pad);
+    border-block-end: 0;
+    border-inline-end: var(--bar) solid var(--ink);
+  }
+
+  .titleText {
+    inline-size: min-content;
+  }
+
+  /* The serving under the title, on a line of its own under a hairline. */
+  .serving {
+    margin-block-start: 0.75rem;
+    padding-block-start: 0.5rem;
+    border-block-start: var(--hairline) solid var(--ink);
+  }
+
+  /* Each figure's name level with the title, what it is level with the serving. */
+  .facts {
+    grid-area: facts;
+    grid-template-rows: auto auto minmax(0, 1fr);
+  }
+
+  .detail {
+    align-self: end;
+  }
+
+  .fact:first-child {
+    padding-inline-start: var(--pad);
+  }
+
   .source {
     grid-area: source;
-    margin-block-start: 0.75rem;
-    padding-block-start: 0.375rem;
   }
 }

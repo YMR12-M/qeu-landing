@@ -13,6 +13,7 @@ import { LOGO_VIEWBOX } from '../brand/logo-paths.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
 import { Landmark, PaymentCard, Van } from '../ui/icons.jsx';
 import { Picture } from '../ui/Picture.jsx';
+import { Scribble } from '../ui/Scribble.jsx';
 import styles from './PolicyPage.module.css';
 
 // The sections' ids are the same in both languages (src/content/policy-contents.js).
@@ -21,9 +22,11 @@ const ICONS = { delivery: Van, payment: PaymentCard, government: Landmark };
 const twoDigits = (value) => String(value).padStart(2, '0');
 
 /**
- * The privacy policy, as the official document it is: laid on the dark desk of the page's
- * cover, on the company's letterhead, with an index card beside it that ticks each section
- * off once it has been read — and, reaching the end, the company's stamp is pressed onto it.
+ * The privacy policy, as the official document it is: its title on Qeu's teal, as the home
+ * page opens; then the document itself on the white of the page — the company's letterhead,
+ * the policy's own sections, and, reaching the end, the company's stamp pressed onto it — with
+ * its contents beside it, each ticked in pen once it has been read. No sheet, no card: the page
+ * is the paper.
  *
  * The text is the policy's own, word for word: `policy` is its Arabic (src/content/policy.js)
  * or its English (policy-en.js), each page passing its own. The lists it contains are drawn
@@ -44,7 +47,7 @@ export function PolicyPage({ policy }) {
     <>
       <section className={styles.cover} aria-labelledby="policy-title">
         <div className="container">
-          <p className={styles.eyebrow}>{policy.company}</p>
+          <p className={styles.runningHead}>{policy.company}</p>
           <h1 id="policy-title" className={styles.title}>
             {policy.title}
           </h1>
@@ -79,7 +82,7 @@ export function PolicyPage({ policy }) {
                     href={`#${section.id}`}
                     aria-current={active === section.id ? 'location' : undefined}
                   >
-                    <span className={styles.tick} aria-hidden="true" />
+                    <Scribble shape="tick" draw="parent" className={styles.tick} />
                     {contents[section.id]}
                   </a>
                 </li>
@@ -157,7 +160,11 @@ function Block({ block }) {
       return <p className={styles.p}>{block.text}</p>;
 
     case 'callout':
-      return <p className={styles.callout}>{block.text}</p>;
+      return (
+        <p className={styles.callout}>
+          <span className={styles.calloutText}>{block.text}</span>
+        </p>
+      );
 
     case 'list': {
       const List = block.style === 'numbered' ? 'ol' : 'ul';

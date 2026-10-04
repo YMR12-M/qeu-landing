@@ -1,0 +1,88 @@
+/*
+ * A pen mark: one even stroke (--pen), however far its box is stretched, in the current text
+ * colour, with round ends. It is drawn by uncovering it: a mask that sweeps round a loop's
+ * centre, or wipes along a line from where the reading starts, as --pen-reveal runs from 0 to 1.
+ * (A dash sliding along the path would draw it truer, but dashes and an even stroke don't mix
+ * in every browser: Chrome measures the dash in screen pixels, not along the path.)
+ */
+
+@property --pen-reveal {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+
+.scribble {
+  --pen-reveal: 1;
+  max-inline-size: none; /* a loop reaches past the word it rings (base.css caps an svg at 100%) */
+  overflow: visible;
+  /* Not yet drawn at all, nothing shows — not even the sliver the mask leaves where the pen
+     sets down. */
+  opacity: clamp(0, var(--pen-reveal) * 100, 1);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--pen, 3px);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.scribble path {
+  vector-effect: non-scaling-stroke;
+}
+
+/* The mask reaches a little past the box on every side, so the stroke — which runs past it at
+   the loop's ends, and has round caps — is never clipped. */
+.scribble[data-uncover] {
+  mask-size: calc(100% + 2rem) calc(100% + 2rem);
+  mask-position: center;
+  mask-repeat: no-repeat;
+}
+
+/* A loop: uncovered round its centre, from where the pen set down (its top left) onwards. */
+.scribble[data-uncover='sweep'] {
+  mask-image: conic-gradient(
+    from -55deg,
+    #000 calc(var(--pen-reveal) * 1turn),
+    #0000 calc(var(--pen-reveal) * 1turn + 0.5deg)
+  );
+}
+
+/* A line: wiped on from the side the reading starts. */
+.scribble[data-uncover='wipe'] {
+  mask-image: linear-gradient(
+    to var(--wipe, left),
+    #000 calc(var(--pen-reveal) * 100%),
+    #0000 calc(var(--pen-reveal) * 100% + 1%)
+  );
+}
+
+.scribble[data-uncover='wipe']:dir(ltr) {
+  --wipe: right;
+}
+
+/* Waiting to be drawn: below the fold. */
+.scribble[data-reveal='pending'] {
+  --pen-reveal: 0;
+}
+
+.scribble[data-reveal='shown'] {
+  transition: --pen-reveal var(--duration-draw) var(--ease-out) var(--draw-delay, 0ms);
+}
+
+/* On screen from the start: drawn once the page has loaded. */
+.scribble[data-draw='load'] {
+  animation: draw var(--duration-draw) var(--ease-out) var(--draw-delay, 0ms) both;
+}
+
+/* Drawn when an ancestor says so (--drawn: 1), and rubbed out when it no longer does. */
+.scribble[data-draw='parent'] {
+  --pen-reveal: var(--drawn, 0);
+  transition: --pen-reveal var(--duration-base) var(--ease-out);
+}
+
+@keyframes draw {
+  from {
+    --pen-reveal: 0;
+  }
+}

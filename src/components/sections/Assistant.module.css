@@ -1,24 +1,23 @@
 /*
- * «اسأل كيور» — the app's assistant, live: its conversation replays in a phone on the night of
- * the hero, lit by the assistant's own violet-to-teal. Everything in the phone is sized in em
- * from the phone's width, so the whole screen scales as one, like a picture of the app.
+ * «اسأل كيور» — the app's assistant, live, on the night wall, shown as a poster shows a
+ * feature: the phone in the middle, the title one huge line broken by it, and the steps written
+ * round it as notes, each with a yellow pen arrow to the part of the screen it explains.
+ * Everything in the phone is sized in em from the phone's width, so the whole screen scales as
+ * one, like a picture of the app — and the title, the notes and the arrows are placed in the
+ * same grid (--u), so they land on the same spot at any size.
  */
 
 .section {
   --focus-ring: var(--glow);
   --violet: #8a5cb3; /* the list card's gradient end: white text keeps 4.9:1 on it */
   --ink: #174a55; /* the app's chat text */
+  --button-bg: var(--star);
+  --button-fg: var(--night);
+  --button-hover: #ffd36b;
   position: relative;
   overflow: clip;
   padding-block: var(--section-space);
   background-color: var(--night);
-  background-image: radial-gradient(
-    circle,
-    rgb(159 227 234 / 0.07) 0.07rem,
-    rgb(159 227 234 / 0) 0.1rem
-  );
-  background-position: 50% 0;
-  background-size: 1.5rem 1.5rem;
   color: var(--white);
 }
 
@@ -30,209 +29,115 @@
   overflow: hidden;
 }
 
-/* Phones: the heading, the phone, then the steps and the button. Computers: the phone beside
-   the heading and the steps, which meet in the middle of its height. */
 .layout {
   display: grid;
-  grid-template-areas: 'intro' 'stage' 'more';
-  gap: clamp(2.5rem, 5vw, 4rem);
 }
 
-.intro {
-  grid-area: intro;
-}
+/* ── The stage: the title, the phone, and the notes round it ────── */
 
 .stage {
-  grid-area: stage;
-}
-
-.more {
-  grid-area: more;
-}
-
-@media (min-width: 64em) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr) minmax(20rem, 28rem);
-    grid-template-areas:
-      'intro stage'
-      'more stage';
-    column-gap: clamp(3rem, 6vw, 7rem);
-    row-gap: clamp(2rem, 3vw, 3rem);
-  }
-
-  .intro {
-    align-self: end;
-  }
-
-  .more {
-    align-self: start;
-  }
-}
-
-/* ── The heading ────────────────────────────────────────────────── */
-
-/* As the FAQ's: a short rule, then the words. */
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  font-size: var(--text-nav);
-  font-weight: 700;
-  color: var(--glow);
-}
-
-.eyebrow::before {
-  content: '';
-  flex: none;
-  inline-size: 2.5rem;
-  block-size: 1px;
-  background: currentColor;
-}
-
-.title {
-  margin-block-start: 1rem;
-  font-size: clamp(2.25rem, 4.2vw, 4.75rem);
-  line-height: 1.12;
-  color: var(--white);
-}
-
-/* The assistant's name, in the page's accent — as the hero's accent line. */
-.name {
-  color: var(--glow);
-}
-
-.lead {
-  max-inline-size: 24em;
-  margin-block-start: 1.25rem;
-  font-size: var(--text-lead);
-  font-weight: 500;
-  color: var(--glow);
-}
-
-/* ── The shopping list and the button ───────────────────────────── */
-
-/* A page from a shopping-list pad, taped up on the dark counter like the FAQ's receipt:
-   ruled lines, the red margin, and a strip of tape holding it. */
-.note {
-  --row: 2.75rem; /* one ruled line */
-  position: relative;
-  max-inline-size: 23rem;
-  padding: 1.5rem 1.25rem 1rem;
-  padding-inline-start: 3rem;
-  background: #fffdf4;
-  color: var(--deep);
-  box-shadow: 0 1.5rem 2rem -1.25rem rgb(1 12 15 / 0.7);
-  rotate: -1.5deg;
-}
-
-/* The margin, ruled in red on the side the writing starts. */
-.note::before {
-  content: '';
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: 2.125rem;
-  inline-size: 1px;
-  background: rgb(214 40 40 / 0.45);
-}
-
-.note::after {
-  content: '';
-  position: absolute;
-  inset-block-start: -0.75rem;
-  left: 50%;
-  inline-size: 5.5rem;
-  block-size: 1.5rem;
-  background: rgb(233 222 190 / 0.82);
-  box-shadow: 0 1px 2px rgb(1 12 15 / 0.2);
-  translate: -50% 0;
-  rotate: 3deg;
-}
-
-.steps {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  background: repeating-linear-gradient(
-    transparent 0 calc(var(--row) - 1px),
-    rgb(11 74 87 / 0.16) calc(var(--row) - 1px) var(--row)
-  );
-}
-
-.step {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-block-size: var(--row);
-  font-size: var(--text-body);
-  font-weight: 700;
-}
-
-/* The box, drawn in pen… */
-.box {
   display: grid;
-  flex: none;
-  place-items: center;
-  inline-size: 1.375rem;
-  block-size: 1.375rem;
-  border: 2px solid var(--deep);
-  border-radius: 0.3125rem;
+  justify-items: center;
+  container-type: inline-size;
 }
 
-/* …and the tick, written into it with a flourish past its edge. */
-.tick {
-  inline-size: 1.625rem;
-  block-size: 1.625rem;
-  overflow: visible;
-  translate: 0.125rem -0.25rem;
-}
-
-.tick path {
-  fill: none;
-  stroke: var(--brand-text);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-}
-
-/* The last step is the reader's own: ticked when «أضف الكل» is pressed. */
-.step[data-last] .tick path {
-  transition: stroke-dashoffset 450ms ease 250ms;
-}
-
-.step[data-last]:not([data-done]) .tick path {
-  stroke-dashoffset: 1;
-}
-
-.cta {
-  --link: var(--white);
-  --link-badge: var(--glow);
-  --link-arrow: var(--night);
-  margin-block-start: clamp(1.25rem, 2vw, 2rem);
-}
-
-/* ── The stage and the phone ────────────────────────────────────── */
-
-.stage {
+/* The phone's grid: --u is one em of the phone's type, 24 of them across it and 48 down it.
+   Phones and tablets: the title over the phone, which fills the width, and the notes listed
+   under it. Computers: the phone larger, as tall as the screen allows and narrow enough to
+   leave its title and notes their room on both sides, and the board as wide as the phone —
+   everything round it is placed in its grid. */
+.board {
+  --phone-w: min(21.5rem, 100cqi);
+  --u: calc(var(--phone-w) / 24);
   position: relative;
   display: grid;
   justify-items: center;
   gap: 1.25rem;
-  container-type: inline-size;
+  inline-size: 100%;
 }
 
-/* The phone stands in a pool of light, lit from above like the hero's shelf. */
-.stage::before {
-  content: '';
-  position: absolute;
-  inset: -10% -25%;
-  background: radial-gradient(
-    closest-side at 50% 35%,
-    rgb(159 227 234 / 0.16),
-    rgb(159 227 234 / 0)
-  );
-  pointer-events: none;
+@media (min-width: 64em) {
+  .board {
+    --phone-w: min(26rem, 40cqi, (100svh - var(--header-height) - 3rem) / 2);
+    --beside: calc((100cqi - var(--phone-w)) / 2 - var(--u) * 3); /* the room either side */
+    --title-size: min(var(--u) * 5.6, var(--beside) / 5.1); /* each half is 5em wide at most */
+    inline-size: var(--phone-w);
+  }
+}
+
+/* ── The title ──────────────────────────────────────────────────── */
+
+.title {
+  max-inline-size: 16em;
+  font-size: var(--text-h2);
+  color: var(--white);
+  text-align: center;
+}
+
+/* The assistant's name, in the deal yellow: the wall's one colour. */
+.name {
+  color: var(--star);
+}
+
+/* Close under the title, and a little further from the phone. */
+.lead {
+  max-inline-size: 26em;
+  margin-block: -0.5rem 1rem;
+  font-size: var(--text-lead);
+  font-weight: 500;
+  color: var(--glow);
+  text-align: center;
+}
+
+/* Computers: one line broken by the phone — its first half before the phone, its second after
+   it, each against the phone and level with the top of its screen — set as large as the room
+   beside the phone allows. The lead under the title, against the phone too, as a caption is set
+   against its picture. */
+@media (min-width: 64em) {
+  .title {
+    position: absolute;
+    inset-block-start: calc(var(--u) * 1.6);
+    inset-inline: calc((var(--phone-w) - 100cqi) / 2);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--phone-w) minmax(0, 1fr);
+    align-items: start;
+    column-gap: calc(var(--u) * 3);
+    max-inline-size: none;
+    font-size: var(--title-size);
+    line-height: 1.1;
+  }
+
+  .titleStart {
+    grid-column: 1;
+    justify-self: end;
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  .titleEnd {
+    grid-column: 3;
+    justify-self: start;
+    max-inline-size: 5.5em;
+    text-align: start;
+  }
+
+  /* On the phone's right, whichever half of the title is there — the notes on its left point at
+     your question and «أضف الكل» (the screen is right to left in both languages) — and set
+     against the phone. */
+  .lead {
+    position: absolute;
+    inset-block-start: calc(var(--u) * 2.9 + var(--title-size) * 1.1);
+    left: calc(100% + var(--u) * 3);
+    inline-size: min(var(--u) * 16, var(--beside));
+    margin: 0;
+    font-size: max(1.0625rem, var(--u) * 1.2);
+    text-align: left;
+  }
+
+  /* In English that is the title's second half, on two lines. */
+  .lead:dir(ltr) {
+    inset-block-start: calc(var(--u) * 2.9 + var(--title-size) * 2.2);
+  }
 }
 
 .demo {
@@ -241,7 +146,6 @@
 }
 
 .phone {
-  --phone-w: min(21.5rem, 100cqi);
   --focus-ring: var(--brand-text);
   position: relative;
   inline-size: var(--phone-w);
@@ -253,13 +157,184 @@
     inset 0 0 0 1px rgb(255 255 255 / 0.12),
     0 0 0 1px rgb(159 227 234 / 0.16),
     0 2.5em 4em -1.5em rgb(0 0 0 / 0.75);
-  font-size: calc(var(--phone-w) / 24);
+  font-size: var(--u);
 }
 
-/* Computers: the phone also fits the height of the screen. */
+/* ── The notes ──────────────────────────────────────────────────── */
+
+/* A note: its number in the pen's yellow, its words in white, as if written on the wall. */
+.notes {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.note {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: clamp(1.125rem, 1.35vw, 1.4375rem);
+  font-weight: 800;
+  line-height: var(--leading-snug);
+  text-wrap: balance;
+}
+
+.noteNumber {
+  flex: none;
+  font-size: 1.3em;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--star);
+}
+
+/* The way to get the app, written as the last note: its words underlined in the yellow pen. */
+.cta {
+  --link: var(--white);
+  --link-line: var(--star);
+  --link-arrow: var(--star);
+}
+
+/* The arrows and the pins are the computer's and the phone's way of pointing, one each. */
+.arrows,
+.pin {
+  display: none;
+}
+
+/* Phones and tablets: the notes listed under the phone, each number pinned on its part of it. */
+@media (max-width: 63.99em) {
+  .notes {
+    inline-size: min(100cqi, 24rem);
+    margin-block-start: 0.75rem;
+  }
+
+  .cta {
+    margin-block-start: 0.25rem;
+  }
+
+  .pin {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    inline-size: calc(var(--u) * 1.9);
+    block-size: calc(var(--u) * 1.9);
+    border-radius: 50%;
+    background: var(--star);
+    color: var(--night);
+    font-size: calc(var(--u) * 1.05);
+    font-weight: 900;
+    line-height: 1;
+    box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 0.35);
+    translate: -50% -50%;
+  }
+
+  /* The number centred on its digit, not on its line box (tokens.css → --label-box). */
+  .pinNumber {
+    text-box: trim-both cap alphabetic;
+  }
+
+  /* On the edge of your bubble, of كيور's list and of its «أضف الكل» (the screen is right to
+     left in both languages: these are its physical sides). */
+  .pin[data-note='ask'] {
+    left: calc(var(--u) * 1);
+    top: calc(var(--u) * 19.05);
+  }
+
+  .pin[data-note='list'] {
+    left: calc(var(--u) * 22.45);
+    top: calc(var(--u) * 31.2);
+  }
+
+  .pin[data-note='add'] {
+    left: calc(var(--u) * 1.75);
+    top: calc(var(--u) * 25.2);
+  }
+}
+
+/* Computers: the notes written round the phone, each level with what it explains and 4.5u out
+   from the phone's edge, its arrow running in to it (Assistant.jsx → NOTES). Your question and
+   «أضف الكل» are on the screen's left, كيور's list reaches its right edge. */
 @media (min-width: 64em) {
-  .phone {
-    --phone-w: min(21.5rem, 100cqi, 40svh);
+  /* The list lies over the board, as large as it: its notes are placed in it. */
+  .notes {
+    position: absolute;
+    inset: 0;
+    display: block;
+    pointer-events: none;
+  }
+
+  .note,
+  .cta {
+    position: absolute;
+    inline-size: max-content;
+    max-inline-size: calc(var(--u) * 18);
+    translate: 0 -50%;
+    pointer-events: auto;
+  }
+
+  /* Written large, in the phone's grid: the notes fill the wall beside it. */
+  .note,
+  .board .cta {
+    font-size: max(1.125rem, var(--u) * 1.55);
+  }
+
+  .noteNumber {
+    font-size: 1.45em;
+  }
+
+  /* Each note's words lean towards the phone: to the right on its left, to the left on its
+     right. */
+  .note[data-note='ask'],
+  .note[data-note='add'] {
+    right: calc(100% + var(--u) * 4.5);
+    text-align: right;
+  }
+
+  .note[data-note='list'],
+  .cta {
+    left: calc(100% + var(--u) * 4.5);
+    text-align: left;
+  }
+
+  .note[data-note='ask'] {
+    top: calc(var(--u) * 15.3);
+  }
+
+  .note[data-note='list'] {
+    top: calc(var(--u) * 34);
+  }
+
+  .note[data-note='add'] {
+    top: calc(var(--u) * 30.6);
+  }
+
+  .cta {
+    top: calc(var(--u) * 42.9);
+  }
+
+  /* The arrows: drawn in the phone's grid (viewBox: 18u out on either side), over it. */
+  .arrows {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: calc(var(--u) * -18);
+    display: block;
+    inline-size: calc(var(--u) * 60);
+    block-size: calc(var(--u) * 48);
+    max-inline-size: none;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .arrow path {
+    fill: none;
+    stroke: var(--star);
+    stroke-width: 0.16;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
   }
 }
 
@@ -272,7 +347,7 @@
   border-radius: 2.6em;
   background: var(--white);
   color: var(--ink);
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .island {
@@ -353,7 +428,7 @@
 
 .qurText {
   font-size: 0.9em;
-  line-height: 1.65;
+  line-height: 1.5;
 }
 
 .reactions {
@@ -483,6 +558,11 @@
   cursor: default;
 }
 
+/* The words, level with the middle of the + and the tick (tokens.css → --label-box). */
+.addAllLabel {
+  text-box: var(--label-box);
+}
+
 .plus {
   font-size: 1.35em;
   font-weight: 500;
@@ -529,7 +609,7 @@
   place-items: center;
   background: rgb(18 125 134 / 0.16);
   opacity: 0;
-  transition: opacity 300ms ease;
+  transition: opacity 400ms ease;
 }
 
 .productAdded svg {
@@ -540,17 +620,17 @@
   background: var(--brand-text);
   color: var(--white);
   scale: 0.4;
-  transition: scale 450ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: scale var(--duration-base) var(--ease-settle);
 }
 
 .card[data-added] .productAdded {
   opacity: 1;
-  transition-delay: calc(var(--i) * 110ms + 550ms);
+  transition-delay: calc(var(--i) * 150ms + 750ms);
 }
 
 .card[data-added] .productAdded svg {
   scale: 1;
-  transition-delay: calc(var(--i) * 110ms + 550ms);
+  transition-delay: calc(var(--i) * 150ms + 750ms);
 }
 
 .price {
@@ -654,16 +734,16 @@
   box-shadow: 0 0.75em 1.5em -0.75em rgb(4 40 47 / 0.6);
   translate: 0 170%;
   transition:
-    translate 550ms var(--ease-out),
-    --qty 900ms var(--ease-out) 450ms,
-    --sar 900ms var(--ease-out) 450ms;
+    translate 750ms var(--ease-out),
+    --qty 1300ms var(--ease-out) 600ms,
+    --sar 1300ms var(--ease-out) 600ms;
 }
 
 .cart[data-open] {
   --qty: var(--qty-to);
   --sar: var(--sar-to);
   translate: none;
-  animation: bump 450ms ease 1.25s;
+  animation: bump var(--duration-base) ease 1.6s;
 }
 
 .cartIcon {
@@ -676,6 +756,11 @@
 .cartLabel {
   font-size: 0.9em;
   font-weight: 800;
+}
+
+.cartLabel,
+.cartFigures {
+  text-box: var(--label-box);
 }
 
 .cartFigures {
@@ -711,8 +796,7 @@
 @media (prefers-reduced-motion: reduce) {
   .cart,
   .card[data-added] .productAdded,
-  .card[data-added] .productAdded svg,
-  .step[data-last] .tick path {
+  .card[data-added] .productAdded svg {
     transition-delay: 0s;
   }
 
@@ -756,12 +840,9 @@
   color: var(--glow);
 }
 
-/* The button's name, set as a label (not a second button): dashed, like a tag. */
+/* The button's name, set as it reads in the app: in the wall's yellow, not as a second button. */
 .hintButton {
-  padding: 0.0625rem 0.625rem;
-  border: 1px dashed rgb(159 227 234 / 0.6);
-  border-radius: var(--pill);
-  color: var(--white);
+  color: var(--star);
   font-weight: 800;
 }
 
@@ -770,30 +851,39 @@
   block-size: 1.1rem;
 }
 
+/* A quiet button: its words and its arrow, no outline. */
 .replay {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   min-block-size: 2.75rem;
-  padding-inline: 0.875rem 1rem;
-  border: 1px solid rgb(159 227 234 / 0.35);
-  border-radius: var(--pill);
-  background: rgb(4 40 47 / 0.6);
-  color: var(--glow);
+  padding-inline: 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--white);
   font-family: inherit;
   font-size: 0.9375rem;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
-  transition: background-color var(--duration-fast) ease;
 }
 
-.replay:hover {
-  background: rgb(159 227 234 / 0.14);
+.replayLabel {
+  text-box: var(--label-box);
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.35);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.45em;
+  transition: text-decoration-color var(--duration-fast) ease;
+}
+
+.replay:hover .replayLabel {
+  text-decoration-color: currentColor;
 }
 
 .replayIcon {
   inline-size: 1.125rem;
   block-size: 1.125rem;
+  color: var(--star);
   transition: rotate 500ms var(--ease-out);
 }
 
@@ -803,12 +893,13 @@
 
 /* ── The replay ─────────────────────────────────────────────────── */
 
-/* Armed below the fold: what is about to arrive is held back, the list not yet ticked… */
-.section[data-demo='ready'] :is(.user, .qurMark, .word, .reactions, .card, .product, .hint) {
+/* Armed below the fold: what is about to arrive is held back, the notes not yet written… */
+.section[data-demo='ready']
+  :is(.user, .qurMark, .word, .reactions, .card, .product, .hint, .note, .pin, .cta) {
   opacity: 0;
 }
 
-.section[data-demo='ready'] .tick path {
+.section[data-demo='ready'] .arrow path {
   stroke-dashoffset: 1;
 }
 
@@ -816,11 +907,11 @@
    within five seconds. */
 .section[data-demo='play'] .user,
 .section[data-demo='play'] .hint {
-  animation: rise 450ms var(--ease-out) var(--at) both;
+  animation: rise 600ms var(--ease-out) var(--at) both;
 }
 
 .section[data-demo='play'] .qurMark {
-  animation: fade 300ms ease calc(var(--at) - 0.45s) both;
+  animation: fade 400ms ease calc(var(--at) - 0.45s) both;
 }
 
 .section[data-demo='play'] .typing {
@@ -840,20 +931,19 @@
 }
 
 .section[data-demo='play'] .word {
-  animation: word 380ms ease calc(var(--at) + var(--i) * 30ms) both;
+  animation: word 450ms ease calc(var(--at) + var(--i) * 30ms) both;
 }
 
 .section[data-demo='play'] .reactions {
-  animation: fade 300ms ease calc(var(--at) + 0.55s) both;
+  animation: fade 400ms ease calc(var(--at) + 0.55s) both;
 }
 
 .section[data-demo='play'] .card {
-  animation: rise 550ms var(--ease-out) var(--at) both;
+  animation: rise 700ms var(--ease-out) var(--at) both;
 }
 
 .section[data-demo='play'] .product {
-  animation: pop 500ms cubic-bezier(0.34, 1.45, 0.64, 1) calc(var(--at) + 0.2s + var(--i) * 0.1s)
-    both;
+  animation: pop 650ms var(--ease-settle) calc(var(--at) + 0.2s + var(--i) * 0.12s) both;
 }
 
 /* Once the invitation is up, the button nudges twice: "press me". */
@@ -861,8 +951,32 @@
   animation: nudge 700ms ease-in-out var(--hint-at) 2;
 }
 
-.section[data-demo='play'] .step:not([data-last]) .tick path {
-  animation: write 450ms ease var(--at) both;
+/* Each note is written in as the conversation reaches its part — its words from where they
+   start, as a pen writes them — then the pen's arrow from them to the screen, then its head;
+   the last, the way to the app, once the list is in. */
+.section[data-demo='play'] .note {
+  animation: write-in 700ms var(--ease-out) var(--at) both;
+}
+
+.section[data-demo='play'] .cta {
+  animation: write-in 700ms var(--ease-out) calc(var(--hint-at) + 0.5s) both;
+}
+
+.section[data-demo='play'] :is(.note, .cta):dir(ltr) {
+  animation-name: write-in-ltr;
+}
+
+.section[data-demo='play'] .arrow path {
+  animation: write 650ms var(--ease-out) calc(var(--at) + 0.2s) both;
+}
+
+.section[data-demo='play'] .arrow .arrowHead {
+  animation-duration: 300ms;
+  animation-delay: calc(var(--at) + 0.75s);
+}
+
+.section[data-demo='play'] .pin {
+  animation: pop 500ms var(--ease-settle) var(--at) both;
 }
 
 @keyframes rise {
@@ -875,7 +989,7 @@
 @keyframes pop {
   from {
     opacity: 0;
-    scale: 0.6;
+    scale: 0.75;
   }
 }
 
@@ -923,5 +1037,26 @@
 @keyframes write {
   from {
     stroke-dashoffset: 1;
+  }
+}
+
+/* A line of writing uncovered from where it starts: the right in Arabic, the left in English. */
+@keyframes write-in {
+  from {
+    clip-path: inset(-0.5em -0.5em -0.5em 100%);
+  }
+
+  to {
+    clip-path: inset(-0.5em);
+  }
+}
+
+@keyframes write-in-ltr {
+  from {
+    clip-path: inset(-0.5em 100% -0.5em -0.5em);
+  }
+
+  to {
+    clip-path: inset(-0.5em);
   }
 }

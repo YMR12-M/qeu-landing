@@ -1,70 +1,96 @@
-.section {
-  overflow-x: clip; /* a sticker standing off a corner never widens the page */
-  padding-block: var(--section-space);
-  background: var(--surface);
-}
+/*
+ * «حمّل كيو» — back on the teal: the figures, the call, both stores and the QR code, and the app
+ * in its phone at the end, standing half on the teal and half on the footer's night.
+ */
 
-/* On a computer the QR card hangs 1.75rem under the app (AppStage.module.css): the space
-   under the section starts at the card, as it starts at every other section's last thing. */
-@media (min-width: 64em) and (hover: hover) {
-  .section {
-    padding-block-end: calc(var(--section-space) + 1.75rem);
-  }
+.section {
+  --focus-ring: var(--night);
+  --floor: clamp(7rem, 12vw, 12rem); /* how far down the phone reaches into the night */
+  position: relative;
+  overflow-x: clip; /* a phone set askew never widens the page */
+  padding-block: var(--section-space) 0;
+  background: var(--brand);
+  color: var(--night);
 }
 
 .stats {
-  margin-block-end: clamp(3.5rem, 4.1667vw, 5rem);
+  margin-block-end: clamp(3.5rem, 6vw, 6rem);
 }
 
+/* The call and the phone: stacked on a phone and a tablet, side by side on a computer — the
+   phone standing on the floor. */
 .grid {
+  position: relative;
+  z-index: 1; /* over the floor */
   display: grid;
-  gap: clamp(3rem, 4.1667vw, 5rem);
-  align-items: center;
+  gap: clamp(2.5rem, 4vw, 4rem);
+  padding-block-end: var(--section-space);
 }
 
 @media (min-width: 64em) {
   .grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    align-items: end;
+    padding-block-end: calc(var(--floor) * 0.45);
+  }
+
+  .copy {
+    align-self: center;
+    padding-block-end: var(--floor);
   }
 }
 
 .title {
-  font-size: var(--text-h2);
+  font-size: clamp(3rem, 6.5vw, 7.5rem);
+  line-height: 1.05;
+  color: var(--night);
 }
 
 /* The brand's name in the heading is its wordmark, sized to the letters around it. */
 .brand {
   display: inline-block;
-  block-size: 1.02em;
+  block-size: 1em;
   inline-size: auto;
   margin-inline: 0.08em;
   vertical-align: -0.2em;
-  color: var(--deep);
 }
 
 .subtitle {
   margin-block-start: 0.5rem;
   font-size: var(--text-h3);
   font-weight: 800;
-  line-height: 1.3;
-  color: var(--deep);
+  line-height: var(--leading-snug);
 }
 
 .text {
-  max-inline-size: 30em;
-  margin-block-start: 1.5rem;
+  max-inline-size: 28em;
+  margin-block-start: 1rem;
   font-size: var(--text-lead);
   font-weight: 500;
-  color: var(--muted);
 }
 
-.pills {
-  margin-block-start: clamp(1.75rem, 2.0833vw, 2.5rem);
+/* Both stores, and the QR code beside them for a reader on a computer. */
+.get {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem clamp(2rem, 3.5vw, 3.5rem);
+  margin-block-start: clamp(1.75rem, 2.5vw, 2.5rem);
 }
 
-/* Phones: no picture of a phone on a phone — the store buttons are the way in. */
-@media (max-width: 47.99em) {
-  .stage {
+/* Phones and tablets: no picture of a phone on a phone — the store buttons are the way in. */
+@media (max-width: 63.99em) {
+  .stage,
+  .floor {
     display: none;
   }
+}
+
+/* The footer's night, begun at the bottom of the teal: the phone stands half on it. */
+.floor {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: var(--floor);
+  background: var(--night);
 }

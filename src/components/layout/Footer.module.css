@@ -1,57 +1,25 @@
 /*
- * The bag the order comes home in: Qeu's teal paper with a cut, toothed top edge and a
- * folded hem, the brand printed across it, and a white delivery sticker slapped on.
+ * The footer on the night wall: the wordmark and the slogan set large, then the delivery
+ * label's words, the page's contents and the ways to reach Qeu in three columns — no sticker,
+ * no bag, no rule between them — and the small print.
  */
 
 .footer {
-  --tooth: 0.875rem; /* one tooth of the bag's cut edge */
-  --hem: clamp(1.75rem, 2.5vw, 2.5rem); /* the top of the bag, folded over */
-  --hem-paper: #083e4a;
   --focus-ring: var(--glow);
   position: relative;
-  /* Sideways only: the sticker, lifted and turned before it lands, must not widen the page
-     (phones would zoom out to fit it). The teeth still show above the bag. */
-  overflow-x: clip;
-  padding-block: calc(var(--hem) + var(--section-space)) clamp(2rem, 3vw, 3rem);
-  background:
-    linear-gradient(rgb(159 227 234 / 0.2), rgb(159 227 234 / 0.2)) 0 var(--hem) / 100% 1px
-      no-repeat,
-    linear-gradient(rgb(0 0 0 / 0.16), rgb(0 0 0 / 0)) 0 calc(var(--hem) + 1px) / 100% 1.5rem
-      no-repeat,
-    linear-gradient(var(--hem-paper), var(--hem-paper)) 0 0 / 100% var(--hem) no-repeat,
-    var(--deep);
+  padding-block: clamp(3rem, 6vw, 6rem) clamp(2rem, 3vw, 3rem);
+  background: var(--night);
   color: var(--white);
 }
 
-/* The cut edge: a row of teeth along the top of the bag. */
-.footer::before {
-  content: '';
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 100%;
-  block-size: calc(var(--tooth) / 2);
-  background: conic-gradient(from 135deg at 50% 0, var(--hem-paper) 90deg, #0000 0) 50% 0 /
-    var(--tooth) 100%;
-}
-
-.layout {
-  display: grid;
-  gap: clamp(2.5rem, 5vw, 4.5rem);
-  align-items: center;
-}
-
-@media (min-width: 64em) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-  }
-}
-
-/* ── The print on the bag ────────────────────────────────────────── */
+/* ── The wordmark and the slogan ────────────────────────────────── */
 
 .print {
-  display: grid;
-  justify-items: start;
-  gap: clamp(1rem, 1.6vw, 1.75rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem 3rem;
 }
 
 .home {
@@ -61,105 +29,68 @@
 
 .wordmark {
   display: block;
-  inline-size: clamp(8.5rem, 17vw, 19rem);
+  inline-size: clamp(8rem, 16vw, 17rem);
   block-size: auto;
   color: var(--white);
 }
 
 .tagline {
-  font-size: clamp(1.625rem, 2.6vw, 3rem);
-  font-weight: 800;
-  line-height: 1.3;
-  color: var(--glow);
+  font-size: clamp(2rem, 4.2vw, 5rem);
+  font-weight: 900;
+  line-height: var(--leading-heading);
+  color: var(--white);
 }
 
-/* The last word on an offer flag, like the labels on the shelf at the top of the page. */
+/* The last word on a stroke of the deal yellow, as with a marker, in night ink — the offer flag
+   of the hero's screens, drawn by hand. The ink is the wall's own colour, so anything of the word
+   the stroke missed would vanish into the night: the stroke reaches up past the dot of «ض» and
+   down past the tails of «ر» and «و» (padding widens the background, not the line). */
 .offer {
-  display: inline-block;
-  padding: 0 0.3em;
-  border-radius: 0.18em;
-  background: var(--star);
+  margin-inline: -0.12em;
+  padding-block: 0.3em 0.07em;
+  padding-inline: 0.18em;
   color: var(--night);
-  rotate: -3deg;
+  background: url('../../assets/marks/marker.svg') no-repeat center / 100% 100%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
-/* ── The delivery sticker ────────────────────────────────────────── */
+/* ── The three columns ──────────────────────────────────────────── */
 
-.sticker {
-  --focus-ring: var(--brand-text);
-  --ink: var(--night);
-  padding: clamp(1.25rem, 2.2vw, 2rem);
-  border-radius: 0.875rem;
-  background: var(--white);
-  color: var(--text);
-  box-shadow:
-    0 1.75rem 2.5rem -1.5rem rgb(1 12 15 / 0.7),
-    0 0.125rem 0.375rem rgb(1 12 15 / 0.3);
+.lists {
+  display: grid;
+  gap: 2.5rem clamp(2rem, 4vw, 4rem);
+  margin-block-start: clamp(3rem, 5.5vw, 5.5rem);
 }
 
-@media (min-width: 64em) {
-  .sticker {
-    rotate: -1.5deg;
+@media (min-width: 48em) {
+  .lists {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 
-/* Scrolled into view, it is slapped on: lifted and turned, then pressed flat onto the bag. */
-.sticker[data-reveal='pending'] {
-  opacity: 0;
-  scale: 1.08;
-  translate: 0 -1.5rem;
-  rotate: -6deg;
+/* Phones: the page's contents are the bar's list, a tap away at the top — the footer keeps the
+   delivery label and the ways to reach Qeu. */
+@media (max-width: 47.99em) {
+  .contents {
+    display: none;
+  }
 }
 
-.sticker[data-reveal='shown'] {
-  transition:
-    opacity 0.25s ease,
-    scale 0.5s var(--ease-out),
-    translate 0.5s var(--ease-out),
-    rotate 0.5s var(--ease-out);
+/* The delivery label's words: «طلبك وصل», from Qeu to your door, and its barcode. */
+.deliveryTitle {
+  font-size: clamp(1.625rem, 2.2vw, 2.25rem);
+  font-weight: 900;
+  line-height: var(--leading-snug);
+  color: var(--star);
 }
 
-.head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem 1.5rem;
-  padding-block-end: 1rem;
-  border-block-end: 3px solid var(--ink);
-}
-
-.title {
-  font-size: clamp(1.5rem, 2.2vw, 2.25rem);
-  font-weight: 800;
-  line-height: 1.2;
-  color: var(--deep);
-}
-
-.tracking {
-  display: grid;
-  justify-items: stretch;
-  gap: 0.25rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-align: center;
-  color: var(--muted);
-}
-
-.barcode {
-  inline-size: clamp(7.5rem, 11vw, 10rem);
-  block-size: 2.5rem;
-  color: var(--ink);
-}
-
-/* From Qeu to your door: the two ends of the route, a dashed road between. */
 .route {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding-block: 0.875rem;
-  border-block-end: 3px solid var(--ink);
+  max-inline-size: 26rem;
+  margin: 1rem 0 0;
 }
 
 .stop {
@@ -168,6 +99,7 @@
   gap: 0.5rem;
 }
 
+/* A dotted road between the two ends of the route. */
 .stop:first-child {
   flex: 1;
 }
@@ -177,80 +109,51 @@
   flex: 1;
   align-self: center;
   margin-inline-start: 0.5rem;
-  border-block-end: 2px dashed #b9cbce;
+  border-block-end: 2px dotted rgb(159 227 234 / 0.45);
 }
 
 .stop dt {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.9375rem;
   font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.stop dt:lang(ar) {
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: normal;
+  color: var(--glow);
 }
 
 .stop dd {
   margin: 0;
   font-size: clamp(1.125rem, 1.4vw, 1.375rem);
   font-weight: 800;
-  color: var(--deep);
 }
 
-.lists {
-  display: grid;
-  gap: 1.25rem 2rem;
-  padding-block-start: 1rem;
+.tracking {
+  display: inline-grid;
+  gap: 0.375rem;
+  margin-block-start: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--glow);
 }
 
-@media (min-width: 30em) {
-  .lists {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-/* Phones: the page's contents are the island's receipt, a tap away at the top — the sticker
-   keeps the ways to reach Qeu. */
-@media (max-width: 47.99em) {
-  .contents {
-    display: none;
-  }
-
-  .lists {
-    grid-template-columns: minmax(0, 1fr);
-  }
+.barcode {
+  inline-size: clamp(8rem, 12vw, 11rem);
+  block-size: 2.25rem;
+  color: var(--white);
 }
 
 .heading {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.heading:lang(ar) {
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: normal;
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--glow);
 }
 
 .links {
   display: grid;
-  margin: 0.25rem 0 0;
+  margin: 0.5rem 0 0;
   padding: 0;
   list-style: none;
 }
 
-/* 44px tall hit areas. */
+/* 44px tall hit areas (40px under a mouse, which needs less). */
 .links a {
   display: flex;
   align-items: center;
@@ -258,59 +161,46 @@
   min-block-size: 2.75rem;
   font-size: clamp(1rem, 1vw, 1.125rem);
   font-weight: 700;
-  color: var(--text);
+  color: var(--white);
   overflow-wrap: anywhere;
-  transition: color var(--duration-fast) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .links a {
+    min-block-size: 2.5rem;
+  }
 }
 
 .links a:hover {
-  color: var(--brand-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
 }
 
-/* A packing-list box, ticked once its section has been read. */
+/* Beside each section, the tick it gets once it has been read, drawn in yellow. */
 .tick {
-  position: relative;
+  --pen: 2.5px;
   flex: none;
-  inline-size: 1.125rem;
-  block-size: 1.125rem;
-  border: 1.5px solid var(--deep);
-  border-radius: 0.25rem;
-  transition: background-color var(--duration-fast) ease;
+  inline-size: 1rem;
+  block-size: 1rem;
+  color: var(--star);
 }
 
-/* The tick is a glyph: drawn the same way in both reading directions. */
-.tick::after {
-  content: '';
-  position: absolute;
-  top: 12%;
-  left: 34%;
-  width: 30%;
-  height: 58%;
-  border: solid var(--white);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg) scale(0);
-  transition: transform var(--duration-base) var(--ease-out);
+[data-seen] {
+  --drawn: 1;
 }
 
-[data-seen] .tick {
-  background: var(--deep);
-}
-
-[data-seen] .tick::after {
-  transform: rotate(45deg) scale(1);
-}
-
-/* ── The small print along the bottom of the bag ─────────────────── */
+/* ── The small print ────────────────────────────────────────────── */
 
 .small {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  margin-block-start: clamp(2.5rem, 4.5vw, 4.5rem);
+  margin-block-start: clamp(3rem, 5vw, 5rem);
   font-family: var(--font-mono);
   font-size: var(--text-mono);
-  line-height: 1.8;
+  line-height: 1.6;
   color: rgb(255 255 255 / 0.72);
 }
 

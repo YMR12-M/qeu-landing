@@ -3,8 +3,16 @@
  *
  * vite-imagetools encodes each import at the listed widths during the build
  * (`as=picture` → { sources, img }). All sources are Qeu's own material:
- *   screen-home, screen-categories   → app screens published on qeu.app (device frame included)
- *   screen-picks, screen-chat, step-* → Google Play screenshots, cropped (≈1.8× the provided crops)
+ *   screen-home                       → app screen published on qeu.app, in its phone
+ *   screen-categories, -picks, -chat  → the app's screens set in screen-home's own phone, so
+ *                                       all four are the same phone: the categories screen from
+ *                                       qeu.app (its phone was another colour), the picks and
+ *                                       chat screens cut out of the Google Play screenshots
+ *                                       (their bezel, dynamic island and backdrop left behind),
+ *                                       the bottom the store cut off completed with the app's tab
+ *                                       bar or the chat's input field, the status bar
+ *                                       screen-home's
+ *   step-*                            → Google Play screenshots, cropped (≈1.8× the provided crops)
  *   play-*                            → the six Google Play screenshots, whole (1242×2688 originals
  *                                       scaled to 960px wide); play-delivery-1/-2 are one panorama
  *   app-icon                          → Google Play icon
@@ -20,10 +28,6 @@
  * 25–30 % smaller than WebP at q72 on these screens and closer to the source (SSIM), while
  * AVIF at q72 came out larger than the WebP. The app icon is WebP only: at the sizes the
  * header asks for, AVIF's container overhead outweighs what it saves.
- *
- * `kind` tells the frames how to fit a screen: a device render sits inside with a margin,
- * a store crop fills the frame edge to edge. `focus` is the crop's object-position, for
- * screens whose important part isn't at the top.
  */
 
 import appIcon from '../assets/images/app-icon.png?w=48;96;160;240&format=webp&quality=80&as=picture';
@@ -97,9 +101,6 @@ const screenChat = picture(screenChatAvif, screenChatWebp);
 const screenHome = picture(screenHomeAvif, screenHomeWebp);
 const screenPicks = picture(screenPicksAvif, screenPicksWebp);
 
-const device = (image) => ({ image, kind: 'device' });
-const crop = (image, focus) => ({ image, kind: 'crop', focus });
-
 export const media = {
   appIcon,
 
@@ -116,12 +117,12 @@ export const media = {
     { id: 'smart', image: playSmart },
   ],
 
-  /** «ليه كيو؟» — one screen per benefit, keyed by benefit id. */
+  /** «ليش كيو؟» — one screen per benefit, keyed by benefit id: four of the same phone. */
   why: {
-    deals: device(screenHome),
-    search: device(screenCategories),
-    prices: crop(screenPicks),
-    picks: crop(screenChat, '50% 72%'), // the «مكونات الكبسة» card
+    deals: screenHome,
+    search: screenCategories,
+    prices: screenPicks,
+    picks: screenChat,
   },
 
   /** «أقسام كيو» — the categories' pictures by department, and the departments' icons. */

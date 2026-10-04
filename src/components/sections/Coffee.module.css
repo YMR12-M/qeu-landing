@@ -1,19 +1,22 @@
 /*
- * «كيو كوفي» — a café corner in the supermarket, after dark: espresso-brown walls (the
- * kitchen's, while this tab is open: Kitchen.module.css), the menu board under a warm neon of
- * the wordmark, and the counter where the drink picked from it is poured
+ * «كيو كوفي» — on the café's espresso wall (the kitchen's, while this tab is open:
+ * Kitchen.module.css), as a café's menu board: the heading at the start, the menu written
+ * straight on the wall at the end, as a café writes it — the drink, a line of cream dots, its
+ * price — the drink picked underlined in crema, and between them, large, the cup poured with it
  * (src/components/illustrations/IcedCup.jsx).
  */
 
-/* Phones: the heading, the counter, the menu right under it — close enough that the cup is
-   still in view when a drink is picked — then the rest. Wider: the counter beside everything
-   else, level with the menu. */
+/* Phones: the heading, the cup, the menu right under it — close enough that the cup is still in
+   view when a drink is picked — then the rest. Tablets: the heading over the menu, the cup facing
+   the menu at the middle of its height, the way to the tab under the menu. Computers: the board
+   in three columns — the heading and the way to the tab, the cup, the menu — the whole café in
+   one view. */
 .layout {
-  --espresso: #1c120c;
   --crema: #e9b97a; /* 9.5:1 on the wall */
   --foam: #f7eee3;
-  --foam-soft: #cdb8a1; /* 9:1 on the wall, 8:1 on the board */
-  --deal: #ff8e76; /* the app's deal red, lit for a dark board: 7:1 */
+  --foam-soft: #cdb8a1; /* 9:1 on the wall */
+  --dots: rgb(247 238 227 / 0.4); /* the menu's leaders: foam, faded to a cream */
+  --deal-lit: #ff8e76; /* the app's deal red, lit for the dark wall: 7:1 */
   --focus-ring: var(--crema);
   display: grid;
   color: var(--foam);
@@ -47,28 +50,56 @@
   grid-area: more;
 }
 
-/* The cup is a smaller one now: the board takes the room, its drinks' names on one line. */
 @media (min-width: 48em) {
   .layout {
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    grid-template-columns: minmax(0, 46rem) minmax(14rem, 1fr);
     grid-template-areas:
-      'intro bar'
+      'intro intro'
       'board bar'
-      'more bar';
-    column-gap: clamp(2.5rem, 6vw, 7rem);
+      'more .';
+    column-gap: clamp(2.5rem, 5vw, 6rem);
     row-gap: clamp(2rem, 3vw, 3rem);
   }
 
+  /* Facing the menu, close to it, level with its middle — and large: the wall's picture, about
+     as tall as the menu it faces. */
   .bar {
     align-self: center;
+    justify-self: start;
+    inline-size: min(21rem, 100%);
+  }
+}
+
+/* The heading's column about as wide as on the other tab (Foods.module.css), so the heading
+   stays where it is when the tab changes; the cup in the middle of the board, as tall as the
+   menu beside it. */
+@media (min-width: 64em) {
+  .layout {
+    grid-template-columns: minmax(17rem, 0.42fr) minmax(0, 0.33fr) minmax(0, 0.67fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'intro bar board'
+      'more bar board';
+    column-gap: clamp(2rem, 3.5vw, 4.5rem);
+    row-gap: 2rem;
+  }
+
+  .bar {
+    justify-self: center;
+    inline-size: min(100%, 19rem);
+  }
+
+  .more {
+    align-self: end;
   }
 }
 
 /* ── The heading ────────────────────────────────────────────────── */
 
 .title {
-  font-size: clamp(2.25rem, 3.6vw, 4.25rem);
-  line-height: 1.15;
+  font-size: var(--text-h2);
+  font-weight: 900;
+  line-height: var(--leading-heading);
   color: var(--foam);
 }
 
@@ -79,94 +110,57 @@
 
 .brand {
   display: inline-block;
-  block-size: 0.98em;
+  block-size: 1em;
   inline-size: auto;
   margin-inline: 0.06em;
   vertical-align: -0.2em;
 }
 
 .lead {
-  max-inline-size: 26em;
-  margin-block-start: 1.25rem;
+  max-inline-size: 24em;
+  margin-block-start: clamp(0.75rem, 1.2vw, 1.25rem);
   font-size: var(--text-lead);
   font-weight: 500;
   color: var(--foam-soft);
 }
 
-/* ── The counter and the cup ────────────────────────────────────── */
+/* ── The cup ────────────────────────────────────────────────────── */
 
 .bar {
   position: relative;
   display: grid;
   justify-items: center;
-  padding-block-start: clamp(1rem, 3vw, 2.5rem);
-}
-
-/* A warm pool of light over the counter. */
-.bar::before {
-  content: '';
-  position: absolute;
-  inset: -12% -20% 10%;
-  background: radial-gradient(
-    closest-side at 50% 45%,
-    rgb(233 185 122 / 0.2),
-    rgb(233 185 122 / 0.05) 55%,
-    rgb(233 185 122 / 0)
-  );
-  pointer-events: none;
 }
 
 .cups {
   position: relative;
-  z-index: 1;
-  inline-size: min(14rem, 100%);
+  inline-size: 100%;
 }
 
-/* Phones: the counter is a strip over the menu — a small cup at its start, poured with the
-   drink picked just under it, and the hint beside it — so the café fits the screen with it. */
+/* Phones: a strip over the menu — a small cup at its start, poured with the drink picked just
+   under it, and the hint beside it — so the café fits the screen with it. */
 @media (max-width: 47.99em) {
   .bar {
     grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
     justify-items: start;
     column-gap: 1.25rem;
-    padding-block-start: 0.75rem;
-  }
-
-  /* The warm pool of light, around the cup. */
-  .bar::before {
-    inset-block: -1.5rem -0.5rem;
-    inset-inline: -2.5rem auto;
-    inline-size: 12rem;
   }
 
   .cups {
-    grid-row: 1;
-    grid-column: 1;
     inline-size: 6.5rem;
   }
 
-  .counter {
-    grid-row: 2;
-    grid-column: 1;
-    justify-self: center;
-    inline-size: 9rem;
-    block-size: 1.25rem;
-    margin-block-start: -0.375rem;
-  }
-
   .hint {
-    grid-row: 1 / span 2;
-    grid-column: 2;
     margin-block-start: 0;
     font-size: 1rem;
-    line-height: 1.5;
+    line-height: 1.4;
     text-align: start;
   }
 }
 
-/* Only the checked drink's cup is on the counter. Showing another plays its pour from the
-   start — no script needed. Where :has() isn't known, the first drink stays poured. */
+/* Only the checked drink's cup is out. Showing another plays its pour from the start — no
+   script needed. Where :has() isn't known, the first drink stays poured. */
 .cup {
   display: none;
 }
@@ -184,148 +178,81 @@
   }
 }
 
-/* The counter top, in walnut, seen just above its edge. */
-.counter {
-  position: relative;
-  inline-size: min(24rem, 100%);
-  block-size: 1.75rem;
-  margin-block-start: -0.5rem;
-  border-radius: 0.375rem;
-  background:
-    linear-gradient(rgb(255 255 255 / 0.12), rgb(255 255 255 / 0) 30%),
-    linear-gradient(#5b3a25 0 45%, #3b2518 45%);
-  box-shadow: 0 1.25rem 2rem -1rem rgb(0 0 0 / 0.8);
-}
-
 .hint {
-  margin-block-start: 1.25rem;
+  margin-block-start: 1.75rem;
   font-size: 0.9375rem;
   font-weight: 700;
   color: var(--crema);
   text-align: center;
 }
 
-/* ── The menu board ─────────────────────────────────────────────── */
-
-.board {
-  position: relative;
-  padding: clamp(1.25rem, 2vw, 1.75rem);
-  border-radius: 1.25rem;
-  background:
-    radial-gradient(120% 55% at 50% 0%, rgb(233 185 122 / 0.14), rgb(233 185 122 / 0) 60%), #28190f;
-  box-shadow:
-    inset 0 0 0 1px rgb(233 185 122 / 0.18),
-    0 2rem 3rem -2rem rgb(0 0 0 / 0.85);
+/* The pen arrow is the board's: it points from the words to the menu at the end. */
+.hintArrow {
+  display: none;
 }
 
-/* The screws it hangs from. */
-.board::before,
-.board::after {
-  content: '';
-  position: absolute;
-  inset-block-start: 0.75rem;
-  inline-size: 0.5rem;
-  block-size: 0.5rem;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #d9c3a5, #6b5440);
+@media (min-width: 64em) {
+  .hint {
+    font-size: 1.0625rem;
+    text-wrap: balance;
+  }
+
+  .hintArrow {
+    --pen: 2px;
+    --wipe: right; /* from its tail to its head, turned round or not */
+    display: inline-block;
+    inline-size: 2.6em;
+    block-size: 1.7em;
+    margin-inline-start: 0.5em;
+    vertical-align: -0.2em;
+  }
+
+  /* Drawn pointing right: turned round where the menu is on the left. */
+  .hintArrow:dir(rtl) {
+    scale: -1 1;
+  }
 }
 
-.board::before {
-  left: 0.75rem;
-}
-
-.board::after {
-  right: 0.75rem;
-}
-
-/* The neon: the wordmark and «كوفي» in warm light. */
-.neon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4em;
-  margin-block-end: 1.25rem;
-  font-size: clamp(1.625rem, 2.4vw, 2.125rem);
-  font-weight: 800;
-  line-height: 1;
-  color: #ffe2b6;
-  text-shadow:
-    0 0 0.25em rgb(255 190 110 / 0.75),
-    0 0 0.8em rgb(255 160 70 / 0.45);
-}
-
-.neonLogo {
-  inline-size: auto;
-  block-size: 1.05em;
-  filter: drop-shadow(0 0 0.2em rgb(255 190 110 / 0.8)) drop-shadow(0 0 0.6em rgb(255 160 70 / 0.4));
-}
+/* ── The menu, written on the wall ──────────────────────────────── */
 
 .menu {
+  display: grid;
+  gap: clamp(1.25rem, 1.8vw, 1.625rem);
   min-inline-size: 0;
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-/* A heading chalked on the board, ruled off to the edge. */
+/* A heading of the menu, in crema, over its drinks: the cold coffee, then the box for a
+   gathering. */
 .heading {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  inline-size: 100%;
-  margin-block-end: 0.5rem;
+  margin-block-end: 0.125rem;
   padding: 0;
-  font-size: 0.9375rem;
+  font-size: clamp(1rem, 1.15vw, 1.25rem);
   font-weight: 800;
   color: var(--crema);
 }
 
-.heading::after {
-  content: '';
-  flex: 1;
-  block-size: 1px;
-  background: rgb(233 185 122 / 0.25);
+.menu + .heading {
+  margin-block: clamp(2rem, 3vw, 2.75rem) clamp(1.25rem, 1.8vw, 1.625rem);
 }
 
-/* The drinks: a two-by-two grid of cards, so the menu stays short. A card is picked as a
-   whole — its radio covers it, unseen, and the card shows the pick — and a picked drink is
-   poured. */
-.menu {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
-}
-
+/* One line of the menu: the photo, the name, cream dots running on to the price — and the size
+   under the name. A drink's whole line is its radio. */
 .option {
   position: relative;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: 3.75rem minmax(0, 1fr);
   grid-template-areas:
-    'thumb item'
-    'thumb prices';
-  align-items: start;
-  gap: 0.25rem 0.625rem;
-  padding: 0.75rem;
-  border-radius: 0.875rem;
-  box-shadow: inset 0 0 0 1px rgb(233 185 122 / 0.16);
+    'thumb line'
+    'thumb size';
+  align-items: center;
+  column-gap: clamp(0.875rem, 1.3vw, 1.25rem);
+}
+
+label.option {
   cursor: pointer;
-  transition:
-    background-color var(--duration-fast) ease,
-    box-shadow var(--duration-fast) ease;
-}
-
-.option:hover {
-  background: rgb(255 255 255 / 0.04);
-}
-
-.option:has(:checked) {
-  background: rgb(233 185 122 / 0.12);
-  box-shadow: inset 0 0 0 2px var(--crema);
-}
-
-.option:has(:focus-visible) {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
 }
 
 .radio {
@@ -333,7 +260,6 @@
   inset: 0;
   z-index: 1;
   margin: 0;
-  border-radius: inherit;
   opacity: 0;
   cursor: pointer;
   appearance: none;
@@ -341,156 +267,128 @@
 
 .thumb {
   grid-area: thumb;
-  align-self: center;
+  justify-self: center;
   inline-size: auto;
-  block-size: 3.25rem;
-  filter: drop-shadow(0 0.25rem 0.3rem rgb(0 0 0 / 0.45));
+  max-inline-size: 100%;
+  block-size: 3.75rem;
+  object-fit: contain;
+  filter: drop-shadow(0 0.5rem 0.5rem rgb(0 0 0 / 0.45));
+  transition: translate var(--duration-base) var(--ease-out);
 }
 
-.item {
-  display: grid;
+.line {
+  grid-area: line;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
   min-inline-size: 0;
 }
 
-.option .item {
-  grid-area: item;
-}
-
 .name {
-  font-size: 1rem;
+  position: relative;
+  flex: none;
+  max-inline-size: 70%;
+  padding-block-end: 0.3em; /* room for the pen */
+  font-size: clamp(1.125rem, 1.4vw, 1.4375rem);
   font-weight: 800;
-  line-height: 1.35;
+  line-height: var(--leading-snug);
   color: var(--foam);
 }
 
+/* The dots, from the name to the price, sitting on the line the words sit on. */
+.leader {
+  flex: 1 1 auto;
+  min-inline-size: 1.5rem;
+  block-size: 0.25rem;
+  background: radial-gradient(circle, var(--dots) 1.4px, transparent 1.9px) 0 50% / 0.6rem 100%
+    repeat-x;
+}
+
+/* The pick, underlined in crema as with a pen (Scribble → --drawn). */
+.pick {
+  --pen: 2.5px;
+  position: absolute;
+  inset-inline: -0.15em;
+  inset-block-end: -0.1em;
+  inline-size: calc(100% + 0.3em);
+  block-size: 0.4em;
+  color: var(--crema);
+}
+
+.option:has(:checked) {
+  --drawn: 1;
+}
+
+.option:has(:checked) .thumb {
+  translate: 0 -0.25rem;
+}
+
+/* Keyboard focus underlines the name — a line under the word, not a box round the line. */
+.option:has(:focus-visible) .name {
+  text-decoration: underline 2px var(--focus-ring);
+  text-underline-offset: 0.35em;
+}
+
 .size {
-  font-size: 0.8125rem;
+  grid-area: size;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--foam-soft);
-}
-
-.prices {
-  display: grid;
-  justify-items: end;
-  line-height: 1.3;
-  white-space: nowrap;
-}
-
-/* On a card, the price follows the name, the old one beside it. */
-.option .prices {
-  display: flex;
-  grid-area: prices;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0 0.375rem;
 }
 
 .price {
-  font-size: 1.0625rem;
-  font-weight: 800;
-  color: var(--deal);
-}
-
-.was {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--foam-soft);
+  --price-size: clamp(1.375rem, 1.8vw, 1.75rem);
+  --price-color: var(--deal-lit);
+  --was-color: var(--foam-soft);
+  flex: none;
 }
 
 @media (max-width: 47.99em) {
   .option {
-    gap: 0.25rem 0.5rem;
-    padding: 0.625rem 0.5rem;
+    grid-template-columns: 3rem minmax(0, 1fr);
+  }
+
+  .thumb {
+    block-size: 3rem;
   }
 
   .name {
-    font-size: 0.875rem;
-    line-height: 1.3;
-  }
-
-  .size {
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
 
   .price {
-    font-size: 0.9375rem;
+    --price-size: 1.25rem;
   }
 }
 
-/* The box, from the tab's «مشروبات للجمعات»: the menu's last line, across both columns. */
-.boxRow {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.75rem;
-  margin-block-start: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.875rem;
-  box-shadow: inset 0 0 0 1px rgb(233 185 122 / 0.16);
-}
-
-.boxImage {
-  inline-size: 3.5rem;
-  block-size: auto;
-  filter: drop-shadow(0 0.25rem 0.3rem rgb(0 0 0 / 0.45));
-}
-
-/* Its shelf in the app, as a chalked tag. */
-.tag {
-  display: inline-block;
-  margin-inline-start: 0.375rem;
-  padding-inline: 0.5rem;
-  border-radius: var(--pill);
-  background: rgb(233 185 122 / 0.14);
-  color: var(--crema);
-  font-size: 0.75rem;
-  font-weight: 700;
-  line-height: 1.6;
-  white-space: nowrap;
-}
-
 .source {
-  margin-block-start: 1rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--foam-soft);
-  text-align: center;
-}
-
-/* ── The tab's shelves, the way to it, and the link ─────────────── */
-
-/* The tab's other shelves, named in a line: the board shows two of the four. */
-.also {
-  font-size: 0.9375rem;
+  margin-block-start: clamp(1.5rem, 2.5vw, 2rem);
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--foam-soft);
 }
 
-.alsoItems {
-  font-weight: 700;
-  color: var(--foam);
+/* ── The tab's shelves, and the way to it ───────────────────────── */
+
+/* The tab's other shelves, named in a line: the menu shows two of the four. */
+.also,
+.where {
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--foam-soft);
 }
 
 .where {
   margin-block-start: 0.375rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--foam-soft);
 }
 
+.alsoItems,
 .path {
-  font-weight: 700;
+  font-weight: 800;
   color: var(--foam);
 }
 
 .chevron {
   margin-inline: 0.4em;
   color: var(--crema);
-}
-
-.cta {
-  --link: var(--foam);
-  --link-badge: var(--crema);
-  --link-arrow: var(--espresso);
-  margin-block-start: clamp(1rem, 2vw, 1.75rem);
 }

@@ -44,24 +44,6 @@ export function Globe(props) {
   );
 }
 
-/** A till receipt — torn bottom edge, three printed lines: the page's sections menu. */
-export function Receipt(props) {
-  return (
-    <Icon
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="M5 3h14v17l-1.75-1.25L15.5 20l-1.75-1.25L12 20l-1.75-1.25L8.5 20l-1.75-1.25L5 20Z" />
-      <path d="M8.5 8h7M8.5 11.5h7M8.5 15h4" />
-    </Icon>
-  );
-}
-
 // Media controls keep their direction in RTL (they describe playback, not reading order).
 export function Pause(props) {
   return (
@@ -121,6 +103,15 @@ export function ChevronBack(props) {
   );
 }
 
+/** Opens downwards: the bar's list of sections, on phones. */
+export function ChevronDown(props) {
+  return (
+    <StrokeIcon {...props}>
+      <path d="m6 9.5 6 6 6-6" />
+    </StrokeIcon>
+  );
+}
+
 export function Basket(props) {
   return (
     <StrokeIcon {...props}>
@@ -143,26 +134,6 @@ export function ArrowForward(props) {
   return (
     <StrokeIcon {...props}>
       <path d="M5 12h14M13 6l6 6-6 6" />
-    </StrokeIcon>
-  );
-}
-
-/** «كيو فودز»: the display fridge its meals are sold from. */
-export function Fridge(props) {
-  return (
-    <StrokeIcon {...props}>
-      <rect x="5" y="2.5" width="14" height="19" rx="2.5" />
-      <path d="M5 10h14M8.5 5.5v1.5M8.5 13v3" />
-    </StrokeIcon>
-  );
-}
-
-/** «كيو كوفي»: an iced coffee in its cold cup, with a straw. */
-export function IcedCoffee(props) {
-  return (
-    <StrokeIcon {...props}>
-      <path d="M5.5 8h13l-1.6 12a1.8 1.8 0 0 1-1.8 1.5H8.9a1.8 1.8 0 0 1-1.8-1.5Z" />
-      <path d="M4.5 8h15M12.5 8l2-5.5h2.5" />
     </StrokeIcon>
   );
 }

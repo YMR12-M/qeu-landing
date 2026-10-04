@@ -1,0 +1,36 @@
+/* The amount set heavy and large, the currency a third its size at its side, the old price
+   after it, struck through. */
+.price {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.6em;
+}
+
+.now {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25em;
+  color: var(--price-color, var(--deal));
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.amount {
+  font-size: var(--price-size, 2rem);
+}
+
+.currency {
+  font-size: calc(var(--price-size, 2rem) * 0.42);
+  font-weight: 800;
+}
+
+.was {
+  font-size: max(0.8125rem, calc(var(--price-size, 2rem) * 0.46));
+  font-weight: 700;
+  line-height: 1;
+  color: var(--was-color, var(--muted));
+  text-decoration-thickness: 0.1em;
+  white-space: nowrap;
+}

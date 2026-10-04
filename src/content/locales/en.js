@@ -15,7 +15,7 @@ const en = {
     siteName: 'Q',
     // The link-preview image (scripts/og-images.js draws it from the hero and this line).
     ogImage: {
-      alt: 'Q: “Make your shopping easier, and your deals better!” and a “Get Q for free” button, beside the app’s screens on a shelf of deals',
+      alt: 'Q: “Make your shopping easier, and your deals better!” and a “Get Q for free” button, beside the app’s screens with their deal flags, and its price: free',
       stores: 'on Google Play and the App Store',
     },
   },
@@ -46,6 +46,12 @@ const en = {
     switchLocale: 'ع',
     here: 'You’re here',
     progress: '{n} of {total}',
+    card: {
+      title: 'Get Q on your phone',
+      text: 'Scan the code with your phone’s camera — it opens your phone’s store.',
+      or: 'or get it from',
+      note: 'Free on iPhone and Android',
+    },
   },
 
   hero: {
@@ -58,7 +64,8 @@ const en = {
       android: 'Download free on Google Play',
     },
     note: '{downloads}+ downloads in {months}',
-    // The shelf: every product's label is an offer; the names echo the store screenshots.
+    // The screens under the headline: each one's flag is an offer; the names echo the store
+    // screenshots. The app's own price is circled beside the headline.
     shelf: {
       offer: 'Deal',
       labels: {
@@ -115,16 +122,13 @@ const en = {
   // The departments and categories are translated; the way to them (`inApp`) stays in Arabic,
   // as the app writes it.
   aisles: {
-    eyebrow: 'Departments',
     title: 'Everything you want —',
     titleAccent: 'it’s all in Q',
     lead: '{departments} departments and over {categories} categories — from rice and vegetables to headphones.',
-    sticker: 'categories',
     legend: 'Choose a department',
-    shelf: { previous: 'Previous categories', next: 'More categories' },
+    directory: 'Store directory',
     where: 'In the app:',
     tab: 'الأقسام',
-    cta: 'Get Q and shop every department',
     departments: {
       groceries: {
         name: 'Groceries',
@@ -212,7 +216,6 @@ const en = {
 
   // The section around the replayed conversation, which stays in Arabic: so is the app.
   assistant: {
-    eyebrow: 'The smart assistant in Q',
     name: 'Q-ur',
     title: 'Ask Q-ur about your dish',
     lead: 'Ask it about a dish like kabsa, and it puts the ingredients in one list.',
@@ -232,14 +235,14 @@ const en = {
     tabs: { foods: 'Q Foods', coffee: 'Q Coffee' },
   },
 
-  // The app is Arabic, so its signs stay Arabic (the fridge's, the menu board's) and so does
-  // the way to the tab (`path`); the products are translated.
+  // The app is Arabic, so its signs stay Arabic (the cup's label) and so does the way to the
+  // tab (`path`); the products are translated.
   foods: {
     title: 'Not cooking today?',
+    struck: 'cooking',
     titleAccent: 'Leave it to Q Foods',
     lead: 'Meals and sandwiches made by Q itself, ordered with your groceries.',
-    fridgeLabel: 'The Q Foods fridge',
-    sign: 'فودز',
+    fridgeLabel: 'Q Foods meals',
     seal: { main: 'Made by', sub: 'Q' },
     offer: 'Deal',
     products: {
@@ -262,7 +265,6 @@ const en = {
     also: { label: 'Also in the app:', items: ['Appetizers & dips', 'Salads'] },
     where: 'In the app, under:',
     path: ['المنتجات الطازجة', 'كيو فودز'],
-    cta: 'Get Q and order your meal',
   },
 
   coffee: {
@@ -290,7 +292,6 @@ const en = {
     also: { label: 'Also in the app:', items: ['Iced tea', 'Coffee of the day'] },
     where: 'In the app, under:',
     path: ['المنتجات الطازجة', 'كيو كوفي'],
-    cta: 'Get Q and order your coffee',
   },
 
   prices: {
@@ -300,7 +301,6 @@ const en = {
   },
 
   inside: {
-    eyebrow: 'How it works',
     arrived: 'Your order’s here',
     title: 'Our deals come to you — at the same price',
     lead: 'Simple shopping, secure payment options, and delivery right to your door.',
@@ -324,12 +324,9 @@ const en = {
   },
 
   faq: {
-    eyebrow: 'Before you download',
     title: 'Got a question?',
     lead: 'We printed the answers on one receipt: short and clear.',
     ticket: {
-      take: 'Take a number',
-      now: 'Now serving',
       label: 'Your number',
       question: 'Your question isn’t on the receipt?',
       action: 'Email us',
@@ -341,8 +338,6 @@ const en = {
       total: 'Total',
       totalValue: 'Free',
       thanks: 'Thanks for choosing Q',
-      more: 'Print the other questions ({n})',
-      less: 'Fold the questions back',
     },
     items: [
       {
@@ -397,7 +392,7 @@ const en = {
     ],
   },
 
-  // The store figures, printed as the app's nutrition-facts label.
+  // The store figures, in the words of the app's nutrition-facts label.
   stats: {
     title: 'Nutrition Facts',
     product: 'for the Q app',
@@ -408,7 +403,7 @@ const en = {
       detail: 'on Google Play in the {months} since launch',
     },
     rating: { name: 'Rating', detail: 'from phone users on Google Play' },
-    fiveStar: { name: '5-star ratings', unit: '%', detail: '{count} phone ratings' },
+    fiveStar: { name: '5-star ratings', suffix: '%', detail: '{count} phone ratings' },
     count: { name: 'Ratings', detail: 'from phones · {allRatings} in total' },
     price: { name: 'Price', value: 'Free', detail: 'on the App Store and Google Play' },
     source: 'Figures from Q’s Google Play page, {date}.',
@@ -417,7 +412,6 @@ const en = {
   download: {
     title: 'Get Q',
     subtitle: 'Free on your phone',
-    sticker: 'FREE',
     text: 'For iPhone and Android, and the deals start on the very first screen. The app itself is in Arabic.',
     stageAlt:
       'The Q app home screen: a super deal on Al Fakhama rice with Al Fakhama oil free, and the “prices you’ll only find on Q” section',
@@ -437,7 +431,7 @@ const en = {
   footer: {
     // The slogan on qeu.app/english: “Our Prices are Offers!”.
     tagline: { before: 'Our prices are', offer: 'offers' },
-    // The delivery sticker on the bag the order comes in.
+    // The order's delivery label, written in the footer.
     sticker: {
       title: 'Your order’s here',
       from: 'From',

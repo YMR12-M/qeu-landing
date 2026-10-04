@@ -204,37 +204,39 @@
 
 /* ── The pour ───────────────────────────────────────────────────── */
 
+/* Poured at an unhurried pace — about four and a half seconds from the cup set down to the cold
+   beading on it — so the milk, then the shot, can be watched going in. */
 @media (prefers-reduced-motion: no-preference) {
   .cup {
-    animation: set-down 400ms var(--ease-out) both;
+    animation: set-down 600ms var(--ease-out) both;
   }
 
   .stream[data-stream='milk'] {
-    animation: stream 1050ms linear 350ms both;
+    animation: stream 1350ms linear 450ms both;
   }
 
   .stream[data-stream='coffee'] {
-    animation: stream 900ms linear 1200ms both;
+    animation: stream 1150ms linear 1550ms both;
   }
 
   .pour {
-    animation: rise 1750ms cubic-bezier(0.35, 0.1, 0.3, 1) 500ms both;
+    animation: rise 2250ms cubic-bezier(0.35, 0.1, 0.3, 1) 650ms both;
   }
 
   .shot {
-    animation: shot 1100ms ease-out 1300ms both;
+    animation: shot 1400ms ease-out 1700ms both;
   }
 
   .ice {
-    animation: float 1600ms ease-out 600ms both;
+    animation: float 2100ms ease-out 800ms both;
   }
 
   .label {
-    animation: slap 550ms cubic-bezier(0.2, 0.9, 0.3, 1.25) 2250ms both;
+    animation: slap 800ms var(--ease-settle) 2900ms both;
   }
 
   .drops {
-    animation: bead 1200ms ease 2400ms both;
+    animation: bead 1500ms ease 3100ms both;
   }
 
   /* Waiting below the fold (Coffee.jsx): an empty cup of ice, and no pour yet. */
@@ -313,18 +315,14 @@
 @keyframes slap {
   0% {
     opacity: 0;
-    scale: 1.5;
-    rotate: -16deg;
+    scale: 1.35;
+    rotate: -14deg;
   }
 
-  60% {
+  70% {
     opacity: 1;
-    scale: 0.95;
+    scale: 0.98;
     rotate: -4deg;
-  }
-
-  80% {
-    scale: 1.03;
   }
 
   100% {

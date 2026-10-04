@@ -1,58 +1,15 @@
 .visual {
   position: relative;
-  justify-self: center;
-  inline-size: min(100%, 27rem);
-}
-
-.stage {
-  position: relative;
-  aspect-ratio: 5 / 6;
-  overflow: hidden;
-  border-radius: 22%;
-  background: var(--icon-aqua);
-}
-
-.logo {
-  position: absolute;
-  inset-block-start: 10%;
-  inset-inline: 0;
-  inline-size: 46%;
-  margin-inline: auto;
-  color: var(--white);
+  display: grid;
+  justify-items: center;
 }
 
 .phone {
-  position: absolute;
-  inset-block-start: 34%;
-  inset-inline: 0;
-  inline-size: 62%;
-  margin-inline: auto;
-  filter: drop-shadow(0 1.75rem 2rem rgb(4 40 47 / 0.35));
+  inline-size: min(100%, clamp(15rem, 20vw, 21rem));
+  rotate: -6deg;
+  filter: drop-shadow(0 2.5rem 2.5rem rgb(4 40 47 / 0.45));
 }
 
-/* The «مجاناً» starburst, on the stage's outer top corner: inside the page's edge on a phone,
-   standing off the corner on a computer. */
-.sticker {
-  --size: clamp(5.5rem, 9vw, 7.5rem);
-  position: absolute;
-  z-index: 1;
-  inset-block-start: calc(var(--size) * -0.3);
-  inset-inline-end: -0.25rem;
-}
-
-@media (min-width: 64em) {
-  .stage {
-    aspect-ratio: 4 / 5;
-  }
-
-  .sticker {
-    inset-inline-end: calc(var(--size) * -0.25);
-  }
-
-  .qr {
-    position: absolute;
-    inset-block-end: -1.75rem;
-    inset-inline-start: -3.5rem;
-    box-shadow: var(--shadow-float);
-  }
+.phone:dir(ltr) {
+  rotate: 6deg;
 }

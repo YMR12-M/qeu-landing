@@ -5,8 +5,6 @@ import { Reveal } from '../ui/Reveal.jsx';
 import { SectionHeading } from '../ui/SectionHeading.jsx';
 import styles from './HowItWorks.module.css';
 
-const stepNumber = (index) => String(index + 1).padStart(2, '0');
-
 /**
  * Qeu's delivery van in its livery — white, two teal waves, the wordmark on the side — drawn
  * facing the way the steps read. The wordmark sits outside the SVG, so flipping the van for
@@ -69,12 +67,7 @@ export function HowItWorks() {
   return (
     <section id="inside" className={styles.section} aria-labelledby="inside-title">
       <div className="container">
-        <SectionHeading
-          id="inside-title"
-          eyebrow={inside.eyebrow}
-          title={inside.title}
-          lead={inside.lead}
-        />
+        <SectionHeading id="inside-title" title={inside.title} lead={inside.lead} />
 
         <div className={styles.route} aria-hidden="true">
           <Skyline className={styles.skyline} />
@@ -93,7 +86,6 @@ export function HowItWorks() {
           {inside.steps.map((step, index) => (
             <span key={step.id} className={styles.stop} data-stop={index + 1}>
               <span className={styles.dot} />
-              <span className={styles.stopNumber}>{stepNumber(index)}</span>
             </span>
           ))}
           <DeliveryVan />
@@ -106,10 +98,10 @@ export function HowItWorks() {
               key={step.id}
               className={styles.step}
               data-step={step.id}
-              delay={index * 80}
+              delay={index * 150}
             >
               <span className={styles.number} aria-hidden="true">
-                {stepNumber(index)}
+                {index + 1}
               </span>
               <h3 className={styles.title}>{step.title}</h3>
               <p className={styles.text}>{step.text}</p>

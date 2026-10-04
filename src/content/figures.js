@@ -11,10 +11,10 @@ const monthsBetween = (from, to) =>
 /**
  * The figures the copy quotes as {tokens}, formatted for one locale from src/content/site.js,
  * so a new capture of the store listing is a one-file change:
- *   {downloads}  "١٠٠ ألف" / "100K"      {months}     "٨ شهور" / "8 months"
- *   {allRatings} "١٫٣ ألف" / "1.3K"
- *   {package}    "sa.qeu1.app"          {androidMin} "٧٫٠" / "7.0"
- *                                        {iosMin}     "١٥٫٠" / "15.0"
+ *   {downloads}  "100 ألف" / "100K"      {months}     "8 شهور" / "8 months"
+ *   {allRatings} "1.3 ألف" / "1.3K"
+ *   {package}    "sa.qeu1.app"          {androidMin} "7.0"
+ *                                        {iosMin}     "15.0"
  * `copy` is the locale's copy (src/content/locales), for its words for numbers.
  */
 export function figuresFor(locale, copy) {

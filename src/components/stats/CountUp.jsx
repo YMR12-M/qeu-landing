@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { cx } from '../../lib/cx.js';
-import { Numeral } from '../ui/Numeral.jsx';
 import styles from './CountUp.module.css';
 
-const DURATION = 1100;
+const DURATION = 1800;
 
 /**
  * A figure that counts up the first time it scrolls into view.
@@ -62,10 +61,10 @@ export function CountUp({ value, format, className }) {
   return (
     <span ref={ref} className={cx(styles.countUp, className)}>
       <span className={styles.final} aria-hidden="true">
-        <Numeral>{format(value)}</Numeral>
+        {format(value)}
       </span>
       <span className={styles.current} aria-hidden="true">
-        <Numeral>{format(current)}</Numeral>
+        {format(current)}
       </span>
       <span className="visually-hidden">{format(value)}</span>
     </span>

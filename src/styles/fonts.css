@@ -1,7 +1,9 @@
 /*
- * Self-hosted fonts (from @fontsource), as specified by the v3 design:
+ * Self-hosted fonts (from @fontsource):
  *   Tajawal 500 · 700 · 800 — all text (Arabic + Latin subsets)
- *   IBM Plex Mono 500        — figures, step numbers, fine print
+ *   Tajawal 900             — the display titles: the hero and every section's title, set
+ *                             large and heavy, as a poster sets them (9 KB per subset)
+ *   IBM Plex Mono 500       — figures, step numbers, fine print
  * Each subset is a separate file; the browser downloads only what the page renders. The
  * text weight is 500 (base.css): v3's 400 was left to a few lines of the «اسأل كيور» chat and
  * two small mono lines, and cost three more files (34 KB) on every first visit.
@@ -10,4 +12,5 @@
 @import '@fontsource/tajawal/500.css';
 @import '@fontsource/tajawal/700.css';
 @import '@fontsource/tajawal/800.css';
+@import '@fontsource/tajawal/900.css';
 @import '@fontsource/ibm-plex-mono/latin-500.css';

@@ -16,7 +16,7 @@ const ar = {
     siteName: 'كيو',
     // The link-preview image (scripts/og-images.js draws it from the hero and this line).
     ogImage: {
-      alt: 'كيو: «تطبيق كله عروض من أوله إلى آخره، وأسعار ما تلاقيها إلا فيه» وزر «حمّل كيو مجاناً»، بجانب شاشات التطبيق على رف العروض',
+      alt: 'كيو: «تطبيق كله عروض من أوله إلى آخره، وأسعار ما تلاقيها إلا فيه» وزر «حمّل كيو مجاناً»، بجانب شاشات التطبيق بأعلام العروض، وسعره: مجاناً',
       stores: 'على Google Play و App Store',
     },
   },
@@ -46,8 +46,16 @@ const ar = {
     download: 'حمّل كيو',
     switchLocale: 'EN',
     here: 'أنت هنا',
-    // Beside the section's name in the folded island: how far down the page the reader is.
+    // Beside the section's name in the bar at the top (phones): how far down the page it is.
     progress: '{n} من {total}',
+    // On a computer, «حمّل كيو» in the bar opens a card: the download QR code (which sends
+    // each phone to its own store) and both stores.
+    card: {
+      title: 'حمّل كيو على جوالك',
+      text: 'امسح الكود بكاميرا جوالك، ويفتح لك متجر جوالك مباشرة.',
+      or: 'أو حمّله من',
+      note: 'مجاني على الآيفون والأندرويد',
+    },
   },
 
   hero: {
@@ -59,7 +67,8 @@ const ar = {
       android: 'حمّله مجاناً من Google Play',
     },
     note: 'أكثر من {downloads} تنزيل في {months}',
-    // The shelf: every product's label is an offer; the names echo the store screenshots.
+    // The screens under the headline: each one's flag is an offer; the names echo the store
+    // screenshots. The app's own price is circled beside the headline.
     shelf: {
       offer: 'عرض',
       labels: {
@@ -81,9 +90,9 @@ const ar = {
     items: [
       {
         id: 'deals',
-        title: 'عروض ١+١ مجاناً',
-        sticker: { main: '١+١', sub: 'مجاناً' },
-        text: 'اكتشف أفضل العروض المتاحة على المنتجات اليومية، من ١+١ مجاناً إلى الخصومات الواضحة، وكلها في مكان واحد.',
+        title: 'عروض 1+1 مجاناً',
+        sticker: { main: '1+1', sub: 'مجاناً' },
+        text: 'اكتشف أفضل العروض المتاحة على المنتجات اليومية، من 1+1 مجاناً إلى الخصومات الواضحة، وكلها في مكان واحد.',
         imageAlt: 'الشاشة الرئيسية في تطبيق كيو: عرض السوبر «أرز الفخامة + زيت الفخامة مجاناً»',
       },
       {
@@ -113,23 +122,19 @@ const ar = {
     ],
   },
 
-  // «أقسام كيو»: the store's aisles — a hanging sign for each of the app's departments, and the
-  // shelf under them stocked with the chosen one's categories (src/content/departments.js).
-  // Every name is the app's, written out in full where its card cuts it short.
+  // «أقسام كيو»: the store's aisles — the store directory, a line for each of the app's
+  // departments, and beside it the chosen one's categories (src/content/departments.js). Every
+  // name is the app's, written out in full where its card cuts it short.
   aisles: {
-    eyebrow: 'أقسام كيو',
     title: 'كل اللي تبيه،',
     titleAccent: 'تلقاه في {brand}',
     lead: '{departments} أقسام وأكثر من {categories} فئة — من الرز والخضار لحد السماعات.',
-    // The starburst by the heading: the categories, rounded down to the ten, and this word.
-    sticker: 'فئة',
     legend: 'اختر القسم',
-    // The arrows at the ends of the shelf, on a wider screen.
-    shelf: { previous: 'الفئات السابقة', next: 'فئات أكثر' },
+    // The directory's title, over its lines.
+    directory: 'دليل الأقسام',
     // The way to a department in the app: its «الأقسام» tab, then the department.
     where: 'في التطبيق:',
     tab: 'الأقسام',
-    cta: 'حمّل كيو وتسوّق من كل الأقسام',
     departments: {
       groceries: {
         name: 'المقاضي',
@@ -212,7 +217,6 @@ const ar = {
   // «اسأل كيور»: the section around the replayed conversation (src/content/assistant-chat.js).
   // It says only what the FAQ's answer about كيور says, from the same screenshot.
   assistant: {
-    eyebrow: 'المساعد الذكي في كيو',
     name: 'كيور', // drawn in the assistant's colours wherever the title names it
     title: 'اسأل كيور عن طبختك',
     lead: 'اسأله عن طبخة مثل الكبسة، ويجهّز لك مكوناتها في قائمة وحدة.',
@@ -223,7 +227,7 @@ const ar = {
     hintAfter: '',
     done: 'تمّت الإضافة للسلة',
     // Announced to screen readers when «أضف الكل» is pressed.
-    added: 'أُضيفت مكونات الكبسة للسلة: ١٥ منتج بـ ١٧٩ ر.س',
+    added: 'أُضيفت مكونات الكبسة للسلة: 15 منتج بـ 179 ر.س',
     replay: 'أعد المحادثة',
   },
 
@@ -235,22 +239,21 @@ const ar = {
     tabs: { foods: 'كيو فودز', coffee: 'كيو كوفي' },
   },
 
-  // «كيو فودز»: Qeu's own sandwiches and meals, in the fridge they're sold from. Its shelves
-  // hold what the app's screenshot of the tab shows — names and sizes as the app writes them,
-  // prices from src/content/menu.js. "Made by Qeu" is the client's own word for these meals.
+  // «كيو فودز»: Qeu's own sandwiches and meals, set out as a flyer's offers: what the app's
+  // screenshot of the tab shows — names and sizes as the app writes them, prices from
+  // src/content/menu.js. "Made by Qeu" is the client's own word for these meals.
   foods: {
     title: 'ما تبي تطبخ اليوم؟',
+    struck: 'تطبخ', // crossed out in the title with the red pen: no cooking today
     titleAccent: 'خلّها على {brand} فودز',
     lead: 'وجبات وساندويتشات تحضّرها كيو بنفسها، وتطلبها مع مقاضيك.',
-    fridgeLabel: 'ثلاجة كيو فودز',
-    // The fridge's lit sign: the wordmark, then this word — as the app names the tab.
-    sign: 'فودز',
+    fridgeLabel: 'وجبات كيو فودز',
     seal: { main: 'من تحضير', sub: 'كيو' },
     offer: 'عرض',
     products: {
       omelette: {
         name: 'كلوب أومليت',
-        size: '١٣٠ جم',
+        size: '130 جم',
         imageAlt: 'ساندويتش كلوب أومليت في علبة عليها شعار كيو',
       },
       tuna: {
@@ -260,60 +263,57 @@ const ar = {
       },
       meal: {
         name: 'داود باشا مع الرز',
-        size: '١٥٠×١٥٠ جم',
+        size: '150×150 جم',
         imageAlt: 'علبة داود باشا مع الرز: رز أبيض، وكرات لحم بصلصة الطماطم',
       },
     },
-    // The tab's other shelves in the app, which the fridge doesn't show.
+    // The tab's other shelves in the app, which the page doesn't show.
     also: { label: 'وكمان في التطبيق:', items: ['مقبلات وغموس', 'سلطات'] },
     where: 'تلقاها في التطبيق:',
     path: ['المنتجات الطازجة', 'كيو فودز'],
-    cta: 'حمّل كيو واطلب وجبتك',
   },
 
-  // «كيو كوفي»: the menu board of Qeu's coffee, and a cup poured with the drink picked from
-  // it. The drinks, their size and prices are the app's (src/content/menu.js).
+  // «كيو كوفي»: the menu of Qeu's coffee, and a cup poured with the drink picked from it.
+  // The drinks, their size and prices are the app's (src/content/menu.js).
   coffee: {
     title: 'كيف تبي قهوتك؟',
     titleAccent: '{brand} كوفي تجهّزها لك',
     lead: 'قهوتك الباردة بأسعار عروض، وتوصلك مع مقاضيك.',
-    // The menu board's sign: the wordmark, then this word.
+    // The label on the cup: the wordmark, then this word.
     sign: 'كوفي',
     menu: {
       legend: 'اختر مشروبك',
       cold: 'قهوة باردة',
-      gatherings: 'مشروبات للجمعات', // the box's shelf, tagged on its line
+      gatherings: 'مشروبات للجمعات', // the box's shelf: the menu's second heading
     },
     drinks: {
-      spanish: { name: 'لاتيه إسباني مثلج', size: '١٦ أونصة' },
-      latte: { name: 'لاتيه مثلج', size: '١٦ أونصة' },
-      pistachio: { name: 'لاتيه فستق مثلج', size: '١٦ أونصة' },
-      americano: { name: 'أمريكانو مثلج', size: '١٦ أونصة' },
+      spanish: { name: 'لاتيه إسباني مثلج', size: '16 أونصة' },
+      latte: { name: 'لاتيه مثلج', size: '16 أونصة' },
+      pistachio: { name: 'لاتيه فستق مثلج', size: '16 أونصة' },
+      americano: { name: 'أمريكانو مثلج', size: '16 أونصة' },
     },
     // Its name runs past the app's card («بوكس قهوة اليوم بارد ا…»): only what shows is used.
     box: {
       name: 'بوكس قهوة اليوم بارد',
-      size: '١٫٢ لتر',
+      size: '1.2 لتر',
       imageAlt: 'بوكس قهوة اليوم: كرتون قهوة بصنبور، مع أكواب وكوب ثلج',
     },
     hint: 'اختر من القائمة، ونصبّها لك',
-    // The tab's other shelves in the app, which the board doesn't show.
+    // The tab's other shelves in the app, which the menu doesn't show.
     also: { label: 'وكمان في التطبيق:', items: ['شاي مثلج', 'قهوة اليوم'] },
     where: 'تلقاها في التطبيق:',
     path: ['المنتجات الطازجة', 'كيو كوفي'],
-    cta: 'حمّل كيو واطلب قهوتك',
   },
 
-  // The prices on the fridge's labels and the coffee menu (src/content/menu.js).
+  // The prices of Qeu Foods' packs and the coffee menu (src/content/menu.js).
   prices: {
     price: '{n} ر.س',
-    was: 'بدل', // read before the struck-through price: «٤٫٨٠ ر.س، بدل ١٠»
+    was: 'بدل', // read before the struck-through price: «4.80 ر.س، بدل 10»
     source: 'الأسعار كما في تطبيق كيو بتاريخ {date}، وقد تتغير.',
   },
 
   inside: {
-    eyebrow: 'كيف يشتغل',
-    // Over the house when the van arrives: the footer's sticker says it too.
+    // Over the house when the van arrives: the footer says it too.
     arrived: 'طلبك وصل',
     title: 'عروضنا تجيك وبنفس السعر',
     lead: 'تجربة شراء بسيطة، وخيارات دفع آمنة، وتوصيل لحد باب بيتك.',
@@ -340,13 +340,11 @@ const ar = {
   // Every answer restates what the page and the Google Play listing already say — nothing new
   // is promised here (no delivery areas, fees or payment brands: the sources don't give them).
   faq: {
-    eyebrow: 'قبل ما تحمّل',
     title: 'عندك سؤال؟',
     lead: 'جمعنا لك الأجوبة في فاتورة وحدة: واضحة ومختصرة.',
-    // The take-a-number ticket beside the receipt: now serving the last question, yours is next.
+    // The last line of the receipt's questions: take a number — yours is the next after its
+    // last question — and ask.
     ticket: {
-      take: 'خذ رقمك',
-      now: 'الدور الحالي',
       label: 'رقمك',
       question: 'سؤالك مو في الفاتورة؟',
       action: 'راسلنا',
@@ -364,9 +362,6 @@ const ar = {
       total: 'الإجمالي',
       totalValue: 'مجاناً',
       thanks: 'شكراً لاختيارك كيو',
-      // The receipt prints the first questions; the rest print on demand, and fold back up.
-      more: 'اطبع باقي الأسئلة ({n})',
-      less: 'اطوِ الأسئلة',
     },
     items: [
       {
@@ -384,7 +379,7 @@ const ar = {
         id: 'deals',
         question: 'إيش العروض اللي في كيو؟',
         answer:
-          'عروض ١+١ مجاناً، وخصومات واضحة على المنتجات اليومية، وأسعار ما تلاقيها إلا في كيو.',
+          'عروض 1+1 مجاناً، وخصومات واضحة على المنتجات اليومية، وأسعار ما تلاقيها إلا في كيو.',
       },
       {
         id: 'order',
@@ -411,7 +406,7 @@ const ar = {
     ],
   },
 
-  // The store figures, printed as the app's nutrition-facts label — «القيمة الغذائية» on
+  // The store figures, in the words of the app's nutrition-facts label — «القيمة الغذائية» on
   // every pack in the supermarket. The figures are the ones src/content/site.js holds.
   stats: {
     title: 'القيمة الغذائية',
@@ -424,7 +419,7 @@ const ar = {
       detail: 'على Google Play خلال {months} من الإطلاق',
     },
     rating: { name: 'التقييم', detail: 'من مستخدمي الجوال على Google Play' },
-    fiveStar: { name: 'تقييمات ٥ نجوم', unit: '٪', detail: '{count} تقييم من الجوال' },
+    fiveStar: { name: 'تقييمات 5 نجوم', suffix: '%', detail: '{count} تقييم من الجوال' },
     count: { name: 'عدد التقييمات', detail: 'من الجوال · {allRatings} إجمالاً' },
     price: { name: 'السعر', value: 'مجاناً', detail: 'على App Store و Google Play' },
     source: 'الأرقام من صفحة كيو على Google Play بتاريخ {date}.',
@@ -433,8 +428,6 @@ const ar = {
   download: {
     title: 'حمّل {brand}',
     subtitle: 'مجاناً على جوالك',
-    // The yellow starburst on the app's stage.
-    sticker: 'مجاناً',
     text: 'متوفر للآيفون والأندرويد، والعروض تبدأ من أول شاشة.',
     stageAlt:
       'الشاشة الرئيسية في تطبيق كيو: عرض السوبر «أرز الفخامة + زيت الفخامة مجاناً»، وقسم «أسعار ما تلاقيها إلا في كيو!»',
@@ -454,7 +447,7 @@ const ar = {
   footer: {
     // The slogan on qeu.app: «اسعارنا هي اصلًا عروض».
     tagline: { before: 'أسعارنا هي أصلًا', offer: 'عروض' },
-    // The delivery sticker on the bag the order comes in.
+    // The order's delivery label, written in the footer.
     sticker: {
       title: 'طلبك وصل',
       from: 'من',
@@ -477,10 +470,10 @@ const ar = {
     legal: '© {year} {company} — حي الرحاب، جدة',
   },
 
-  // The page hosts show for a link that leads nowhere: an empty shelf, its label «نفد».
+  // The page hosts show for a link that leads nowhere: what a shop writes on an empty shelf, «نفد».
   notFound: {
     title: 'الصفحة غير موجودة — كيو',
-    eyebrow: 'خطأ ٤٠٤',
+    eyebrow: 'خطأ 404',
     heading: 'هالصفحة مو على الرف',
     text: 'يمكن الرابط قديم أو فيه حرف ناقص. العروض كلها في الصفحة الرئيسية، وفي التطبيق نفسه.',
     home: 'الصفحة الرئيسية',
@@ -489,7 +482,7 @@ const ar = {
     name: 'الصفحة المطلوبة',
   },
 
-  /** How the figures are written; {n} is the number, already in Arabic-Indic digits. */
+  /** How the figures are written; {n} is the number, already formatted (100, 1.3). */
   numbers: {
     thousand: '{n} ألف',
     million: '{n} مليون',

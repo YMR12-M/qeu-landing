@@ -3,40 +3,27 @@ import { media } from '../../content/media.js';
 import { MENU } from '../../content/menu.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
-import { formatDate, formatPrice, interpolate } from '../../lib/format.js';
-import { Logo } from '../brand/Logo.jsx';
+import { formatDate, interpolate } from '../../lib/format.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
-import { DownloadLink } from '../download/DownloadLink.jsx';
 import { IcedCup } from '../illustrations/IcedCup.jsx';
 import { Picture } from '../ui/Picture.jsx';
+import { Price } from '../ui/Price.jsx';
+import { Scribble } from '../ui/Scribble.jsx';
 import styles from './Coffee.module.css';
 
 const { drinks, box } = MENU.coffee;
 
-// The drinks' photos sit beside their names, about as tall as two lines of them.
-const THUMB_SIZES = '2.5rem';
+// The drinks' photos sit beside their names, about as tall as the line and the size under it.
+const THUMB_SIZES = '3rem';
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/** A menu price: the app's, and — struck through — the one it replaces. */
-function Prices({ item, locale, prices }) {
-  return (
-    <span className={styles.prices}>
-      <span className={styles.price}>
-        {formatPrice(item.price, { locale, template: prices.price })}
-      </span>
-      <s className={styles.was}>
-        <span className="visually-hidden">{prices.was} </span>
-        {formatPrice(item.was, { locale })}
-      </s>
-    </span>
-  );
-}
-
 /**
- * «كيو كوفي», the second of the kitchen's two tabs (Kitchen.jsx) — Qeu's coffee as a café
- * corner: its menu board, lit by a neon of the wordmark, and the counter beside it where a cup
- * is poured with whatever the reader picks. The menu is a radio group, so picking works with a
+ * «كيو كوفي», the second of the kitchen's two tabs (Kitchen.jsx) — Qeu's coffee on the café's
+ * espresso wall: the menu written on it in one column, as a café writes its menu — each drink
+ * beside its photo, a line of cream dots from its name to its price — and facing it, level with
+ * the middle of the menu, a large cup poured with whatever the reader picks, the pick
+ * underlined in crema as with a pen. The menu is a radio group, so picking works with a
  * keyboard and a screen reader like any form — and without JavaScript: the stylesheet shows
  * the cup of the checked drink (:has()), and a cup that appears plays its pour from the start
  * (IcedCup) — as it does when the tab itself is opened.
@@ -82,7 +69,7 @@ export function CoffeePanel() {
         <p className={styles.lead}>{coffee.lead}</p>
       </div>
 
-      {/* The counter: one cup per drink, the checked drink's shown (Coffee.module.css). */}
+      {/* The cup: one per drink, the checked drink's shown (Coffee.module.css). */}
       <div ref={barRef} className={styles.bar}>
         <div className={styles.cups}>
           {drinks.map((drink) => (
@@ -96,17 +83,14 @@ export function CoffeePanel() {
             />
           ))}
         </div>
-        <span className={styles.counter} aria-hidden="true" />
-        <p className={styles.hint}>{coffee.hint}</p>
+        <p className={styles.hint}>
+          {coffee.hint}
+          {/* On a computer, a pen arrow from the words to the menu beside the cup. */}
+          <Scribble shape="arrow" delay={400} className={styles.hintArrow} />
+        </p>
       </div>
 
       <div className={styles.board}>
-        {/* The neon over the menu: the wordmark and «كوفي». */}
-        <p className={styles.neon} aria-hidden="true" dir="rtl">
-          <Logo className={styles.neonLogo} />
-          <span lang="ar">{coffee.sign}</span>
-        </p>
-
         <fieldset className={styles.menu}>
           <legend className={styles.heading}>
             <span className="visually-hidden">{coffee.menu.legend}: </span>
@@ -129,32 +113,48 @@ export function CoffeePanel() {
                   sizes={THUMB_SIZES}
                   className={styles.thumb}
                 />
-                <span className={styles.item}>
-                  <span className={styles.name}>{copy.name}</span>
-                  <span className={styles.size}>{copy.size}</span>
+                <span className={styles.line}>
+                  <span className={styles.name}>
+                    {copy.name}
+                    <Scribble shape="underline" draw="parent" className={styles.pick} />
+                  </span>
+                  <span className={styles.leader} aria-hidden="true" />
+                  <Price
+                    value={drink.price}
+                    was={drink.was}
+                    locale={locale}
+                    prices={prices}
+                    className={styles.price}
+                  />
                 </span>
-                <Prices item={drink} locale={locale} prices={prices} />
+                <span className={styles.size}>{copy.size}</span>
               </label>
             );
           })}
         </fieldset>
 
-        {/* The menu's last line, from the tab's «مشروبات للجمعات»: the box, to share rather
+        {/* The menu's second heading, from the tab's «مشروبات للجمعات»: the box, to share rather
             than to pour. */}
-        <div className={styles.boxRow}>
+        <p className={styles.heading}>{coffee.menu.gatherings}</p>
+        <div className={styles.option}>
           <Picture
             image={media.coffee.box}
             alt={coffee.box.imageAlt}
             sizes="3.5rem"
-            className={styles.boxImage}
+            className={styles.thumb}
           />
-          <span className={styles.item}>
+          <span className={styles.line}>
             <span className={styles.name}>{coffee.box.name}</span>
-            <span className={styles.size}>
-              {coffee.box.size} <span className={styles.tag}>{coffee.menu.gatherings}</span>
-            </span>
+            <span className={styles.leader} aria-hidden="true" />
+            <Price
+              value={box.price}
+              was={box.was}
+              locale={locale}
+              prices={prices}
+              className={styles.price}
+            />
           </span>
-          <Prices item={box} locale={locale} prices={prices} />
+          <span className={styles.size}>{coffee.box.size}</span>
         </div>
 
         <p className={styles.source}>{interpolate(prices.source, { date })}</p>
@@ -182,9 +182,6 @@ export function CoffeePanel() {
             ))}
           </bdi>
         </p>
-        <DownloadLink placement="coffee" variant="link" labels={t.hero.cta} className={styles.cta}>
-          {coffee.cta}
-        </DownloadLink>
       </div>
     </div>
   );
