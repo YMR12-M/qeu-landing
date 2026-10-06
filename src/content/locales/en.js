@@ -27,8 +27,6 @@ const en = {
     storeLinks: 'Download the app',
     switchLocale: 'عرض الصفحة بالعربي',
     switchSite: 'عرض الموقع بالعربي',
-    pauseMotion: 'Pause background animation',
-    playMotion: 'Play background animation',
     sectionsMenu: 'Page sections',
   },
 

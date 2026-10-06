@@ -1,4 +1,5 @@
 import { useLocale } from '../../i18n/useLocale.js';
+import { Edge } from '../ui/Edge.jsx';
 import { CoffeePanel } from './Coffee.jsx';
 import { FoodsPanel } from './Foods.jsx';
 import styles from './Kitchen.module.css';
@@ -55,6 +56,7 @@ export function Kitchen() {
           <Panel />
         </div>
       ))}
+      <Edge kind="scallop" to="var(--mist)" />
     </section>
   );
 }

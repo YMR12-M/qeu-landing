@@ -8,6 +8,8 @@
  */
 
 .section {
+  --misprint: var(--star);
+  position: relative;
   --gap: clamp(1.25rem, 2.0833vw, 2.5rem); /* shared by route and steps: stops sit over columns */
   --brand-text: #10747c; /* the text teal a shade deeper on the aqua wall: 4.8:1 */
   --muted: #33636d; /* 5.6:1 on the aqua wall */

@@ -7,6 +7,7 @@
  */
 
 .section {
+  --misprint: var(--white);
   --focus-ring: var(--night);
   --pen-red: #c8281e;
   --poster-ink: #7bc9d5; /* the wall's aqua, a shade deeper: the name behind the products */

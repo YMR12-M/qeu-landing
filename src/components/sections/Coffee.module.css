@@ -101,6 +101,7 @@
   font-weight: 900;
   line-height: var(--leading-heading);
   color: var(--foam);
+  text-shadow: 0.035em 0.03em 0 #9b5d2a; /* the print's second ink (base.css) */
 }
 
 .accent {

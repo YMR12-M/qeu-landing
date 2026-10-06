@@ -5,6 +5,7 @@
  */
 
 .hero {
+  --misprint: var(--star); /* the second ink of the print: the deal yellow on the teal */
   /* A screenshot's height in the row: on a phone, small enough that the headline stays the
      largest thing on the first screen, and so the page's LCP, painted with the first frame —
      also in English, whose headline has a line less than the Arabic one. */
@@ -20,7 +21,8 @@
   --button-hover: var(--deep);
   position: relative;
   container-type: inline-size;
-  padding-block: calc(var(--header-height) + clamp(1.25rem, 3.2vw, 3rem)) var(--foot);
+  /* Under the bar, room for the awning that hangs from it (Edge.module.css → .awning). */
+  padding-block: calc(var(--header-height) + clamp(2.75rem, 3.2vw, 3rem)) var(--foot);
   overflow: hidden;
   background-color: var(--brand);
   color: var(--on-brand);
@@ -215,8 +217,7 @@
   flex-direction: row-reverse;
 }
 
-/* Paused by the visitor, or scrolled out of view (nothing to see, nothing to animate). */
-.hero[data-paused] .track,
+/* Scrolled out of view: nothing to see, nothing to animate. */
 .hero[data-offscreen] .track {
   animation-play-state: paused;
 }
@@ -327,38 +328,95 @@
   }
 }
 
-/* ── Pause control (WCAG 2.2.2) ───────────────────────────────────── */
-
-.motionToggle {
-  position: absolute;
-  z-index: 1;
-  inset-block-start: -3.25rem;
-  inset-inline-end: var(--edge);
-  display: grid;
-  place-items: center;
-  inline-size: 2.75rem;
-  block-size: 2.75rem;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: var(--night);
-  color: var(--white);
-  cursor: pointer;
-  transition: background-color var(--duration-fast) ease;
-}
-
-.motionToggle:hover {
-  background: var(--deep);
-}
-
-.motionIcon {
-  inline-size: 1.125rem;
-  block-size: 1.125rem;
-}
-
-/* Nothing moves under reduced motion, so there is nothing to pause. */
-@media (prefers-reduced-motion: reduce) {
-  .motionToggle {
-    display: none;
+@media (prefers-reduced-motion: no-preference) {
+  .priceValue {
+    animation: stamp 0.55s var(--ease-settle) 0.8s both;
   }
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    scale: 1.8;
+    rotate: -10deg;
+  }
+}
+
+/* ── The coupon ──────────────────────────────────────────────────── */
+
+/* Computers only (a code is for scanning from a screen): at the far end of the headline, under
+   the price, where a flyer keeps its tear-off tab. A cream slip, set a little crooked, cut by a
+   dashed line into the words and the code, a round bite out of the line at each end. */
+.coupon {
+  display: none;
+}
+
+@media (min-width: 64em) and (hover: hover) {
+  .coupon {
+    --stub: clamp(9.5rem, 11vw, 12.5rem);
+    /* Centred in the empty half beside the headline: the headline's lines end at about 52vw,
+       the page's margin begins at the gutter. */
+    --coupon-w: clamp(19rem, 26vw, 31rem);
+    position: absolute;
+    inset-block-start: clamp(9.5rem, 12vw, 13rem);
+    inset-inline-end: calc(29.5vw - var(--coupon-w) / 2);
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--stub);
+    align-items: center;
+    inline-size: var(--coupon-w);
+    border-radius: 0.5rem;
+    background: #fffdf6;
+    color: var(--night);
+    box-shadow: 0 1.25rem 1.5rem -1.25rem rgb(4 40 47 / 0.6);
+    rotate: 3deg;
+  }
+
+  .coupon:dir(ltr) {
+    rotate: -3deg;
+  }
+
+  /* The cut: a dashed line, and a bite out of it at the top and the bottom. */
+  .coupon::before {
+    content: '';
+    position: absolute;
+    inset-block: 0.75rem;
+    inset-inline-end: var(--stub);
+    border-inline-start: 2px dashed rgb(4 40 47 / 0.35);
+  }
+
+  .coupon::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: calc(var(--stub) - 0.5rem);
+    inline-size: 1rem;
+    background:
+      radial-gradient(circle at 50% 0, var(--brand) 0.5rem, transparent calc(0.5rem + 0.5px)),
+      radial-gradient(circle at 50% 100%, var(--brand) 0.5rem, transparent calc(0.5rem + 0.5px));
+  }
+}
+
+.couponCopy {
+  display: grid;
+  gap: 0.35rem;
+  padding: clamp(1.1rem, 1.6vw, 1.75rem) clamp(1.25rem, 1.8vw, 2rem);
+}
+
+.couponTitle {
+  font-size: clamp(1.1875rem, 1.6vw, 1.875rem);
+  font-weight: 800;
+  line-height: var(--leading-snug);
+}
+
+.couponText {
+  font-size: clamp(0.9375rem, 1.05vw, 1.1875rem);
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.couponCode {
+  inline-size: calc(var(--stub) - 1.5rem);
+  block-size: auto;
+  margin-inline: auto;
 }

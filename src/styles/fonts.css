@@ -1,8 +1,12 @@
 /*
  * Self-hosted fonts (from @fontsource):
  *   Tajawal 500 · 700 · 800 — all text (Arabic + Latin subsets)
- *   Tajawal 900             — the display titles: the hero and every section's title, set
- *                             large and heavy, as a poster sets them (9 KB per subset)
+ *   Lalezar 400             — the display weight: the hero's headline, every section's title,
+ *                             every price and figure. Lalezar is a poster face — thick, a little
+ *                             uneven, close to the lettering painted on a shop's sign — so the
+ *                             titles read as drawn, not typeset. It is declared below as
+ *                             Tajawal's 900, so everything the page sets at weight 900 is set
+ *                             in it, and the browser never fakes a bold of a face that has none.
  *   IBM Plex Mono 500       — figures, step numbers, fine print
  * Each subset is a separate file; the browser downloads only what the page renders. The
  * text weight is 500 (base.css): v3's 400 was left to a few lines of the «اسأل كيور» chat and
@@ -12,5 +16,28 @@
 @import '@fontsource/tajawal/500.css';
 @import '@fontsource/tajawal/700.css';
 @import '@fontsource/tajawal/800.css';
-@import '@fontsource/tajawal/900.css';
 @import '@fontsource/ibm-plex-mono/latin-500.css';
+
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('../../node_modules/@fontsource/lalezar/files/lalezar-arabic-400-normal.woff2')
+    format('woff2');
+  unicode-range:
+    U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E,
+    U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('../../node_modules/@fontsource/lalezar/files/lalezar-latin-400-normal.woff2')
+    format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

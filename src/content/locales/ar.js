@@ -28,8 +28,6 @@ const ar = {
     storeLinks: 'حمّل التطبيق من المتجر',
     switchLocale: 'View this page in English',
     switchSite: 'View the site in English',
-    pauseMotion: 'إيقاف حركة الخلفية',
-    playMotion: 'تشغيل حركة الخلفية',
     sectionsMenu: 'أقسام الصفحة',
   },
 

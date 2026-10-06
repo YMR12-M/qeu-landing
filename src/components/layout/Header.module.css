@@ -7,7 +7,7 @@
 .header {
   /* On a light wall — the teal, the white, the yellow — night ink; on a dark one, white. */
   --ink: var(--night);
-  --accent: var(--night); /* the mark under the section, the reading progress */
+  --accent: var(--night); /* the pen loop round the section being read */
   --button-bg: var(--night);
   --button-fg: var(--white);
   --button-hover: var(--deep);
@@ -42,35 +42,6 @@
   padding-inline: var(--gutter);
 }
 
-/* Reading progress, drawn along the bar's lower edge as the page scrolls: the part read, and
-   nothing where there is still page to come. */
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .header::after {
-      content: '';
-      position: absolute;
-      inset-inline: 0;
-      inset-block-end: 0;
-      block-size: 3px;
-      background: var(--accent);
-      transform-origin: left;
-      transition: background-color var(--duration-base) ease;
-      animation: read linear both;
-      animation-timeline: scroll(root);
-    }
-
-    .header:dir(rtl)::after {
-      transform-origin: right;
-    }
-  }
-}
-
-@keyframes read {
-  from {
-    scale: 0 1;
-  }
-}
-
 /* ── Brand ──────────────────────────────────────────────────────── */
 
 /* The wordmark alone, in the bar's ink. On a phone it is sized so the section's name beside
@@ -98,7 +69,7 @@
 
 @media (min-width: 64em) {
   .wordmark {
-    inline-size: 4.25rem;
+    inline-size: 3.625rem;
   }
 }
 
@@ -116,34 +87,41 @@
    the other follows a beat later: it stretches across, then settles. */
 .mark {
   position: absolute;
-  inset-block-end: 0.5rem;
-  left: var(--mark-left, 0);
-  right: var(--mark-right, 100%);
-  block-size: 3px;
-  border-radius: var(--pill);
-  background: var(--accent);
+  inset-block-start: 50%;
+  left: calc(var(--mark-left, 0px) - 0.75rem);
+  right: calc(var(--mark-right, 100%) - 0.75rem);
+  block-size: 2.75rem;
+  translate: 0 -50%;
+  overflow: visible;
   opacity: 0;
   transition:
     left 700ms var(--ease-out),
     right 700ms var(--ease-out),
     opacity var(--duration-base) ease,
-    background-color var(--duration-base) ease;
+    color var(--duration-base) ease;
+}
+
+/* The pen's loop: one stroke, a little uneven, as drawn round a word on a flyer. */
+.mark path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
 }
 
 .track[data-moving='right'] .mark {
   transition:
     left 700ms var(--ease-out) 160ms,
     right 700ms var(--ease-out),
-    opacity var(--duration-base) ease,
-    background-color var(--duration-base) ease;
+    opacity var(--duration-base) ease;
 }
 
 .track[data-moving='left'] .mark {
   transition:
     left 700ms var(--ease-out),
     right 700ms var(--ease-out) 160ms,
-    opacity var(--duration-base) ease,
-    background-color var(--duration-base) ease;
+    opacity var(--duration-base) ease;
 }
 
 .track[data-mark] .mark {
@@ -158,7 +136,7 @@
   list-style: none;
 }
 
-/* Every link in one weight, the one being read marked from under it: bolding it would widen
+/* Every link in one weight, the one being read circled in pen: bolding it would widen
    it, and move its neighbours every time the reader crossed into a section. */
 .link {
   position: relative;
@@ -176,14 +154,14 @@
   text-box: var(--label-box);
 }
 
+/* A link answers a hover as a hand-set sign would: it tilts a little. No line under it. */
 .link:hover .linkText {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.45em;
+  rotate: -2.5deg;
 }
 
-.link[aria-current]:hover .linkText {
-  text-decoration: none;
+.linkText {
+  display: inline-block;
+  transition: rotate var(--duration-fast) var(--ease-out);
 }
 
 /* ── The section's name, and the way into the list (phones) ─────── */

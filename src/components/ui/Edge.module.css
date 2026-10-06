@@ -1,0 +1,70 @@
+/*
+ * The edges between the walls (Edge.jsx). Each is a strip painted in the next wall's colour and
+ * cut into a shape by a mask; it sits on the foot of the section above, so it takes no room.
+ */
+
+.edge {
+  position: absolute;
+  z-index: 1;
+  inset-inline: 0;
+  inset-block-end: 0;
+  display: block;
+  block-size: var(--edge, 1.25rem);
+  background: var(--to, var(--white));
+  pointer-events: none;
+}
+
+@media (min-width: 64em) {
+  .edge {
+    --edge: 1.75rem;
+  }
+}
+
+/* A sheet torn off a pad: an uneven line, never the same twice (the tile is long, and `flip`
+   turns it round for the next time). */
+.torn {
+  mask: url('../../assets/marks/torn.svg') 0 0 / 60rem 100% repeat-x;
+}
+
+.torn[data-flip] {
+  scale: -1 1;
+}
+
+/* A coupon's perforation: round bites out of the edge at an even pitch. */
+.perforation {
+  --bite: 0.5rem;
+  mask: radial-gradient(circle at 50% 0, transparent var(--bite), #000 calc(var(--bite) + 0.5px)) 0
+    0 / 1.75rem 100% repeat-x;
+}
+
+/* The teeth where a till receipt is torn off its roll. */
+.sawtooth {
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% 100% / 2rem
+    100% repeat-x;
+}
+
+/* A scalloped shelf edge: rounded bumps rising into the wall above. */
+.scallop {
+  --edge: 1rem;
+  mask: radial-gradient(circle at 50% 100%, #000 calc(1rem - 0.5px), transparent 1rem) 0 100% / 2rem
+    100% repeat-x;
+}
+
+/* The shop's awning, hanging from the bar over the hero: yellow and white stripes, each stripe
+   one scallop, a thin shadow cast under it. It scrolls away with the hero; the bar stays. */
+.awning {
+  --scallop: 1.125rem;
+  inset-block: var(--header-height) auto;
+  block-size: calc(var(--scallop) * 2);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--star) 0 calc(var(--scallop) * 2),
+    var(--white) calc(var(--scallop) * 2) calc(var(--scallop) * 4)
+  );
+  mask:
+    linear-gradient(#000 0 0) 0 0 / 100% var(--scallop) no-repeat,
+    radial-gradient(circle at 50% 0, #000 calc(var(--scallop) - 0.5px), transparent var(--scallop))
+      0 var(--scallop) / calc(var(--scallop) * 2) var(--scallop) repeat-x;
+  filter: drop-shadow(0 0.3rem 0 rgb(4 40 47 / 0.22));
+  z-index: 0;
+}

@@ -6,6 +6,7 @@ import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { formatNumber, interpolate } from '../../lib/format.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
+import { Edge } from '../ui/Edge.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import { Scribble } from '../ui/Scribble.jsx';
 import styles from './Aisles.module.css';
@@ -19,24 +20,24 @@ const PRODUCT_SIZES = '(min-width: 64em) 11rem, (min-width: 48em) 20vw, 34vw';
 
 // Behind the categories, the chosen department's name is set as wide as the products' column.
 // CSS can't fit type to a width by itself, so here is how many ems wide each name's longest
-// line is in Tajawal 900 (measured in the browser), and on how many lines it is set — a long
+// line is in the display face, Lalezar (measured in the browser), and on how many lines it is set — a long
 // name a word to a line, its last word on the second. Measure again if a name changes.
 const POSTER = {
   ar: {
-    groceries: { em: 4.084, lines: 1 }, // المقاضي
-    fresh: { em: 4.221, lines: 2 }, // المنتجات / الطازجة
-    drinks: { em: 5.228, lines: 2 }, // المشروبات / والمفرحات
-    home: { em: 3.478, lines: 2 }, // العناية / بالمنزل
-    care: { em: 3.119, lines: 1 }, // كيو كير
-    tech: { em: 3.507, lines: 1 }, // كيو تيك
+    groceries: { em: 3.094, lines: 1 }, // المقاضي
+    fresh: { em: 3.254, lines: 2 }, // المنتجات / الطازجة
+    drinks: { em: 3.634, lines: 2 }, // المشروبات / والمفرحات
+    home: { em: 2.566, lines: 2 }, // العناية / بالمنزل
+    care: { em: 2.477, lines: 1 }, // كيو كير
+    tech: { em: 2.77, lines: 1 }, // كيو تيك
   },
   en: {
-    groceries: { em: 4.283, lines: 1 },
-    fresh: { em: 2.475, lines: 1 },
-    drinks: { em: 3.73, lines: 2 }, // Drinks & / treats
-    home: { em: 4.889, lines: 1 },
-    care: { em: 2.958, lines: 1 },
-    tech: { em: 2.998, lines: 1 },
+    groceries: { em: 3.987, lines: 1 },
+    fresh: { em: 2.31, lines: 1 },
+    drinks: { em: 3.579, lines: 2 }, // Drinks & / treats
+    home: { em: 4.411, lines: 1 },
+    care: { em: 2.672, lines: 1 },
+    tech: { em: 2.793, lines: 1 },
   },
 };
 
@@ -192,6 +193,7 @@ export function Aisles() {
           </p>
         </div>
       </div>
+      <Edge kind="perforation" to="var(--night)" />
     </section>
   );
 }

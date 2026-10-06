@@ -5,6 +5,7 @@
  */
 
 .section {
+  --misprint: var(--aqua);
   position: relative;
   overflow: clip; /* a pour's light or a pen loop never widens the page */
   padding-block: var(--section-space);

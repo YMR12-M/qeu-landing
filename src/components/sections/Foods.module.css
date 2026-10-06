@@ -68,6 +68,7 @@
   font-size: var(--text-h2);
   font-weight: 900;
   line-height: var(--leading-heading);
+  text-shadow: 0.035em 0.03em 0 var(--aqua); /* the print's second ink (base.css) */
 }
 
 /* «تطبخ», crossed out with two quick strokes of the red pen. */
@@ -80,7 +81,7 @@
   --pen: 0.07em;
   position: absolute;
   inset-inline: -0.1em;
-  inset-block-start: 0.34em;
+  inset-block-start: 0.5em; /* through the middle of the letters: Lalezar's sit low in its box */
   inline-size: calc(100% + 0.2em);
   block-size: 0.3em;
   color: var(--pen-red);

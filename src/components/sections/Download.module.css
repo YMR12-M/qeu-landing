@@ -4,6 +4,7 @@
  */
 
 .section {
+  --misprint: var(--star);
   --focus-ring: var(--night);
   --floor: clamp(7rem, 12vw, 12rem); /* how far down the phone reaches into the night */
   position: relative;

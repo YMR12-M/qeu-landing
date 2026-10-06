@@ -65,6 +65,14 @@ h2 {
   font-weight: 900;
 }
 
+/* A title is printed in two inks, and the second is a hair off: a ghost of the wall's second
+   colour sits just beside each letter, as a riso print or a flyer's cheap press leaves it. Each
+   section names its own (--misprint). */
+h1,
+h2 {
+  text-shadow: 0.035em 0.03em 0 var(--misprint, transparent);
+}
+
 /* Arabic letters join, so tracking is only ever tightened on Latin text. */
 :is(h1, h2, h3):lang(en) {
   letter-spacing: -0.02em;

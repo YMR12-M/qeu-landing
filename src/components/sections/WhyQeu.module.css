@@ -5,6 +5,8 @@
  */
 
 .section {
+  --misprint: var(--aqua);
+  position: relative;
   overflow-x: clip; /* the huge promise never widens the page (and the section pins) */
   background: var(--white);
 }

@@ -156,7 +156,15 @@ export function Header({ sections }) {
 
         <nav className={styles.directory} aria-label={t.a11y.primaryNav}>
           <div ref={trackRef} className={styles.track}>
-            <span className={styles.mark} aria-hidden="true" />
+            <svg
+              className={styles.mark}
+              viewBox="0 0 200 100"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M54 13C94 1 162 5 185 29C205 50 181 84 114 89C50 94 3 76 6 46C9 19 51 6 99 11" />
+            </svg>
             <ul className={styles.links} role="list">
               {links.map((item) => (
                 <li key={item.id}>

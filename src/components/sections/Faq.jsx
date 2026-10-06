@@ -5,6 +5,7 @@ import { useLocale } from '../../i18n/useLocale.js';
 import { formatPlural, interpolate } from '../../lib/format.js';
 import { Logo } from '../brand/Logo.jsx';
 import { Barcode } from '../ui/Barcode.jsx';
+import { Edge } from '../ui/Edge.jsx';
 import styles from './Faq.module.css';
 
 const EMAIL = site.contact.email;
@@ -135,6 +136,7 @@ export function Faq() {
           <p className={styles.thanks}>{receipt.thanks}</p>
         </div>
       </div>
+      <Edge kind="perforation" to="var(--brand)" />
     </section>
   );
 }

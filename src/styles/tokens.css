@@ -25,6 +25,7 @@
   --aqua: #92d6e0; /* the app's own «الأقسام» screen — its category circles: the aisles' wall */
   --deal: #c62828; /* the app's deal red, for prices: 5.6:1 on white */
   --espresso: #1c120c; /* the café's wall */
+  --paper-sheet: #f7f4ec; /* a till roll's warm white: the FAQ's paper */
   --white: #ffffff;
 
   /* Kept from the previous design: the app-icon aqua and the screenshots' backdrop. */
@@ -46,7 +47,7 @@
   --text-cta: clamp(1rem, 1.15vw, 1.3125rem);
   --text-body: clamp(1rem, 1.0417vw, 1.25rem);
   --text-small: clamp(0.875rem, 0.9vw, 1rem);
-  --text-nav: clamp(0.9375rem, 0.95vw, 1.0625rem);
+  --text-nav: clamp(0.875rem, 0.88vw, 1rem);
   --text-mono: clamp(0.8125rem, 0.8333vw, 1rem);
   --text-figure: clamp(2.75rem, 4.4vw, 5.25rem); /* a figure or a price, set as a headline */
 
@@ -104,6 +105,6 @@
 @media (min-width: 64em) {
   :root {
     --gutter: max(clamp(3rem, 6.5vw, 7.5rem), var(--safe-inline));
-    --header-height: 4.75rem;
+    --header-height: 4.125rem;
   }
 }

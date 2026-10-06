@@ -1,10 +1,11 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
+import qrCode from '../../assets/qr/download-qr.svg';
 import { media } from '../../content/media.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { interpolate } from '../../lib/format.js';
 import { DownloadLink } from '../download/DownloadLink.jsx';
-import { Pause, Play } from '../ui/icons.jsx';
+import { Edge } from '../ui/Edge.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import { Scribble } from '../ui/Scribble.jsx';
 import styles from './Hero.module.css';
@@ -25,15 +26,14 @@ const STOCK = Array.from({ length: SETS }, () => media.shelf).flat();
  * page's margins — the screens fade in at one edge of the content and out at the other, so
  * none is ever seen cut in half. The headline has no entrance animation and is one block of
  * text (lines broken with <br>), so it — not a screen — is the page's Largest Contentful
- * Paint, painted with the first frame. The motion can be paused (WCAG 2.2.2), stops while the
- * hero is out of view, and is off entirely under reduced motion.
+ * Paint, painted with the first frame. The motion stops while the hero is out of view,
+ * and is off entirely under reduced motion.
  */
 export function Hero() {
   const { t, figures } = useLocale();
   const { hero } = t;
   const { shelf } = hero;
   const sectionRef = useRef(null);
-  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -45,13 +45,9 @@ export function Hero() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      id="hero"
-      className={styles.hero}
-      data-paused={paused || undefined}
-      aria-labelledby="hero-title"
-    >
+    <section ref={sectionRef} id="hero" className={styles.hero} aria-labelledby="hero-title">
+      {/* The shop's awning, hanging from the bar. */}
+      <Edge kind="awning" />
       <div className={cx('container', styles.head)}>
         <h1 id="hero-title" className={styles.title}>
           {hero.titleLines.map((line) => (
@@ -69,6 +65,23 @@ export function Hero() {
           <p className={styles.note}>{interpolate(hero.note, figures)}</p>
         </div>
 
+        {/* The tear-off coupon a flyer carries at its foot, for someone reading on a computer: the
+            download code, ready for a phone's camera. (On a phone the button above is the way.) */}
+        <div className={styles.coupon}>
+          <div className={styles.couponCopy}>
+            <p className={styles.couponTitle}>{t.qr.title}</p>
+            <p className={styles.couponText}>{t.qr.text}</p>
+          </div>
+          <img
+            className={styles.couponCode}
+            src={qrCode}
+            width="96"
+            height="96"
+            alt={t.qr.alt}
+            decoding="async"
+          />
+        </div>
+
         {/* The app's own price, as a flyer prints it — and circled. */}
         <p className={styles.price} aria-hidden="true">
           <span className={styles.priceName}>{shelf.app}</span>
@@ -83,7 +96,7 @@ export function Hero() {
 
       <div className={styles.stock}>
         <div className={styles.aisle} aria-hidden="true">
-          {/* data-hero-drift: without JavaScript there is no pause button, so no-js.css stops it. */}
+          {/* data-hero-drift: without JavaScript the row doesn't need to move, so no-js.css stops it. */}
           <div className={styles.track} style={{ '--sets': SETS }} data-hero-drift>
             {STOCK.map(({ id, image }, index) => (
               <div key={index} className={styles.facing}>
@@ -103,20 +116,6 @@ export function Hero() {
             ))}
           </div>
         </div>
-
-        <button
-          type="button"
-          className={styles.motionToggle}
-          data-needs-js
-          aria-label={paused ? t.a11y.playMotion : t.a11y.pauseMotion}
-          onClick={() => setPaused((value) => !value)}
-        >
-          {paused ? (
-            <Play className={styles.motionIcon} />
-          ) : (
-            <Pause className={styles.motionIcon} />
-          )}
-        </button>
       </div>
     </section>
   );

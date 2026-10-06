@@ -3,6 +3,7 @@ import { media } from '../../content/media.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
+import { Edge } from '../ui/Edge.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import styles from './WhyQeu.module.css';
 
@@ -164,6 +165,7 @@ export function WhyQeu() {
           </div>
         </div>
       </div>
+      <Edge kind="torn" to="var(--aqua)" />
     </section>
   );
 }

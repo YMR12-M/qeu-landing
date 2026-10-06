@@ -1,6 +1,7 @@
 import { useLocale } from '../../i18n/useLocale.js';
 import { Logo } from '../brand/Logo.jsx';
 import { Bag, House, Palm, Pin, Skyline, Store } from '../illustrations/Street.jsx';
+import { Edge } from '../ui/Edge.jsx';
 import { Reveal } from '../ui/Reveal.jsx';
 import { SectionHeading } from '../ui/SectionHeading.jsx';
 import styles from './HowItWorks.module.css';
@@ -109,6 +110,7 @@ export function HowItWorks() {
           ))}
         </ol>
       </div>
+      <Edge kind="sawtooth" to="var(--paper-sheet)" />
     </section>
   );
 }
