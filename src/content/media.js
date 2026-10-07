@@ -51,6 +51,12 @@ import playOffersAvif from '../assets/images/play-offers.webp?w=240;360;480;720&
 import playOffersWebp from '../assets/images/play-offers.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
 import playSmartAvif from '../assets/images/play-smart.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
 import playSmartWebp from '../assets/images/play-smart.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
+import stepOffersAvif from '../assets/images/step-offers.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
+import stepOffersWebp from '../assets/images/step-offers.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
+import stepPicksAvif from '../assets/images/step-picks.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
+import stepPicksWebp from '../assets/images/step-picks.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
+import stepDeliveryAvif from '../assets/images/step-delivery.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
+import stepDeliveryWebp from '../assets/images/step-delivery.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
 import qurRice from '../assets/images/qur-rice.webp?w=120;180;250&format=webp&quality=80&as=picture';
 import qurSpice from '../assets/images/qur-spice.webp?w=120;180;250&format=webp&quality=80&as=picture';
 import qurTomato from '../assets/images/qur-tomato.webp?w=120;180;250&format=webp&quality=80&as=picture';
@@ -96,6 +102,9 @@ const playDelivery1 = picture(playDelivery1Avif, playDelivery1Webp);
 const playDelivery2 = picture(playDelivery2Avif, playDelivery2Webp);
 const playOffers = picture(playOffersAvif, playOffersWebp);
 const playSmart = picture(playSmartAvif, playSmartWebp);
+const stepOffers = picture(stepOffersAvif, stepOffersWebp);
+const stepPicks = picture(stepPicksAvif, stepPicksWebp);
+const stepDelivery = picture(stepDeliveryAvif, stepDeliveryWebp);
 const screenCategories = picture(screenCategoriesAvif, screenCategoriesWebp);
 const screenChat = picture(screenChatAvif, screenChatWebp);
 const screenHome = picture(screenHomeAvif, screenHomeWebp);
@@ -123,6 +132,13 @@ export const media = {
     search: screenCategories,
     prices: screenPicks,
     picks: screenChat,
+  },
+
+  /** «كيف يشتغل» — one cut of the app per step, keyed by step id: the printed photos on the slip. */
+  steps: {
+    offers: stepOffers,
+    picks: stepPicks,
+    delivery: stepDelivery,
   },
 
   /** «أقسام كيو» — the categories' pictures by department, and the departments' icons. */

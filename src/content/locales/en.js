@@ -307,16 +307,21 @@ const en = {
         id: 'offers',
         title: 'Browse the deals',
         text: 'Standout deals, and prices you’ll only find on Q.',
+        imageAlt:
+          'From the Q app: the deals screen, a drinks offer and the «prices you’ll only find on Q» section',
       },
       {
         id: 'picks',
         title: 'Choose and order',
         text: 'Add what you need to your cart, and order in seconds.',
+        imageAlt:
+          'From the Q app: «picked for you» products with their prices before and after the discount, and a + button to add to the cart',
       },
       {
         id: 'delivery',
         title: 'Get it at your door',
         text: 'Fast, organized delivery — and you track your order step by step.',
+        imageAlt: 'From the Q app: the order review screen, with a Q van and its logo behind it',
       },
     ],
   },

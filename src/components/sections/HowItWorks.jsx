@@ -1,8 +1,12 @@
+import { useRef } from 'react';
+import { media } from '../../content/media.js';
+import { useScrollReveal } from '../../hooks/useScrollReveal.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { Logo } from '../brand/Logo.jsx';
-import { Bag, House, Palm, Pin, Skyline, Store } from '../illustrations/Street.jsx';
+import { Barcode } from '../ui/Barcode.jsx';
 import { Edge } from '../ui/Edge.jsx';
-import { Reveal } from '../ui/Reveal.jsx';
+import { Picture } from '../ui/Picture.jsx';
+import { Scribble } from '../ui/Scribble.jsx';
 import { SectionHeading } from '../ui/SectionHeading.jsx';
 import styles from './HowItWorks.module.css';
 
@@ -53,62 +57,75 @@ function DeliveryVan() {
 }
 
 /**
- * «كيف يشتغل» — the order's route, as a street. Three steps from the Google Play description,
- * each written under its stop, as a tracker labels its own: Qeu's store at the first, the pin
- * where the order is placed at the second, your house at the third. As the section scrolls by, Qeu's van drives
- * from the store to your door, drawing the route behind it and lighting each stop it reaches —
- * the way the app tracks an order step by step — and the bag is at the door when it arrives.
- * The motion is a CSS scroll-driven animation: no JavaScript, off the main thread, and where
- * it can't run (or motion is reduced) the van simply waits at the door.
+ * «كيف يشتغل» — the order, as the delivery slip a shop tears off for it, and not as a row of
+ * three alike: a sheet of paper with a perforated edge, Qeu's wordmark, «بون توصيل» and a barcode
+ * at its head; on it the three steps from the Google Play description as a checklist, each line
+ * with its number, its words, and a red-pen tick drawn at its end as it comes into view; beside
+ * the list, prints of the app's own screens tossed down together — overlapping, each at its own
+ * angle, the last and largest the order with Qeu's van behind it. At the foot the route is a
+ * dashed line: as the section scrolls by, the van drives along it, drawing it solid behind, to
+ * where «طلبك وصل» is stamped. The drive is a CSS scroll-driven animation: no JavaScript, off
+ * the main thread, and where it can't run (or motion is reduced) the van simply waits at the
+ * stamp. The prints are laid down, and the stamp pressed, as the slip comes into view.
  */
 export function HowItWorks() {
   const { t } = useLocale();
   const { inside } = t;
+  const slipRef = useRef(null);
+  useScrollReveal(slipRef, '0px 0px -12% 0px');
 
   return (
     <section id="inside" className={styles.section} aria-labelledby="inside-title">
       <div className="container">
         <SectionHeading id="inside-title" title={inside.title} lead={inside.lead} />
 
-        <div className={styles.route} aria-hidden="true">
-          <Skyline className={styles.skyline} />
-          <Store className={styles.store} />
-          <Palm className={styles.palm} data-at="1" />
-          <Pin className={styles.pin} />
-          <Palm className={styles.palm} data-at="2" />
-          <div className={styles.home}>
-            <House className={styles.house} />
-            <Bag className={styles.bag} />
-            <span className={styles.bubble}>{inside.arrived}</span>
+        <div ref={slipRef} className={styles.slip}>
+          <div className={styles.head} aria-hidden="true">
+            <Logo className={styles.logo} />
+            <Barcode seed="qeu-delivery" count={38} className={styles.code} />
           </div>
-          <span className={styles.walk} />
-          <span className={styles.road} />
-          <span className={styles.fill} />
-          {inside.steps.map((step, index) => (
-            <span key={step.id} className={styles.stop} data-stop={index + 1}>
-              <span className={styles.dot} />
-            </span>
-          ))}
-          <DeliveryVan />
-        </div>
 
-        <ol className={styles.steps} role="list">
-          {inside.steps.map((step, index) => (
-            <Reveal
-              as="li"
-              key={step.id}
-              className={styles.step}
-              data-step={step.id}
-              delay={index * 150}
-            >
-              <span className={styles.number} aria-hidden="true">
-                {index + 1}
-              </span>
-              <h3 className={styles.title}>{step.title}</h3>
-              <p className={styles.text}>{step.text}</p>
-            </Reveal>
-          ))}
-        </ol>
+          <div className={styles.body}>
+            <ol className={styles.steps} role="list">
+              {inside.steps.map((step, index) => (
+                <li key={step.id} className={styles.step} data-step={step.id}>
+                  <span className={styles.digit} aria-hidden="true">
+                    {index + 1}
+                  </span>
+                  <div className={styles.words}>
+                    <h3 className={styles.title}>{step.title}</h3>
+                    <p className={styles.text}>{step.text}</p>
+                  </div>
+                  <span className={styles.tick} aria-hidden="true">
+                    <Scribble shape="tick" delay={400 + index * 350} className={styles.pen} />
+                  </span>
+                </li>
+              ))}
+            </ol>
+
+            <div className={styles.prints}>
+              {inside.steps.map((step) => (
+                <Picture
+                  key={step.id}
+                  image={media.steps[step.id]}
+                  alt={step.imageAlt}
+                  sizes="(min-width: 64em) 17rem, 40vw"
+                  className={styles.print}
+                  data-step={step.id}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.foot} aria-hidden="true">
+            <div className={styles.lane}>
+              <span className={styles.dash} />
+              <span className={styles.fill} />
+              <DeliveryVan />
+            </div>
+            <span className={styles.stamp}>{inside.arrived}</span>
+          </div>
+        </div>
       </div>
       <Edge kind="sawtooth" to="var(--paper-sheet)" />
     </section>
