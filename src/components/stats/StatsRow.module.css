@@ -1,25 +1,26 @@
 /*
  * The store's figures as the app's nutrition-facts label — «القيمة الغذائية», printed on every
- * pack in the supermarket — in its own form: a heavy frame, the thickest bar after the title, a
- * hairline between the figures, a heavy rule before the price and before the small print.
- * Printed straight on the teal wall in night ink, as a pack prints it on its own colour, and as
- * large as a headline: one strip across the page on a computer — the linear label of a slim
- * pack — the title over the figures on a tablet, and the tall label, a figure a line, on a
- * phone.
+ * pack in the supermarket — in the form it really has: black on white, a thin frame, the title
+ * heavy, the serving size over a very thick bar, «الكمية لكل حصة», a hairline between the
+ * figures, a thick rule before the price and before the small print. A white label on the teal
+ * wall, as a pack carries it, and its figures as large as a headline: one strip across the page
+ * on a computer — the linear label of a slim pack — the title over the figures on a tablet, and
+ * the tall label, a figure a line, on a phone.
  */
 
 .label {
-  --ink: var(--night);
-  --frame: 0.25rem; /* round the label */
-  --bar: 0.75rem; /* after the title */
+  --ink: #0a0a0a; /* a label is printed in black */
+  --frame: 2px; /* round the label */
+  --bar: 0.75rem; /* after the serving size: the thickest */
   --rule: 0.3125rem; /* before the price and the small print */
   --hairline: 1.5px; /* between the figures */
   --pad: clamp(0.875rem, 1.3vw, 1.5rem);
   --figure-size: var(--text-figure);
   container-type: inline-size;
   margin: 0;
-  padding: 0.125rem var(--pad) 0;
+  padding: 0.25rem var(--pad) 0;
   border: var(--frame) solid var(--ink);
+  background: #fff;
   color: var(--ink);
   line-height: var(--leading-snug);
 }
@@ -62,6 +63,15 @@
 }
 
 /* ── The figures: a line each ───────────────────────────────────── */
+
+/* «الكمية لكل حصة», small and bold, over the first figure, as a real label heads its amounts. */
+.amount {
+  margin: 0;
+  padding-block: 0.375rem;
+  border-block-end: var(--hairline) solid var(--ink);
+  font-size: var(--text-small);
+  font-weight: 800;
+}
 
 .facts {
   margin: 0;
@@ -119,22 +129,15 @@
   font-weight: 900;
 }
 
-/* What it all costs, after the heavy rule: the same size, and marked in yellow. */
+/* What it all costs, after the heavy rule: the same size, and  */
 .price {
   border-block-start: var(--rule) solid var(--ink);
 }
 
 .free {
-  margin-inline: -0.1em;
-  padding-inline: 0.1em;
   font-size: var(--figure-size);
   font-weight: 900;
   line-height: 1;
-  background: url('../../assets/marks/marker.svg') no-repeat right 0 bottom 0.02em / 100% 0.55em;
-}
-
-.free:dir(ltr) {
-  background-position: left 0 bottom 0.02em;
 }
 
 /* The small print, after the heavy rule: where the figures were read, and when. */
@@ -224,8 +227,15 @@
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas:
+      'head amount'
       'head facts'
       'source source';
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .amount {
+    grid-area: amount;
+    padding-inline-start: var(--pad);
   }
 
   .head {

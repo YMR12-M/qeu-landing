@@ -81,7 +81,7 @@ const en = {
 
   why: {
     title: 'Why Q?',
-    lead: 'Because it brings you the best deals and the lowest prices in one simple experience.',
+    lead: 'Because it puts the best deals and the lowest prices on one shelf.',
     items: [
       {
         id: 'deals',
@@ -110,7 +110,7 @@ const en = {
         id: 'picks',
         title: 'Personalized Picks',
         sticker: { main: 'Picked', sub: 'for you' },
-        text: 'Get product suggestions tailored to your taste and needs, so you can discover the right items faster — without overthinking or scrolling forever.',
+        text: 'Get product suggestions tailored to your taste and needs, so you can find the right items faster.',
         imageAlt:
           'Q-ur, the smart assistant in the Q app, suggesting “Kabsa ingredients” in one list with an “Add all” button',
       },
@@ -395,6 +395,7 @@ const en = {
     title: 'Nutrition Facts',
     product: 'for the Q app',
     serving: { label: 'Serving size', value: '1 app' },
+    amount: 'Amount per serving',
     downloads: {
       name: 'Downloads',
       unit: { thousand: 'K+', million: 'M+' },
