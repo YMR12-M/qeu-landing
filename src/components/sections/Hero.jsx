@@ -1,12 +1,9 @@
 import { Fragment, useEffect, useRef } from 'react';
 import qrCode from '../../assets/qr/download-qr.svg';
 import { media } from '../../content/media.js';
-import { useMedia } from '../../hooks/useMedia.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { interpolate } from '../../lib/format.js';
-import { DownloadLink } from '../download/DownloadLink.jsx';
-import { Edge } from '../ui/Edge.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import { Scribble } from '../ui/Scribble.jsx';
 import styles from './Hero.module.css';
@@ -24,9 +21,9 @@ const STOCK = Array.from({ length: SETS }, () => media.shelf).flat();
  *
  * - The words: the headline — large, heavy, in night ink — with its promise, «وأسعار ما تلاقيها
  *   إلا فيه», marked in the deal yellow as with a highlighter pen; under it the line that says
- *   what the app is for (groceries, meals and coffee, brought to the door), the way in (the
- *   download button, and the way to how it works) and, for someone reading on a computer, the
- *   download code, stuck on like a flyer's tear-off tab.
+ *   what the app is for (groceries, meals and coffee, brought to the door), how many have
+ *   downloaded it and, for someone reading on a computer, the download code, stuck on like a
+ *   flyer's tear-off tab.
  * - The app: two of its screens, and its price — free — circled in pen across the gap between
  *   them and the words.
  * - The store's six Google Play screenshots, gliding by in the store's order, each leaning its own
@@ -39,12 +36,10 @@ const STOCK = Array.from({ length: SETS }, () => media.shelf).flat();
  * glide stops while the hero is out of view, and is off entirely under reduced motion.
  */
 export function Hero() {
-  const { t, figures, sectionHref } = useLocale();
+  const { t, figures } = useLocale();
   const { hero } = t;
   const { shelf } = hero;
   const sectionRef = useRef(null);
-  // The picture laid out as one (Hero.module.css): the words have a column only so wide there.
-  const onePicture = useMedia('(min-width: 80em)');
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -57,8 +52,6 @@ export function Hero() {
 
   return (
     <section ref={sectionRef} id="hero" className={styles.hero} aria-labelledby="hero-title">
-      {/* The shop's awning, hanging from the bar. */}
-      <Edge kind="awning" />
       <div className="container">
         <div className={styles.bento}>
           {/* The words. */}
@@ -91,22 +84,6 @@ export function Hero() {
 
                 <div className={styles.say}>
                   <p className={styles.lead}>{hero.lead}</p>
-                  <div className={styles.actions}>
-                    {/* The button names the visitor's store («حمّله مجاناً من Google Play») on a phone
-                        and a tablet; in the one picture it keeps its short name, so that, once the
-                        page runs, a longer one never wraps the second button under it (an iPad with
-                        a trackpad is a computer here, and is told apart only after hydration). */}
-                    <DownloadLink
-                      placement="hero"
-                      labels={onePicture ? undefined : hero.cta}
-                      className={styles.button}
-                    >
-                      {hero.cta.default}
-                    </DownloadLink>
-                    <a className={cx(styles.button, styles.more)} href={sectionHref('inside')}>
-                      <span className={styles.moreText}>{hero.explore}</span>
-                    </a>
-                  </div>
                   <p className={styles.note}>{interpolate(hero.note, figures)}</p>
                 </div>
               </div>

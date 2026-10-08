@@ -12,7 +12,6 @@
  */
 
 .hero {
-  --sky: var(--aqua); /* the second button: the aqua of the app's own «الأقسام» screen */
   /* A screenshot's height in the strip: on a phone, small enough that the headline stays the
      largest thing on the first screen, and so the page's LCP, painted with the first frame —
      also in English, whose headline has a line less than the Arabic one. */
@@ -26,8 +25,7 @@
   --button-fg: var(--white);
   --button-hover: var(--deep);
   position: relative;
-  /* Under the bar, room for the awning that hangs from it (Edge.module.css → .awning). */
-  padding-block: calc(var(--header-height) + clamp(2.25rem, 3.2vw, 3rem)) var(--foot);
+  padding-block: calc(var(--header-height) + clamp(1rem, 1.6vw, 1.5rem)) var(--foot);
   overflow: hidden;
   color: var(--night);
 }
@@ -119,44 +117,6 @@
   font-weight: 700;
   line-height: var(--leading-snug);
   color: var(--night);
-}
-
-/* On a phone the two ways on stand one above the other, as wide as the words. */
-.actions {
-  display: grid;
-  gap: 0.75rem;
-  margin-block-start: clamp(1.25rem, 2.3vw, 2rem);
-}
-
-/* The way on from the download: a second pill, in the aqua of the app. */
-.more {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-block-size: clamp(3.25rem, 3.5vw, 4rem);
-  padding-inline: clamp(1.25rem, 2vw, 2rem);
-  border-radius: var(--radius-control);
-  background: var(--sky);
-  color: var(--night);
-  font-size: var(--text-cta);
-  font-weight: 800;
-  line-height: 1.2;
-  white-space: nowrap;
-  transition:
-    background-color var(--duration-fast) ease,
-    scale 150ms ease;
-}
-
-.more:hover {
-  background: #7fcbd7;
-}
-
-.more:active {
-  scale: 0.97;
-}
-
-.moreText {
-  text-box: var(--label-box);
 }
 
 .note {
@@ -389,17 +349,6 @@
   }
 }
 
-/* The two ways on side by side, once the words' column is wide enough for the longest name the
-   download button can take (a store's, «حمّله مجاناً من Google Play»): below that they stay one
-   above the other, so the button naming the store, once the page runs, pushes nothing down. */
-@media (min-width: 64em) {
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-}
-
 /* ── A computer: one picture ─────────────────────────────────────── */
 
 @media (min-width: 80em) {
@@ -455,7 +404,7 @@
 
   .row {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: calc(var(--u) * 28);
     margin-block-start: calc(var(--u) * 22);
     inline-size: calc(var(--u) * 700);
@@ -472,20 +421,9 @@
     font-size: max(0.9375rem, calc(var(--u) * 27));
   }
 
-  .actions {
-    gap: calc(var(--u) * 12);
-    margin-block-start: calc(var(--u) * 16);
-  }
-
-  .actions .button {
-    min-block-size: max(2.75rem, calc(var(--u) * 62));
-    padding-inline: calc(var(--u) * 30);
-    font-size: max(0.9375rem, calc(var(--u) * 21));
-  }
-
   .note {
-    margin-block-start: calc(var(--u) * 12);
-    font-size: max(0.8125rem, calc(var(--u) * 17));
+    margin-block-start: calc(var(--u) * 16);
+    font-size: max(0.8125rem, calc(var(--u) * 20));
   }
 
   /* The tear-off tab: a slip of the wall's own white, set a little crooked, the code and what

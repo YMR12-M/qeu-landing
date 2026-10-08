@@ -65,9 +65,7 @@ const en = {
     // door — all said elsewhere on the page and in the Google Play listing.
     lead: 'Groceries, meals and coffee, delivered to your door.',
     note: '{downloads}+ downloads in {months}',
-    // The way on from the download button: to how an order works. And the caption of the
-    // download code beside the headline, on a computer.
-    explore: 'See how it works',
+    // The caption of the download code beside the headline, on a computer.
     scan: 'Scan to get it',
     // The page no longer prints these under the screens (the screens say their own words); the
     // link-preview image does (scripts/og-images.js). The app's own price is circled beside the
