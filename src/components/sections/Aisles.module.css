@@ -491,11 +491,11 @@
   /* A department that appears is set out: each category put down in its place, its name
      rising behind them. */
   .item {
-    animation: restock var(--duration-slow) var(--ease-settle) calc(var(--j) * 70ms + 100ms) both;
+    animation: restock var(--duration-base) var(--ease-settle) calc(var(--j) * 40ms + 60ms) both;
   }
 
   .poster {
-    animation: poster-in var(--duration-slow) var(--ease-out) both;
+    animation: poster-in var(--duration-base) var(--ease-out) both;
   }
 
   /* Waiting below the fold (useScrollReveal): the names held back, the products unset… */
@@ -506,14 +506,14 @@
 
   /* …then, in view: the names come in one after another as the products are set out. */
   .layout[data-reveal='shown'] .line {
-    animation: line-in var(--duration-slow) var(--ease-out) calc(var(--i) * 90ms) both;
+    animation: line-in var(--duration-base) var(--ease-out) calc(var(--i) * 50ms) both;
   }
 }
 
 @keyframes restock {
   0% {
     opacity: 0;
-    translate: 0 -1.25rem;
+    translate: 0 -0.5rem;
   }
 
   50% {
@@ -529,13 +529,13 @@
 @keyframes poster-in {
   from {
     opacity: 0;
-    translate: 0 1.5rem;
+    translate: 0 0.6rem;
   }
 }
 
 @keyframes line-in {
   from {
     opacity: 0;
-    translate: 0 0.75rem;
+    translate: 0 0.4rem;
   }
 }

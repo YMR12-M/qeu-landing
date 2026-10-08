@@ -109,13 +109,13 @@
 /* A tab that opens comes in with a fade. */
 @media (prefers-reduced-motion: no-preference) {
   .panel {
-    animation: panel-in var(--duration-slow) var(--ease-out);
+    animation: panel-in var(--duration-base) var(--ease-out);
   }
 }
 
 @keyframes panel-in {
   from {
     opacity: 0;
-    translate: 0 1rem;
+    translate: 0 0.5rem;
   }
 }

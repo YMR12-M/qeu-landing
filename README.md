@@ -280,8 +280,8 @@ Content (claims v3 made that the sources don't support)
   the café's big cup and the footer's contents. The «حمّل كيو» button is kept for the hero, the
   bar and the download section, and one quieter link between them — كيور's last note. The bar
   says how far down the page the reader is.
-- Unhurried motion (`src/styles/tokens.css`): content fades up over a second as it scrolls into
-  view, the pen takes a second and more to draw a mark, the coffee about four and a half seconds
+- Unhurried motion (`src/styles/tokens.css`): things come in over about half a second, from a short distance
+  (a few rems, staggered by tenths of a second), as they scroll into view, the pen takes under a second to draw a mark, the coffee about four and a half seconds
   to pour, and the hero's row glides one set of screenshots past in 80 seconds. Hovers still answer at once. The كيور replay keeps its
   timing, so it is still over within five seconds (WCAG 2.2.2).
 - Set close, as Tajawal reads best: its line box is 1em and its letters small in it, so

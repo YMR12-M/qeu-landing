@@ -388,24 +388,24 @@
 @media (prefers-reduced-motion: no-preference) {
   .route[data-reveal='pending'] .print {
     opacity: 0;
-    translate: 0 -1rem;
+    translate: 0 -0.5rem;
   }
 
   .route[data-reveal='pending'] :is(.stamp, .arrived) {
     opacity: 0;
-    scale: 1.7;
+    scale: 1.3;
   }
 
   /* …then, in view: the prints laid down one after another, and the stamp pressed last. */
   .route[data-reveal='shown'] .print {
     transition:
-      opacity var(--duration-base) ease calc(var(--n, 0) * 250ms),
-      translate var(--duration-slow) var(--ease-settle) calc(var(--n, 0) * 250ms);
+      opacity 400ms ease calc(var(--n, 0) * 140ms),
+      translate var(--duration-base) var(--ease-settle) calc(var(--n, 0) * 140ms);
   }
 
   .route[data-reveal='shown'] :is(.stamp, .arrived) {
     transition:
-      opacity 200ms ease 1100ms,
-      scale 400ms var(--ease-settle) 1100ms;
+      opacity 200ms ease 650ms,
+      scale 350ms var(--ease-settle) 650ms;
   }
 }

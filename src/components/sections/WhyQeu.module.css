@@ -165,14 +165,14 @@
 @media (prefers-reduced-motion: no-preference) {
   .row[data-reveal='pending'] :is(.sign, .phone) {
     opacity: 0;
-    translate: 0 -1.5rem;
+    translate: 0 -0.6rem;
   }
 
   /* …then, in view: set down one after another, each settling into its lean. */
   .row[data-reveal='shown'] :is(.sign, .phone) {
     transition:
-      opacity var(--duration-slow) ease calc(var(--i) * 160ms),
-      translate var(--duration-slow) var(--ease-settle) calc(var(--i) * 160ms);
+      opacity var(--duration-base) ease calc(var(--i) * 90ms),
+      translate var(--duration-base) var(--ease-settle) calc(var(--i) * 90ms);
   }
 }
 

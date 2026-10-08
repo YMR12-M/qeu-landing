@@ -101,7 +101,7 @@
   --duration-base: 600ms; /* opening, closing, a state that turns */
   --duration-slow: 900ms; /* something arriving on screen */
   --duration-reveal: 1000ms; /* content fading up as it scrolls into view */
-  --duration-draw: 1200ms; /* a pen mark drawn in: a circle, an underline, a tick */
+  --duration-draw: 850ms; /* a pen mark drawn in: a circle, an underline, a tick */
   --drift-duration: 80s; /* hero: one set of screenshots glides past, one full loop */
 }
 

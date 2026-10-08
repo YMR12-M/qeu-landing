@@ -457,27 +457,27 @@
 /* Waiting below the fold (useScrollReveal): the packs not yet stacked, the signs not yet leant… */
 .piles[data-reveal='pending'] .pack {
   opacity: 0;
-  translate: 0 -2.5rem;
+  translate: 0 -1rem;
 }
 
 .piles[data-reveal='pending'] .sign {
   opacity: 0;
-  translate: 0 1rem;
-  rotate: calc(var(--sign-lean, -2deg) - 4deg);
+  translate: 0 0.5rem;
+  rotate: calc(var(--sign-lean, -2deg) - 2deg);
 }
 
 /* …then, in view: each pile stacked pack by pack, from the back to the top, each dropped onto
    the one under it; its sign leant on once it is up. */
 .piles[data-reveal='shown'] .pack {
-  --delay: calc(var(--pile) * 220ms + var(--n) * 120ms);
+  --delay: calc(var(--pile) * 100ms + var(--n) * 60ms);
   transition:
-    opacity 350ms ease var(--delay),
-    translate 700ms var(--ease-settle) var(--delay);
+    opacity 250ms ease var(--delay),
+    translate 500ms var(--ease-settle) var(--delay);
 }
 
 .piles[data-reveal='shown'] .sign {
   transition:
-    opacity 500ms ease calc(var(--pile) * 220ms + var(--count) * 120ms + 150ms),
-    translate 800ms var(--ease-settle) calc(var(--pile) * 220ms + var(--count) * 120ms + 150ms),
-    rotate 800ms var(--ease-settle) calc(var(--pile) * 220ms + var(--count) * 120ms + 150ms);
+    opacity 350ms ease calc(var(--pile) * 100ms + var(--count) * 60ms + 80ms),
+    translate 500ms var(--ease-settle) calc(var(--pile) * 100ms + var(--count) * 60ms + 80ms),
+    rotate 500ms var(--ease-settle) calc(var(--pile) * 100ms + var(--count) * 60ms + 80ms);
 }
