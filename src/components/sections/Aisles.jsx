@@ -13,49 +13,78 @@ import styles from './Aisles.module.css';
 // "More than" this many categories: their count, rounded down to the ten.
 const AT_LEAST = Math.floor(CATEGORY_COUNT / 10) * 10;
 
-// A category takes a quarter of the products' width on a computer and a tablet, and a little
-// over a third of the screen on a phone, where they are swiped.
-const PRODUCT_SIZES = '(min-width: 64em) 11rem, (min-width: 48em) 20vw, 34vw';
+// A category stands about a quarter to a third of the column wide on a computer and a tablet, and
+// a little over a third of the screen on a phone, where they are swiped.
+const PRODUCT_SIZES = '(min-width: 64em) 15rem, (min-width: 48em) 24vw, 34vw';
 
-// Behind the categories, the chosen department's name is set as wide as the products' column.
-// CSS can't fit type to a width by itself, so here is how many ems wide each name's longest
-// line is in the display face, Lalezar (measured in the browser), and on how many lines it is set — a long
-// name a word to a line, its last word on the second. Measure again if a name changes.
+// Behind the categories, the chosen department's name is set on one line, as wide as the products'
+// column. CSS can't fit type to a width by itself, so here is how many ems wide each name is in
+// the display face, Lalezar (measured in the browser). Measure again if a name changes.
 const POSTER = {
   ar: {
-    groceries: { em: 3.094, lines: 1 }, // المقاضي
-    fresh: { em: 3.254, lines: 2 }, // المنتجات / الطازجة
-    drinks: { em: 3.634, lines: 2 }, // المشروبات / والمفرحات
-    home: { em: 2.566, lines: 2 }, // العناية / بالمنزل
-    care: { em: 2.477, lines: 1 }, // كيو كير
-    tech: { em: 2.77, lines: 1 }, // كيو تيك
+    groceries: 3.094, // المقاضي
+    fresh: 5.929, // المنتجات الطازجة
+    drinks: 7.251, // المشروبات والمفرحات
+    home: 4.971, // العناية بالمنزل
+    care: 2.477, // كيو كير
+    tech: 2.77, // كيو تيك
   },
   en: {
-    groceries: { em: 3.987, lines: 1 },
-    fresh: { em: 2.31, lines: 1 },
-    drinks: { em: 3.579, lines: 2 }, // Drinks & / treats
-    home: { em: 4.411, lines: 1 },
-    care: { em: 2.672, lines: 1 },
-    tech: { em: 2.793, lines: 1 },
+    groceries: 3.987,
+    fresh: 2.31,
+    drinks: 6.258,
+    home: 4.411,
+    care: 2.672,
+    tech: 2.793,
   },
 };
 
-/** A department's name as the poster sets it: on one line, or its last word on a second. */
-function posterLines(name, lines) {
-  if (lines === 1) return [name];
-  const words = name.split(' ');
-  return [words.slice(0, -1).join(' '), words.at(-1)];
+// The pile, in units of the column's width (cqi). The first four categories stand in a back row,
+// smaller and higher; the rest in a front row, larger and staggered between the back row's packs
+// (half a gap along), so every pack shows. The two rows together are centred and, if they are
+// wider than the column, scaled down to it. Reading order runs right to left, so the first
+// category takes the rightmost place of its row; a pack leans a little, each its own way.
+const BACK_COUNT = 4;
+const BACK_WIDTH = 23;
+const FRONT_WIDTH = 31;
+const PACK_GAP = 24;
+const LEANS = [-2.2, 1.8, -1.2, 2.6, -1.6, 2.1, -2.4, 1.4];
+const round = (value) => Math.round(value * 100) / 100;
+
+function layPile(count) {
+  const front = count - BACK_COUNT;
+  const packs = Array.from({ length: count }, (_, index) => {
+    const isBack = index < BACK_COUNT;
+    const place = isBack ? index : index - BACK_COUNT;
+    const slot = (isBack ? BACK_COUNT : front) - 1 - place; // from the left
+    const width = isBack ? BACK_WIDTH : FRONT_WIDTH;
+    return { isBack, width, centre: slot * PACK_GAP + (isBack ? 0 : PACK_GAP / 2) };
+  });
+  const left = Math.min(...packs.map((pack) => pack.centre - pack.width / 2));
+  const right = Math.max(...packs.map((pack) => pack.centre + pack.width / 2));
+  const scale = Math.min(1, 98 / (right - left));
+  return packs.map((pack, index) => ({
+    row: pack.isBack ? 'back' : 'front',
+    x: round(50 + (pack.centre - (left + right) / 2) * scale),
+    width: round(pack.width * scale),
+    lean: LEANS[index % LEANS.length],
+  }));
 }
 
+const PILES = Object.fromEntries(
+  DEPARTMENTS.map((department) => [department.id, layPile(department.categories.length)]),
+);
+
 /**
- * «أقسام كيو» — the store's aisles, on the deal yellow, as a poster. At the start, the store
- * directory set as a list of names: the app's six departments, each with its aisle number and
- * the app's own icon, the chosen one circled in pen. Beside it, from the top of the heading to
- * the foot of the directory, the chosen department's categories — the app's own picture of
- * each, standing straight on the yellow over its name, two rows of four, all in view at once —
- * and behind them the department's name, set huge in a deeper yellow, as wide as the column:
- * choose another and the name changes with the products. Under them, the way to that aisle in
- * the app.
+ * «أقسام كيو» — the store's aisles, on the page's wall. At the start, the store directory set like
+ * a table of contents: the app's six departments, each with the app's own icon,
+ * its name, a run of dots and how many categories it has, the chosen one marked in yellow
+ * highlighter with a pen arrow to its products. Beside it, from the top of the heading to the foot
+ * of the directory, the chosen department's categories — the app's own picture of each — piled in
+ * two rows, the back row higher with its names above, the front row with its names below, and
+ * behind them the department's name, painted on the wall in a pale aqua with a hand-painted edge:
+ * choose another and the name changes with the products. Under them, the way to that aisle in the
+ * app.
  *
  * The directory is a radio group, so choosing works with a keyboard and a screen reader like
  * any form, and without JavaScript: the stylesheet shows the checked aisle's categories
@@ -72,6 +101,19 @@ export function Aisles() {
 
   return (
     <section id="departments" className={styles.section} aria-labelledby="departments-title">
+      {/* The painted edge of the department's name: the letters' outline nudged by noise. */}
+      <svg
+        width="0"
+        height="0"
+        aria-hidden="true"
+        focusable="false"
+        style={{ position: 'absolute' }}
+      >
+        <filter id="aisles-paint" x="-2%" y="-5%" width="104%" height="110%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" />
+          <feDisplacementMap in="SourceGraphic" scale="5" />
+        </filter>
+      </svg>
       <div ref={storeRef} className={cx('container', styles.layout)}>
         <div className={styles.intro}>
           <h2 id="departments-title" className={styles.title}>
@@ -92,7 +134,7 @@ export function Aisles() {
           </p>
         </div>
 
-        {/* The store directory: a numbered line per department, the chosen one circled. */}
+        {/* The store directory: a line per department, the chosen one highlighted. */}
         <fieldset className={styles.directory}>
           <legend className="visually-hidden">{aisles.legend}</legend>
           <p className={styles.directoryTitle} aria-hidden="true">
@@ -108,9 +150,6 @@ export function Aisles() {
                   value={department.id}
                   defaultChecked={index === 0}
                 />
-                <span className={styles.aisleNumber} aria-hidden="true">
-                  {number(index + 1)}
-                </span>
                 <Picture
                   image={media.departmentIcons[department.id]}
                   alt=""
@@ -118,34 +157,35 @@ export function Aisles() {
                   className={styles.icon}
                 />
                 <span className={styles.name}>
+                  <span className={styles.mark} aria-hidden="true" />
                   {aisles.departments[department.id].name}
-                  <Scribble shape="circle" draw="parent" className={styles.circle} />
-                  <Scribble shape="arrow" draw="parent" className={styles.toAisle} />
                 </span>
+                <span className={styles.dots} aria-hidden="true" />
+                <span className={styles.count}>
+                  {interpolate(aisles.categoryCount, {
+                    count: number(department.categories.length),
+                  })}
+                </span>
+                <Scribble shape="arrow" draw="parent" className={styles.toAisle} />
               </label>
             ))}
           </div>
         </fieldset>
 
         {/* The chosen department's categories: one set per department, the checked one shown,
-            its name set huge behind them. */}
+            its name painted on the wall behind them. */}
         <div className={styles.products}>
-          {DEPARTMENTS.map((department) => {
-            const { em, lines } = POSTER[locale][department.id];
-            return (
-              <p
-                key={department.id}
-                className={styles.poster}
-                data-aisle={department.id}
-                style={{ '--em': em }}
-                aria-hidden="true"
-              >
-                {posterLines(aisles.departments[department.id].name, lines).map((line) => (
-                  <span key={line}>{line}</span>
-                ))}
-              </p>
-            );
-          })}
+          {DEPARTMENTS.map((department) => (
+            <p
+              key={department.id}
+              className={styles.poster}
+              data-aisle={department.id}
+              style={{ '--em': POSTER[locale][department.id] }}
+              aria-hidden="true"
+            >
+              {aisles.departments[department.id].name}
+            </p>
+          ))}
           {DEPARTMENTS.map((department) => {
             const copy = aisles.departments[department.id];
             return (
@@ -153,17 +193,26 @@ export function Aisles() {
                 {/* The circled line names the aisle: its name is here for screen readers. */}
                 <h3 className="visually-hidden">{copy.name}</h3>
                 <ul className={styles.items} role="list">
-                  {department.categories.map((category, index) => (
-                    <li key={category} className={styles.item} style={{ '--j': index }}>
-                      <Picture
-                        image={media.departments[department.id][category]}
-                        alt=""
-                        sizes={PRODUCT_SIZES}
-                        className={styles.product}
-                      />
-                      <span className={styles.label}>{copy.categories[category]}</span>
-                    </li>
-                  ))}
+                  {department.categories.map((category, index) => {
+                    const { row, x, width, lean } = PILES[department.id][index];
+                    return (
+                      <li
+                        key={category}
+                        className={styles.item}
+                        data-row={row}
+                        style={{ '--j': index, '--x': x, '--w': width, '--lean': `${lean}deg` }}
+                      >
+                        <Picture
+                          image={media.departments[department.id][category]}
+                          alt=""
+                          sizes={PRODUCT_SIZES}
+                          className={styles.product}
+                        />
+                        <span className={styles.leader} aria-hidden="true" />
+                        <span className={styles.label}>{copy.categories[category]}</span>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             );

@@ -5,6 +5,7 @@ import { useLocale } from '../../i18n/useLocale.js';
 import { formatPlural, interpolate } from '../../lib/format.js';
 import { Logo } from '../brand/Logo.jsx';
 import { Barcode } from '../ui/Barcode.jsx';
+import { SectionHeading } from '../ui/SectionHeading.jsx';
 import styles from './Faq.module.css';
 
 const EMAIL = site.contact.email;
@@ -26,8 +27,8 @@ function withEmailLink(text) {
 }
 
 /**
- * One line of the receipt: the question, and its answer printed out under it. `line` is its
- * row in its column, for the order it prints in.
+ * One line of the receipt: the question, and its answer printed out under it. `line` is its row,
+ * for the order it prints in.
  */
 function Question({ item, number, line, figures, open = false }) {
   return (
@@ -46,93 +47,99 @@ function Question({ item, number, line, figures, open = false }) {
 }
 
 /**
- * «عندك سؤال؟» — the FAQ, printed as a till receipt — straight onto the section's own paper: no
- * slip, no torn edge, only the print — as wide as the page, the one thing in the section. The
- * shop's name at its head and the question printed large as the receipt's title, then every
- * question, in two columns as a wide till prints its lines: a line each, with dot leaders to its
- * box. The last line of the second column is yours: your number — the next after the last
- * question — and the way to ask your own. Under both columns a total that comes to "free"
- * (marked in yellow), and a barcode. It prints line by line as it scrolls into view, both
- * columns at once.
+ * «عندك سؤال؟» — the FAQ, printed as one long till receipt: the shop's logo, how many
+ * questions there are, every question, then a total that comes to "free" and a barcode. On the
+ * other side are the section's heading, and under it a number machine: its display shows the turn
+ * it's on — the last question's — and the slip it hands out is yours, the next after the last
+ * question, with the way to ask it. The machine stays in view while the receipt is read. The
+ * receipt prints line by line as it scrolls into view.
  *
  * Each question is a native <details> (one open at a time), so the answers work before
  * hydration and without JavaScript, with the browser's own keyboard and screen-reader
- * behaviour — and find-in-page opens the answer it lands in. The first is printed open, so the
- * receipt shows an answer from the start.
+ * behaviour — and find-in-page opens the answer it lands in. The first question is printed open,
+ * so the receipt shows an answer from the start.
  */
 export function Faq() {
   const { t, figures, locale } = useLocale();
   const { faq } = t;
   const { receipt, ticket } = faq;
-  const count = formatPlural(faq.items.length, receipt.count, { locale });
-  // Your number is one more line: the questions are shared out with it in the second column.
-  const perColumn = Math.ceil((faq.items.length + 1) / 2);
-  const columns = [faq.items.slice(0, perColumn), faq.items.slice(perColumn)];
-  const receiptRef = useRef(null);
-  useScrollReveal(receiptRef);
+  const layoutRef = useRef(null);
+  useScrollReveal(layoutRef);
 
   return (
     <section id="faq" className={styles.section} aria-labelledby="faq-title">
       <div className="container">
-        <div ref={receiptRef} className={styles.receipt} style={{ '--rows': perColumn }}>
-          {/* The shop's name, then the question printed large as the receipt's title. */}
-          <div className={styles.head}>
-            <Logo className={styles.logo} />
-            <h2 id="faq-title" className={styles.title}>
-              {faq.title}
-            </h2>
-            <p className={styles.lead}>{faq.lead}</p>
-            <p className={styles.meta}>
-              {receipt.title} · {count}
-            </p>
-          </div>
+        <div ref={layoutRef} className={styles.layout}>
+          <SectionHeading
+            id="faq-title"
+            title={faq.title}
+            lead={faq.lead}
+            className={styles.intro}
+          />
 
-          <div className={styles.lines}>
-            {columns.map((items, column) => (
-              <div key={column} className={styles.column}>
-                <p className={styles.columns} aria-hidden="true">
-                  <span>{receipt.columns.question}</span>
-                  <span>{receipt.columns.answer}</span>
+          <div className={styles.printer}>
+            <div className={styles.receipt}>
+              <div className={styles.head}>
+                <Logo className={styles.logo} />
+                <p className={styles.headTitle}>{receipt.title}</p>
+                <p className={styles.meta}>
+                  {formatPlural(faq.items.length, receipt.count, { locale })}
                 </p>
-                {items.map((item, index) => (
-                  <Question
-                    key={item.id}
-                    item={item}
-                    number={column * perColumn + index + 1}
-                    line={index + 2}
-                    figures={figures}
-                    open={column === 0 && index === 0}
-                  />
-                ))}
-
-                {/* The second column's last line: take a number — yours, the next after the
-                    last question — and ask. */}
-                {column === 1 && (
-                  <p className={styles.ticket} style={{ '--line': items.length + 2 }}>
-                    <span className={styles.ticketLabel}>{ticket.label}</span>
-                    <span className={styles.ticketNumber}>{twoDigits(faq.items.length + 1)}</span>
-                    <span className={styles.ticketQuestion}>{ticket.question}</span>
-                    <span className={styles.leader} aria-hidden="true" />
-                    <a className={styles.ticketAction} href={`mailto:${EMAIL}`}>
-                      {ticket.action}
-                    </a>
-                    <span className={styles.ticketEmail}>
-                      <span dir="ltr">{EMAIL}</span>
-                    </span>
-                  </p>
-                )}
               </div>
-            ))}
+
+              <p className={styles.columns} aria-hidden="true">
+                <span>{receipt.columns.question}</span>
+                <span>{receipt.columns.answer}</span>
+              </p>
+
+              {faq.items.map((item, index) => (
+                <Question
+                  key={item.id}
+                  item={item}
+                  number={index + 1}
+                  line={index + 2}
+                  figures={figures}
+                  open={index === 0}
+                />
+              ))}
+
+              <p className={styles.total}>
+                <span>{receipt.total}</span>
+                <span className={styles.leader} aria-hidden="true" />
+                <span>{receipt.totalValue}</span>
+              </p>
+
+              <Barcode seed="QEU FAQ" count={64} className={styles.barcode} />
+              <p className={styles.thanks}>{receipt.thanks}</p>
+            </div>
           </div>
 
-          <p className={styles.total}>
-            <span>{receipt.total}</span>
-            <span className={styles.leader} aria-hidden="true" />
-            <span className={styles.free}>{receipt.totalValue}</span>
-          </p>
-
-          <Barcode seed="QEU FAQ" count={64} className={styles.barcode} />
-          <p className={styles.thanks}>{receipt.thanks}</p>
+          {/* The number machine: the turn it's on, and the slip it hands out — yours. */}
+          <div className={styles.machine}>
+            <div className={styles.dispenser}>
+              <span className={styles.current}>{ticket.current}</span>
+              <span className={styles.display} dir="ltr">
+                {twoDigits(faq.items.length)}
+              </span>
+            </div>
+            <div className={styles.slip}>
+              <div className={styles.slipHead}>
+                <Logo className={styles.slipLogo} />
+                <span>{ticket.take}</span>
+              </div>
+              <p className={styles.slipLabel}>{ticket.label}</p>
+              <p className={styles.slipNumber} dir="ltr">
+                {twoDigits(faq.items.length + 1)}
+              </p>
+              <p className={styles.slipQuestion}>{ticket.question}</p>
+              <a className={styles.slipAction} href={`mailto:${EMAIL}`}>
+                {ticket.action}
+              </a>
+              <p className={styles.slipEmail} dir="ltr">
+                {EMAIL}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

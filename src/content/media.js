@@ -12,7 +12,12 @@
  *                                       the bottom the store cut off completed with the app's tab
  *                                       bar or the chat's input field, the status bar
  *                                       screen-home's
- *   step-*                            → Google Play screenshots, cropped (≈1.8× the provided crops)
+ *   van                               → Qeu's van, cut out of the two delivery screenshots (play-delivery-1/-2
+ *                                       are one panorama): stitched, the sky lifted off it with macOS's Vision
+ *                                       (as scripts/cutout.swift does for the packs), the phone that stood
+ *                                       in front of its rear taken away, and the rear that phone hid built
+ *                                       again as plain bodywork. The panorama's edge cuts its nose, so a
+ *                                       phone always stands over it (HowItWorks)
  *   play-*                            → the six Google Play screenshots, whole (1242×2688 originals
  *                                       scaled to 960px wide); play-delivery-1/-2 are one panorama
  *   app-icon                          → Google Play icon
@@ -68,12 +73,6 @@ import playOffersAvif from '../assets/images/play-offers.webp?w=240;360;480;720&
 import playOffersWebp from '../assets/images/play-offers.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
 import playSmartAvif from '../assets/images/play-smart.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
 import playSmartWebp from '../assets/images/play-smart.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
-import stepOffersAvif from '../assets/images/step-offers.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
-import stepOffersWebp from '../assets/images/step-offers.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
-import stepPicksAvif from '../assets/images/step-picks.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
-import stepPicksWebp from '../assets/images/step-picks.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
-import stepDeliveryAvif from '../assets/images/step-delivery.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
-import stepDeliveryWebp from '../assets/images/step-delivery.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
 import qurRice from '../assets/images/qur-rice.webp?w=120;180;250&format=webp&quality=80&as=picture';
 import qurSpice from '../assets/images/qur-spice.webp?w=120;180;250&format=webp&quality=80&as=picture';
 import qurTomato from '../assets/images/qur-tomato.webp?w=120;180;250&format=webp&quality=80&as=picture';
@@ -85,6 +84,8 @@ import screenHomeAvif from '../assets/images/screen-home.webp?w=240;360;540;720&
 import screenHomeWebp from '../assets/images/screen-home.webp?w=240;360;540;720&format=webp&quality=72&as=picture';
 import screenPicksAvif from '../assets/images/screen-picks.webp?w=240;360;540;720&format=avif&quality=50&as=picture';
 import screenPicksWebp from '../assets/images/screen-picks.webp?w=240;360;540;720&format=webp&quality=72&as=picture';
+import vanAvif from '../assets/images/van.webp?w=640;960;1280;1914&format=avif&quality=50&as=picture';
+import vanWebp from '../assets/images/van.webp?w=640;960;1280;1914&format=webp&quality=80&as=picture';
 
 // «أقسام كيو»: every category's picture, filed by department (departments/<department>/
 // <category>.webp, the ids in src/content/departments.js), and each department's icon — the
@@ -119,13 +120,11 @@ const playDelivery1 = picture(playDelivery1Avif, playDelivery1Webp);
 const playDelivery2 = picture(playDelivery2Avif, playDelivery2Webp);
 const playOffers = picture(playOffersAvif, playOffersWebp);
 const playSmart = picture(playSmartAvif, playSmartWebp);
-const stepOffers = picture(stepOffersAvif, stepOffersWebp);
-const stepPicks = picture(stepPicksAvif, stepPicksWebp);
-const stepDelivery = picture(stepDeliveryAvif, stepDeliveryWebp);
 const screenCategories = picture(screenCategoriesAvif, screenCategoriesWebp);
 const screenChat = picture(screenChatAvif, screenChatWebp);
 const screenHome = picture(screenHomeAvif, screenHomeWebp);
 const screenPicks = picture(screenPicksAvif, screenPicksWebp);
+const van = picture(vanAvif, vanWebp);
 
 export const media = {
   appIcon,
@@ -151,11 +150,14 @@ export const media = {
     picks: screenChat,
   },
 
-  /** «كيف يشتغل» — one cut of the app per step, keyed by step id: the printed photos on the slip. */
+  /**
+   * «كيف يشتغل» — one picture per step, keyed by step id: the app's home screen and its picks
+   * screen (the same phone as «ليش كيو؟»), and Qeu's van.
+   */
   steps: {
-    offers: stepOffers,
-    picks: stepPicks,
-    delivery: stepDelivery,
+    offers: screenHome,
+    picks: screenPicks,
+    delivery: van,
   },
 
   /** «أقسام كيو» — the categories' pictures by department, and the departments' icons. */

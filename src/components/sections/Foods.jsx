@@ -67,7 +67,7 @@ const PILES = {
  * sign leaning at its foot. The headline first, «تطبخ» crossed out in red pen — no cooking today —
  * and «من تحضير كيو» circled beside it; under it the piles.
  *
- * The sign is what is read: what is on the pile, a yellow burst with its lowest price, and the
+ * The sign is what is read: what is on the pile, a strip of tape with its lowest price, and the
  * six packs with their sizes and prices, written in marker. The piles are the pictures beside
  * it (hidden from screen readers, which read the signs). Pointing at a pack marks its line on
  * the sign, and pointing at a line lifts its pack out of the pile; a tap does the same on a
@@ -170,14 +170,14 @@ export function FoodsPanel() {
                   <h4 id={`foods-${shelf.id}`} className={styles.signName}>
                     {foods.shelves[shelf.id]}
                   </h4>
-                  {/* The flyer's burst, stuck on the sign's corner: the pile's lowest price. */}
-                  <p className={styles.burst}>
-                    <span className={styles.burstFrom}>{foods.from}</span>
+                  {/* A strip of tape across the sign's corner, the pile's lowest price written on it. */}
+                  <p className={styles.tape}>
+                    <span className={styles.tapeFrom}>{foods.from}</span>
                     <Price
                       value={lowest}
                       locale={locale}
                       prices={prices}
-                      className={styles.burstPrice}
+                      className={styles.tapePrice}
                     />
                   </p>
                   <ul className={styles.lines} role="list">

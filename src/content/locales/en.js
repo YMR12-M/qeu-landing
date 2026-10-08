@@ -133,6 +133,7 @@ const en = {
     lead: '{departments} departments and over {categories} categories — from rice and vegetables to headphones.',
     legend: 'Choose a department',
     directory: 'Store directory',
+    categoryCount: '{count} categories',
     where: 'In the app:',
     tab: 'الأقسام',
     departments: {
@@ -315,8 +316,9 @@ const en = {
   },
 
   inside: {
-    arrived: 'Your order’s here',
-    title: 'Our deals come to you — at the same price',
+    title: 'Our deals come to you\u00a0—',
+    // The promise, on the yellow marker: it is also what is written on the van.
+    titleAccent: 'at the same price',
     lead: 'Simple shopping, secure payment options, and delivery right to your door.',
     steps: [
       {
@@ -324,7 +326,7 @@ const en = {
         title: 'Browse the deals',
         text: 'Standout deals, and prices you’ll only find on Q.',
         imageAlt:
-          'From the Q app: the deals screen, a drinks offer and the «prices you’ll only find on Q» section',
+          'The Q app home screen: a super deal on Al Fakhama rice with Al Fakhama oil free, its price before and after the discount, and the “prices you’ll only find on Q” section',
       },
       {
         id: 'picks',
@@ -337,7 +339,8 @@ const en = {
         id: 'delivery',
         title: 'Get it at your door',
         text: 'Fast, organized delivery — and you track your order step by step.',
-        imageAlt: 'From the Q app: the order review screen, with a Q van and its logo behind it',
+        imageAlt:
+          'A Q van with its logo, and «عروضنا تجيك وبنفس السعر» — “our deals come to you at the same price” — written on its side',
       },
     ],
   },
@@ -346,6 +349,8 @@ const en = {
     title: 'Got a question?',
     lead: 'We printed the answers on one receipt: short and clear.',
     ticket: {
+      current: 'Now serving',
+      take: 'Take a number',
       label: 'Your number',
       question: 'Your question isn’t on the receipt?',
       action: 'Email us',
@@ -477,7 +482,6 @@ const en = {
   // Same shape as ar.js; the 404 page itself is Arabic, with a line in English.
   notFound: {
     title: 'Page not found — Q',
-    eyebrow: 'Error 404',
     heading: 'This page isn’t on the shelf',
     text: 'The link may be old or mistyped. All the deals are on the home page, and in the app itself.',
     home: 'Home page',

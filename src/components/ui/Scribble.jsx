@@ -5,9 +5,9 @@ import styles from './Scribble.module.css';
 
 // Each mark as a hand would draw it: a loop round a word that runs on past where it started,
 // an underline with its second pass, a word crossed out with two quick strokes, an arrow and its
-// head, a tick. Drawn in a box they are stretched to fit (preserveAspectRatio="none"), at an
-// even width. `reveal` is how the pen's progress is shown: a loop is uncovered round its centre,
-// the rest along their length.
+// head, a tick, a plain line drawn once. Drawn in a box they are stretched to fit
+// (preserveAspectRatio="none"), at an even width. `reveal` is how the pen's progress is shown: a
+// loop is uncovered round its centre, the rest along their length.
 const MARKS = {
   circle: {
     viewBox: '0 0 200 100',
@@ -34,15 +34,20 @@ const MARKS = {
     reveal: 'wipe',
     strokes: ['M5 22 15 32 36 6'],
   },
+  line: {
+    viewBox: '0 0 200 10',
+    reveal: 'wipe',
+    strokes: ['M2 6C50 3 130 2 198 5'],
+  },
 };
 
 /**
  * A pen mark on the page — a circle round a word, an underline, a word struck out, an arrow, a
- * tick — uncovered as the pen would draw it. It draws as it scrolls into view (`draw="reveal"`,
- * the default), once the page has loaded (`"load"`, for what is on screen from the start), or
- * when an ancestor sets `--drawn: 1` (`"parent"`, for a mark that comes and goes with a choice,
- * even without a script). Under reduced motion it is simply there. Decorative: it only marks
- * what the text already says.
+ * tick, a line — uncovered as the pen would draw it. It draws as it scrolls into view
+ * (`draw="reveal"`, the default), once the page has loaded (`"load"`, for what is on screen from
+ * the start), or when an ancestor sets `--drawn: 1` (`"parent"`, for a mark that comes and goes
+ * with a choice, even without a script). Under reduced motion it is simply there. Decorative: it
+ * only marks what the text already says.
  */
 export function Scribble({ shape, draw = 'reveal', delay = 0, className, style, ...props }) {
   const ref = useRef(null);

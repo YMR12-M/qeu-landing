@@ -1,9 +1,17 @@
 /*
- * «كيف يشتغل» — the order as the route it takes, drawn by hand across the page's wall: a dashed
- * line from where the order starts, down and up through three stops — a pen-ringed number each —
- * to the door, where «طلبك وصل» is stamped. From each stop a dashed line drops to what happens
- * there: a print of the app's own screen, tossed down, and under it the step. Qeu's van drives
- * the line as the section scrolls by, and the line turns solid behind it.
+ * «عروضنا تجيك وبنفس السعر» — one poster on the page's wall, not three cards: the app's home
+ * screen standing in front, its picks screen behind Qeu's van, and the van across the bottom, each
+ * picture whole and large enough to read, with its number taped on it by hand — a torn scrap of
+ * yellow paper, the digit in marker; one stroke of the marker is the ground they stand on.
+ *
+ * On a computer the places are one picture on a sheet 100 units wide (the sheet is the poster,
+ * scaled with the page: every size and place is written in hundredths of its width, cqi), counted
+ * from where the reading starts: the right, in Arabic. Read left to right the poster is the same
+ * one mirrored — except the van, whose side says «عروضنا تجيك» and so is never turned round: the
+ * panorama's edge cuts the van's nose, so a screen always stands over it (the first one in Arabic,
+ * the second in English). English is longer, so it gives up the sheet for the phone's layout
+ * sooner. On a phone the headline stands above and the pictures zigzag down the page, the van
+ * across its foot; that layout is the default, and the sheet is what a wide enough poster adds.
  */
 
 .section {
@@ -11,401 +19,472 @@
   padding-block: var(--section-space);
 }
 
-.route {
-  margin-block-start: clamp(2.5rem, 3.3333vw, 4rem);
-}
-
-/* ── The map ────────────────────────────────────────────────────── */
-
-/* Computers and tablets: the line across the page, in a box as tall as it is drawn. Phones have
-   the upright route down the steps instead (below). */
-.map {
-  --van-width: clamp(3.5rem, 6.5vw, 6rem);
-  position: relative;
-  display: none;
-  aspect-ratio: 1200 / 150;
-}
-
-@media (min-width: 48em) {
-  .map {
-    display: block;
-  }
-}
-
-.svg {
-  position: absolute;
-  inset: 0;
+/* The poster is the container its units are measured in. */
+.poster {
+  container-type: inline-size;
   inline-size: 100%;
-  block-size: 100%;
-  overflow: visible;
 }
 
-/* Written for left to right; a right-to-left page is its mirror (the stops are placed from the
-   start edge, so they follow). */
-.map:dir(rtl) .svg {
-  scale: -1 1;
-}
-
-.dash,
-.done {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.dash {
-  stroke: #9db6ba;
-  stroke-width: 3;
-  stroke-dasharray: 2 13;
-}
-
-/* The route as far as the van has driven: solid, in Qeu's teal. Without a script, all of it. */
-.done {
-  stroke: var(--brand);
-  stroke-width: 4;
-}
-
-/* Where the order starts: a dot, as a pen is put down. */
-.origin {
-  position: absolute;
-  inset-inline-start: calc(10 / 1200 * 100%);
-  inset-block-start: calc(70 / 150 * 100%);
-  inline-size: 0.875rem;
-  block-size: 0.875rem;
-  margin-block-start: -0.4375rem;
-  margin-inline-start: -0.4375rem;
-  border-radius: 50%;
-  background: var(--night);
-}
-
-.stop {
-  position: absolute;
-  inset-inline-start: var(--x);
-  inset-block: var(--y) 0;
-}
-
-/* From the stop down to its step. */
-.drop {
-  position: absolute;
-  inset-block: 1.5rem 0;
-  inset-inline-start: 0;
-  border-inline-start: 2px dashed rgb(4 40 47 / 0.3);
-}
-
-/* The number, on the line, ringed in pen. */
-.pin {
-  position: absolute;
-  inset-block-start: -1.375rem;
-  inset-inline-start: -1.375rem;
-  display: grid;
-  place-items: center;
-  inline-size: 2.75rem;
-  block-size: 2.75rem;
-  border-radius: 50%;
-  background: var(--page-wall);
-  font-size: 1.25rem;
-  font-weight: 900;
-  line-height: 1;
-  color: var(--night);
-}
-
-.ring {
-  --pen: 2.5px;
-  position: absolute;
-  inset: -0.3rem -0.4rem;
-  inline-size: calc(100% + 0.8rem);
-  block-size: calc(100% + 0.6rem);
-  color: var(--night);
-}
-
-/* The van rides the line, wheels on it. Resting, it stands at the door. */
-.driver {
-  position: absolute;
-  z-index: 2;
-  left: var(--x, 99.2%);
-  top: var(--y, 36.6%);
-  translate: -50% -92%;
-  rotate: var(--tilt, 0deg);
-  transform-origin: 50% 92%;
-}
-
-.map:dir(rtl) .driver {
-  left: var(--x, 0.8%);
-}
-
-/* ── The van ────────────────────────────────────────────────────── */
-
-/* On the line: it drives it (HowItWorks.jsx → useDrive), and rests at the door. */
-.van {
+.stage {
+  --mirror: 1; /* the sheet is drawn for right to left: left to right turns its tilts round */
   position: relative;
-  inline-size: var(--van-width);
-  block-size: calc(var(--van-width) * 57 / 136);
-}
-
-.vanArt {
+  isolation: isolate; /* the pictures are stacked among themselves, not against the page */
   inline-size: 100%;
-  block-size: 100%;
-  overflow: visible;
 }
 
-.map:dir(rtl) .vanArt {
-  scale: -1 1;
+.stage:dir(ltr) {
+  --mirror: -1;
 }
 
-.vanBody {
-  fill: var(--white);
-  stroke: #c3d3d6;
-  stroke-width: 1.25;
+/* ── The headline ───────────────────────────────────────────────── */
+
+.head {
+  margin-block-end: clamp(1.25rem, 6cqi, 2.25rem);
 }
 
-.waveLight {
-  fill: var(--icon-aqua);
+.title {
+  font-size: var(--text-h2);
 }
 
-.waveBrand {
-  fill: var(--brand);
+.stage:dir(ltr) .title {
+  font-size: min(var(--text-h2), 9.4cqi);
 }
 
-.vanWindow {
-  fill: var(--deep);
+/* The promise, on the yellow marker as the hero's headline is — and as the van says it. */
+.accent {
+  margin-inline: -0.12em;
+  padding-inline: 0.12em;
+  background: url('../../assets/marks/marker.svg') no-repeat;
+  background-position: right 0 bottom 0.02em;
+  background-size: 100% 0.62em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
-.vanSeam {
-  fill: none;
-  stroke: #d3e0e2;
+.stage:dir(ltr) .accent {
+  display: block; /* the headline is longer: «at the same price» is its second line */
+  inline-size: fit-content;
+  background-position: left 0 bottom 0.02em;
 }
 
-.headlight {
-  fill: var(--star);
+.lead {
+  max-inline-size: 26em;
+  margin-block-start: clamp(0.75rem, 1.2vw, 1.25rem);
+  font-size: var(--text-lead);
+  font-weight: 500;
+  color: var(--muted);
 }
 
-.bumper {
-  fill: none;
-  stroke: var(--deep);
-  stroke-width: 2;
-  stroke-linecap: round;
+/* ── The pictures ───────────────────────────────────────────────── */
+
+/* The box the places are measured in. */
+.sheet {
+  position: relative;
+  aspect-ratio: 100 / 212;
 }
 
-.wheel {
-  transform-box: fill-box;
-  transform-origin: center;
+.stage:dir(ltr) .sheet {
+  aspect-ratio: 100 / 215;
 }
-
-.tyre {
-  fill: #0a2126;
-}
-
-.hub {
-  fill: #e8f0f1;
-}
-
-.spokes {
-  fill: none;
-  stroke: #0a2126;
-  stroke-width: 1.2;
-  stroke-linecap: round;
-}
-
-.vanShadow {
-  fill: rgb(0 0 0 / 0.3);
-}
-
-/* Motion lines behind the van — only while it's driving. */
-.speed {
-  fill: none;
-  stroke: #9fb3b7;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  opacity: 0;
-}
-
-/* The wordmark on the van's side: never mirrored, because it isn't part of the flipped art. */
-.vanLogo {
-  position: absolute;
-  inset-block-start: 23%;
-  inset-inline-start: 28.7%;
-  inline-size: 17.6%;
-  block-size: auto;
-  color: var(--deep);
-}
-
-/* ── The stamp ──────────────────────────────────────────────────── */
-
-/* «طلبك وصل», pressed on once, a little crooked, in the ink of a rubber stamp, a double border
-   round it: at the door, under the end of the line. */
-.stamp,
-.arrived {
-  padding: 0.35em 1em;
-  border: 3px double var(--deal);
-  border-radius: 0.375rem;
-  color: var(--deal);
-  font-size: clamp(1.125rem, 1.7vw, 1.875rem);
-  font-weight: 900;
-  line-height: 1.2;
-  rotate: -7deg;
-}
-
-@supports (text-box: trim-both ex alphabetic) {
-  .stamp,
-  .arrived {
-    padding-block: 0.6em;
-    text-box: var(--label-box);
-  }
-}
-
-.stamp {
-  position: absolute;
-  inset-inline-end: 0;
-  inset-block-start: 58%;
-}
-
-/* ── The steps ──────────────────────────────────────────────────── */
 
 .steps {
-  display: grid;
-  gap: clamp(2.5rem, 6vw, 3.5rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.step {
-  position: relative;
+/* Everything on the sheet stands where --x (from the start), --y (from the top) and --w say. */
+.caption,
+.piece {
+  position: absolute;
+  inset-inline-start: calc(var(--x) * 1cqi);
+  inset-block-start: calc(var(--y) * 1cqi);
+  inline-size: calc(var(--w) * 1cqi);
+  z-index: var(--z, 1);
+}
+
+.piece {
+  margin: 0;
+  rotate: calc(var(--tilt, 0deg) * var(--mirror));
+}
+
+.picture {
+  inline-size: 100%;
+}
+
+/* Each carries its own shadow, never a frame. */
+.step[data-step='offers'] .picture,
+.step[data-step='picks'] .picture {
+  filter: drop-shadow(0 1.6rem 1.25rem rgb(4 40 47 / 0.26))
+    drop-shadow(0 0.25rem 0.35rem rgb(4 40 47 / 0.18));
+}
+
+.step[data-step='delivery'] .picture {
+  filter: drop-shadow(0 0.9rem 0.7rem rgb(4 40 47 / 0.24));
+}
+
+/* The ground the van and the front screen stand on, in one stroke of the marker. */
+.ground {
+  --pen: 2.5px;
+  position: absolute;
+  inset-inline-start: calc(var(--x) * 1cqi);
+  inset-block-start: calc(var(--y) * 1cqi);
+  inline-size: calc(var(--w) * 1cqi);
+  block-size: 0.9cqi;
+  z-index: 1;
+  color: var(--night);
+}
+
+/* ── The steps ──────────────────────────────────────────────────── */
+
+/* A step: its number, taped over its picture's corner, its name and its line. */
+.caption {
+  --nsz: clamp(3.4rem, 19.5cqi, 5.5rem); /* the scrap of paper */
+  --name-size: clamp(1.375rem, 6.8cqi, 2rem);
+  --text-size: clamp(0.9375rem, 4.2cqi, 1.125rem);
   display: grid;
-  justify-items: center;
-  gap: 0.5rem;
-  text-align: center;
+  grid-template-columns: var(--nsz) minmax(0, 1fr);
+  column-gap: clamp(0.5rem, 1.2cqi, 1.1rem);
+  align-items: start;
 }
 
-/* The print: a screen of the app tossed down, each at its own angle and its own crop. */
-.print {
-  inline-size: min(100%, 15rem);
-  aspect-ratio: 4 / 5;
-  margin-block-end: 0.75rem;
-  border: 0.4375rem solid var(--white);
-  border-radius: 0.25rem;
-  object-fit: cover;
-  background: var(--white);
-  box-shadow: 0 0.875rem 1.25rem -0.75rem rgb(4 40 47 / 0.6);
-  rotate: var(--tilt, 0deg);
+/* The number: yellow paper torn out of a sheet, its white core showing at the tear, a strip of tape
+   across its top and the digit written on it in marker — each torn, taped and slanted its own way
+   (the shapes are in HowItWorks.jsx). */
+.number {
+  display: block;
+  inline-size: var(--nsz);
+  rotate: calc(var(--stick, -6deg) * var(--mirror));
+  filter: drop-shadow(0 0.3rem 0.25rem rgb(4 40 47 / 0.24));
 }
 
-.step[data-step='offers'] .print {
-  object-position: 50% 12%;
+.scrap {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  overflow: visible;
 }
 
-.step[data-step='picks'] .print {
-  object-position: 50% 8%;
+.core {
+  fill: var(--white);
 }
 
-.step[data-step='delivery'] .print {
-  object-position: 50% 72%;
+.paper {
+  fill: var(--star);
 }
 
-.title {
-  font-size: clamp(1.25rem, 1.8vw, 2rem);
-  font-weight: 800;
-  line-height: var(--leading-snug);
+.grain {
+  fill: #000;
+  opacity: 0.5;
+}
+
+.ink {
+  fill: none;
+  stroke: var(--night);
+  stroke-width: 8.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tape {
+  fill: #efe1b6;
+  fill-opacity: 0.86;
+}
+
+/* The filters the scraps are made with (HowItWorks.jsx): drawn once, taking no room. */
+.filters {
+  position: absolute;
+  inline-size: 0;
+  block-size: 0;
+  overflow: hidden;
+}
+
+.name {
+  font-size: var(--name-size);
+  font-weight: 900;
+  line-height: 1.1;
+  text-shadow: 0.035em 0.03em 0 var(--misprint, transparent);
 }
 
 .text {
-  max-inline-size: 20em;
-  font-size: clamp(0.9375rem, 1.0417vw, 1.25rem);
+  max-inline-size: 16em;
+  margin-block-start: 0.35em;
+  font-size: var(--text-size);
   font-weight: 500;
   color: var(--muted);
 }
 
-@media (min-width: 48em) {
-  .steps {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: clamp(1rem, 3vw, 3rem);
-    padding-block-start: 0.5rem;
+/* ── A phone: where each thing stands (the default) ─────────────── */
+
+.step[data-step='offers'] .piece {
+  --x: 1;
+  --y: 4;
+  --w: 36;
+  --tilt: 2.5deg;
+  --z: 6;
+}
+
+.step[data-step='offers'] .caption {
+  --x: 33.4;
+  --y: 1;
+  --w: 66.6;
+  --z: 7;
+  --stick: -7deg;
+}
+
+.step[data-step='picks'] .piece {
+  --x: 63;
+  --y: 74;
+  --w: 36;
+  --tilt: -3deg;
+  --z: 2;
+}
+
+/* Its text is on the near side of the screen, its number over the screen's corner. */
+.step[data-step='picks'] .caption {
+  --x: 1;
+  --y: 81;
+  --w: 66;
+  --z: 7;
+  --stick: 6deg;
+  grid-template-columns: minmax(0, 1fr) var(--nsz);
+}
+
+.step[data-step='picks'] .number {
+  order: 2;
+}
+
+/* The van bleeds off the side its nose is on: the page's edge hides where the panorama cut it. */
+.step[data-step='delivery'] .piece {
+  --x: -8;
+  --y: 134;
+  --w: 110;
+  --z: 4;
+}
+
+.stage:dir(ltr) .step[data-step='delivery'] .piece {
+  --x: -6;
+  --w: 116;
+}
+
+.step[data-step='delivery'] .caption {
+  --x: 1;
+  --y: 186;
+  --w: 98;
+  --z: 7;
+  --stick: -5deg;
+}
+
+.stage:dir(ltr) .step[data-step='delivery'] .caption {
+  --y: 189;
+}
+
+.ground {
+  --x: -4;
+  --y: 181.8;
+  --w: 104;
+}
+
+.stage:dir(ltr) .ground {
+  --y: 184.4;
+}
+
+/* ── A computer, read right to left: the sheet ──────────────────── */
+
+@container (width > 35rem) {
+  .stage:dir(rtl) {
+    aspect-ratio: 100 / 60;
   }
 
-  .number,
-  .arrived {
-    display: none;
+  /* The sheet is the stage itself, and the headline is drawn on it. */
+  .stage:dir(rtl) .sheet {
+    display: contents;
+  }
+
+  .stage:dir(rtl) .head {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: 50cqi;
+    margin-block-end: 0;
+  }
+
+  /* The one title size of the page, held to the poster's own scale where the page is wider. */
+  .stage:dir(rtl) .title {
+    font-size: min(var(--text-h2), 5.3cqi);
+  }
+
+  .stage:dir(rtl) .caption {
+    --nsz: clamp(3.5rem, 8.4cqi, 7.5rem);
+    --name-size: clamp(1.375rem, 3.4cqi, 3.4rem);
+    --text-size: clamp(0.9375rem, 1.5cqi, 1.3rem);
+    grid-template-columns: var(--nsz) minmax(0, 1fr);
+  }
+
+  .stage:dir(rtl) .number {
+    order: 0;
+  }
+
+  .stage:dir(rtl) .step[data-step='offers'] .piece {
+    --x: 0.5;
+    --y: 17.5;
+    --w: 20.5;
+    --tilt: 3deg;
+  }
+
+  .stage:dir(rtl) .step[data-step='offers'] .caption {
+    --x: 17.6;
+    --y: 14.2;
+    --w: 31;
+  }
+
+  .stage:dir(rtl) .step[data-step='picks'] .piece {
+    --x: 52;
+    --y: 2.5;
+    --w: 19.5;
+    --tilt: -3.5deg;
+  }
+
+  .stage:dir(rtl) .step[data-step='picks'] .caption {
+    --x: 68.2;
+    --y: 8.6;
+    --w: 31.8;
+  }
+
+  .stage:dir(rtl) .step[data-step='delivery'] .piece {
+    --x: 16.5;
+    --y: 25.4;
+    --w: 67;
+  }
+
+  .stage:dir(rtl) .step[data-step='delivery'] .caption {
+    --x: 23;
+    --y: 55.6;
+    --w: 56;
+  }
+
+  .stage:dir(rtl) .ground {
+    --x: 15;
+    --y: 54.6;
+    --w: 71;
   }
 }
 
-/* Phones: the route stands upright along the start edge, a numbered stop at each step and the
-   stamp at its foot. */
-@media (max-width: 47.99em) {
-  .steps {
-    position: relative;
-    padding-inline-start: 3.75rem;
+/* ── A computer, read left to right: the same sheet, mirrored ───── */
+
+/* The van keeps its side and so its nose: the second screen stands over it and the first beside
+   its tail; the van is a little lower, for the longer headline. */
+@container (width > 46rem) {
+  .stage:dir(ltr) {
+    aspect-ratio: 100 / 66;
   }
 
-  .steps::before {
-    content: '';
-    position: absolute;
-    inset-block: 1.25rem -1.5rem;
-    inset-inline-start: 1.375rem;
-    border-inline-start: 3px dashed #9db6ba;
+  .stage:dir(ltr) .sheet {
+    display: contents;
   }
 
-  .step {
-    justify-items: start;
-    text-align: start;
-  }
-
-  .number {
+  .stage:dir(ltr) .head {
     position: absolute;
     inset-block-start: 0;
-    inset-inline-start: -3.75rem;
-    display: grid;
-    place-items: center;
-    inline-size: 2.75rem;
-    block-size: 2.75rem;
-    border: 2.5px solid var(--night);
-    border-radius: 50%;
-    background: var(--page-wall);
-    font-size: 1.25rem;
-    font-weight: 900;
-    line-height: 1;
+    inset-inline-start: 0;
+    inline-size: 56cqi;
+    margin-block-end: 0;
   }
 
-  .print {
-    inline-size: min(70%, 13rem);
-    margin-block-start: 0.5rem;
+  .stage:dir(ltr) .title {
+    font-size: min(var(--text-h2), 4.4cqi);
   }
 
-  .arrived {
-    display: inline-block;
-    margin-block-start: 2.5rem;
-    margin-inline-start: 3.75rem;
+  .stage:dir(ltr) .caption {
+    --nsz: clamp(3.5rem, 8.4cqi, 7.5rem);
+    --name-size: clamp(1.375rem, 3.4cqi, 3.4rem);
+    --text-size: clamp(0.9375rem, 1.5cqi, 1.3rem);
   }
 
-  .route {
-    display: grid;
-    justify-items: start;
+  .stage:dir(ltr) .step[data-step='offers'] .piece {
+    --x: 0.5;
+    --y: 20;
+    --w: 20.5;
+    --tilt: 3deg;
+  }
+
+  .stage:dir(ltr) .step[data-step='offers'] .caption {
+    --x: 17.6;
+    --y: 16;
+    --w: 26;
+  }
+
+  .stage:dir(ltr) .step[data-step='picks'] .piece {
+    --x: 79;
+    --y: 20;
+    --w: 20.5;
+    --tilt: -3.5deg;
+    --z: 6;
+  }
+
+  .stage:dir(ltr) .step[data-step='picks'] .caption {
+    --x: 56.6;
+    --y: 16;
+    --w: 26;
+  }
+
+  .stage:dir(ltr) .step[data-step='delivery'] .piece {
+    --x: 22;
+    --y: 31;
+    --w: 66;
+  }
+
+  .stage:dir(ltr) .step[data-step='delivery'] .caption {
+    --x: 24;
+    --y: 61.2;
+    --w: 56;
+  }
+
+  .stage:dir(ltr) .ground {
+    --x: 19;
+    --y: 59.6;
+    --w: 72;
   }
 }
 
 /* ── Put down ───────────────────────────────────────────────────── */
 
-/* Waiting below the fold (useScrollReveal): the prints not yet laid, the stamps not yet pressed… */
 @media (prefers-reduced-motion: no-preference) {
-  .route[data-reveal='pending'] .print {
+  /* Waiting below the fold (useScrollReveal): nothing put down yet… */
+  .stage[data-reveal='pending'] .piece {
     opacity: 0;
-    translate: 0 -0.5rem;
+    translate: 0 1.25rem;
   }
 
-  .route[data-reveal='pending'] :is(.stamp, .arrived) {
+  .stage[data-reveal='pending'] .caption {
     opacity: 0;
-    scale: 1.3;
   }
 
-  /* …then, in view: the prints laid down one after another, and the stamp pressed last. */
-  .route[data-reveal='shown'] .print {
-    transition:
-      opacity 400ms ease calc(var(--n, 0) * 140ms),
-      translate var(--duration-base) var(--ease-settle) calc(var(--n, 0) * 140ms);
+  .stage[data-reveal='pending'] .number {
+    scale: 0.75;
   }
 
-  .route[data-reveal='shown'] :is(.stamp, .arrived) {
+  .stage[data-reveal='pending'] .accent {
+    background-size: 0% 0.62em;
+  }
+
+  /* …then, in view: the screens and the van one after another, each step's number after its
+     picture, and the marker drawn under the promise. The ground follows (Scribble). */
+  .stage[data-reveal='shown'] .piece {
     transition:
-      opacity 200ms ease 650ms,
-      scale 350ms var(--ease-settle) 650ms;
+      opacity 450ms ease calc(var(--n, 0) * 110ms),
+      translate var(--duration-base) var(--ease-out) calc(var(--n, 0) * 110ms);
+  }
+
+  .stage[data-reveal='shown'] .caption {
+    transition: opacity 450ms ease calc(var(--n, 0) * 110ms + 200ms);
+  }
+
+  .stage[data-reveal='shown'] .number {
+    transition: scale var(--duration-base) var(--ease-settle) calc(var(--n, 0) * 110ms + 250ms);
+  }
+
+  .stage[data-reveal='shown'] .accent {
+    transition: background-size 900ms var(--ease-out) 150ms;
   }
 }

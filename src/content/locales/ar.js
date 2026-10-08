@@ -138,6 +138,8 @@ const ar = {
     legend: 'اختر القسم',
     // The directory's title, over its lines.
     directory: 'دليل الأقسام',
+    // How many categories a department's line in the directory counts.
+    categoryCount: '{count} فئات',
     // The way to a department in the app: its «الأقسام» tab, then the department.
     where: 'في التطبيق:',
     tab: 'الأقسام',
@@ -328,17 +330,18 @@ const ar = {
   },
 
   inside: {
-    // Over the house when the van arrives: the footer says it too.
-    arrived: 'طلبك وصل',
-    title: 'عروضنا تجيك وبنفس السعر',
+    title: 'عروضنا تجيك',
+    // The promise, on the yellow marker: it is also what is written on the van.
+    titleAccent: 'وبنفس السعر',
     lead: 'تجربة شراء بسيطة، وخيارات دفع آمنة، وتوصيل لحد باب بيتك.',
     steps: [
-      // Each is written under its stop on the street: a title, and one line.
+      // Each is a picture with its number stuck on it, a title and one line.
       {
         id: 'offers',
         title: 'تصفّح العروض',
         text: 'عروض للتاريخ، وأسعار ما تلاقيها إلا في كيو.',
-        imageAlt: 'من تطبيق كيو: شاشة العروض، عرض على المشروبات وقسم «أسعار ما تلاقيها إلا في كيو»',
+        imageAlt:
+          'الشاشة الرئيسية في تطبيق كيو: عرض السوبر «أرز الفخامة + زيت الفخامة مجاناً» بسعره قبل الخصم وبعده، وقسم «أسعار ما تلاقيها إلا في كيو»',
       },
       {
         id: 'picks',
@@ -350,7 +353,7 @@ const ar = {
         id: 'delivery',
         title: 'استلم لحد بابك',
         text: 'توصيل سريع ومنظّم، وتتابع طلبك خطوة بخطوة.',
-        imageAlt: 'من تطبيق كيو: شاشة مراجعة الطلب، وخلفها فان كيو بشعاره',
+        imageAlt: 'فان كيو بشعاره، وعلى جانبه عبارة «عروضنا تجيك وبنفس السعر»',
       },
     ],
   },
@@ -360,9 +363,11 @@ const ar = {
   faq: {
     title: 'عندك سؤال؟',
     lead: 'جمعنا لك الأجوبة في فاتورة وحدة: واضحة ومختصرة.',
-    // The last line of the receipt's questions: take a number — yours is the next after its
-    // last question — and ask.
+    // The number machine beside the receipt: the turn it's on is the last question's, and the slip
+    // it hands out is yours — the next after the last question.
     ticket: {
+      current: 'الدور الحالي',
+      take: 'خذ رقمك',
       label: 'رقمك',
       question: 'سؤالك مو في الفاتورة؟',
       action: 'راسلنا',
@@ -492,7 +497,6 @@ const ar = {
   // The page hosts show for a link that leads nowhere: what a shop writes on an empty shelf, «نفد».
   notFound: {
     title: 'الصفحة غير موجودة — كيو',
-    eyebrow: 'خطأ 404',
     heading: 'هالصفحة مو على الرف',
     text: 'يمكن الرابط قديم أو فيه حرف ناقص. العروض كلها في الصفحة الرئيسية، وفي التطبيق نفسه.',
     home: 'الصفحة الرئيسية',

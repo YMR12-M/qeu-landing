@@ -177,19 +177,6 @@
   text-underline-offset: 0.35em;
 }
 
-/* Beside each section, the tick it gets once it has been read, drawn in pen. */
-.tick {
-  --pen: 2.5px;
-  flex: none;
-  inline-size: 1rem;
-  block-size: 1rem;
-  color: var(--night);
-}
-
-[data-seen] {
-  --drawn: 1;
-}
-
 /* ── The small print ────────────────────────────────────────────── */
 
 .small {

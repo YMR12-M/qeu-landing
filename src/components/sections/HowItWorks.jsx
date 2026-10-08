@@ -1,202 +1,216 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { media } from '../../content/media.js';
 import { useScrollReveal } from '../../hooks/useScrollReveal.js';
 import { useLocale } from '../../i18n/useLocale.js';
-import { Logo } from '../brand/Logo.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import { Scribble } from '../ui/Scribble.jsx';
-import { SectionHeading } from '../ui/SectionHeading.jsx';
 import styles from './HowItWorks.module.css';
 
+// A screen is about a fifth of the poster's width, the van two thirds of it (a little more when the
+// page reads left to right); on a phone, and on a tablet reading left to right, the screens are a
+// third of it and the van all of it.
+const SCREEN_SIZES = '(min-width: 52rem) min(18vw, 18.5rem), 33vw';
+const VAN_SIZES = '(min-width: 52rem) min(66vw, 68rem), 100vw';
+const SIZES = { offers: SCREEN_SIZES, picks: SCREEN_SIZES, delivery: VAN_SIZES };
+
+// The digits as a marker writes them: one stroke each, in a box 60 wide and 80 tall, a little off
+// true as a hand is.
+const DIGITS = {
+  1: 'M13 29C20 23 27 16 35 8C34 28 33 50 34 72M19 72.5C28 71.4 40 72 49 70.6',
+  2: 'M11 26C13 12 27 6 38 9.5C50 13.5 49 29 39 39C30 48 19 58 12 69.5C25 67.5 38 68.3 51 66.5',
+  3: 'M12 18C19 8 38 6.5 45 17C50 27 39 36 27 38C40 38 52 46 49.5 58C47 71 27 76.5 11 65',
+};
+
+// Each scrap of paper is torn its own way: its size, its tape's place and slant, and the seeds of
+// the two tears — the white of the paper's core, and the yellow over it.
+const SCRAPS = [
+  { w: 118, h: 112, tape: [34, 58, -5], tears: [9, 21] },
+  { w: 112, h: 120, tape: [30, 56, 6], tears: [14, 5] },
+  { w: 122, h: 108, tape: [36, 60, -3], tears: [23, 33] },
+];
+
 /**
- * Qeu's delivery van in its livery — white, two teal waves, the wordmark on the side — drawn
- * facing the way the steps read. The wordmark sits outside the SVG, so flipping the van for
- * right-to-left never mirrors the logo.
+ * What the scraps are made with, drawn once and used by name: a torn edge (noise that nudges the
+ * outline of a plain rectangle), a marker's slightly wavering line, the grain of paper, and the
+ * ragged ends of a strip of tape. Zero-sized, and hidden from screen readers.
  */
-function DeliveryVan() {
+function PaperFilters() {
   return (
-    <div className={styles.van}>
-      <svg className={styles.vanArt} viewBox="-18 0 136 57" aria-hidden="true" focusable="false">
-        <defs>
-          <clipPath id="qeu-van-body">
-            <path d="M5 6H71c3.6 0 6.9 1.7 9 4.6L92 27.5h12.5c4.1 0 7.5 3.4 7.5 7.5v10c0 2.2-1.8 4-4 4H5c-2.2 0-4-1.8-4-4V10c0-2.2 1.8-4 4-4Z" />
-          </clipPath>
-        </defs>
-        <g className={styles.speed}>
-          <path d="M-3 17h-12M-1 26h-16M-3 35h-9" />
-        </g>
-        <ellipse className={styles.vanShadow} cx="56" cy="55.6" rx="52" ry="1.9" />
-        <path
-          className={styles.vanBody}
-          d="M5 6H71c3.6 0 6.9 1.7 9 4.6L92 27.5h12.5c4.1 0 7.5 3.4 7.5 7.5v10c0 2.2-1.8 4-4 4H5c-2.2 0-4-1.8-4-4V10c0-2.2 1.8-4 4-4Z"
-        />
-        <g clipPath="url(#qeu-van-body)">
-          <path className={styles.waveLight} d="M0 32c20-6 38 8 62 1 17-5 34-3 52 1v18H0Z" />
-          <path className={styles.waveBrand} d="M0 39c22-5 42 6 66 0 16-4 32-2 48 1v11H0Z" />
-        </g>
-        <path
-          className={styles.vanWindow}
-          d="M76 13.4c0-.9 1.2-1.3 1.8-.5L88.7 27.5H77a1 1 0 0 1-1-1Z"
-        />
-        <path className={styles.vanSeam} d="M66 8.5v23" />
-        <rect className={styles.headlight} x="107.6" y="31" width="4" height="4.6" rx="1.2" />
-        <path className={styles.bumper} d="M99 45.6h12" />
-        {[25, 90].map((cx) => (
-          <g key={cx} className={styles.wheel}>
-            <circle className={styles.tyre} cx={cx} cy="49" r="8" />
-            <circle className={styles.hub} cx={cx} cy="49" r="3.4" />
-            <path className={styles.spokes} d={`M${cx} 45.6v6.8M${cx - 3.4} 49h6.8`} />
+    <svg className={styles.filters} width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        {SCRAPS.map(({ tears }, index) => (
+          <g key={index}>
+            <filter id={`hiw-core-${index}`} x="-12%" y="-12%" width="124%" height="124%">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.11"
+                numOctaves="3"
+                seed={tears[0]}
+                result="noise"
+              />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="5.5" />
+            </filter>
+            <filter id={`hiw-paper-${index}`} x="-12%" y="-12%" width="124%" height="124%">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.09"
+                numOctaves="3"
+                seed={tears[1]}
+                result="noise"
+              />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="6.5" />
+            </filter>
           </g>
         ))}
-      </svg>
-      <Logo className={styles.vanLogo} />
-    </div>
+        <filter id="hiw-ink" x="-10%" y="-10%" width="120%" height="120%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.07"
+            numOctaves="2"
+            seed="4"
+            result="noise"
+          />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" />
+        </filter>
+        <filter id="hiw-tape" x="-6%" y="-20%" width="112%" height="140%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.16 0.02"
+            numOctaves="2"
+            seed="5"
+            result="noise"
+          />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" />
+        </filter>
+        <filter id="hiw-grain" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0.4  0 0 0 0 0.3  0 0 0 0 0.1  0 0 0 0.28 0"
+          />
+          <feComposite in2="SourceGraphic" operator="in" />
+        </filter>
+      </defs>
+    </svg>
   );
 }
 
-// The route, drawn in a 1200 × 150 box: from where the order starts, down and up through the three
-// stops, to the door. Every curve leaves a stop level, as a hand's line does when it turns.
-const W = 1200;
-const H = 150;
-const ROUTE =
-  'M10 70C80 70 120 95 200 95C320 95 440 45 600 45C760 45 880 95 1000 95C1080 95 1120 55 1190 55';
-const STOPS = [
-  [200, 95],
-  [600, 45],
-  [1000, 95],
-];
-const TILT = ['-3deg', '2deg', '-2deg'];
-
-// NaN (a window with no height yet: 0 / 0) counts as the start, or getPointAtLength throws.
-const clamp = (value) => (Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : 0);
-
 /**
- * The van's drive: as the route scrolls into view the van moves along the line, the line turning
- * from dashes to solid behind it. Run by script, on scroll; without it — or with reduced motion —
- * the route stays drawn to the end with the van at the door (the CSS defaults).
+ * A step's number: a scrap of yellow paper torn out of a sheet and taped down, the digit written
+ * on it in marker — not a printed badge. Each is torn, taped and slanted its own way.
  */
-function useDrive(mapRef) {
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const path = map.querySelector('[data-route]');
-    const done = map.querySelector('[data-done]');
-    const van = map.querySelector('[data-van]');
-    const length = path.getTotalLength();
-    let frame = 0;
+function Scrap({ index }) {
+  const { w, h, tape } = SCRAPS[index];
+  const [tapeLeft, tapeWidth, tapeSlant] = tape;
 
-    const update = () => {
-      frame = 0;
-      const progress = clamp(
-        (window.innerHeight * 0.9 - map.getBoundingClientRect().top) / (window.innerHeight * 0.5),
-      );
-      const rtl = getComputedStyle(map).direction === 'rtl';
-      const here = progress * length;
-      const at = path.getPointAtLength(here);
-      const back = path.getPointAtLength(Math.max(0, here - 6));
-      const ahead = path.getPointAtLength(Math.min(length, here + 6));
-      const slope = Math.atan2((ahead.y - back.y) * (rtl ? -1 : 1), ahead.x - back.x);
-      done.style.strokeDasharray = length;
-      done.style.strokeDashoffset = length * (1 - progress);
-      van.style.setProperty('--x', `${(((rtl ? W - at.x : at.x) / W) * 100).toFixed(3)}%`);
-      van.style.setProperty('--y', `${((at.y / H) * 100).toFixed(3)}%`);
-      van.style.setProperty(
-        '--tilt',
-        `${Math.max(-25, Math.min(25, (slope * 180) / Math.PI)).toFixed(1)}deg`,
-      );
-    };
-    const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
-    };
-  }, [mapRef]);
+  return (
+    <svg className={styles.scrap} viewBox={`0 0 ${w} ${h}`} aria-hidden="true" focusable="false">
+      <rect
+        className={styles.core}
+        x="2"
+        y="3"
+        width={w - 4}
+        height={h - 5}
+        filter={`url(#hiw-core-${index})`}
+      />
+      <rect
+        className={styles.paper}
+        x="6"
+        y="7"
+        width={w - 12}
+        height={h - 13}
+        filter={`url(#hiw-paper-${index})`}
+      />
+      <rect
+        className={styles.grain}
+        x="6"
+        y="7"
+        width={w - 12}
+        height={h - 13}
+        filter="url(#hiw-grain)"
+      />
+      <g transform={`translate(${w / 2 - 25} ${h / 2 - 34.5}) scale(0.93)`}>
+        <path className={styles.ink} d={DIGITS[index + 1]} filter="url(#hiw-ink)" />
+      </g>
+      <rect
+        className={styles.tape}
+        x={tapeLeft}
+        y="-10"
+        width={tapeWidth}
+        height="22"
+        rx="1"
+        transform={`rotate(${tapeSlant} ${tapeLeft + tapeWidth / 2} 1)`}
+        filter="url(#hiw-tape)"
+      />
+    </svg>
+  );
 }
 
 /**
- * «كيف يشتغل» — the order as the route it takes, drawn by hand across the page: a dashed line
- * leaves where the order starts, turns down and up through three stops — each a pen-ringed
- * number — and ends at the door, where «طلبك وصل» is stamped. From each stop a dashed line drops
- * to what happens there: a print of the app's own screen, tossed down, and under it the step from
- * the Google Play description. As the section scrolls by, Qeu's van drives the line, turning it
- * from dashes to solid behind it. No card, no sheet: the route is on the wall.
+ * «عروضنا تجيك وبنفس السعر» — the three steps of an order as one poster on the page's wall, not
+ * three cards: the app's home screen standing in front, its picks screen behind Qeu's van, and the
+ * van itself across the bottom — each picture whole, large enough to read, with its number taped on
+ * it by hand (a scrap of yellow paper, the digit in marker), and under the headline's «وبنفس
+ * السعر» the same yellow marker as the hero's. One stroke of the marker is the ground they stand on.
  *
- * On a phone the route stands upright along the start edge of the steps, the numbers on it. The
- * prints are laid down, and the stamp pressed, as the route comes into view.
+ * The places are in hundredths of the poster's width (the CSS), so it keeps its shape at any size;
+ * on a phone the headline stands above and the pictures zigzag down the page, the van across its
+ * foot. Each picture is put down as the poster comes into view — the screens, the van, the numbers.
  */
 export function HowItWorks() {
   const { t } = useLocale();
   const { inside } = t;
-  const routeRef = useRef(null);
-  const mapRef = useRef(null);
-  useScrollReveal(routeRef, '0px 0px -12% 0px');
-  useDrive(mapRef);
+  const stageRef = useRef(null);
+  useScrollReveal(stageRef, '0px 0px -15% 0px');
 
   return (
     <section id="inside" className={styles.section} aria-labelledby="inside-title">
       <div className="container">
-        <SectionHeading id="inside-title" title={inside.title} lead={inside.lead} />
+        <div className={styles.poster}>
+          <div ref={stageRef} className={styles.stage}>
+            <PaperFilters />
 
-        <div ref={routeRef} className={styles.route}>
-          <div ref={mapRef} className={styles.map} aria-hidden="true">
-            <svg className={styles.svg} viewBox={`0 0 ${W} ${H}`} focusable="false">
-              <path className={styles.dash} d={ROUTE} />
-              <path className={styles.done} d={ROUTE} data-done />
-              <path d={ROUTE} fill="none" stroke="none" data-route />
-            </svg>
-            <span className={styles.origin} />
-            {STOPS.map(([x, y], index) => (
-              <span
-                key={x}
-                className={styles.stop}
-                style={{ '--x': `${(x / W) * 100}%`, '--y': `${(y / H) * 100}%` }}
-              >
-                <span className={styles.drop} />
-                <span className={styles.pin}>
-                  <Scribble shape="circle" delay={300 + index * 300} className={styles.ring} />
-                  {index + 1}
-                </span>
-              </span>
-            ))}
-            <span className={styles.stamp}>{inside.arrived}</span>
-            <div className={styles.driver} data-van>
-              <DeliveryVan />
+            <header className={styles.head}>
+              <h2 id="inside-title" className={styles.title}>
+                {inside.title} <span className={styles.accent}>{inside.titleAccent}</span>
+              </h2>
+              <p className={styles.lead}>{inside.lead}</p>
+            </header>
+
+            <div className={styles.sheet}>
+              <ol className={styles.steps} role="list">
+                {inside.steps.map((step, index) => (
+                  <li
+                    key={step.id}
+                    className={styles.step}
+                    data-step={step.id}
+                    style={{ '--n': index }}
+                  >
+                    <div className={styles.caption}>
+                      <span className={styles.number} aria-hidden="true">
+                        <Scrap index={index} />
+                      </span>
+                      <div>
+                        <h3 className={styles.name}>{step.title}</h3>
+                        <p className={styles.text}>{step.text}</p>
+                      </div>
+                    </div>
+
+                    <figure className={styles.piece}>
+                      <Picture
+                        image={media.steps[step.id]}
+                        alt={step.imageAlt}
+                        sizes={SIZES[step.id]}
+                        className={styles.picture}
+                      />
+                    </figure>
+                  </li>
+                ))}
+              </ol>
+
+              <Scribble shape="line" delay={400} className={styles.ground} />
             </div>
           </div>
-
-          <ol className={styles.steps} role="list">
-            {inside.steps.map((step, index) => (
-              <li
-                key={step.id}
-                className={styles.step}
-                data-step={step.id}
-                style={{ '--tilt': TILT[index], '--n': index }}
-              >
-                <span className={styles.number} aria-hidden="true">
-                  {index + 1}
-                </span>
-                <Picture
-                  image={media.steps[step.id]}
-                  alt={step.imageAlt}
-                  sizes="(min-width: 64em) 15rem, 40vw"
-                  className={styles.print}
-                />
-                <h3 className={styles.title}>{step.title}</h3>
-                <p className={styles.text}>{step.text}</p>
-              </li>
-            ))}
-          </ol>
-
-          <span className={styles.arrived} aria-hidden="true">
-            {inside.arrived}
-          </span>
         </div>
       </div>
     </section>

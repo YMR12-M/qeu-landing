@@ -1,14 +1,12 @@
 import { site } from '../../content/site.js';
 import { useCurrentYear } from '../../hooks/useCurrentYear.js';
 import { usePlatform } from '../../hooks/usePlatform.js';
-import { useSeenSections } from '../../hooks/useSeenSections.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { trackDownloadClick } from '../../lib/analytics.js';
 import { formatNumber, interpolate } from '../../lib/format.js';
 import { getStoreHref, storeLinkTarget } from '../../lib/links.js';
 import { Logo } from '../brand/Logo.jsx';
 import { Barcode } from '../ui/Barcode.jsx';
-import { Scribble } from '../ui/Scribble.jsx';
 import styles from './Footer.module.css';
 
 // Both store pages, in the order of the download section's buttons.
@@ -18,7 +16,7 @@ const STORES = ['googlePlay', 'appStore'];
  * The footer, on the page's one white wall: the wordmark and Qeu's slogan set large — its last word marked
  * in yellow, as the hero's promise is — and under them what the order's delivery label says,
  * written on the wall: «طلبك وصل», from Qeu to your door, the app's store id in a barcode. Beside
- * it the page's contents, each ticked in pen once it has been read, and the ways to reach Qeu.
+ * it the page's contents and the ways to reach Qeu.
  * The small print along the bottom keeps the legal line and the figures' source. On a phone the
  * contents are left to the bar's list, a tap away at the top.
  */
@@ -27,7 +25,6 @@ export function Footer() {
   const { footer } = t;
   const { sticker } = footer;
   const platform = usePlatform();
-  const seen = useSeenSections(t.nav.items.map((item) => item.id));
   const mailto = `mailto:${site.contact.email}`;
   const year = formatNumber(useCurrentYear(), { locale, grouping: false });
 
@@ -69,11 +66,8 @@ export function Footer() {
             </h2>
             <ul className={styles.links} role="list">
               {t.nav.items.map((item) => (
-                <li key={item.id} data-seen={seen.has(item.id) || undefined}>
-                  <a href={sectionHref(item.id)}>
-                    <Scribble shape="tick" draw="parent" className={styles.tick} />
-                    {item.label}
-                  </a>
+                <li key={item.id}>
+                  <a href={sectionHref(item.id)}>{item.label}</a>
                 </li>
               ))}
             </ul>

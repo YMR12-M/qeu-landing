@@ -2,7 +2,7 @@
  * «كيو فودز» — on the white wall, as a shop puts out its stock: the headline first, «تطبخ»
  * crossed out in red pen and «من تحضير كيو» circled beside it, then three piles — the clubs
  * leaning like books, the loaves in a pyramid, the tubs stacked by the jar — each with one
- * cardboard sign leant at its foot: what is on it, a yellow burst with its lowest price, and every
+ * cardboard sign leant at its foot: what is on it, a strip of tape with its lowest price, and every
  * pack's line in marker. No grid of cards, no sticker on every pack.
  */
 
@@ -275,7 +275,7 @@
 .board {
   position: relative;
   isolation: isolate;
-  padding: clamp(1rem, 1.3vw, 1.375rem) clamp(1rem, 1.4vw, 1.5rem) clamp(0.875rem, 1.1vw, 1.25rem);
+  padding: clamp(1.375rem, 1.7vw, 1.75rem) clamp(1rem, 1.4vw, 1.5rem) clamp(0.875rem, 1.1vw, 1.25rem);
 }
 
 .board::before,
@@ -307,56 +307,66 @@
 
 .signName {
   margin: 0 0 0.5rem;
-  padding-inline-end: clamp(4.25rem, 5vw, 5.25rem); /* clear of the burst */
   font-size: clamp(1.375rem, 1.65vw, 1.875rem);
   font-weight: 900;
   line-height: 1.15;
   color: var(--night);
 }
 
-/* The burst: the flyer's yellow star, stuck over the sign's top corner, the lowest price on it. */
-.burst {
-  --size: clamp(4.5rem, 5.4vw, 5.75rem);
+/* The tape: a strip of paper tape across the sign's top corner, torn at both ends and stuck on a
+   little crooked, the pile's lowest price written on it in marker — by hand, not printed. */
+.tape {
   position: absolute;
-  inset-block-start: calc(var(--size) * -0.42);
-  inset-inline-end: calc(var(--size) * -0.22);
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: calc(var(--size) * 0.04);
-  inline-size: var(--size);
-  aspect-ratio: 1;
-  background: url('../../assets/marks/burst.svg') center / 100% 100% no-repeat;
+  inset-block-start: -1rem;
+  inset-inline-end: clamp(0.75rem, 1.2vw, 1.25rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+  padding: 0.3rem 1.05rem 0.2rem;
+  background: rgb(239 225 182 / 0.92);
+  clip-path: polygon(
+    0 9%,
+    2.5% 0,
+    5% 11%,
+    7.5% 1%,
+    100% 0,
+    97.5% 14%,
+    100% 28%,
+    97% 42%,
+    100% 57%,
+    97.5% 71%,
+    100% 85%,
+    97% 100%,
+    7.5% 100%,
+    5% 91%,
+    2.5% 100%,
+    0.5% 88%,
+    2.5% 50%
+  );
   color: var(--night);
-  text-align: center;
-  rotate: 9deg;
-  filter: drop-shadow(0 0.25rem 0.3rem rgb(4 40 47 / 0.22));
+  white-space: nowrap;
+  rotate: 4deg;
+  filter: drop-shadow(0 0.1rem 0.1rem rgb(60 40 10 / 0.25));
 }
 
-.stall:nth-child(2) .burst {
-  rotate: -7deg;
+.stall:nth-child(2) .tape {
+  rotate: -3.5deg;
 }
 
-.burstFrom {
-  font-size: calc(var(--size) * 0.17);
+.stall:nth-child(3) .tape {
+  rotate: 2deg;
+}
+
+.tapeFrom {
+  font-size: clamp(0.875rem, 0.95vw, 1rem);
   font-weight: 800;
   line-height: 1;
 }
 
-.burstPrice {
-  --price-size: calc(var(--size) * 0.26);
-  --price-color: var(--deal);
-}
-
-.burstPrice > span {
-  flex-direction: column;
-  align-items: center;
-  gap: calc(var(--size) * 0.03);
-}
-
-.burstFrom,
-.burstPrice > span > span {
-  text-box: trim-both cap alphabetic;
+.tapePrice {
+  --price-size: clamp(1.25rem, 1.45vw, 1.5rem);
+  --price-color: var(--marker-red);
+  rotate: -2deg;
 }
 
 /* Every pack's line: its name and size at the start, its price at the end, in a red marker, the
