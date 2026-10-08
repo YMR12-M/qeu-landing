@@ -1,45 +1,49 @@
 /*
  * Design tokens — Qeu's page as a deals poster, not a stack of cards.
  *
- * Nothing on the page sits in a framed box: sections are told apart by their colour, things
- * inside them by space, size and weight. The brand's teal is used at full strength as a wall,
- * the deal yellow marks what is on offer, and the night teal carries the dark sections. Type
- * does the rest: display titles are set large and heavy (Tajawal 900), and every size is a
- * clamp() that holds its proportion on a computer and stays readable on a phone.
+ * Nothing on the page sits in a framed box, and nothing divides it: the whole page is one pale
+ * wall (white, a shade toward the brand's aqua), and what is on it is told apart by space, size and weight. The brand's teal is what is
+ * drawn on the wall — the screens, the awning — the deal yellow marks what is on offer, and the
+ * night teal is the ink and the dark objects. Type does the rest: display titles are set large
+ * and heavy (Tajawal 900), and every size is a clamp() that holds its proportion on a computer
+ * and stays readable on a phone.
  */
 
 :root {
   /* ── Colour ────────────────────────────────────────────────────── */
-  --brand: #17a2ae; /* Qeu's teal: a wall (the hero, the download), never text on white */
+  --brand: #17a2ae; /* Qeu's teal: the colour of its screens and the awning, never text on white */
   --brand-text: #127d86; /* the teal for text and focus rings on white: 4.5:1 */
-  --on-brand: #04282f; /* text on a teal wall: night, 5:1 (white is 2.9:1 there) */
   --deep: #0b4a57;
   --text: #12333a;
   --muted: #3e6e78; /* 5.7:1 on white */
   --line: #dce5e6;
   --surface: #f4f7f7;
-  --mist: #e3f2f3; /* the pale aqua of Qeu's store screenshots, as a wall */
-  --night: #04282f; /* the dark walls: Q-ur, the footer */
+  --mist: #e3f2f3; /* the pale aqua of Qeu's store screenshots */
+  --night: #04282f; /* the page's ink, and its dark objects */
   --glow: #9fe3ea; /* accent on night */
-  --star: #ffc43d; /* the deal yellow: offer flags, the marker, the price stickers */
-  --aqua: #92d6e0; /* the app's own «الأقسام» screen — its category circles: the aisles' wall */
+  --star: #ffc43d; /* the deal yellow: the marker, the price stickers, the signs */
+  --aqua: #92d6e0; /* the app's own «الأقسام» screen — its category circles */
   --deal: #c62828; /* the app's deal red, for prices: 5.6:1 on white */
-  --espresso: #1c120c; /* the café's wall */
-  --paper-sheet: #f7f4ec; /* a till roll's warm white: the FAQ's paper */
   --white: #ffffff;
 
   /* Kept from the previous design: the app-icon aqua and the screenshots' backdrop. */
   --icon-aqua: #74c7d0;
   --screen-backdrop: #b8dee4;
 
-  --focus-ring: var(--brand-text); /* dark walls set --glow instead */
+  --focus-ring: var(--brand-text);
+
+  /* The one wall: the whole page — every section, the bar over it and the footer — is painted
+     this white, a shade toward Qeu's aqua (the swatch the client chose: #f4fbfd). Nothing changes
+     colour between one section and the next, so nothing says where one stops; what is on it is
+     told apart by space, size and weight alone. */
+  --page-wall: #f4fbfd;
 
   /* ── Type ──────────────────────────────────────────────────────── */
   --font-sans: 'Tajawal', system-ui, -apple-system, 'Segoe UI', 'Geeza Pro', Tahoma, sans-serif;
   --font-mono: 'IBM Plex Mono', 'Tajawal', ui-monospace, monospace;
 
   /* Display: the hero's headline and every section's title — one size for all the titles, so
-     the page keeps one rhythm from wall to wall. */
+     the page keeps one rhythm from the top to the foot. */
   --text-hero: clamp(2.25rem, 5.2vw, 6.25rem);
   --text-h2: clamp(2.25rem, 4.1vw, 5rem);
   --text-h3: clamp(1.3125rem, 1.75vw, 2.125rem);

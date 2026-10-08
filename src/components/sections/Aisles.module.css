@@ -1,21 +1,18 @@
 /*
- * «أقسام كيو» — the aisles as a poster, on the aqua of the app's own «الأقسام» screen (the colour
- * of the circles its categories sit in): the store directory as a list of names at the start,
- * the chosen one circled in red pen with an arrow to its aisle, and beside it, filling the
- * column, the chosen department's categories — pictures standing on their own shadow, no shelf,
- * no card — over the department's name set huge in a deeper aqua.
+ * «أقسام كيو» — the aisles as a poster, on the page's wall: the store directory as a list of names
+ * at the start, the chosen one circled in red pen with an arrow to its aisle, and beside it,
+ * filling the column, the chosen department's categories — pictures standing on a shelf of their
+ * own, no card — over the department's name set huge in a pale aqua.
  */
 
 .section {
-  --misprint: var(--white);
   --focus-ring: var(--night);
   --pen-red: #c8281e;
-  --poster-ink: #7bc9d5; /* the wall's aqua, a shade deeper: the name behind the products */
-  --title-teal: #0b5f6b; /* the app's teal for its departments' names, deepened: 4.5:1 */
+  --poster-ink: #d6edf1; /* a pale aqua on the white wall: the name behind the products */
+  --title-teal: #0b5f6b; /* the app's teal for its departments' names, deepened: 7:1 */
   position: relative;
   overflow-x: clip; /* a pen loop reaching past a name never widens the page */
   padding-block: var(--section-space);
-  background: var(--aqua);
   color: var(--night);
 }
 
@@ -113,13 +110,13 @@
   align-items: center;
   gap: 0.875rem;
   min-block-size: 3.25rem;
-  opacity: 0.6; /* night over the aqua: 3.4:1, for names this large */
+  opacity: 0.6; /* night over the white: 5:1, for names this large */
   cursor: pointer;
   transition: opacity var(--duration-base) ease;
 }
 
 .line:hover {
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 /* The radio is the whole line: unseen, over it. */
@@ -355,7 +352,8 @@
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.75rem, 3vw, 3rem) clamp(0.75rem, 2vw, 2rem);
+  --gx: clamp(0.75rem, 2vw, 2rem); /* between categories: the shelf runs on through it */
+  gap: clamp(1.75rem, 3vw, 3rem) var(--gx);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -376,7 +374,7 @@
   grid-template-rows: auto auto;
   justify-items: center;
   align-content: end;
-  row-gap: 0.75rem;
+  row-gap: 0;
   min-inline-size: 0;
 }
 
@@ -388,21 +386,50 @@
   }
 }
 
-/* Standing on the aqua, on a shadow of its own — large: the poster's picture. */
+/* Standing on the wall, on a shadow of its own — large: the poster's picture. */
 .product {
   inline-size: auto;
   max-inline-size: 100%;
   block-size: clamp(9.75rem, 12.9vw, 15rem);
+  position: relative;
+  z-index: 1; /* in front of the shelf's top face it stands on */
   object-fit: contain;
-  filter: drop-shadow(0 1rem 0.75rem rgb(4 58 68 / 0.26));
+  filter: drop-shadow(0 0.35rem 0.3rem rgb(4 58 68 / 0.25));
 }
 
+.item {
+  position: relative;
+}
+
+/* The shelf: each category stands on a white shelf-edge strip that carries its name, as a
+   supermarket's shelf carries its price tags. The strips of a row run into each other across
+   the gap, so the row reads as one shelf; its top face catches the light, and it throws a soft
+   shadow on the wall. */
 .label {
-  max-inline-size: 11em;
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-self: start;
+  inline-size: calc(100% + var(--gx));
+  block-size: 3.5em; /* room for two lines: every strip of a shelf is as tall as the next */
+  margin-block-start: 0.3rem; /* the product's foot is half-way across the shelf's top face */
+  padding: 0.35em 0.75em;
+  background: var(--white);
+  color: var(--night);
   font-size: clamp(0.875rem, 0.95vw, 1.0625rem);
   font-weight: 800;
   line-height: var(--leading-snug);
   text-align: center;
+  box-shadow: 0 0.9rem 0.9rem -0.7rem rgb(4 58 68 / 0.4);
+}
+
+.label::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 100%;
+  block-size: 0.6rem;
+  background: #dff1f4;
 }
 
 /* Phones: the two rows are swiped, the next categories showing at the edge. */

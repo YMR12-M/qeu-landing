@@ -8,32 +8,14 @@ import { ChevronDown, Globe } from '../ui/icons.jsx';
 import styles from './Header.module.css';
 
 /**
- * The wall under a point: its colour, and whether it is 'dark' or 'light'. Of everything at
- * that point, top to bottom, it takes the first section — or part of one painted as a wall of
- * its own (`data-wall`: the floors the hero's screens and the download's phone stand on) — whose
- * background shows; the pictures and the words in front of it don't count.
- */
-function wallAt(x, y) {
-  for (const node of document.elementsFromPoint(x, y)) {
-    if (!node.matches('[data-wall], main > *, footer')) continue;
-    const color = getComputedStyle(node).backgroundColor;
-    const [r, g, b, alpha = 1] = color.match(/[\d.]+/g).map(Number);
-    if (alpha < 0.5) continue;
-    return { color, tone: 0.2126 * r + 0.7152 * g + 0.0722 * b < 128 ? 'dark' : 'light' };
-  }
-  return { color: 'rgb(255, 255, 255)', tone: 'light' };
-}
-
-/**
- * The bar across the top of the page. It has no colour of its own: it takes the colour of the
- * wall right under it — the hero's teal, the aisles' aqua, Q-ur's night — so nothing
- * separates it from the page, and its words turn dark or light with the wall.
+ * The bar across the top of the page. It has no colour of its own: it is painted the page's wall,
+ * the same colour as everything it runs over (tokens.css → --page-wall), so nothing separates it
+ * from the page.
  *
- * On a computer it is always open, at one size: the wordmark, the sections (a mark under the
- * one being read slides from one to the next), the language, and the store button — which
- * opens a card with the download QR code and both stores (DownloadCard). Its lower edge fills
- * with how far down the page the reader is. On phones and tablets it names the section being
- * read, and how far down the page it is («3 من 7»); that name opens the sections.
+ * On a computer it is always open, at one size: the wordmark, the sections (a loop of pen
+ * glides round the one being read), the language, and the store button — which opens a card with
+ * the download QR code and both stores (DownloadCard). On phones and tablets it names the section
+ * being read, and how far down the page it is («3 من 7»); that name opens the sections.
  *
  * `sections` are the page's own sections, for the name and the list — the home page's by
  * default; the privacy policy passes its contents. The open bar always links to the home
@@ -43,41 +25,11 @@ export function Header({ sections }) {
   const { t, locale, config, alternate, alternatePath, page, sectionHref } = useLocale();
   const links = t.nav.items;
   const items = sections ?? links;
-  const barRef = useRef(null);
   const trackRef = useRef(null);
   const menuRef = useRef(null);
-  // Every page opens on its hero: the home page's teal. Read again as soon as the page runs.
-  const [wall, setWall] = useState({ color: null, tone: 'light' });
   const [menuOpen, setMenuOpen] = useState(false);
   const active = useActiveSection(items.map((item) => item.id));
   const activeIndex = items.findIndex((item) => item.id === active);
-
-  // Once per scroll frame: the wall just under the bar gives it its colour.
-  useEffect(() => {
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const bar = barRef.current.getBoundingClientRect();
-      const next = wallAt(bar.left + bar.width / 2, bar.bottom + 1);
-      setWall((current) => (current.color === next.color ? current : next));
-    };
-    const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
-    schedule();
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    window.addEventListener('load', update); // settles it once everything has laid out
-    // A switch can turn a section's wall without a scroll (the kitchen's tabs): read it again.
-    document.addEventListener('change', schedule);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
-      window.removeEventListener('load', update);
-      document.removeEventListener('change', schedule);
-    };
-  }, []);
 
   // The mark under the section being read: its two ends travel to the new link one after the
   // other — the leading end first, the trailing end catching up — so it stretches, then
@@ -143,12 +95,8 @@ export function Header({ sections }) {
   const switchLabel = page === 'notFound' ? t.a11y.switchSite : t.a11y.switchLocale;
 
   return (
-    <header
-      className={styles.header}
-      data-tone={wall.tone}
-      style={wall.color ? { '--wall': wall.color } : undefined}
-    >
-      <div ref={barRef} className={styles.bar}>
+    <header className={styles.header}>
+      <div className={styles.bar}>
         {/* The brand is its name alone, the wordmark, on every screen. */}
         <a className={styles.brand} href={config.path} aria-label={t.a11y.home}>
           <Logo className={styles.wordmark} />

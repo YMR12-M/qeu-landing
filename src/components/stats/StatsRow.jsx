@@ -9,9 +9,9 @@ import styles from './StatsRow.module.css';
  * The four Google Play figures from v3, printed as the app's nutrition-facts label — the panel
  * on the side of every pack in the supermarket: its title and serving size, the heavy bars, one
  * figure per line, then the price, and where the figures come from in the small print. In black
- * on a white label standing on the teal wall, each figure as large as a headline: one long strip
- * on a computer, like the linear label of a slim pack, and tall and narrow on a phone, as on a
- * pack. Every figure is read from src/content/site.js.
+ * on the white wall, each figure as large as a headline: one long strip on a computer, like the
+ * linear label of a slim pack, and tall and narrow on a phone, as on a pack. Every figure is
+ * read from src/content/site.js.
  */
 export function StatsRow({ className }) {
   const { t, figures, locale } = useLocale();

@@ -1,72 +1,84 @@
 /*
- * The hero: Qeu's teal as a wall, the headline in night ink across it, the promise marked in
- * yellow, the price circled — and the store's screenshots gliding by underneath, each with
- * its offer flag.
+ * The hero: the words, the app's screens, the store's screenshots and a product, floating on the
+ * page's white wall — nothing behind them, nothing cutting them: every picture is whole. Laid out
+ * as the client drew it (the words top left, the app top right, the strip along the bottom, the
+ * product in the corner; mirrored for Arabic).
+ *
+ * On a computer the places are one picture on a sheet of 1400 × 760 units, scaled with the page:
+ * every size and place in the last block below is written in units (--u, one 1400th of the
+ * sheet's width), the left-to-right page is the right-to-left one mirrored (logical properties;
+ * the tilts are multiplied by --mirror). On a tablet the places are a grid of two rows; on a phone
+ * they are stacked, the words first, each as tall as its contents need.
  */
 
 .hero {
-  --misprint: var(--star); /* the second ink of the print: the deal yellow on the teal */
-  /* A screenshot's height in the row: on a phone, small enough that the headline stays the
+  --sky: var(--aqua); /* the second button: the aqua of the app's own «الأقسام» screen */
+  /* A screenshot's height in the strip: on a phone, small enough that the headline stays the
      largest thing on the first screen, and so the page's LCP, painted with the first frame —
      also in English, whose headline has a line less than the Arabic one. */
-  --product-h: clamp(9.5rem, 42vw, 14rem);
-  --gap: clamp(1rem, 2.2vw, 2.5rem); /* between screens */
-  --foot: clamp(1.25rem, 2.2vw, 2.5rem); /* under the flags */
-  /* Where the page's content starts: the same line as every section's container. */
-  --edge: max(var(--gutter), calc((100cqi - 90rem) / 2));
+  --product-h: clamp(8.5rem, 38vw, 12rem);
+  --gap: clamp(0.875rem, 2.2vw, 1.75rem); /* between screens */
+  --foot: clamp(1.25rem, 2.2vw, 2.5rem); /* under the pieces */
   --toward: 1; /* the side new stock comes from: the reading start (the right, in Arabic) */
+  --mirror: -1; /* the sheet is drawn for left to right; right to left is its mirror image */
   --focus-ring: var(--night);
   --button-bg: var(--night);
   --button-fg: var(--white);
   --button-hover: var(--deep);
   position: relative;
-  container-type: inline-size;
   /* Under the bar, room for the awning that hangs from it (Edge.module.css → .awning). */
-  padding-block: calc(var(--header-height) + clamp(2.75rem, 3.2vw, 3rem)) var(--foot);
+  padding-block: calc(var(--header-height) + clamp(2.25rem, 3.2vw, 3rem)) var(--foot);
   overflow: hidden;
-  background-color: var(--brand);
-  color: var(--on-brand);
-}
-
-/* The teal ends half-way down the screens: their lower half, and the flags under them, stand on
-   the white of the page that follows — the row carries the reader on into it. The floor is an
-   element of its own (data-wall), so the bar at the top takes its white as it passes. */
-.floor {
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 0;
-  block-size: calc(var(--product-h) * 0.42 + 3.5rem + var(--foot));
-  background: var(--white);
+  color: var(--night);
 }
 
 .hero:dir(ltr) {
   --toward: -1;
+  --mirror: 1;
 }
 
-@media (min-width: 64em) {
-  .hero {
-    --product-h: clamp(12.5rem, 15vw, 19rem);
-  }
+/* ── Stacked: a phone ────────────────────────────────────────────── */
+
+/* The words across the top; under them the app's screens; the screenshots' strip last. */
+.bento {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'words'
+    'phones'
+    'strip';
+  gap: 0.75rem;
 }
 
-/* ── The headline ────────────────────────────────────────────────── */
-
-.head {
+.words {
+  grid-area: words;
   position: relative;
 }
 
-.title {
-  max-inline-size: 16em;
-  font-size: var(--text-hero);
-  line-height: var(--leading-hero);
-  color: var(--night);
+.phones {
+  grid-area: phones;
+  position: relative;
+  min-block-size: 16rem;
 }
 
-/* Phones: small enough that the last line keeps its words together — down to a 320px screen. */
-@media (max-width: 47.99em) {
-  .title {
-    font-size: clamp(1.5rem, 7.6vw, 2.5rem);
-  }
+.strip {
+  grid-area: strip;
+  position: relative;
+  min-inline-size: 0; /* the gliding row is as wide as its screens, not as its place */
+  overflow: clip;
+}
+
+/* ── The words ───────────────────────────────────────────────────── */
+
+.copy {
+  display: grid;
+  padding-block: clamp(0.5rem, 2vw, 1.5rem) clamp(1rem, 3vw, 2rem);
+}
+
+.title {
+  font-size: clamp(1.5rem, 7.6vw, 2.5rem);
+  line-height: var(--leading-hero);
+  color: var(--night);
 }
 
 /* The promise, marked with a yellow highlighter: a brush stroke along the lower half of its
@@ -98,53 +110,94 @@
   }
 }
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem clamp(1.25rem, 2vw, 2rem);
-  margin-block-start: clamp(1.5rem, 2.3vw, 2.5rem);
+/* What it is, in one line: groceries, meals and coffee, brought to the door — the headline says
+   what the prices are, this says what they are the prices of. */
+.lead {
+  max-inline-size: 24em;
+  margin-block-start: clamp(1rem, 1.8vw, 1.5rem);
+  font-size: clamp(1.0625rem, 2.4vw, 1.5rem);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+  color: var(--night);
 }
 
-/* Phones and tablets: the note under the button, from the first paint. Once the page runs, the
-   button names the visitor's store («حمّله مجاناً من Google Play»), longer than the
-   pre-rendered label: were the note beside it, it would drop to the next line then and push
-   the whole page down (a layout shift). */
-@media (max-width: 63.99em) {
-  .actions {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+/* On a phone the two ways on stand one above the other, as wide as the words. */
+.actions {
+  display: grid;
+  gap: 0.75rem;
+  margin-block-start: clamp(1.25rem, 2.3vw, 2rem);
+}
+
+/* The way on from the download: a second pill, in the aqua of the app. */
+.more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: clamp(3.25rem, 3.5vw, 4rem);
+  padding-inline: clamp(1.25rem, 2vw, 2rem);
+  border-radius: var(--radius-control);
+  background: var(--sky);
+  color: var(--night);
+  font-size: var(--text-cta);
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-fast) ease,
+    scale 150ms ease;
+}
+
+.more:hover {
+  background: #7fcbd7;
+}
+
+.more:active {
+  scale: 0.97;
+}
+
+.moreText {
+  text-box: var(--label-box);
 }
 
 .note {
-  font-size: clamp(0.9375rem, 1.1vw, 1.25rem);
+  margin-block-start: 0.875rem;
+  font-size: clamp(0.9375rem, 1.1vw, 1.125rem);
   font-weight: 700;
   color: var(--night);
 }
 
-/* ── The price, circled ──────────────────────────────────────────── */
-
-/* Computers: at the far end of the headline's lines, as a flyer prints a price beside what it
-   sells. */
-.price {
+/* The download code is for scanning from a screen: a computer's. */
+.code {
   display: none;
 }
 
-@media (min-width: 64em) {
-  .price {
-    position: absolute;
-    inset-block-start: 0.5rem;
-    inset-inline-end: var(--gutter);
-    display: grid;
-    justify-items: center;
-    gap: 0.25rem;
-    rotate: -6deg;
-  }
+/* ── The app ─────────────────────────────────────────────────────── */
 
-  .price:dir(ltr) {
-    rotate: 6deg;
-  }
+/* On a phone the screen, shadow included, is kept smaller than the headline, which is the page's
+   LCP (a drop shadow counts: the browser measures the picture with its shadow round it). */
+.phone {
+  position: absolute;
+  display: block;
+  inline-size: 7.5rem;
+  max-inline-size: none;
+  block-size: auto;
+  inset-block-start: 1.5rem;
+}
+
+.phoneBack {
+  inset-inline-start: calc(50% - 6.75rem);
+  inset-block-start: 2.5rem;
+  rotate: calc(-5deg * var(--mirror));
+}
+
+.phoneFront {
+  inset-inline-start: calc(50% - 1.25rem);
+  rotate: calc(3deg * var(--mirror));
+}
+
+/* The app's own price, as a flyer prints it — on a computer. */
+.price {
+  display: none;
 }
 
 .priceName {
@@ -159,7 +212,7 @@
   line-height: 1.1;
 }
 
-/* The pen's loop round it, in white: the one mark on the wall that isn't ink. */
+/* The pen's loop round it, in ink. */
 .priceCircle {
   --pen: 4px;
   position: absolute;
@@ -167,7 +220,7 @@
   inset-inline: -0.45em;
   inline-size: calc(100% + 0.9em);
   block-size: calc(100% + 0.32em);
-  color: var(--white);
+  color: var(--night);
 }
 
 /* Drawn by a right hand either way: mirrored for a word read left to right. */
@@ -175,24 +228,31 @@
   scale: -1 1;
 }
 
-/* ── The screens ─────────────────────────────────────────────────── */
-
-/* The row, and its pause button over its end. */
-.stock {
-  position: relative;
-  margin-block-start: clamp(2rem, 3.4vw, 3.75rem);
+@media (prefers-reduced-motion: no-preference) {
+  .priceValue {
+    animation: stamp 0.55s var(--ease-settle) 0.8s both;
+  }
 }
 
-/* The row stays within the page's margins: the screens fade in at one edge of the content and
-   out at the other, finishing in the margin, so a screen is never seen sliced in two. The
-   fades are a mask, so the flags fade with their screens. */
+@keyframes stamp {
+  from {
+    opacity: 0;
+    scale: 1.8;
+    rotate: -10deg;
+  }
+}
+
+/* ── The screens ─────────────────────────────────────────────────── */
+
+/* The strip stays within its piece: the screens fade in at one end and out at the other, so a
+   screen is never seen sliced in two. The fades are a mask, so the last screen fades with the
+   end. */
 .aisle {
-  --fade: max(1.25rem, var(--edge));
+  --fade: 1.5rem;
   position: relative;
-  z-index: 1; /* over the floor */
-  padding-block: 1rem; /* room for a screen set at a tilt */
+  padding-block: 1.25rem; /* room for a screen set at a tilt */
   overflow: clip;
-  pointer-events: none; /* the bar at the top reads the wall through it */
+  pointer-events: none;
   mask-image: linear-gradient(
     90deg,
     transparent,
@@ -204,7 +264,7 @@
 
 .track {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--gap);
   inline-size: max-content;
   padding-inline-end: var(--gap);
@@ -234,189 +294,281 @@
 .facing {
   position: relative;
   flex: none;
-  display: grid;
-  justify-items: start;
-  gap: 0.75rem;
 }
 
 .facing picture {
   display: block;
 }
 
-/* Set down by hand, not by a grid: each screen of a set at its own slight tilt and height. The
-   six are the same in every set, so the loop still has no seam. */
+/* Set down by hand, not by a grid: each screen of a set leans its own way. The six are the same
+   in every set, so the loop still has no seam. */
 .facing:nth-child(6n + 1) {
-  rotate: -2deg;
+  --lean: -2deg;
 }
 
 .facing:nth-child(6n + 2) {
-  translate: 0 0.75rem;
-  rotate: 1.5deg;
+  --lean: 1.5deg;
 }
 
 .facing:nth-child(6n + 3) {
-  rotate: -1deg;
+  --lean: -1deg;
 }
 
 .facing:nth-child(6n + 4) {
-  translate: 0 0.5rem;
-  rotate: 2deg;
+  --lean: 2deg;
 }
 
 .facing:nth-child(6n + 5) {
-  translate: 0 -0.25rem;
-  rotate: -1.5deg;
+  --lean: -1.5deg;
 }
 
 .facing:nth-child(6n) {
-  translate: 0 0.625rem;
-  rotate: 1deg;
+  --lean: 1deg;
 }
 
 /* The store's screenshots, whole and all one size, rounded like the store shows them. They
-   stand on the wall on their own shadow. */
-.product {
+   stand on their piece, leaning from their foot, on a shadow of their own. */
+.screen {
   display: block;
   inline-size: auto;
   max-inline-size: none;
   block-size: var(--product-h);
   border-radius: 8% / 3.7%;
   background: rgb(4 40 47 / 0.12); /* the screen's place, until its picture arrives */
-  box-shadow: 0 1.5rem 2rem -1.25rem rgb(4 40 47 / 0.55);
+  box-shadow: 0 0.6rem 0.7rem -0.5rem rgb(4 40 47 / 0.6);
+  rotate: var(--lean, 0deg);
+  transform-origin: 50% 100%;
 }
 
-/* Under each, its offer: the yellow flag, and the screen's own words. */
-.label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  max-inline-size: calc(100% + var(--gap) - 0.5rem);
-  white-space: nowrap;
-}
+/* ── A tablet: two rows ──────────────────────────────────────────── */
 
-.flag {
-  flex: none;
-  padding: 0.5em 0.55em;
-  border-radius: 0.3rem;
-  background: var(--star);
-  color: var(--night);
-  font-size: clamp(0.75rem, 0.8vw, 0.9375rem);
-  font-weight: 900;
-  line-height: 1;
-}
-
-@supports (text-box: trim-both ex alphabetic) {
-  .flag {
-    padding-block: 0.62em;
-    text-box: var(--label-box);
+/* The words and the strip two thirds of the width, the app and the product the third beside
+   them. */
+@media (min-width: 48em) {
+  .bento {
+    --product-h: clamp(10rem, 21vw, 15rem);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      'words words phones'
+      'strip strip strip';
+    gap: 1rem;
   }
-}
 
-.name {
-  min-inline-size: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: clamp(0.75rem, 0.8vw, 0.9375rem);
-  font-weight: 800;
-  color: var(--night);
-}
-
-/* Narrow screens: the flag alone. */
-@media (max-width: 47.99em) {
-  .name {
-    display: none;
+  .phones {
+    min-block-size: 0;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .priceValue {
-    animation: stamp 0.55s var(--ease-settle) 0.8s both;
-  }
-}
-
-@keyframes stamp {
-  from {
-    opacity: 0;
-    scale: 1.8;
-    rotate: -10deg;
-  }
-}
-
-/* ── The coupon ──────────────────────────────────────────────────── */
-
-/* Computers only (a code is for scanning from a screen): at the far end of the headline, under
-   the price, where a flyer keeps its tear-off tab. A cream slip, set a little crooked, cut by a
-   dashed line into the words and the code, a round bite out of the line at each end. */
-.coupon {
-  display: none;
-}
-
-@media (min-width: 64em) and (hover: hover) {
-  .coupon {
-    --stub: clamp(9.5rem, 11vw, 12.5rem);
-    /* Centred in the empty half beside the headline: the headline's lines end at about 52vw,
-       the page's margin begins at the gutter. */
-    --coupon-w: clamp(19rem, 26vw, 31rem);
-    position: absolute;
-    inset-block-start: clamp(9.5rem, 12vw, 13rem);
-    inset-inline-end: calc(29.5vw - var(--coupon-w) / 2);
-    z-index: 1;
+  .strip {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--stub);
+    grid-template-columns: minmax(0, 1fr);
     align-items: center;
-    inline-size: var(--coupon-w);
-    border-radius: 0.5rem;
-    background: #fffdf6;
-    color: var(--night);
-    box-shadow: 0 1.25rem 1.5rem -1.25rem rgb(4 40 47 / 0.6);
-    rotate: 3deg;
   }
 
-  .coupon:dir(ltr) {
-    rotate: -3deg;
+  /* Two thirds of the width are room for the headline at a size that keeps its last line whole. */
+  .title {
+    font-size: clamp(2rem, 4.6vw, 4rem);
   }
 
-  /* The cut: a dashed line, and a bite out of it at the top and the bottom. */
-  .coupon::before {
-    content: '';
+  .lead {
+    font-size: clamp(1.125rem, 1.9vw, 1.5rem);
+  }
+
+  .phone {
+    inline-size: 56%;
+    inset-block-start: 1.5rem;
+    filter: drop-shadow(0 0.75rem 0.75rem rgb(4 40 47 / 0.28));
+  }
+
+  .phoneBack {
+    inset-inline-start: 0;
+    inset-block-start: 3rem;
+  }
+
+  .phoneFront {
+    inset-inline-start: 40%;
+  }
+}
+
+/* The two ways on side by side, once the words' column is wide enough for the longest name the
+   download button can take (a store's, «حمّله مجاناً من Google Play»): below that they stay one
+   above the other, so the button naming the store, once the page runs, pushes nothing down. */
+@media (min-width: 64em) {
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+}
+
+/* ── A computer: one picture ─────────────────────────────────────── */
+
+@media (min-width: 80em) {
+  .bento {
+    --u: calc(100cqi / 1400);
+    --product-h: calc(var(--u) * 262);
+    --gap: calc(var(--u) * 26);
+    display: block;
+    position: relative;
+    container-type: inline-size;
+    aspect-ratio: 1400 / 760;
+  }
+
+  /* Every place is as big as the sheet, so the places inside them are the sheet's places. */
+  .piece {
     position: absolute;
-    inset-block: 0.75rem;
-    inset-inline-end: var(--stub);
-    border-inline-start: 2px dashed rgb(4 40 47 / 0.35);
+    inset: 0;
+    min-block-size: 0;
+    pointer-events: none; /* the places overlap: only what is clickable takes clicks */
   }
 
-  .coupon::after {
-    content: '';
+  .copy {
+    pointer-events: auto;
+  }
+
+  .strip {
+    overflow: visible;
+  }
+
+  /* The words. */
+  .copy {
     position: absolute;
-    inset-block: 0;
-    inset-inline-end: calc(var(--stub) - 0.5rem);
-    inline-size: 1rem;
-    background:
-      radial-gradient(circle at 50% 0, var(--brand) 0.5rem, transparent calc(0.5rem + 0.5px)),
-      radial-gradient(circle at 50% 100%, var(--brand) 0.5rem, transparent calc(0.5rem + 0.5px));
+    inset-block-start: calc(var(--u) * 24);
+    inset-inline-start: 0;
+    inline-size: calc(var(--u) * 700);
+    padding: 0;
   }
-}
 
-.couponCopy {
-  display: grid;
-  gap: 0.35rem;
-  padding: clamp(1.1rem, 1.6vw, 1.75rem) clamp(1.25rem, 1.8vw, 2rem);
-}
+  .title {
+    max-inline-size: none;
+    font-size: calc(var(--u) * 72);
+    line-height: 1.1;
+  }
 
-.couponTitle {
-  font-size: clamp(1.1875rem, 1.6vw, 1.875rem);
-  font-weight: 800;
-  line-height: var(--leading-snug);
-}
+  .title:lang(en) {
+    font-size: calc(var(--u) * 50);
+  }
 
-.couponText {
-  font-size: clamp(0.9375rem, 1.05vw, 1.1875rem);
-  line-height: 1.45;
-  color: var(--muted);
-}
+  /* The English headline has a line less: the words sit a little lower. */
+  .copy:lang(en) {
+    inset-block-start: calc(var(--u) * 90);
+  }
 
-.couponCode {
-  inline-size: calc(var(--stub) - 1.5rem);
-  block-size: auto;
-  margin-inline: auto;
+  .row {
+    display: flex;
+    align-items: flex-end;
+    gap: calc(var(--u) * 28);
+    margin-block-start: calc(var(--u) * 22);
+    inline-size: calc(var(--u) * 700);
+  }
+
+  .say {
+    flex: 1 1 0;
+    min-inline-size: 0;
+  }
+
+  .lead {
+    max-inline-size: none;
+    margin-block-start: 0;
+    font-size: max(0.9375rem, calc(var(--u) * 27));
+  }
+
+  .actions {
+    gap: calc(var(--u) * 12);
+    margin-block-start: calc(var(--u) * 16);
+  }
+
+  .actions .button {
+    min-block-size: max(2.75rem, calc(var(--u) * 62));
+    padding-inline: calc(var(--u) * 30);
+    font-size: max(0.9375rem, calc(var(--u) * 21));
+  }
+
+  .note {
+    margin-block-start: calc(var(--u) * 12);
+    font-size: max(0.8125rem, calc(var(--u) * 17));
+  }
+
+  /* The tear-off tab: a slip of the wall's own white, set a little crooked, the code and what
+     to do with it. Stuck to the wall — no outline, only a faint shade. A code is for scanning
+     from a screen, so it is only here where there is a pointer to point at one. */
+  .code {
+    flex: none;
+    inline-size: calc(var(--u) * 150);
+    margin: 0;
+    padding: calc(var(--u) * 11) calc(var(--u) * 11) calc(var(--u) * 9);
+    border-radius: calc(var(--u) * 16);
+    background: var(--page-wall);
+    box-shadow: 0 0.2rem 0.6rem -0.3rem rgb(4 40 47 / 0.28);
+    rotate: calc(-3deg * var(--mirror));
+  }
+
+  @media (hover: hover) {
+    .code {
+      display: block;
+    }
+  }
+
+  .codeImage {
+    inline-size: 100%;
+    block-size: auto;
+    /* The code's white takes the wall's tint: it is printed on the slip, not a white tile on it. */
+    mix-blend-mode: multiply;
+  }
+
+  .codeCaption {
+    margin-block-start: calc(var(--u) * 4);
+    font-size: max(0.75rem, calc(var(--u) * 17));
+    font-weight: 800;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  /* The app: two whole screens, one in front of the other, floating. */
+  .phone {
+    inline-size: calc(var(--u) * 316);
+    filter: drop-shadow(0 calc(var(--u) * 18) calc(var(--u) * 20) rgb(4 40 47 / 0.3));
+  }
+
+  .phoneFront {
+    inset-inline: calc(var(--u) * 1080) auto;
+    inset-block-start: calc(var(--u) * 14);
+    rotate: calc(2deg * var(--mirror));
+  }
+
+  .phoneBack {
+    inset-inline: calc(var(--u) * 826) auto;
+    inset-block-start: calc(var(--u) * 110);
+    rotate: calc(-5deg * var(--mirror));
+  }
+
+  /* The price stamp, between the words and the app. */
+  .price {
+    position: absolute;
+    inset-block-start: calc(var(--u) * 26);
+    inset-inline-start: calc(var(--u) * 660);
+    display: grid;
+    justify-items: center;
+    gap: 0.25rem;
+    rotate: calc(6deg * var(--mirror));
+  }
+
+  .priceName {
+    font-size: max(0.9375rem, calc(var(--u) * 20));
+  }
+
+  .priceValue {
+    font-size: calc(var(--u) * 68);
+  }
+
+  /* The strip: the screens glide along the foot of the sheet under the words, and fade out
+     before the app's screens, so none is ever seen cut. */
+  .aisle {
+    --fade: calc(var(--u) * 100);
+    position: absolute;
+    inset-inline: 0 calc(var(--u) * 640);
+    inset-block: calc(var(--u) * 482) calc(var(--u) * 6);
+    padding-block: 0;
+    display: flex;
+    align-items: center;
+  }
 }

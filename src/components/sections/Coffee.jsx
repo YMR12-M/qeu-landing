@@ -19,11 +19,11 @@ const THUMB_SIZES = '3rem';
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /**
- * «كيو كوفي», the second of the kitchen's two tabs (Kitchen.jsx) — Qeu's coffee on the café's
- * espresso wall: the menu written on it in one column, as a café writes its menu — each drink
- * beside its photo, a line of cream dots from its name to its price — and facing it, level with
+ * «كيو كوفي», the second of the kitchen's two tabs (Kitchen.jsx) — Qeu's coffee as a café's
+ * menu board: the menu written on the wall in one column, as a café writes its menu — each
+ * drink beside its photo, a line of dots from its name to its price — and facing it, level with
  * the middle of the menu, a large cup poured with whatever the reader picks, the pick
- * underlined in crema as with a pen. The menu is a radio group, so picking works with a
+ * underlined in teal as with a pen. The menu is a radio group, so picking works with a
  * keyboard and a screen reader like any form — and without JavaScript: the stylesheet shows
  * the cup of the checked drink (:has()), and a cup that appears plays its pour from the start
  * (IcedCup) — as it does when the tab itself is opened.
@@ -36,7 +36,7 @@ export function CoffeePanel() {
   const { t, locale } = useLocale();
   const { coffee, prices } = t;
   const barRef = useRef(null);
-  const date = formatDate(MENU.capturedAt, { locale, dates: t.dates });
+  const date = formatDate(MENU.coffee.capturedAt, { locale, dates: t.dates });
 
   useEffect(() => {
     const bar = barRef.current;

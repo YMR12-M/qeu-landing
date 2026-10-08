@@ -10,8 +10,9 @@ import styles from './Download.module.css';
 /**
  * «حمّل كيو» — the page ends where it began, on Qeu's teal: the store figures first, then the
  * call to download, with both stores and — on a computer — the QR code beside them, and the app
- * itself in its phone at the end, reaching down into the footer's night as the hero's screens
- * reach into the page. On a phone the reader is holding one already: the store buttons do it.
+ * itself in its phone at the end, standing where the teal turns to the footer's night as the
+ * hero's screens stand where it turns white. On a phone the reader is holding one already: the
+ * store buttons do it.
  */
 export function Download() {
   const { t } = useLocale();
@@ -38,9 +39,6 @@ export function Download() {
 
         <AppStage className={styles.stage} />
       </div>
-
-      {/* The footer's night, begun under the phone: the bar at the top takes it as it passes. */}
-      <div className={styles.floor} data-wall aria-hidden="true" />
     </section>
   );
 }

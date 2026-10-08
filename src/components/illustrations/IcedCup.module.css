@@ -3,6 +3,9 @@
  * in first, the shot poured over it — and the pour is timed from the moment the cup is shown:
  * set down on the counter, the milk rises through the ice, the shot runs down into it, the
  * label is slapped on and the cup beads with cold. About three seconds, once.
+ *
+ * It stands on the page's white wall, so the clear plastic is drawn in the ink of the page
+ * (--line, a thin night line) with white in it, not in white: white on white would be nothing.
  */
 
 .cup {
@@ -11,6 +14,7 @@
   --body-bottom: var(--milk);
   --coffee: #6a3a1e;
   --swirl: #7f9c3d;
+  --line: rgb(4 40 47 / 0.55); /* the plastic's edge, and the ice standing above it */
   --mid: 96px; /* how far below the brim the milk stops, before the shot tops it up */
   position: relative;
   container-type: inline-size;
@@ -64,10 +68,15 @@
   stop-color: var(--milk);
 }
 
+/* A thin night edge down a stream, so a pale one (the milk) reads on the wall. */
+.edgeStop {
+  stop-color: rgb(4 40 47 / 0.3);
+}
+
 /* ── The cup ────────────────────────────────────────────────────── */
 
 .back {
-  fill: rgb(255 255 255 / 0.06);
+  fill: rgb(23 162 174 / 0.07);
 }
 
 .surface {
@@ -80,15 +89,15 @@
 }
 
 .ice rect {
-  fill: rgb(255 255 255 / 0.3);
-  stroke: rgb(255 255 255 / 0.8);
+  fill: rgb(255 255 255 / 0.75);
+  stroke: var(--line);
   stroke-width: 1.4;
 }
 
 /* In a milky drink the ice only just shows through; in an Americano, clearly. */
 .ice[data-under] rect {
-  fill: rgb(255 255 255 / 0.1);
-  stroke: rgb(255 255 255 / 0.32);
+  fill: rgb(255 255 255 / 0.16);
+  stroke: rgb(4 40 47 / 0.2);
 }
 
 .cup[data-drink='americano'] .ice[data-under] rect {
@@ -98,7 +107,7 @@
 
 .glass {
   fill: none;
-  stroke: rgb(255 255 255 / 0.6);
+  stroke: var(--line);
   stroke-width: 2;
 }
 
@@ -119,13 +128,16 @@
 }
 
 .lip {
-  fill: rgb(255 255 255 / 0.2);
-  stroke: rgb(255 255 255 / 0.75);
+  fill: rgb(255 255 255 / 0.7);
+  stroke: var(--line);
   stroke-width: 1.5;
 }
 
+/* Beads of cold on the plastic: a spot of white with a hair of shade, to show on milk and wall. */
 .drops ellipse {
-  fill: rgb(255 255 255 / 0.6);
+  fill: rgb(255 255 255 / 0.85);
+  stroke: rgb(4 40 47 / 0.25);
+  stroke-width: 0.5;
 }
 
 /* A stream shows only while it pours: above the cup, and inside it until the drink rises. */
@@ -149,7 +161,7 @@
   inset-block-end: -3%;
   z-index: -1;
   block-size: 7%;
-  background: radial-gradient(closest-side, rgb(0 0 0 / 0.55), rgb(0 0 0 / 0));
+  background: radial-gradient(closest-side, rgb(4 40 47 / 0.3), rgb(4 40 47 / 0));
 }
 
 /* ── The label ──────────────────────────────────────────────────── */

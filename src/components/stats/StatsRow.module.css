@@ -20,7 +20,7 @@
   margin: 0;
   padding: 0.25rem var(--pad) 0;
   border: var(--frame) solid var(--ink);
-  background: #fff;
+  background: var(--page-wall);
   color: var(--ink);
   line-height: var(--leading-snug);
 }

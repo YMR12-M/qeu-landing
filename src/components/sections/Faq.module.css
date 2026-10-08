@@ -1,27 +1,22 @@
 /*
- * «عندك سؤال؟» — a till receipt printed straight onto the section's paper, the one thing in the
- * section and as wide as the page: its head in the middle, then its lines in two columns, as a
- * wide till prints them. Set in the page's own pairing — IBM Plex Mono for the till's numbers,
- * Tajawal for what people actually read — its title printed large, with dot leaders, a total in
- * yellow marker, the number to take and a barcode. No slip around it: the wall is the paper.
+ * «عندك سؤال؟» — a till receipt printed straight onto the page's wall, the one thing
+ * in the section and as wide as the page: its head in the middle, then its lines in two columns,
+ * as a wide till prints them. Set in the page's own pairing — IBM Plex Mono for the till's
+ * numbers, Tajawal for what people actually read — its title printed large, with dot leaders, a
+ * total in yellow marker, the number to take and a barcode. No slip around it: the wall is the
+ * paper.
  */
 
 .section {
-  --misprint: var(--star);
   position: relative;
-  --paper: #f7f4ec; /* a till roll's warm white */
-  --brand-text: #117a83; /* the text teal a shade deeper on the paper: 4.6:1 */
-  --rule: #b3aa98; /* the till's dotted leaders (decorative) */
-  --muted: #4d6a70; /* 5.4:1 on the paper */
+  --rule: #b2c2c5; /* the till's dotted leaders (decorative) */
   padding-block: var(--section-space);
-  background: var(--paper);
   color: var(--night);
 }
 
 /* ── The receipt ────────────────────────────────────────────────── */
 
 .receipt {
-  position: relative;
   --focus-ring: var(--brand-text);
   font-family: var(--font-mono);
   font-size: var(--text-mono);
@@ -380,36 +375,5 @@
   from {
     opacity: 0;
     translate: 0 -0.5rem;
-  }
-}
-
-/* The receipt is scanned as it comes into view: a red beam, the till's laser, passes once down
-   it. (Only when it was held back below the fold: the pre-rendered page shows none.) */
-@media (prefers-reduced-motion: no-preference) {
-  .receipt[data-reveal='shown']::after {
-    content: '';
-    position: absolute;
-    inset-inline: -1rem;
-    inset-block-start: 0;
-    block-size: 3px;
-    border-radius: var(--pill);
-    background: #ff4b3e;
-    box-shadow: 0 0 1rem 0.2rem rgb(255 75 62 / 0.45);
-    pointer-events: none;
-    animation: laser 1.8s var(--ease-in-out) both;
-  }
-}
-
-@keyframes laser {
-  from {
-    inset-block-start: 0;
-    opacity: 1;
-  }
-  85% {
-    opacity: 1;
-  }
-  to {
-    inset-block-start: 100%;
-    opacity: 0;
   }
 }

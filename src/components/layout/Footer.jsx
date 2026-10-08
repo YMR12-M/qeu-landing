@@ -15,7 +15,7 @@ import styles from './Footer.module.css';
 const STORES = ['googlePlay', 'appStore'];
 
 /**
- * The footer, on the night wall: the wordmark and Qeu's slogan set large — its last word marked
+ * The footer, on the page's one white wall: the wordmark and Qeu's slogan set large — its last word marked
  * in yellow, as the hero's promise is — and under them what the order's delivery label says,
  * written on the wall: «طلبك وصل», from Qeu to your door, the app's store id in a barcode. Beside
  * it the page's contents, each ticked in pen once it has been read, and the ways to reach Qeu.

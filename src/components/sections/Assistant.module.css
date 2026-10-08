@@ -1,27 +1,20 @@
 /*
- * «اسأل كيور» — the app's assistant, live, on the night wall, shown as a poster shows a
+ * «اسأل كيور» — the app's assistant, live, on the page's wall, shown as a poster shows a
  * feature: the phone in the middle, the title one huge line broken by it, and the steps written
- * round it as notes, each with a yellow pen arrow to the part of the screen it explains.
+ * round it as notes, each with a pen arrow to the part of the screen it explains.
  * Everything in the phone is sized in em from the phone's width, so the whole screen scales as
  * one, like a picture of the app — and the title, the notes and the arrows are placed in the
  * same grid (--u), so they land on the same spot at any size.
  */
 
 .section {
-  --misprint: var(
-    --deep
-  ); /* a deeper teal than the wall's, so the print's second ink never glows */
-  --focus-ring: var(--glow);
+  --focus-ring: var(--night);
   --violet: #8a5cb3; /* the list card's gradient end: white text keeps 4.9:1 on it */
   --ink: #174a55; /* the app's chat text */
-  --button-bg: var(--star);
-  --button-fg: var(--night);
-  --button-hover: #ffd36b;
   position: relative;
   overflow: clip;
   padding-block: var(--section-space);
-  background-color: var(--night);
-  color: var(--white);
+  color: var(--night);
 }
 
 /* Holds the sparkles' gradient; takes no room. */
@@ -73,13 +66,15 @@
 .title {
   max-inline-size: 16em;
   font-size: var(--text-h2);
-  color: var(--white);
+  color: var(--night);
   text-align: center;
 }
 
-/* The assistant's name, in the deal yellow: the wall's one colour. */
+/* The assistant's name, in the deal yellow over a night shadow, as a sign-painter sets a word —
+   the same as the signs of «ليش كيو؟». */
 .name {
   color: var(--star);
+  text-shadow: 0.04em 0.035em 0 var(--night);
 }
 
 /* Close under the title, and a little further from the phone. */
@@ -88,7 +83,7 @@
   margin-block: -0.5rem 1rem;
   font-size: var(--text-lead);
   font-weight: 500;
-  color: var(--glow);
+  color: var(--muted);
   text-align: center;
 }
 
@@ -159,13 +154,13 @@
   box-shadow:
     inset 0 0 0 1px rgb(255 255 255 / 0.12),
     0 0 0 1px rgb(159 227 234 / 0.16),
-    0 2.5em 4em -1.5em rgb(0 0 0 / 0.75);
+    0 2.5em 4em -1.5em rgb(4 40 47 / 0.7);
   font-size: var(--u);
 }
 
 /* ── The notes ──────────────────────────────────────────────────── */
 
-/* A note: its number in the pen's yellow, its words in white, as if written on the wall. */
+/* A note: its number on a yellow disc, its words in night ink, as if written on the wall. */
 .notes {
   display: grid;
   gap: 1rem;
@@ -176,7 +171,7 @@
 
 .note {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.75rem;
   font-size: clamp(1.125rem, 1.35vw, 1.4375rem);
   font-weight: 800;
@@ -186,17 +181,24 @@
 
 .noteNumber {
   flex: none;
-  font-size: 1.3em;
+  display: grid;
+  place-items: center;
+  inline-size: 1.7em;
+  block-size: 1.7em;
+  border-radius: 50%;
+  background: var(--star);
+  font-size: 0.95em;
   font-weight: 900;
   line-height: 1;
-  color: var(--star);
+  color: var(--night);
+  text-box: trim-both cap alphabetic;
 }
 
-/* The way to get the app, written as the last note: its words underlined in the yellow pen. */
+/* The way to get the app, written as the last note: its words underlined in pen. */
 .cta {
-  --link: var(--white);
-  --link-line: var(--star);
-  --link-arrow: var(--star);
+  --link: var(--night);
+  --link-line: var(--night);
+  --link-arrow: var(--night);
 }
 
 /* The arrows and the pins are the computer's and the phone's way of pointing, one each. */
@@ -283,7 +285,7 @@
   }
 
   .noteNumber {
-    font-size: 1.45em;
+    font-size: 1.05em;
   }
 
   /* Each note's words lean towards the phone: to the right on its left, to the left on its
@@ -332,7 +334,7 @@
 
   .arrow path {
     fill: none;
-    stroke: var(--star);
+    stroke: var(--night);
     stroke-width: 0.16;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -840,13 +842,13 @@
   gap: 0.4rem;
   font-size: 0.9375rem;
   font-weight: 700;
-  color: var(--glow);
+  color: var(--night);
 }
 
-/* The button's name, set as it reads in the app: in the wall's yellow, not as a second button. */
+/* The button's name, set as it reads in the app and marked in yellow, not as a second button. */
 .hintButton {
-  color: var(--star);
   font-weight: 800;
+  box-shadow: inset 0 -0.45em 0 var(--star);
 }
 
 .hintIcon {
@@ -863,7 +865,7 @@
   padding-inline: 0.25rem;
   border: 0;
   background: none;
-  color: var(--white);
+  color: var(--night);
   font-family: inherit;
   font-size: 0.9375rem;
   font-weight: 800;
@@ -873,7 +875,7 @@
 .replayLabel {
   text-box: var(--label-box);
   text-decoration: underline;
-  text-decoration-color: rgb(255 255 255 / 0.35);
+  text-decoration-color: rgb(4 40 47 / 0.4);
   text-decoration-thickness: 1.5px;
   text-underline-offset: 0.45em;
   transition: text-decoration-color var(--duration-fast) ease;
@@ -886,7 +888,7 @@
 .replayIcon {
   inline-size: 1.125rem;
   block-size: 1.125rem;
-  color: var(--star);
+  color: var(--night);
   transition: rotate 500ms var(--ease-out);
 }
 

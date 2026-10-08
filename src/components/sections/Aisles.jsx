@@ -6,7 +6,6 @@ import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { formatNumber, interpolate } from '../../lib/format.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
-import { Edge } from '../ui/Edge.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import { Scribble } from '../ui/Scribble.jsx';
 import styles from './Aisles.module.css';
@@ -193,7 +192,6 @@ export function Aisles() {
           </p>
         </div>
       </div>
-      <Edge kind="perforation" to="var(--night)" />
     </section>
   );
 }

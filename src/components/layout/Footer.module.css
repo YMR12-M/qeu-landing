@@ -1,16 +1,14 @@
 /*
- * The footer on the night wall: the wordmark and the slogan set large, then the delivery
- * label's words, the page's contents and the ways to reach Qeu in three columns — no sticker,
- * no bag, no rule between them — and the small print.
+ * The footer, on the same wall as everything above it: the wordmark and the slogan set large,
+ * then the delivery label's words, the page's contents and the ways to reach Qeu in three
+ * columns — no sticker, no bag, no rule between them — and the small print.
  */
 
 .footer {
-  --misprint: var(--brand);
-  --focus-ring: var(--glow);
+  --focus-ring: var(--night);
   position: relative;
   padding-block: clamp(3rem, 6vw, 6rem) clamp(2rem, 3vw, 3rem);
-  background: var(--night);
-  color: var(--white);
+  color: var(--night);
 }
 
 /* ── The wordmark and the slogan ────────────────────────────────── */
@@ -32,20 +30,19 @@
   display: block;
   inline-size: clamp(8rem, 16vw, 17rem);
   block-size: auto;
-  color: var(--white);
+  color: var(--night);
 }
 
 .tagline {
   font-size: clamp(2rem, 4.2vw, 5rem);
   font-weight: 900;
   line-height: var(--leading-heading);
-  color: var(--white);
+  color: var(--night);
 }
 
-/* The last word on a stroke of the deal yellow, as with a marker, in night ink — the offer flag
-   of the hero's screens, drawn by hand. The ink is the wall's own colour, so anything of the word
-   the stroke missed would vanish into the night: the stroke reaches up past the dot of «ض» and
-   down past the tails of «ر» and «و» (padding widens the background, not the line). */
+/* The last word on a stroke of the deal yellow, as with a marker, in night ink — the same stroke
+   as the hero's promise: it reaches up past the dot of «ض» and down past the tails of «ر» and
+   «و» (padding widens the background, not the line). */
 .offer {
   margin-inline: -0.12em;
   padding-block: 0.3em 0.07em;
@@ -80,10 +77,12 @@
 
 /* The delivery label's words: «طلبك وصل», from Qeu to your door, and its barcode. */
 .deliveryTitle {
+  display: inline-block;
   font-size: clamp(1.625rem, 2.2vw, 2.25rem);
   font-weight: 900;
   line-height: var(--leading-snug);
-  color: var(--star);
+  color: var(--night);
+  box-shadow: inset 0 -0.4em 0 var(--star);
 }
 
 .route {
@@ -110,13 +109,13 @@
   flex: 1;
   align-self: center;
   margin-inline-start: 0.5rem;
-  border-block-end: 2px dotted rgb(159 227 234 / 0.45);
+  border-block-end: 2px dotted rgb(4 40 47 / 0.45);
 }
 
 .stop dt {
   font-size: 0.9375rem;
   font-weight: 500;
-  color: var(--glow);
+  color: var(--muted);
 }
 
 .stop dd {
@@ -132,19 +131,19 @@
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
-  color: var(--glow);
+  color: var(--muted);
 }
 
 .barcode {
   inline-size: clamp(8rem, 12vw, 11rem);
   block-size: 2.25rem;
-  color: var(--white);
+  color: var(--night);
 }
 
 .heading {
   font-size: 0.9375rem;
   font-weight: 800;
-  color: var(--glow);
+  color: var(--night);
 }
 
 .links {
@@ -162,7 +161,7 @@
   min-block-size: 2.75rem;
   font-size: clamp(1rem, 1vw, 1.125rem);
   font-weight: 700;
-  color: var(--white);
+  color: var(--night);
   overflow-wrap: anywhere;
 }
 
@@ -178,13 +177,13 @@
   text-underline-offset: 0.35em;
 }
 
-/* Beside each section, the tick it gets once it has been read, drawn in yellow. */
+/* Beside each section, the tick it gets once it has been read, drawn in pen. */
 .tick {
   --pen: 2.5px;
   flex: none;
   inline-size: 1rem;
   block-size: 1rem;
-  color: var(--star);
+  color: var(--night);
 }
 
 [data-seen] {
@@ -202,7 +201,7 @@
   font-family: var(--font-mono);
   font-size: var(--text-mono);
   line-height: 1.6;
-  color: rgb(255 255 255 / 0.72);
+  color: var(--muted);
 }
 
 .small:lang(ar) {
@@ -233,5 +232,5 @@
 }
 
 .smallLink:hover {
-  color: var(--glow);
+  color: var(--night);
 }

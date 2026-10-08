@@ -15,7 +15,6 @@ import {
   ThumbDown,
   ThumbUp,
 } from '../ui/icons.jsx';
-import { Edge } from '../ui/Edge.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import styles from './Assistant.module.css';
 
@@ -463,7 +462,6 @@ export function Assistant() {
           </div>
         </div>
       </div>
-      <Edge kind="torn" flip to="var(--white)" />
     </section>
   );
 }

@@ -1,21 +1,12 @@
 /*
- * The kitchen: «كيو فودز» and «كيو كوفي» in one section, one tab at a time. The section is the
- * wall behind the open tab — the fresh aisle's white, or the café's espresso brown — so the bar
- * at the top, which takes the colour of the wall under it, turns with it.
+ * The kitchen: «كيو فودز» and «كيو كوفي» in one section, one tab at a time, both on the page's
+ * wall — the café does not change it — each tab laid out its own way (Foods.jsx, Coffee.jsx).
  */
 
 .section {
-  --misprint: var(--aqua);
   position: relative;
   overflow: clip; /* a pour's light or a pen loop never widens the page */
   padding-block: var(--section-space);
-  background-color: var(--white);
-}
-
-/* The café's wall: espresso brown (its colours: Coffee.module.css). */
-.section:has([value='coffee']:checked) {
-  --focus-ring: #e9b97a;
-  background-color: var(--espresso);
 }
 
 /* ── The switch: the app's two tabs, as two names ───────────────── */
@@ -100,23 +91,6 @@
   text-underline-offset: 0.3em;
 }
 
-/* In the café: foam white for the open tab, over a line of crema. */
-.section:has([value='coffee']:checked) .tab {
-  color: #a8927b; /* 6.1:1 on espresso */
-}
-
-.section:has([value='coffee']:checked) .tab:hover {
-  color: #f7eee3;
-}
-
-.section:has([value='coffee']:checked) .tab:has(:checked) {
-  color: #f7eee3;
-}
-
-.section:has([value='coffee']:checked) .tab::after {
-  background: #e9b97a;
-}
-
 /* ── The tabs' panels: the checked one shown ────────────────────── */
 
 .section:has([value='foods']:checked) .panel[data-panel='coffee'],
@@ -132,8 +106,7 @@
   }
 }
 
-/* A tab that opens comes in with a fade, the section's wall already turning (the bar at the
-   top reads the wall's colour as the tab changes). */
+/* A tab that opens comes in with a fade. */
 @media (prefers-reduced-motion: no-preference) {
   .panel {
     animation: panel-in var(--duration-slow) var(--ease-out);

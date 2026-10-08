@@ -2,14 +2,15 @@ import { useLocale } from '../i18n/useLocale.js';
 import { LOCALES } from '../i18n/locales.js';
 import { DownloadLink } from '../components/download/DownloadLink.jsx';
 import { Barcode } from '../components/ui/Barcode.jsx';
+import { Edge } from '../components/ui/Edge.jsx';
 import { Scribble } from '../components/ui/Scribble.jsx';
 import styles from './NotFound.module.css';
 
 /**
- * The page hosts serve for a link that leads nowhere (404.html): on the hero's teal, the
- * headline — «هالصفحة مو على الرف» — and, where the page would be, what a shop writes on an
- * empty shelf: «نفد», sold out, circled in red pen, over the page's name and a barcode. The way
- * on is the home page, the app, or the English site.
+ * The page hosts serve for a link that leads nowhere (404.html): on the page's white wall,
+ * under the shop's awning, the headline — «هالصفحة مو على الرف» — and, where the page would be,
+ * what a shop writes on an empty shelf: «نفد», sold out, circled in red pen, over the page's
+ * name and a barcode. The way on is the home page, the app, or the English site.
  */
 export default function NotFound() {
   const { t, config } = useLocale();
@@ -17,6 +18,7 @@ export default function NotFound() {
 
   return (
     <section className={styles.page} aria-labelledby="not-found-title">
+      <Edge kind="awning" />
       <div>
         <p className={styles.eyebrow}>{notFound.eyebrow}</p>
         <h1 id="not-found-title" className={styles.title}>

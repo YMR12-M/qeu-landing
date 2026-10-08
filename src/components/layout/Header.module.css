@@ -1,11 +1,9 @@
 /*
- * The bar across the top: no box, no rule, no glass — it is painted the colour of the wall
- * under it (Header.jsx → --wall), so the sections run straight up into it. Its words and its
- * marks turn dark or light with that wall.
+ * The bar across the top: no box, no rule, no glass — it is painted the page's wall (tokens.css →
+ * --page-wall), the colour of everything it runs over, so the page goes straight up into it.
  */
 
 .header {
-  /* On a light wall — the teal, the white, the yellow — night ink; on a dark one, white. */
   --ink: var(--night);
   --accent: var(--night); /* the pen loop round the section being read */
   --button-bg: var(--night);
@@ -15,21 +13,9 @@
   inset-block-start: 0;
   inset-inline: 0;
   z-index: 60;
-  background-color: var(--wall, transparent);
+  background-color: var(--page-wall);
   color: var(--ink);
   view-transition-name: qeu-bar; /* carried across page loads (base.css) */
-  transition:
-    background-color var(--duration-base) ease,
-    color var(--duration-base) ease;
-}
-
-.header[data-tone='dark'] {
-  --ink: var(--white);
-  --accent: var(--star);
-  --button-bg: var(--star);
-  --button-fg: var(--night);
-  --button-hover: #ffd36b;
-  --focus-ring: var(--glow);
 }
 
 .bar {
@@ -88,8 +74,8 @@
 .mark {
   position: absolute;
   inset-block-start: 50%;
-  left: calc(var(--mark-left, 0px) - 0.75rem);
-  right: calc(var(--mark-right, 100%) - 0.75rem);
+  left: calc(var(--mark-left, 0px) - 0.5rem);
+  right: calc(var(--mark-right, 100%) - 0.5rem);
   block-size: 2.75rem;
   translate: 0 -50%;
   overflow: visible;
@@ -349,7 +335,7 @@
 
 /* ── The list of sections, dropped from under the bar (phones) ──── */
 
-/* The night wall, whatever the bar's colour: the sections in large type, numbered, the one
+/* A night sheet over the white page: the sections in large type, numbered, the one
    being read marked in yellow. */
 .sheet {
   --focus-ring: var(--glow);

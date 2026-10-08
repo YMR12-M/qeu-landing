@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { cx } from '../../lib/cx.js';
 import { Logo } from '../brand/Logo.jsx';
 import styles from './IcedCup.module.css';
@@ -99,12 +100,19 @@ export function IcedCup({ drink, name, size, sign, className }) {
             <stop offset="0.55" className={styles.shotStop} stopOpacity="0.7" />
             <stop offset="1" className={styles.shotStop} stopOpacity="0" />
           </linearGradient>
-          {/* The streams fade in from above: poured from out of the picture. */}
+          {/* The streams fade in from above: poured from out of the picture — and so does the
+              thin edge that keeps a pale one from vanishing into the wall. */}
           {['milk', 'coffee'].map((stream) => (
-            <linearGradient key={stream} id={id(stream)} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" className={styles[`${stream}Stop`]} stopOpacity="0" />
-              <stop offset="0.16" className={styles[`${stream}Stop`]} />
-            </linearGradient>
+            <Fragment key={stream}>
+              <linearGradient id={id(stream)} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" className={styles[`${stream}Stop`]} stopOpacity="0" />
+                <stop offset="0.16" className={styles[`${stream}Stop`]} />
+              </linearGradient>
+              <linearGradient id={id(`${stream}-edge`)} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" className={styles.edgeStop} stopOpacity="0" />
+                <stop offset="0.16" className={styles.edgeStop} />
+              </linearGradient>
+            </Fragment>
           ))}
         </defs>
 
@@ -121,6 +129,7 @@ export function IcedCup({ drink, name, size, sign, className }) {
             height="360"
             rx="3.5"
             fill={`url(#${id('milk')})`}
+            stroke={`url(#${id('milk-edge')})`}
           />
           <rect
             className={styles.stream}
@@ -131,6 +140,7 @@ export function IcedCup({ drink, name, size, sign, className }) {
             height="360"
             rx="3"
             fill={`url(#${id('coffee')})`}
+            stroke={`url(#${id('coffee-edge')})`}
           />
         </g>
 

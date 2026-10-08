@@ -61,9 +61,17 @@ const en = {
       ios: 'Download free on the App Store',
       android: 'Download free on Google Play',
     },
+    // What it is, under the headline: the things the app brings, and that it brings them to the
+    // door — all said elsewhere on the page and in the Google Play listing.
+    lead: 'Groceries, meals and coffee, delivered to your door.',
     note: '{downloads}+ downloads in {months}',
-    // The screens under the headline: each one's flag is an offer; the names echo the store
-    // screenshots. The app's own price is circled beside the headline.
+    // The way on from the download button: to how an order works. And the caption of the
+    // download code beside the headline, on a computer.
+    explore: 'See how it works',
+    scan: 'Scan to get it',
+    // The page no longer prints these under the screens (the screens say their own words); the
+    // link-preview image does (scripts/og-images.js). The app's own price is circled beside the
+    // headline.
     shelf: {
       offer: 'Deal',
       labels: {
@@ -82,6 +90,8 @@ const en = {
   why: {
     title: 'Why Q?',
     lead: 'Because it puts the best deals and the lowest prices on one shelf.',
+    // Phones, under the row of four: it is swiped.
+    swipe: 'Swipe for the rest',
     items: [
       {
         id: 'deals',
@@ -239,29 +249,37 @@ const en = {
     title: 'Not cooking today?',
     struck: 'cooking',
     titleAccent: 'Leave it to Q Foods',
-    lead: 'Meals and sandwiches made by Q itself, ordered with your groceries.',
-    fridgeLabel: 'Q Foods meals',
+    lead: 'Sandwiches, hummus and salads made by Q itself, ordered with your groceries.',
+    shelvesLabel: 'Q Foods shelves',
     seal: { main: 'Made by', sub: 'Q' },
     offer: 'Deal',
-    products: {
-      omelette: {
-        name: 'Omelette club',
-        size: '130 g',
-        imageAlt: 'An omelette club sandwich in a pack printed with the Q logo',
-      },
-      tuna: {
-        name: 'Spicy tuna club with arugula',
-        size: '1 piece',
-        imageAlt: 'A spicy tuna club sandwich with arugula in a pack printed with the Q logo',
-      },
-      meal: {
-        name: 'Dawood Basha with rice',
-        size: '150×150 g',
-        imageAlt: 'A tray of Dawood Basha with rice: white rice, and meatballs in tomato sauce',
-      },
+    from: 'From',
+    shelves: {
+      clubs: 'Clubs & croissant rolls',
+      minis: 'Minis & jumbos',
+      dips: 'Dips & salads',
     },
-    also: { label: 'Also in the app:', items: ['Appetizers & dips', 'Salads'] },
-    where: 'In the app, under:',
+    products: {
+      'club-tuna': { name: 'Spicy tuna club with arugula', size: '1 piece' },
+      'club-halloumi': { name: 'Halloumi club', size: '1 piece' },
+      'club-shakshuka': { name: 'Shakshuka club', size: '100 g' },
+      'club-caesar': { name: 'Chicken Caesar club', size: '1 piece' },
+      'croissant-lotus': { name: 'Lotus croissant roll', size: '1 piece' },
+      'croissant-pistachio': { name: 'Pistachio croissant roll', size: '1 piece' },
+      'mini-falafel': { name: 'Falafel mini on milk bread', size: '115 g' },
+      'mini-mortadella': { name: 'Mortadella mini on olive bread', size: '100 g' },
+      'jumbo-shawarma': { name: 'Chicken shawarma jumbo', size: '1 piece' },
+      'jumbo-turkey': { name: 'Turkey jumbo', size: '1 piece' },
+      'jumbo-caesar': { name: 'Chicken Caesar jumbo', size: '1 piece' },
+      'multigrain-turkey': { name: 'Turkey on multigrain', size: '1 piece' },
+      'hummus-classic': { name: 'Classic hummus', size: '250 g' },
+      'hummus-cilantro': { name: 'Hummus with cilantro', size: '250 g' },
+      'hummus-foul': { name: 'Foul and hummus', size: '250 g' },
+      'hummus-beiruti': { name: 'Beiruti hummus', size: '250 g' },
+      'labneh-olives': { name: 'Labneh with black olives', size: '250 g' },
+      'salad-quinoa': { name: 'Quinoa tabbouleh', size: '1 pack' },
+    },
+    where: 'And more in the app, under:',
     path: ['المنتجات الطازجة', 'كيو فودز'],
   },
 

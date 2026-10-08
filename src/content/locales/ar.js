@@ -64,9 +64,17 @@ const ar = {
       ios: 'حمّله مجاناً من App Store',
       android: 'حمّله مجاناً من Google Play',
     },
+    // What it is, under the headline: the things the app brings, and that it brings them to the
+    // door — all said elsewhere on the page and in the Google Play listing.
+    lead: 'مقاضي وأكل وقهوة، توصلك لحد باب بيتك.',
     note: 'أكثر من {downloads} تنزيل في {months}',
-    // The screens under the headline: each one's flag is an offer; the names echo the store
-    // screenshots. The app's own price is circled beside the headline.
+    // The way on from the download button: to how an order works. And the caption of the
+    // download code beside the headline, on a computer.
+    explore: 'شوف كيف يشتغل',
+    scan: 'امسح وحمّل',
+    // The page no longer prints these under the screens (the screens say their own words); the
+    // link-preview image does (scripts/og-images.js). The app's own price is circled beside the
+    // headline.
     shelf: {
       offer: 'عرض',
       labels: {
@@ -85,6 +93,8 @@ const ar = {
   why: {
     title: 'ليش {brand}؟',
     lead: 'لأنه يجمع لك أفضل العروض وأقل الأسعار على رف واحد.',
+    // Phones, under the row of four: it is swiped.
+    swipe: 'اسحب لتشوف الباقي',
     items: [
       {
         id: 'deals',
@@ -237,37 +247,46 @@ const ar = {
     tabs: { foods: 'كيو فودز', coffee: 'كيو كوفي' },
   },
 
-  // «كيو فودز»: Qeu's own sandwiches and meals, set out as a flyer's offers: what the app's
-  // screenshot of the tab shows — names and sizes as the app writes them, prices from
-  // src/content/menu.js. "Made by Qeu" is the client's own word for these meals.
+  // «كيو فودز»: Qeu's own sandwiches, dips and salads, set out on three shelves as a flyer sets
+  // out its offers: what the app's screenshots of the tab show — names and sizes as the app writes
+  // them (only the names its cards print whole), prices from src/content/menu.js. "Made by Qeu"
+  // is the client's own word for this food.
   foods: {
     title: 'ما تبي تطبخ اليوم؟',
     struck: 'تطبخ', // crossed out in the title with the red pen: no cooking today
     titleAccent: 'خلّها على {brand} فودز',
-    lead: 'وجبات وساندويتشات تحضّرها كيو بنفسها، وتطلبها مع مقاضيك.',
-    fridgeLabel: 'وجبات كيو فودز',
+    lead: 'ساندويتشات وحمص وسلطات تحضّرها كيو بنفسها، وتطلبها مع مقاضيك.',
+    shelvesLabel: 'رفوف كيو فودز',
     seal: { main: 'من تحضير', sub: 'كيو' },
     offer: 'عرض',
-    products: {
-      omelette: {
-        name: 'كلوب أومليت',
-        size: '130 جم',
-        imageAlt: 'ساندويتش كلوب أومليت في علبة عليها شعار كيو',
-      },
-      tuna: {
-        name: 'كلوب تونة حارة بالجرجير',
-        size: 'قطعة واحدة',
-        imageAlt: 'ساندويتش كلوب تونة حارة بالجرجير في علبة عليها شعار كيو',
-      },
-      meal: {
-        name: 'داود باشا مع الرز',
-        size: '150×150 جم',
-        imageAlt: 'علبة داود باشا مع الرز: رز أبيض، وكرات لحم بصلصة الطماطم',
-      },
+    from: 'من',
+    // Each shelf's sign: the kinds of product on it, as their names say.
+    shelves: {
+      clubs: 'كلوب وكرواسون رول',
+      minis: 'ميني وجامبو',
+      dips: 'مقبلات وغموس وسلطات',
     },
-    // The tab's other shelves in the app, which the page doesn't show.
-    also: { label: 'وكمان في التطبيق:', items: ['مقبلات وغموس', 'سلطات'] },
-    where: 'تلقاها في التطبيق:',
+    products: {
+      'club-tuna': { name: 'كلوب تونة حارة بالجرجير', size: '1 قطعة' },
+      'club-halloumi': { name: 'كلوب جبنة حلوم', size: '1 قطعة' },
+      'club-shakshuka': { name: 'كلوب شكشوكة', size: '100 جم' },
+      'club-caesar': { name: 'كلوب دجاج سيزر', size: '1 قطعة' },
+      'croissant-lotus': { name: 'كرواسون رول باللوتس', size: '1 قطعة' },
+      'croissant-pistachio': { name: 'كرواسون رول بالفستق', size: '1 قطعة' },
+      'mini-falafel': { name: 'فلافل ميني بخبز الحليب', size: '115 جم' },
+      'mini-mortadella': { name: 'مرتديلا ميني بخبز زيتون', size: '100 جم' },
+      'jumbo-shawarma': { name: 'شاورما دجاج جامبو', size: '1 قطعة' },
+      'jumbo-turkey': { name: 'ديك رومي جامبو', size: '1 قطعة' },
+      'jumbo-caesar': { name: 'دجاج سيزر جامبو', size: '1 قطعة' },
+      'multigrain-turkey': { name: 'ديك رومي ملتي سيريال', size: '1 قطعة' },
+      'hummus-classic': { name: 'حمص كلاسيك', size: '250 جم' },
+      'hummus-cilantro': { name: 'حمص بالكزبرة', size: '250 جم' },
+      'hummus-foul': { name: 'فول وحمص', size: '250 جم' },
+      'hummus-beiruti': { name: 'حمص بيروتي', size: '250 جم' },
+      'labneh-olives': { name: 'لبنة بالزيتون الأسود', size: '250 جم' },
+      'salad-quinoa': { name: 'سلطة تبولة كينوا', size: '1 علبة' },
+    },
+    where: 'وأصناف أكتر تلقاها في التطبيق:',
     path: ['المنتجات الطازجة', 'كيو فودز'],
   },
 

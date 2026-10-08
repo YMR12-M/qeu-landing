@@ -1,8 +1,7 @@
 /*
- * «كيو كوفي» — on the café's espresso wall (the kitchen's, while this tab is open:
- * Kitchen.module.css), as a café's menu board: the heading at the start, the menu written
- * straight on the wall at the end, as a café writes it — the drink, a line of cream dots, its
- * price — the drink picked underlined in crema, and between them, large, the cup poured with it
+ * «كيو كوفي» — on the page's wall, as a café's menu board: the heading at the start, the menu
+ * written straight on the wall at the end, as a café writes it — the drink, a line of dots, its
+ * price — the drink picked underlined in pen, and between them, large, the cup poured with it
  * (src/components/illustrations/IcedCup.jsx).
  */
 
@@ -12,12 +11,12 @@
    in three columns — the heading and the way to the tab, the cup, the menu — the whole café in
    one view. */
 .layout {
-  --crema: #e9b97a; /* 9.5:1 on the wall */
-  --foam: #f7eee3;
-  --foam-soft: #cdb8a1; /* 9:1 on the wall */
-  --dots: rgb(247 238 227 / 0.4); /* the menu's leaders: foam, faded to a cream */
-  --deal-lit: #ff8e76; /* the app's deal red, lit for the dark wall: 7:1 */
-  --focus-ring: var(--crema);
+  --crema: var(--brand-text); /* the menu's headings, hint and pen: the app's teal on white */
+  --foam: var(--night);
+  --foam-soft: var(--muted); /* 5.7:1 on the wall */
+  --dots: rgb(4 40 47 / 0.35); /* the menu's leaders */
+  --deal-lit: var(--deal); /* the price in the app's deal red, as Qeu Foods prints it */
+  --focus-ring: var(--brand-text);
   display: grid;
   color: var(--foam);
   grid-template-areas: 'intro' 'bar' 'board' 'more';
@@ -101,12 +100,11 @@
   font-weight: 900;
   line-height: var(--leading-heading);
   color: var(--foam);
-  text-shadow: 0.035em 0.03em 0 #9b5d2a; /* the print's second ink (base.css) */
 }
 
 .accent {
   display: block;
-  color: var(--crema);
+  color: var(--brand-text);
 }
 
 .brand {
@@ -273,7 +271,7 @@ label.option {
   max-inline-size: 100%;
   block-size: 3.75rem;
   object-fit: contain;
-  filter: drop-shadow(0 0.5rem 0.5rem rgb(0 0 0 / 0.45));
+  filter: drop-shadow(0 0.5rem 0.5rem rgb(4 40 47 / 0.35));
   transition: translate var(--duration-base) var(--ease-out);
 }
 

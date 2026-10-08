@@ -11,6 +11,7 @@ import { formatDate } from '../../lib/format.js';
 import { Logo, LOGO_HREF } from '../brand/Logo.jsx';
 import { LOGO_VIEWBOX } from '../brand/logo-paths.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
+import { Edge } from '../ui/Edge.jsx';
 import { Landmark, PaymentCard, Van } from '../ui/icons.jsx';
 import { Picture } from '../ui/Picture.jsx';
 import { Scribble } from '../ui/Scribble.jsx';
@@ -22,11 +23,11 @@ const ICONS = { delivery: Van, payment: PaymentCard, government: Landmark };
 const twoDigits = (value) => String(value).padStart(2, '0');
 
 /**
- * The privacy policy, as the official document it is: its title on Qeu's teal, as the home
- * page opens; then the document itself on the white of the page — the company's letterhead,
- * the policy's own sections, and, reaching the end, the company's stamp pressed onto it — with
- * its contents beside it, each ticked in pen once it has been read. No sheet, no card: the page
- * is the paper.
+ * The privacy policy, as the official document it is: its title under the shop's awning, as
+ * the home page opens; then the document itself — the company's letterhead, the policy's own
+ * sections, and, reaching the end, the company's stamp pressed onto it — with its contents
+ * beside it, each ticked in pen once it has been read. All on the page's one white wall: no
+ * sheet, no card, the page is the paper.
  *
  * The text is the policy's own, word for word: `policy` is its Arabic (src/content/policy.js)
  * or its English (policy-en.js), each page passing its own. The lists it contains are drawn
@@ -46,6 +47,7 @@ export function PolicyPage({ policy }) {
   return (
     <>
       <section className={styles.cover} aria-labelledby="policy-title">
+        <Edge kind="awning" />
         <div className="container">
           <p className={styles.runningHead}>{policy.company}</p>
           <h1 id="policy-title" className={styles.title}>

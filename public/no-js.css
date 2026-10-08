@@ -1,38 +1,14 @@
 /*
  * Loaded when JavaScript is off (index.html → <noscript>), and by the page itself if its script
- * fails to load (src/entry-client.jsx). Nothing then picks the open benefit in «ليش كيو؟»,
- * pauses the hero's screens or paints the bar at the top the colour of the wall under it, so
- * every benefit is shown, unpinned and in full ink, the screens stand still (moving content
- * needs a way to pause it, WCAG 2.2.2), the bar keeps Qeu's teal all the way down, and the
- * controls that need a script are hidden. Everything else works without one.
+ * fails to load (src/entry-client.jsx). The page is one white wall with no script in it — the bar
+ * at the top and every section are the same white already — so what this keeps is small: the
+ * hero's screens stand still (moving content needs a way to stop it, WCAG 2.2.2) and the
+ * controls that need a script are hidden. Everything else — the four benefits in their row
+ * included — works without one.
  */
-
-#root > header {
-  background-color: #17a2ae !important;
-}
 
 [data-hero-drift] {
   animation: none !important;
-}
-
-[data-why-track] {
-  block-size: auto !important;
-}
-
-[data-why-pin] {
-  position: static !important;
-  block-size: auto !important;
-  min-block-size: 0 !important;
-}
-
-[data-why-step] {
-  color: #04282f !important;
-  cursor: auto !important; /* a click can't open one without a script */
-}
-
-[data-why-body] {
-  grid-template-rows: 1fr !important;
-  opacity: 1 !important;
 }
 
 [data-needs-js] {

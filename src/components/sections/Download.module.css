@@ -1,16 +1,13 @@
 /*
- * «حمّل كيو» — back on the teal: the figures, the call, both stores and the QR code, and the app
- * in its phone at the end, standing half on the teal and half on the footer's night.
+ * «حمّل كيو» — the page ends where it began, on the wall it has stood on all the way down: the
+ * figures, the call, both stores and the QR code, and the app in its phone at the end.
  */
 
 .section {
-  --misprint: var(--star);
   --focus-ring: var(--night);
-  --floor: clamp(7rem, 12vw, 12rem); /* how far down the phone reaches into the night */
   position: relative;
   overflow-x: clip; /* a phone set askew never widens the page */
-  padding-block: var(--section-space) 0;
-  background: var(--brand);
+  padding-block: var(--section-space);
   color: var(--night);
 }
 
@@ -18,26 +15,16 @@
   margin-block-end: clamp(3.5rem, 6vw, 6rem);
 }
 
-/* The call and the phone: stacked on a phone and a tablet, side by side on a computer — the
-   phone standing on the floor. */
+/* The call and the phone: stacked on a phone and a tablet, side by side on a computer. */
 .grid {
-  position: relative;
-  z-index: 1; /* over the floor */
   display: grid;
   gap: clamp(2.5rem, 4vw, 4rem);
-  padding-block-end: var(--section-space);
 }
 
 @media (min-width: 64em) {
   .grid {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-    align-items: end;
-    padding-block-end: calc(var(--floor) * 0.45);
-  }
-
-  .copy {
-    align-self: center;
-    padding-block-end: var(--floor);
+    align-items: center;
   }
 }
 
@@ -81,17 +68,7 @@
 
 /* Phones and tablets: no picture of a phone on a phone — the store buttons are the way in. */
 @media (max-width: 63.99em) {
-  .stage,
-  .floor {
+  .stage {
     display: none;
   }
-}
-
-/* The footer's night, begun at the bottom of the teal: the phone stands half on it. */
-.floor {
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 0;
-  block-size: var(--floor);
-  background: var(--night);
 }

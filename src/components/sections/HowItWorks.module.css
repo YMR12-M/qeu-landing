@@ -1,286 +1,145 @@
 /*
- * «كيف يشتغل» — the order, as the delivery slip a shop tears off for it, on the pale aqua of
- * Qeu's store screenshots: a sheet of paper a little askew, a bite out of its edge at every line
- * of print, «كيو» and a barcode at its head. On it, the three steps as a checklist
- * ticked off in red pen, and beside it prints of the app's own screens tossed down together,
- * overlapping, each at its own angle. At the foot the route is a dashed line, Qeu's van drives it
- * as the section scrolls by — drawing it solid behind — to where «طلبك وصل» is stamped.
+ * «كيف يشتغل» — the order as the route it takes, drawn by hand across the page's wall: a dashed
+ * line from where the order starts, down and up through three stops — a pen-ringed number each —
+ * to the door, where «طلبك وصل» is stamped. From each stop a dashed line drops to what happens
+ * there: a print of the app's own screen, tossed down, and under it the step. Qeu's van drives
+ * the line as the section scrolls by, and the line turns solid behind it.
  */
 
 .section {
   position: relative;
-  --brand-text: #10747c; /* the text teal a shade deeper on the aqua wall: 4.8:1 */
-  --muted: #33636d; /* 5.6:1 on the aqua wall */
-  --paper: #fffdf6; /* the coupon's cream */
   padding-block: var(--section-space);
-  background: var(--mist);
 }
 
-/* ── The slip ───────────────────────────────────────────────────── */
-
-.slip {
-  --pad: clamp(1.25rem, 3vw, 3.5rem);
-  position: relative;
+.route {
   margin-block-start: clamp(2.5rem, 3.3333vw, 4rem);
-  padding: clamp(1rem, 1.6vw, 1.75rem) var(--pad) clamp(1.5rem, 2.4vw, 2.5rem);
-  border-radius: 0.5rem;
-  background: var(--paper);
-  color: var(--night);
-  box-shadow: 0 1.5rem 2rem -1.5rem rgb(4 40 47 / 0.55);
-  rotate: -0.4deg;
 }
 
-/* The bites: a round one out of each long edge for every line of print on a counter's pad. */
-.slip::before,
-.slip::after {
-  content: '';
-  position: absolute;
-  inset-block: 0;
-  inline-size: 0.75rem;
-  background: radial-gradient(
-      circle at var(--at) 50%,
-      var(--mist) 0.4rem,
-      transparent calc(0.4rem + 0.5px)
-    )
-    0 0 / 100% 1.5rem repeat-y;
-}
+/* ── The map ────────────────────────────────────────────────────── */
 
-.slip::before {
-  --at: 0;
-  inset-inline-start: 0;
-}
-
-.slip::after {
-  --at: 100%;
-  inset-inline-end: 0;
-}
-
-/* ── Its head ───────────────────────────────────────────────────── */
-
-.head {
-  display: flex;
-  align-items: center;
-  gap: clamp(0.75rem, 1.6vw, 1.5rem);
-  padding-block-end: clamp(0.875rem, 1.3vw, 1.25rem);
-  border-block-end: 2px solid var(--night);
-}
-
-.logo {
-  flex: none;
-  block-size: clamp(1.5rem, 2.2vw, 2.25rem);
-  inline-size: auto;
-  color: var(--night);
-}
-
-.code {
-  margin-inline-start: auto;
-  inline-size: clamp(5rem, 9vw, 8.5rem);
-  block-size: clamp(1.25rem, 1.8vw, 1.75rem);
-  color: var(--night);
-}
-
-/* ── The list and the prints ────────────────────────────────────── */
-
-.body {
-  display: grid;
-  gap: clamp(2rem, 4vw, 3rem);
-  padding-block: clamp(1.5rem, 2.4vw, 2.5rem) clamp(1.25rem, 2vw, 2rem);
+/* Computers and tablets: the line across the page, in a box as tall as it is drawn. Phones have
+   the upright route down the steps instead (below). */
+.map {
+  --van-width: clamp(3.5rem, 6.5vw, 6rem);
+  position: relative;
+  display: none;
+  aspect-ratio: 1200 / 150;
 }
 
 @media (min-width: 48em) {
-  .body {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    column-gap: clamp(2rem, 5vw, 6rem);
-    align-items: center;
+  .map {
+    display: block;
   }
 }
 
-.steps {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* A line of the checklist: the number, the words, and at the end a red-pen tick. Not all in
-   one column: the second is set in a little, as a hand lists them. */
-.step {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: clamp(0.875rem, 1.6vw, 1.75rem);
-  padding-block: clamp(1.1rem, 1.9vw, 1.9rem);
-  border-block-end: 2px dashed rgb(4 40 47 / 0.28);
-}
-
-.step:first-child {
-  padding-block-start: 0;
-}
-
-.step:last-child {
-  border-block-end: 0;
-  padding-block-end: 0;
-}
-
-.step:nth-child(2) {
-  margin-inline-start: clamp(0.75rem, 3vw, 3.5rem);
-}
-
-.digit {
-  min-inline-size: 1.1em;
-  font-size: clamp(2.5rem, 4.4vw, 5rem);
-  font-weight: 900;
-  line-height: 1;
-  color: var(--brand-text);
-}
-
-.title {
-  font-size: clamp(1.25rem, 1.8vw, 2rem);
-  font-weight: 800;
-  line-height: var(--leading-snug);
-}
-
-.text {
-  max-inline-size: 22em;
-  margin-block-start: 0.25rem;
-  font-size: clamp(0.9375rem, 1.0417vw, 1.25rem);
-  font-weight: 500;
-  color: var(--muted);
-}
-
-/* The tick, drawn in the red pen of the stamp, bigger than a box would hold, as a checker's hand
-   leaves it. */
-.tick {
-  display: block;
-  inline-size: clamp(2.75rem, 4.2vw, 4.5rem);
-  block-size: clamp(2.75rem, 4.2vw, 4.5rem);
-}
-
-.pen {
-  --pen: 5px;
+.svg {
+  position: absolute;
+  inset: 0;
   inline-size: 100%;
   block-size: 100%;
-  color: var(--deal);
+  overflow: visible;
 }
 
-.step:nth-child(2) .pen {
-  rotate: -8deg;
-}
-
-.step:nth-child(3) .pen {
-  rotate: 5deg;
-}
-
-.pen:dir(ltr) {
-  scale: 1;
-}
-
-/* The prints: a loose heap, each its own size and angle, the order with the van on top. */
-.prints {
-  position: relative;
-  inline-size: min(100%, 40rem);
-  aspect-ratio: 1.22;
-  justify-self: center;
-}
-
-.print {
-  position: absolute;
-  aspect-ratio: 4 / 5;
-  border: 0.4375rem solid var(--white);
-  border-radius: 0.25rem;
-  object-fit: cover;
-  background: var(--white);
-  box-shadow: 0 0.875rem 1.25rem -0.75rem rgb(4 40 47 / 0.6);
-  rotate: var(--tilt, 0deg);
-}
-
-.print[data-step='offers'] {
-  --tilt: 14deg;
-  inset-inline-start: 0;
-  inset-block-start: 14%;
-  inline-size: 35%;
-  object-position: 50% 12%;
-}
-
-.print[data-step='picks'] {
-  --tilt: 3deg;
-  z-index: 1;
-  inset-inline-start: 33%;
-  inset-block-start: 0;
-  inline-size: 34%;
-  object-position: 50% 8%;
-}
-
-.print[data-step='delivery'] {
-  --tilt: -3deg;
-  z-index: 2;
-  inset-inline-end: 0;
-  inset-block-end: 0;
-  inline-size: 45%;
-  object-position: 50% 72%;
-}
-
-/* ── The foot: the route, and where it ends ─────────────────────── */
-
-.foot {
-  display: flex;
-  align-items: flex-end;
-  gap: clamp(1rem, 2vw, 2rem);
-  padding-block-start: clamp(1rem, 1.6vw, 1.5rem);
-  border-block-start: 2px dashed rgb(4 40 47 / 0.35);
-}
-
-/* The route is a container: the line, and the van on it, are sized from its width. */
-.lane {
-  --van-width: clamp(4rem, 8cqi, 6.5rem);
-  --van-height: calc(var(--van-width) * 57 / 136);
-  --track: 3px;
-  --travel: calc(100cqi - var(--van-width) * 130 / 136);
-  --dir: 1;
-  position: relative;
-  flex: 1;
-  container-type: inline-size;
-  block-size: calc(var(--van-height) + 0.5rem);
-  view-timeline: --route block;
-}
-
-.lane:dir(rtl) {
-  --dir: -1;
+/* Written for left to right; a right-to-left page is its mirror (the stops are placed from the
+   start edge, so they follow). */
+.map:dir(rtl) .svg {
+  scale: -1 1;
 }
 
 .dash,
-.fill {
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 0.375rem;
-  block-size: var(--track);
-  border-radius: var(--pill);
+.done {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .dash {
-  background: repeating-linear-gradient(90deg, #b9c9cb 0 0.625rem, transparent 0.625rem 1.125rem);
+  stroke: #9db6ba;
+  stroke-width: 3;
+  stroke-dasharray: 2 13;
 }
 
-/* The route as far as the van has driven: solid, in Qeu's teal. */
-.fill {
-  background: var(--brand);
-  transform-origin: left;
+/* The route as far as the van has driven: solid, in Qeu's teal. Without a script, all of it. */
+.done {
+  stroke: var(--brand);
+  stroke-width: 4;
 }
 
-.lane:dir(rtl) .fill {
-  transform-origin: right;
+/* Where the order starts: a dot, as a pen is put down. */
+.origin {
+  position: absolute;
+  inset-inline-start: calc(10 / 1200 * 100%);
+  inset-block-start: calc(70 / 150 * 100%);
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  margin-block-start: -0.4375rem;
+  margin-inline-start: -0.4375rem;
+  border-radius: 50%;
+  background: var(--night);
+}
+
+.stop {
+  position: absolute;
+  inset-inline-start: var(--x);
+  inset-block: var(--y) 0;
+}
+
+/* From the stop down to its step. */
+.drop {
+  position: absolute;
+  inset-block: 1.5rem 0;
+  inset-inline-start: 0;
+  border-inline-start: 2px dashed rgb(4 40 47 / 0.3);
+}
+
+/* The number, on the line, ringed in pen. */
+.pin {
+  position: absolute;
+  inset-block-start: -1.375rem;
+  inset-inline-start: -1.375rem;
+  display: grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border-radius: 50%;
+  background: var(--page-wall);
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--night);
+}
+
+.ring {
+  --pen: 2.5px;
+  position: absolute;
+  inset: -0.3rem -0.4rem;
+  inline-size: calc(100% + 0.8rem);
+  block-size: calc(100% + 0.6rem);
+  color: var(--night);
+}
+
+/* The van rides the line, wheels on it. Resting, it stands at the door. */
+.driver {
+  position: absolute;
+  z-index: 2;
+  left: var(--x, 99.2%);
+  top: var(--y, 36.6%);
+  translate: -50% -92%;
+  rotate: var(--tilt, 0deg);
+  transform-origin: 50% 92%;
+}
+
+.map:dir(rtl) .driver {
+  left: var(--x, 0.8%);
 }
 
 /* ── The van ────────────────────────────────────────────────────── */
 
-/* On the line, parked at the stamp: the arrival, and the resting state. */
+/* On the line: it drives it (HowItWorks.jsx → useDrive), and rests at the door. */
 .van {
-  position: absolute;
-  z-index: 2;
-  inset-block-end: 0.1875rem;
-  inset-inline-start: 0;
+  position: relative;
   inline-size: var(--van-width);
-  block-size: var(--van-height);
-  translate: calc(var(--travel) * var(--dir)) 0;
+  block-size: calc(var(--van-width) * 57 / 136);
 }
 
 .vanArt {
@@ -289,7 +148,7 @@
   overflow: visible;
 }
 
-.route:dir(rtl) .vanArt {
+.map:dir(rtl) .vanArt {
   scale: -1 1;
 }
 
@@ -373,138 +232,180 @@
 /* ── The stamp ──────────────────────────────────────────────────── */
 
 /* «طلبك وصل», pressed on once, a little crooked, in the ink of a rubber stamp, a double border
-   round it. */
-.stamp {
-  flex: none;
+   round it: at the door, under the end of the line. */
+.stamp,
+.arrived {
   padding: 0.35em 1em;
   border: 3px double var(--deal);
   border-radius: 0.375rem;
   color: var(--deal);
-  font-size: clamp(1.25rem, 1.9vw, 2rem);
+  font-size: clamp(1.125rem, 1.7vw, 1.875rem);
   font-weight: 900;
   line-height: 1.2;
   rotate: -7deg;
 }
 
 @supports (text-box: trim-both ex alphabetic) {
-  .stamp {
+  .stamp,
+  .arrived {
     padding-block: 0.6em;
     text-box: var(--label-box);
   }
 }
 
-/* Phones: the list, then the heap of prints, a little smaller, then the route. */
+.stamp {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: 58%;
+}
+
+/* ── The steps ──────────────────────────────────────────────────── */
+
+.steps {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 3.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+/* The print: a screen of the app tossed down, each at its own angle and its own crop. */
+.print {
+  inline-size: min(100%, 15rem);
+  aspect-ratio: 4 / 5;
+  margin-block-end: 0.75rem;
+  border: 0.4375rem solid var(--white);
+  border-radius: 0.25rem;
+  object-fit: cover;
+  background: var(--white);
+  box-shadow: 0 0.875rem 1.25rem -0.75rem rgb(4 40 47 / 0.6);
+  rotate: var(--tilt, 0deg);
+}
+
+.step[data-step='offers'] .print {
+  object-position: 50% 12%;
+}
+
+.step[data-step='picks'] .print {
+  object-position: 50% 8%;
+}
+
+.step[data-step='delivery'] .print {
+  object-position: 50% 72%;
+}
+
+.title {
+  font-size: clamp(1.25rem, 1.8vw, 2rem);
+  font-weight: 800;
+  line-height: var(--leading-snug);
+}
+
+.text {
+  max-inline-size: 20em;
+  font-size: clamp(0.9375rem, 1.0417vw, 1.25rem);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+@media (min-width: 48em) {
+  .steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(1rem, 3vw, 3rem);
+    padding-block-start: 0.5rem;
+  }
+
+  .number,
+  .arrived {
+    display: none;
+  }
+}
+
+/* Phones: the route stands upright along the start edge, a numbered stop at each step and the
+   stamp at its foot. */
 @media (max-width: 47.99em) {
-  .prints {
-    inline-size: min(100%, 24rem);
+  .steps {
+    position: relative;
+    padding-inline-start: 3.75rem;
   }
 
-  .step:nth-child(2) {
-    margin-inline-start: 0.75rem;
+  .steps::before {
+    content: '';
+    position: absolute;
+    inset-block: 1.25rem -1.5rem;
+    inset-inline-start: 1.375rem;
+    border-inline-start: 3px dashed #9db6ba;
   }
 
-  .digit {
-    font-size: 2.5rem;
+  .step {
+    justify-items: start;
+    text-align: start;
   }
 
-  .tick {
-    inline-size: 2.25rem;
-    block-size: 2.25rem;
+  .number {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: -3.75rem;
+    display: grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border: 2.5px solid var(--night);
+    border-radius: 50%;
+    background: var(--page-wall);
+    font-size: 1.25rem;
+    font-weight: 900;
+    line-height: 1;
   }
-}
 
-/* ── The drive and the press ────────────────────────────────────── */
-
-/* The van's drive is tied to scrolling, run by the browser off the main thread. Elsewhere — or
-   with reduced motion — nothing animates: the van is parked at the stamp, the route solid. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .van,
-    .fill,
-    .wheel,
-    .speed {
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: --route;
-      animation-range: cover 10% cover 60%;
-    }
-
-    .van {
-      animation-name: drive;
-    }
-
-    .fill {
-      animation-name: fill-in;
-    }
-
-    .wheel {
-      animation-name: roll;
-    }
-
-    .speed {
-      animation-name: driving;
-    }
+  .print {
+    inline-size: min(70%, 13rem);
+    margin-block-start: 0.5rem;
   }
-}
 
-@keyframes drive {
-  from {
-    translate: 0 0;
+  .arrived {
+    display: inline-block;
+    margin-block-start: 2.5rem;
+    margin-inline-start: 3.75rem;
+  }
+
+  .route {
+    display: grid;
+    justify-items: start;
   }
 }
 
-@keyframes fill-in {
-  from {
-    scale: 0 1;
-  }
-}
+/* ── Put down ───────────────────────────────────────────────────── */
 
-@keyframes roll {
-  to {
-    rotate: 12turn;
-  }
-}
-
-@keyframes driving {
-  0%,
-  90% {
-    opacity: 0.6;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* Waiting below the fold (useScrollReveal): the prints not yet laid, the stamp not yet pressed… */
+/* Waiting below the fold (useScrollReveal): the prints not yet laid, the stamps not yet pressed… */
 @media (prefers-reduced-motion: no-preference) {
-  .slip[data-reveal='pending'] .print {
+  .route[data-reveal='pending'] .print {
     opacity: 0;
     translate: 0 -1rem;
   }
 
-  .slip[data-reveal='pending'] .stamp {
+  .route[data-reveal='pending'] :is(.stamp, .arrived) {
     opacity: 0;
     scale: 1.7;
   }
 
   /* …then, in view: the prints laid down one after another, and the stamp pressed last. */
-  .slip[data-reveal='shown'] .print {
+  .route[data-reveal='shown'] .print {
     transition:
-      opacity var(--duration-base) ease calc(var(--n, 0) * 200ms),
-      translate var(--duration-slow) var(--ease-settle) calc(var(--n, 0) * 200ms);
+      opacity var(--duration-base) ease calc(var(--n, 0) * 250ms),
+      translate var(--duration-slow) var(--ease-settle) calc(var(--n, 0) * 250ms);
   }
 
-  .print[data-step='picks'] {
-    --n: 1;
-  }
-
-  .print[data-step='delivery'] {
-    --n: 2;
-  }
-
-  .slip[data-reveal='shown'] .stamp {
+  .route[data-reveal='shown'] :is(.stamp, .arrived) {
     transition:
-      opacity 200ms ease 1000ms,
-      scale 400ms var(--ease-settle) 1000ms;
+      opacity 200ms ease 1100ms,
+      scale 400ms var(--ease-settle) 1100ms;
   }
 }

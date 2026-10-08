@@ -19,10 +19,12 @@
  *   qur-*                             → the kabsa ingredients كيور lists in the chat screenshot
  *                                       (screen-chat), cropped from it with their + button
  *   food-*, coffee-*                  → products from screenshots of the app's «كيو فودز» and
- *                                       «كيو كوفي» tabs: upscaled 4× (macOS's super-resolution
- *                                       model), cut out of the app's grey card and its + button
- *                                       (Vision), edges cleaned of the grey; the meal tray's
- *                                       corner, under the + button, mirrored from the other one
+ *                                       «كيو كوفي» tabs (food-*: provided 8 October 2026):
+ *                                       upscaled 4× (macOS's super-resolution model), cut out of
+ *                                       the app's grey card and its + button (Vision), edges
+ *                                       cleaned of the grey; where a product's corner was under
+ *                                       the + button it is mirrored from the other side (the
+ *                                       price stickers sit over that corner), see scripts/cutout.swift
  *
  * AVIF and WebP are encoded separately because sharp's quality scales differ: AVIF at q50 is
  * 25–30 % smaller than WebP at q72 on these screens and closer to the source (SSIM), while
@@ -36,9 +38,24 @@ import coffeeBox from '../assets/images/coffee-box.webp?w=64;96;128;192&format=w
 import coffeeLatte from '../assets/images/coffee-latte.webp?w=48;72;96;144&format=webp&quality=80&as=picture';
 import coffeePistachio from '../assets/images/coffee-pistachio-latte.webp?w=48;72;96;144&format=webp&quality=80&as=picture';
 import coffeeSpanish from '../assets/images/coffee-spanish-latte.webp?w=48;72;96;144&format=webp&quality=80&as=picture';
-import foodMeal from '../assets/images/food-dawood-basha.webp?w=120;180;240;360&format=webp&quality=80&as=picture';
-import foodOmelette from '../assets/images/food-club-omelette.webp?w=120;180;240;360&format=webp&quality=80&as=picture';
-import foodTuna from '../assets/images/food-club-tuna.webp?w=120;180;240;360&format=webp&quality=80&as=picture';
+import foodClubCaesar from '../assets/images/food-club-caesar.webp?w=120;180;240;360&format=webp&quality=80&as=picture';
+import foodClubHalloumi from '../assets/images/food-club-halloumi.webp?w=120;180;240;360&format=webp&quality=80&as=picture';
+import foodClubShakshuka from '../assets/images/food-club-shakshuka.webp?w=120;180;240;360&format=webp&quality=80&as=picture';
+import foodClubTuna from '../assets/images/food-club-tuna.webp?w=120;180;240;360&format=webp&quality=80&as=picture';
+import foodCroissantLotus from '../assets/images/food-croissant-lotus.webp?w=120;180;240;360&format=webp&quality=80&as=picture';
+import foodCroissantPistachio from '../assets/images/food-croissant-pistachio.webp?w=120;180;240;360&format=webp&quality=80&as=picture';
+import foodHummusBeiruti from '../assets/images/food-hummus-beiruti.webp?w=180;240;360;480&format=webp&quality=80&as=picture';
+import foodHummusCilantro from '../assets/images/food-hummus-cilantro.webp?w=180;240;360;480&format=webp&quality=80&as=picture';
+import foodHummusClassic from '../assets/images/food-hummus-classic.webp?w=180;240;360;480&format=webp&quality=80&as=picture';
+import foodHummusFoul from '../assets/images/food-hummus-foul.webp?w=180;240;360;480&format=webp&quality=80&as=picture';
+import foodJumboCaesar from '../assets/images/food-jumbo-caesar.webp?w=180;240;360;480&format=webp&quality=80&as=picture';
+import foodJumboShawarma from '../assets/images/food-jumbo-shawarma.webp?w=180;240;360;480&format=webp&quality=80&as=picture';
+import foodJumboTurkey from '../assets/images/food-jumbo-turkey.webp?w=180;240;360;480&format=webp&quality=80&as=picture';
+import foodLabnehOlives from '../assets/images/food-labneh-olives.webp?w=180;240;360;480&format=webp&quality=80&as=picture';
+import foodMiniFalafel from '../assets/images/food-mini-falafel.webp?w=180;240;360;480&format=webp&quality=80&as=picture';
+import foodMiniMortadella from '../assets/images/food-mini-mortadella.webp?w=180;240;360;480&format=webp&quality=80&as=picture';
+import foodMultigrainTurkey from '../assets/images/food-multigrain-turkey.webp?w=180;240;360;480&format=webp&quality=80&as=picture';
+import foodSaladQuinoa from '../assets/images/food-salad-quinoa.webp?w=120;180;240;360&format=webp&quality=80&as=picture';
 import playPicksAvif from '../assets/images/play-picks.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
 import playPicksWebp from '../assets/images/play-picks.webp?w=240;360;480;720&format=webp&quality=72&as=picture';
 import playAssistantAvif from '../assets/images/play-assistant.webp?w=240;360;480;720&format=avif&quality=50&as=picture';
@@ -114,8 +131,8 @@ export const media = {
   appIcon,
 
   /**
-   * Hero: the six Google Play screenshots stand on the deals shelf, in the store's order, each
-   * over its offer label (by id). The two delivery shots are one panorama, read right to left.
+   * Hero: the six Google Play screenshots, in the store's order (by id: the og-image script
+   * names them too). The two delivery shots are one panorama, read right to left.
    */
   shelf: [
     { id: 'picks', image: playPicks },
@@ -152,11 +169,26 @@ export const media = {
     tomato: qurTomato,
   },
 
-  /** «كيو فودز» — the fridge's products, keyed by product id (src/content/menu.js). */
+  /** «كيو فودز» — the shelves' products, keyed by product id (src/content/menu.js). */
   foods: {
-    omelette: foodOmelette,
-    tuna: foodTuna,
-    meal: foodMeal,
+    'club-caesar': foodClubCaesar,
+    'club-halloumi': foodClubHalloumi,
+    'club-shakshuka': foodClubShakshuka,
+    'club-tuna': foodClubTuna,
+    'croissant-lotus': foodCroissantLotus,
+    'croissant-pistachio': foodCroissantPistachio,
+    'hummus-beiruti': foodHummusBeiruti,
+    'hummus-cilantro': foodHummusCilantro,
+    'hummus-classic': foodHummusClassic,
+    'hummus-foul': foodHummusFoul,
+    'jumbo-caesar': foodJumboCaesar,
+    'jumbo-shawarma': foodJumboShawarma,
+    'jumbo-turkey': foodJumboTurkey,
+    'labneh-olives': foodLabnehOlives,
+    'mini-falafel': foodMiniFalafel,
+    'mini-mortadella': foodMiniMortadella,
+    'multigrain-turkey': foodMultigrainTurkey,
+    'salad-quinoa': foodSaladQuinoa,
   },
 
   /** «كيو كوفي» — the menu board's drinks, keyed by drink id, and the gatherings box. */

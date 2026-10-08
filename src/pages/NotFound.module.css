@@ -1,8 +1,9 @@
 /*
- * 404: on the hero's teal, the headline and the way back — and, beside it, what a shop writes
- * on an empty shelf: «نفد», circled in red pen.
+ * 404: on the page's white wall, under the shop's awning, the headline and the way back — and,
+ * beside it, what a shop writes on an empty shelf: «نفد», circled in red pen.
  */
 
+/* Relative: the awning hangs from the bar over its top (Edge.jsx). */
 .page {
   --focus-ring: var(--night);
   --button-bg: var(--night);
@@ -11,11 +12,11 @@
   display: grid;
   align-content: center;
   gap: clamp(3rem, 6vw, 5rem);
+  position: relative;
   min-block-size: 100svh;
   padding: calc(var(--header-height) + clamp(2.5rem, 7vh, 5rem)) var(--gutter)
     clamp(2.5rem, 5vw, 4rem);
   overflow: hidden;
-  background: var(--brand);
   color: var(--night);
 }
 
@@ -66,7 +67,7 @@
   }
 }
 
-/* As tall as the store button beside it (DownloadLink.module.css → .md), in the other colour. */
+/* As tall as the store button beside it (DownloadLink.module.css → .md), in outline. */
 .home {
   display: inline-flex;
   align-items: center;
@@ -74,7 +75,7 @@
   min-block-size: clamp(3.25rem, 3.5vw, 4rem);
   padding-inline: clamp(1.5rem, 2.2vw, 2.5rem);
   border-radius: var(--radius-control);
-  background: var(--white);
+  box-shadow: inset 0 0 0 2px var(--night);
   font-size: var(--text-cta);
   font-weight: 800;
   color: var(--night);
@@ -128,7 +129,7 @@
   inset: -0.2em -0.3em;
   inline-size: calc(100% + 0.6em);
   block-size: calc(100% + 0.4em);
-  color: #b3261e; /* red pen on the teal */
+  color: #b3261e; /* the red pen */
 }
 
 .name {

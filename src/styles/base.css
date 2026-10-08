@@ -32,8 +32,11 @@ body {
   font-size: var(--text-body);
   font-weight: 500; /* the lightest weight the site loads (fonts.css) */
   line-height: var(--leading-body);
-  color: var(--text);
-  background: var(--white);
+  color: var(--night);
+  /* The one wall: the whole page is painted it (tokens.css → --page-wall). */
+  background: var(--page-wall);
+  /* The print's second ink, a hair off each title: a pale aqua, the app's own. */
+  --misprint: #c4e9ef;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -65,9 +68,8 @@ h2 {
   font-weight: 900;
 }
 
-/* A title is printed in two inks, and the second is a hair off: a ghost of the wall's second
-   colour sits just beside each letter, as a riso print or a flyer's cheap press leaves it. Each
-   section names its own (--misprint). */
+/* A title is printed in two inks, and the second is a hair off: a ghost of aqua sits just beside
+   each letter, as a riso print or a flyer's cheap press leaves it (body → --misprint). */
 h1,
 h2 {
   text-shadow: 0.035em 0.03em 0 var(--misprint, transparent);

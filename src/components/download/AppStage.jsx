@@ -6,8 +6,8 @@ import styles from './AppStage.module.css';
 
 /**
  * The app's home screen, in its phone, standing at the end of the download section — set a
- * little askew, as a phone is held out to someone — and reaching down past the teal into the
- * footer's night (Download.module.css → .floor).
+ * little askew, as a phone is held out to someone — on its own shadow, like a print on the
+ * page's white wall.
  */
 export function AppStage({ className }) {
   const { t } = useLocale();

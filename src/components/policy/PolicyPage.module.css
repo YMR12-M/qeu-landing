@@ -1,16 +1,18 @@
 /*
- * The privacy policy: its title on Qeu's teal, as the home page opens, then the document on the
- * white of the page — the letterhead, the policy's own sections, the round stamp at the end —
- * with its contents beside it, ticked in pen as they are read. No sheet and no card: what the
- * policy lists is told apart by space and weight, and set on a pale wash where it stands apart.
+ * The privacy policy: its title under the shop's awning, as the home page opens, then the
+ * document — the letterhead, the policy's own sections, the round stamp at the end — with its
+ * contents beside it, ticked in pen as they are read. All of it on the page's one white wall:
+ * no sheet and no card, what the policy lists is told apart by space and weight, and set on a
+ * pale wash where it stands apart.
  */
 
 /* ── The cover ───────────────────────────────────────────────────── */
 
+/* Relative: the awning hangs from the bar over its top (Edge.jsx). */
 .cover {
   --focus-ring: var(--night);
-  padding-block: calc(var(--header-height) + clamp(2.5rem, 5vw, 4.5rem)) clamp(2.5rem, 5vw, 4.5rem);
-  background: var(--brand);
+  position: relative;
+  padding-block: calc(var(--header-height) + clamp(2.5rem, 5vw, 4.5rem)) clamp(1rem, 2.5vw, 2.25rem);
   color: var(--night);
 }
 
@@ -72,7 +74,7 @@
      (phones would zoom out to fit it). Clip, not hidden, so the contents still stick. */
   overflow-x: clip;
   padding-block: clamp(2.5rem, 5vw, 5rem) var(--section-space);
-  background: var(--white);
+  background: var(--page-wall);
 }
 
 .layout {

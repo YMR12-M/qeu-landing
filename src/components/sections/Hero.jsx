@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useRef } from 'react';
 import qrCode from '../../assets/qr/download-qr.svg';
 import { media } from '../../content/media.js';
+import { useMedia } from '../../hooks/useMedia.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { interpolate } from '../../lib/format.js';
@@ -17,23 +18,33 @@ const SETS = 4;
 const STOCK = Array.from({ length: SETS }, () => media.shelf).flat();
 
 /**
- * The hero: a wall of Qeu's own teal with the headline set on it as a poster sets it — large,
- * heavy, in night ink — and its promise, «وأسعار ما تلاقيها إلا فيه», marked in the deal yellow
- * as with a highlighter pen. At its end the app's price, circled by the same pen: free.
+ * The hero, on the page's white wall, laid out as the client drew it — the words top left, the
+ * app top right, the store's screenshots along the bottom, a product in the corner — with nothing
+ * behind any of it: every picture floats on the wall, whole.
  *
- * Under it the app's six Google Play screenshots glide by in the store's order, each with its
- * yellow offer flag: all deals, from one end of the row to the other. The row stays within the
- * page's margins — the screens fade in at one edge of the content and out at the other, so
- * none is ever seen cut in half. The headline has no entrance animation and is one block of
- * text (lines broken with <br>), so it — not a screen — is the page's Largest Contentful
- * Paint, painted with the first frame. The motion stops while the hero is out of view,
- * and is off entirely under reduced motion.
+ * - The words: the headline — large, heavy, in night ink — with its promise, «وأسعار ما تلاقيها
+ *   إلا فيه», marked in the deal yellow as with a highlighter pen; under it the line that says
+ *   what the app is for (groceries, meals and coffee, brought to the door), the way in (the
+ *   download button, and the way to how it works) and, for someone reading on a computer, the
+ *   download code, stuck on like a flyer's tear-off tab.
+ * - The app: two of its screens, and its price — free — circled in pen across the gap between
+ *   them and the words.
+ * - The store's six Google Play screenshots, gliding by in the store's order, each leaning its own
+ *   way; they fade in at one end of the strip and out at the other, so none is ever seen cut.
+ *
+ * The headline has no entrance animation and is one block of text (lines broken with <br>), so on
+ * a phone — where it is the biggest thing on the first screen — it is the page's Largest
+ * Contentful Paint, painted with the first frame. On a computer the places are one picture, scaled
+ * with the page (Hero.module.css); on a tablet two rows; on a phone stacked, the words first. The
+ * glide stops while the hero is out of view, and is off entirely under reduced motion.
  */
 export function Hero() {
-  const { t, figures } = useLocale();
+  const { t, figures, sectionHref } = useLocale();
   const { hero } = t;
   const { shelf } = hero;
   const sectionRef = useRef(null);
+  // The picture laid out as one (Hero.module.css): the words have a column only so wide there.
+  const onePicture = useMedia('(min-width: 80em)');
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -48,73 +59,110 @@ export function Hero() {
     <section ref={sectionRef} id="hero" className={styles.hero} aria-labelledby="hero-title">
       {/* The shop's awning, hanging from the bar. */}
       <Edge kind="awning" />
-      <div className={cx('container', styles.head)}>
-        <h1 id="hero-title" className={styles.title}>
-          {hero.titleLines.map((line) => (
-            <Fragment key={line}>
-              {line} <br />
-            </Fragment>
-          ))}
-          <span className={styles.accent}>{hero.titleAccent}</span>
-        </h1>
+      <div className="container">
+        <div className={styles.bento}>
+          {/* The words. */}
+          <div className={cx(styles.piece, styles.words)}>
+            <div className={styles.copy}>
+              <h1 id="hero-title" className={styles.title}>
+                {hero.titleLines.map((line) => (
+                  <Fragment key={line}>
+                    {line} <br />
+                  </Fragment>
+                ))}
+                <span className={styles.accent}>{hero.titleAccent}</span>
+              </h1>
 
-        <div className={styles.actions}>
-          <DownloadLink placement="hero" labels={hero.cta}>
-            {hero.cta.default}
-          </DownloadLink>
-          <p className={styles.note}>{interpolate(hero.note, figures)}</p>
-        </div>
+              <div className={styles.row}>
+                {/* The tear-off tab a flyer carries at its foot, for someone reading on a
+                    computer: the download code, ready for a phone's camera. (On a phone the
+                    button beside it is the way.) */}
+                <figure className={styles.code}>
+                  <img
+                    className={styles.codeImage}
+                    src={qrCode}
+                    width="96"
+                    height="96"
+                    alt={t.qr.alt}
+                    decoding="async"
+                  />
+                  <figcaption className={styles.codeCaption}>{hero.scan}</figcaption>
+                </figure>
 
-        {/* The tear-off coupon a flyer carries at its foot, for someone reading on a computer: the
-            download code, ready for a phone's camera. (On a phone the button above is the way.) */}
-        <div className={styles.coupon}>
-          <div className={styles.couponCopy}>
-            <p className={styles.couponTitle}>{t.qr.title}</p>
-            <p className={styles.couponText}>{t.qr.text}</p>
-          </div>
-          <img
-            className={styles.couponCode}
-            src={qrCode}
-            width="96"
-            height="96"
-            alt={t.qr.alt}
-            decoding="async"
-          />
-        </div>
-
-        {/* The app's own price, as a flyer prints it — and circled. */}
-        <p className={styles.price} aria-hidden="true">
-          <span className={styles.priceName}>{shelf.app}</span>
-          <span className={styles.priceValue}>
-            {shelf.price}
-            <Scribble shape="circle" draw="load" delay={1100} className={styles.priceCircle} />
-          </span>
-        </p>
-      </div>
-
-      <div className={styles.floor} data-wall aria-hidden="true" />
-
-      <div className={styles.stock}>
-        <div className={styles.aisle} aria-hidden="true">
-          {/* data-hero-drift: without JavaScript the row doesn't need to move, so no-js.css stops it. */}
-          <div className={styles.track} style={{ '--sets': SETS }} data-hero-drift>
-            {STOCK.map(({ id, image }, index) => (
-              <div key={index} className={styles.facing}>
-                <Picture
-                  image={image}
-                  alt=""
-                  sizes="(min-width: 114em) 11.25rem, (min-width: 64em) 9.75vw, (min-width: 33em) 7.5rem, 22.5vw"
-                  loading="eager"
-                  fetchPriority="low"
-                  className={styles.product}
-                />
-                <span className={styles.label}>
-                  <span className={styles.flag}>{shelf.offer}</span>
-                  <span className={styles.name}>{shelf.labels[id]}</span>
-                </span>
+                <div className={styles.say}>
+                  <p className={styles.lead}>{hero.lead}</p>
+                  <div className={styles.actions}>
+                    {/* The button names the visitor's store («حمّله مجاناً من Google Play») on a phone
+                        and a tablet; in the one picture it keeps its short name, so that, once the
+                        page runs, a longer one never wraps the second button under it (an iPad with
+                        a trackpad is a computer here, and is told apart only after hydration). */}
+                    <DownloadLink
+                      placement="hero"
+                      labels={onePicture ? undefined : hero.cta}
+                      className={styles.button}
+                    >
+                      {hero.cta.default}
+                    </DownloadLink>
+                    <a className={cx(styles.button, styles.more)} href={sectionHref('inside')}>
+                      <span className={styles.moreText}>{hero.explore}</span>
+                    </a>
+                  </div>
+                  <p className={styles.note}>{interpolate(hero.note, figures)}</p>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
+
+          {/* The app: two of its screens. */}
+          <div className={cx(styles.piece, styles.phones)} aria-hidden="true">
+            {/* The second screen is only on a computer: lazy, so a phone, which hides it, never
+                fetches it. */}
+            <Picture
+              image={media.why.search}
+              alt=""
+              sizes="21vw"
+              fetchPriority="low"
+              className={cx(styles.phone, styles.phoneBack)}
+            />
+            <Picture
+              image={media.why.deals}
+              alt=""
+              sizes="(min-width: 80em) 21vw, (min-width: 48em) 22vw, 28vw"
+              loading="eager"
+              fetchPriority="low"
+              className={cx(styles.phone, styles.phoneFront)}
+            />
+          </div>
+
+          {/* The store's screenshots, gliding by. */}
+          <div className={cx(styles.piece, styles.strip)} aria-hidden="true">
+            <div className={styles.aisle}>
+              {/* data-hero-drift: without JavaScript the row doesn't need to move, so no-js.css stops it. */}
+              <div className={styles.track} style={{ '--sets': SETS }} data-hero-drift>
+                {STOCK.map(({ image }, index) => (
+                  <div key={index} className={styles.facing}>
+                    <Picture
+                      image={image}
+                      alt=""
+                      sizes="(min-width: 114em) 11.25rem, (min-width: 80em) 8vw, (min-width: 33em) 7.5rem, 22.5vw"
+                      loading="eager"
+                      fetchPriority="low"
+                      className={styles.screen}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* The app's own price, as a flyer prints it — and circled. */}
+          <p className={styles.price} aria-hidden="true">
+            <span className={styles.priceName}>{shelf.app}</span>
+            <span className={styles.priceValue}>
+              {shelf.price}
+              <Scribble shape="circle" draw="load" delay={1100} className={styles.priceCircle} />
+            </span>
+          </p>
         </div>
       </div>
     </section>
