@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { ANIMATE_ON_SCROLL } from '../lib/motion.js';
 
 /**
  * Marks an element that starts below the fold `data-reveal="pending"`, then `"shown"` once it
@@ -12,7 +13,8 @@ import { useEffect } from 'react';
 export function useScrollReveal(ref, rootMargin = '0px 0px -8% 0px') {
   useEffect(() => {
     const element = ref.current;
-    if (!element || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!ANIMATE_ON_SCROLL || !element) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (element.getBoundingClientRect().top < window.innerHeight) return;
 
     element.dataset.reveal = 'pending';

@@ -4,6 +4,7 @@ import { MENU } from '../../content/menu.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { formatDate, interpolate } from '../../lib/format.js';
+import { ANIMATE_ON_SCROLL } from '../../lib/motion.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
 import { IcedCup } from '../illustrations/IcedCup.jsx';
 import { Picture } from '../ui/Picture.jsx';
@@ -40,7 +41,12 @@ export function CoffeePanel() {
 
   useEffect(() => {
     const bar = barRef.current;
-    if (reducedMotion() || bar.getBoundingClientRect().top < window.innerHeight) return;
+    if (
+      !ANIMATE_ON_SCROLL ||
+      reducedMotion() ||
+      bar.getBoundingClientRect().top < window.innerHeight
+    )
+      return;
 
     bar.dataset.pour = 'waiting';
     const observer = new IntersectionObserver(

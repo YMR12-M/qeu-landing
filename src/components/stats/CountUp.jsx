@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { cx } from '../../lib/cx.js';
+import { ANIMATE_ON_SCROLL } from '../../lib/motion.js';
 import styles from './CountUp.module.css';
 
 const DURATION = 1800;
@@ -20,7 +21,8 @@ export function CountUp({ value, format, className }) {
 
   useEffect(() => {
     const element = ref.current;
-    if (!element || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!ANIMATE_ON_SCROLL || !element) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     let armed = false;
     let frame = 0;

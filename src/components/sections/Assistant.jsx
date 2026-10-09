@@ -3,6 +3,7 @@ import { ASSISTANT_CHAT as chat } from '../../content/assistant-chat.js';
 import { media } from '../../content/media.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
+import { ANIMATE_ON_SCROLL } from '../../lib/motion.js';
 import { DownloadLink } from '../download/DownloadLink.jsx';
 import {
   ArrowUp,
@@ -159,7 +160,12 @@ export function Assistant() {
   useEffect(() => {
     const section = sectionRef.current;
     const phone = phoneRef.current;
-    if (reducedMotion() || phone.getBoundingClientRect().top < window.innerHeight) return;
+    if (
+      !ANIMATE_ON_SCROLL ||
+      reducedMotion() ||
+      phone.getBoundingClientRect().top < window.innerHeight
+    )
+      return;
 
     section.dataset.demo = 'ready';
     const observer = new IntersectionObserver(
