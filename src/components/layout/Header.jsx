@@ -11,10 +11,10 @@ import styles from './Header.module.css';
  * the same colour as everything it runs over (tokens.css → --page-wall), so nothing separates it
  * from the page.
  *
- * On a computer it is always open, at one size: the wordmark, the sections (a loop of pen
- * glides round the one being read), the language, and the store button — which opens a card with
+ * On a computer it is always open, at one size: the wordmark, the sections (a stroke of yellow
+ * marker glides under the one being read), the language, and the store button — which opens a card with
  * the download QR code and both stores (DownloadCard). On phones and tablets it names the section
- * being read, and how far down the page it is («3 من 7»); that name opens the sections.
+ * being read, on the yellow marker; that name opens the sections.
  *
  * `sections` are the page's own sections, for the name and the list — the home page's by
  * default; the privacy policy passes its contents. The open bar always links to the home

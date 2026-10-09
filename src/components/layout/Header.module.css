@@ -5,7 +5,6 @@
 
 .header {
   --ink: var(--night);
-  --accent: var(--night); /* the pen loop round the section being read */
   --button-bg: var(--night);
   --button-fg: var(--white);
   --button-hover: var(--deep);
@@ -54,7 +53,7 @@
 
 @media (min-width: 64em) {
   .wordmark {
-    inline-size: 3.625rem;
+    inline-size: 4.5rem;
   }
 }
 
@@ -68,31 +67,30 @@
   position: relative;
 }
 
-/* The mark under the section being read. The end moving towards the new link sets off first,
-   the other follows a beat later: it stretches across, then settles. */
+/* The mark under the section being read: a stroke of the yellow marker laid on the lower half of
+   its name, a little crooked. The end moving towards the new link sets off first, the other
+   follows a beat later: it stretches across, then settles. */
 .mark {
   position: absolute;
-  inset-block-start: 50%;
+  inset-block-start: calc(50% - 0.4rem);
   left: calc(var(--mark-left, 0px) - 0.5rem);
   right: calc(var(--mark-right, 100%) - 0.5rem);
-  block-size: 2.75rem;
-  translate: 0 -50%;
-  overflow: visible;
+  /* An <svg> is not stretched between its two sides: its width is said. */
+  inline-size: calc(100% - (var(--mark-left, 0px) - 0.5rem) - (var(--mark-right, 100%) - 0.5rem));
+  block-size: 1.2rem;
+  border-radius: 0.4rem 0.15rem 0.45rem 0.12rem / 0.2rem 0.4rem 0.15rem 0.3rem;
+  background: var(--star);
+  rotate: -1.2deg;
   opacity: 0;
   transition:
     left 700ms var(--ease-out),
     right 700ms var(--ease-out),
-    opacity var(--duration-base) ease,
-    color var(--duration-base) ease;
+    opacity var(--duration-base) ease;
 }
 
-/* The pen's loop: one stroke, a little uneven, as drawn round a word on a flyer. */
+/* The loop it replaced is not drawn. */
 .mark path {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 2px;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
+  display: none;
 }
 
 .track[data-moving='right'] .mark {
@@ -121,15 +119,15 @@
   list-style: none;
 }
 
-/* Every link in one weight, the one being read circled in pen: bolding it would widen
+/* Every link in one weight, the one being read on the yellow marker: bolding it would widen
    it, and move its neighbours every time the reader crossed into a section. */
 .link {
   position: relative;
   display: inline-flex;
   align-items: center;
   min-block-size: var(--header-height);
-  font-size: var(--text-nav);
-  font-weight: 700;
+  font-size: clamp(1.0625rem, 1.5vw, 1.5rem);
+  font-weight: 900;
   line-height: 1.4;
   white-space: nowrap;
   color: var(--ink);
@@ -162,14 +160,12 @@
 }
 
 /* The store button, as a sign-painter hangs it: a little crooked, a yellow shadow set off to one
-   side (phones and tablets, where the bar has the room to carry it). */
-@media (max-width: 63.99em) {
-  a.download,
-  .download > button {
-    rotate: -2deg;
-    box-shadow: 0.18rem 0.2rem 0 var(--star);
-    font-weight: 900;
-  }
+   side. On a computer it is the button that tilts, not the card that opens from it. */
+a.download,
+.download > button {
+  rotate: -2deg;
+  box-shadow: 0.18rem 0.2rem 0 var(--star);
+  font-weight: 900;
 }
 
 .now {

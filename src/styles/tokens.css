@@ -109,6 +109,6 @@
 @media (min-width: 64em) {
   :root {
     --gutter: max(clamp(3rem, 6.5vw, 7.5rem), var(--safe-inline));
-    --header-height: 4.125rem;
+    --header-height: 5rem;
   }
 }
