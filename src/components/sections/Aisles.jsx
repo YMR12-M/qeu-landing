@@ -14,8 +14,8 @@ import styles from './Aisles.module.css';
 const AT_LEAST = Math.floor(CATEGORY_COUNT / 10) * 10;
 
 // A category stands about a quarter to a third of the column wide on a computer and a tablet, and
-// a little over a third of the screen on a phone, where they are swiped.
-const PRODUCT_SIZES = '(min-width: 64em) 15rem, (min-width: 48em) 24vw, 34vw';
+// a little under a third of the screen on a phone, where they are laid out three to a row.
+const PRODUCT_SIZES = '(min-width: 64em) 15rem, (min-width: 48em) 24vw, 30vw';
 
 // Behind the categories, the chosen department's name is set on one line, as wide as the products'
 // column. CSS can't fit type to a width by itself, so here is how many ems wide each name is in
@@ -71,6 +71,19 @@ function layPile(count) {
   }));
 }
 
+// On a phone the packs are gathered close in staggered rows — 3, 2, 3 (or 2, 3, 2 for seven) — on
+// a grid of six columns, each pack two wide: a row of two starts a column in, so it sits between
+// the packs of the rows above and below it. Returns [column, row] (1-based) for the pack at `index`.
+function gatherPack(count, index) {
+  const rows = count === 7 ? [2, 3, 2] : [3, 2, 3];
+  let left = index;
+  for (let row = 0; row < rows.length; row += 1) {
+    if (left < rows[row]) return [(rows[row] === 3 ? 1 : 2) + left * 2, row + 1];
+    left -= rows[row];
+  }
+  return [1, rows.length];
+}
+
 const PILES = Object.fromEntries(
   DEPARTMENTS.map((department) => [department.id, layPile(department.categories.length)]),
 );
@@ -85,6 +98,10 @@ const PILES = Object.fromEntries(
  * behind them the department's name, painted on the wall in a pale aqua with a hand-painted edge:
  * choose another and the name changes with the products. Under them, the way to that aisle in the
  * app.
+ *
+ * On a phone the directory gives way to the aisle's sign — its icon and name painted large, the
+ * aisles before and after it written beside it in pen, each a tap away — and the categories are
+ * gathered close in staggered rows, as on a computer.
  *
  * The directory is a radio group, so choosing works with a keyboard and a screen reader like
  * any form, and without JavaScript: the stylesheet shows the checked aisle's categories
@@ -144,6 +161,7 @@ export function Aisles() {
             {DEPARTMENTS.map((department, index) => (
               <label key={department.id} className={styles.line} style={{ '--i': index }}>
                 <input
+                  id={`aisle-${department.id}`}
                   className={styles.radio}
                   type="radio"
                   name="aisle"
@@ -172,6 +190,41 @@ export function Aisles() {
           </div>
         </fieldset>
 
+        {/* Phones: the chosen aisle's sign, in place of the directory — its icon and name painted
+            large, and the aisles either side of it written in pen with an arrow, each a tap to go
+            there (the directory's radios, which are still there for a keyboard and a screen
+            reader, are what is checked). */}
+        <div className={styles.signs} aria-hidden="true">
+          {DEPARTMENTS.map((department, index) => {
+            const before = DEPARTMENTS[index - 1];
+            const after = DEPARTMENTS[index + 1];
+            const neighbour = (other, side) =>
+              other ? (
+                <label htmlFor={`aisle-${other.id}`} className={cx(styles.neighbour, styles[side])}>
+                  <Scribble shape="arrow" draw="load" className={styles.pen} />
+                  <span>{aisles.departments[other.id].name}</span>
+                </label>
+              ) : (
+                <span />
+              );
+            return (
+              <div key={department.id} className={styles.sign} data-aisle={department.id}>
+                {neighbour(before, 'before')}
+                <p className={styles.here}>
+                  <Picture
+                    image={media.departmentIcons[department.id]}
+                    alt=""
+                    sizes="3.5rem"
+                    className={styles.signIcon}
+                  />
+                  <span className={styles.signName}>{aisles.departments[department.id].name}</span>
+                </p>
+                {neighbour(after, 'after')}
+              </div>
+            );
+          })}
+        </div>
+
         {/* The chosen department's categories: one set per department, the checked one shown,
             its name painted on the wall behind them. */}
         <div className={styles.products}>
@@ -195,12 +248,20 @@ export function Aisles() {
                 <ul className={styles.items} role="list">
                   {department.categories.map((category, index) => {
                     const { row, x, width, lean } = PILES[department.id][index];
+                    const [column, line] = gatherPack(department.categories.length, index);
                     return (
                       <li
                         key={category}
                         className={styles.item}
                         data-row={row}
-                        style={{ '--j': index, '--x': x, '--w': width, '--lean': `${lean}deg` }}
+                        style={{
+                          '--j': index,
+                          '--x': x,
+                          '--w': width,
+                          '--lean': `${lean}deg`,
+                          '--col': column,
+                          '--line': line,
+                        }}
                       >
                         <Picture
                           image={media.departments[department.id][category]}

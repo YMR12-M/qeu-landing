@@ -5,7 +5,6 @@ import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
 import { WithBrand } from '../brand/WithBrand.jsx';
 import { Picture } from '../ui/Picture.jsx';
-import { Scribble } from '../ui/Scribble.jsx';
 import styles from './WhyQeu.module.css';
 
 // A promise whose first word runs longer than this is set a size smaller («اخترناها لك»).
@@ -19,8 +18,9 @@ const isLong = (sticker) => sticker.main.length > 5 || undefined;
  * Nothing is hidden behind a scroll, a tab or a click: it is a list of four, read in order, and
  * seen at a glance.
  *
- * On a tablet it breaks into two rows of two; on a phone it is one row the reader swipes along,
- * the next screen showing at the edge, and a note in pen under it saying so.
+ * On a tablet it breaks into two rows of two; on a phone it is a list read down the page, one
+ * benefit a row — its screen on one side, its sign and its words on the other, the sides
+ * alternating — so nothing is hidden behind a swipe.
  *
  * The screens are put down one after another as the row comes into view (the pre-rendered page,
  * reduced motion, or a row already on screen shows them in place).
@@ -62,12 +62,6 @@ export function WhyQeu() {
             </li>
           ))}
         </ol>
-
-        {/* Phones: the row is swiped, and this says so. */}
-        <p className={styles.swipe} aria-hidden="true">
-          {why.swipe}
-          <Scribble shape="arrow" delay={900} className={styles.swipeArrow} />
-        </p>
       </div>
     </section>
   );

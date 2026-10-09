@@ -6,9 +6,10 @@
  * pack's line in marker. No grid of cards, no sticker on every pack.
  */
 
-/* Phones: the heading, its line and the stamp, the piles — swiped along — then the way to them.
-   Tablets and computers: the heading, and at its end the line and the stamp; under them the
-   piles across the whole page (side by side on a computer). */
+/* Phones: the heading, its line and the stamp, the three shelves' names, the chosen pile and its
+   sign, then the way to them. Tablets and computers: the heading, and at its end the line and
+   the stamp; under them the piles across the whole page (side by side on a computer, swiped
+   along on a tablet). */
 .layout {
   --pen-red: #c8281e;
   --kraft: #e7d0a4; /* the sign's cardboard */
@@ -16,8 +17,12 @@
   --marker-red: #a51d17; /* prices written on the cardboard: 5:1 on it */
   display: grid;
   grid-template-columns: minmax(0, 1fr); /* the swiped piles must not widen the page */
-  grid-template-areas: 'intro' 'aside' 'piles' 'more';
+  grid-template-areas: 'intro' 'aside' 'chips' 'piles' 'more';
   gap: clamp(2rem, 3.5vw, 3.25rem);
+}
+
+.chips {
+  grid-area: chips;
 }
 
 .intro {
@@ -160,10 +165,79 @@
   color: var(--pen-red);
 }
 
+/* ── The shelves' names (phones) ────────────────────────────────── */
+
+/* Three short names in a row, set as the kitchen's own switch is: the open one in full ink over a
+   yellow line, the others set back. One pile at a time (see the phone block under the piles). */
+.chips {
+  display: none;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 3rem; /* a thumb's height */
+  color: #6f8f96;
+  font-size: 1.1875rem;
+  font-weight: 900;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--duration-base) ease;
+}
+
+.chipRadio {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  appearance: none;
+}
+
+.chipName {
+  text-box: var(--label-box);
+}
+
+.chip::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: 0.18em;
+  border-radius: var(--pill);
+  background: var(--star);
+  scale: 0 1;
+  transform-origin: right;
+  transition: scale var(--duration-base) var(--ease-out);
+}
+
+.chip:dir(ltr)::after {
+  transform-origin: left;
+}
+
+.chip:has(:checked) {
+  color: var(--night);
+}
+
+.chip:has(:checked)::after {
+  scale: 1 1;
+}
+
+.chip:has(:focus-visible) .chipName {
+  text-decoration: underline 2px var(--focus-ring);
+  text-underline-offset: 0.3em;
+}
+
 /* ── The piles ──────────────────────────────────────────────────── */
 
-/* Side by side on a computer, each standing on the same floor; swiped along on a phone and a
-   tablet, the next pile showing at the edge. */
+/* Side by side on a computer, each standing on the same floor; swiped along on a tablet, the next
+   pile showing at the edge; on a phone, one at a time (below). */
 .piles {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -189,6 +263,66 @@
 
   .piles::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* Phones: the three piles are one at a time — the chosen shelf's, as wide as the page allows — and
+   the names above them (a radio group) say which. Where :has() isn't known, the names are left
+   out and all three piles are stacked, one under another. */
+@media (max-width: 47.99em) {
+  .piles {
+    display: block;
+    margin-inline: 0;
+    padding: 1rem 0 0.75rem;
+    overflow: visible;
+  }
+
+  .stall {
+    inline-size: min(100%, 21rem);
+    margin-inline: auto;
+  }
+
+  .stall + .stall {
+    margin-block-start: 2.5rem;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 clamp(1.25rem, 6vw, 2rem);
+    margin-block-end: -0.75rem;
+  }
+
+  @supports selector(:has(*)) {
+    .stall + .stall {
+      margin-block-start: 0;
+    }
+
+    .layout:has([value='clubs']:checked) .stall:not([data-shelf='clubs']),
+    .layout:has([value='minis']:checked) .stall:not([data-shelf='minis']),
+    .layout:has([value='dips']:checked) .stall:not([data-shelf='dips']) {
+      display: none;
+    }
+  }
+
+  @supports not selector(:has(*)) {
+    .chips {
+      display: none;
+    }
+  }
+
+  /* A shelf that opens is put out again: its packs drop in. */
+  @media (prefers-reduced-motion: no-preference) {
+    .stall {
+      animation: shelf-in var(--duration-base) var(--ease-out);
+    }
+  }
+}
+
+@keyframes shelf-in {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
   }
 }
 
@@ -275,7 +409,8 @@
 .board {
   position: relative;
   isolation: isolate;
-  padding: clamp(1.375rem, 1.7vw, 1.75rem) clamp(1rem, 1.4vw, 1.5rem) clamp(0.875rem, 1.1vw, 1.25rem);
+  padding: clamp(1.375rem, 1.7vw, 1.75rem) clamp(1rem, 1.4vw, 1.5rem)
+    clamp(0.875rem, 1.1vw, 1.25rem);
 }
 
 .board::before,

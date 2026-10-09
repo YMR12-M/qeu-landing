@@ -530,49 +530,201 @@
   }
 }
 
-/* Phones: the two rows are swiped, the next categories showing at the edge. */
+/* Phones: the categories gathered close, as on a computer — staggered rows of 3, 2, 3 (2, 3, 2 for
+   seven) on a grid of six columns, each pack two wide, a row of two starting a column in so it
+   sits between the packs above and below it (Aisles.jsx → gatherPack). Every name is under its
+   pack, on a pale floor, over the department's name painted on the wall. */
 @media (max-width: 47.99em) {
-  .items {
-    display: grid;
-    grid-template-rows: repeat(2, auto);
-    grid-auto-columns: 38%;
-    grid-auto-flow: column;
-    gap: 1.5rem 0.5rem;
-    margin-inline: calc(var(--gutter) * -1);
-    padding-inline: var(--gutter);
-    /* The first category's snap position is where the padding already has it, so the row never
-       scrolls by itself as the page loads: a scroll then — even this one, by a few pixels — ends
-       Chrome's Largest Contentful Paint before the headline is painted, and phones would report
-       none at all. */
-    scroll-padding-inline: var(--gutter);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
+  .products::before {
+    content: '';
+    position: absolute;
+    inset-inline: -4%;
+    inset-block: 6% -2%;
+    background: radial-gradient(
+      ellipse 50% 50% at 50% 50%,
+      #e0f1f5 0,
+      #e0f1f5 50%,
+      rgb(224 241 245 / 0) 100%
+    );
+    pointer-events: none;
   }
 
-  .items::-webkit-scrollbar {
-    display: none;
+  .items {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    column-gap: 0.25rem;
+    row-gap: 0.25rem;
+    padding-block-start: 4cqi;
   }
 
   .item {
-    display: grid;
-    grid-template-rows: auto auto;
-    justify-items: center;
-    align-content: end;
-    scroll-snap-align: start;
+    grid-column: var(--col) / span 2;
+    grid-row: var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
   }
 
   .product {
-    inline-size: auto;
-    max-inline-size: 100%;
-    block-size: 7.5rem;
+    inline-size: 100%;
+    max-block-size: 7.4rem;
     object-fit: contain;
+    rotate: var(--lean);
+    transform-origin: 50% 100%;
   }
 
   .label {
-    margin-block-start: 0.5rem;
+    margin-block-start: 0.4rem;
+    min-block-size: 2.5em;
     font-size: 0.8125rem;
+  }
+}
+
+/* ── Phones: the chosen aisle's sign ────────────────────────────── */
+
+/* In place of the directory: the chosen aisle's icon and name painted large, as the page's own
+   signs are (a night shadow behind yellow letters), and the aisle before it and the one after it
+   written beside it in pen, each a tap away. The directory's radios stay for a keyboard and a
+   screen reader, out of sight. */
+.signs {
+  display: none;
+  grid-area: sign;
+}
+
+.sign {
+  display: none;
+}
+
+@media (max-width: 47.99em) {
+  .layout {
+    position: relative;
+    grid-template-areas: 'intro' 'sign' 'products' 'foot';
+  }
+
+  .directory {
+    grid-area: auto;
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .signs {
+    display: block;
+  }
+
+  .layout:has([value='groceries']:checked) .sign[data-aisle='groceries'],
+  .layout:has([value='fresh']:checked) .sign[data-aisle='fresh'],
+  .layout:has([value='drinks']:checked) .sign[data-aisle='drinks'],
+  .layout:has([value='home']:checked) .sign[data-aisle='home'],
+  .layout:has([value='care']:checked) .sign[data-aisle='care'],
+  .layout:has([value='tech']:checked) .sign[data-aisle='tech'] {
+    display: grid;
+  }
+
+  @supports not selector(:has(*)) {
+    .sign[data-aisle='groceries'] {
+      display: grid;
+    }
+  }
+
+  .sign {
+    grid-template-columns: 5rem minmax(0, 1fr) 5rem;
+    align-items: center;
+    column-gap: 0.25rem;
+  }
+
+  .here {
+    display: grid;
+    justify-items: center;
+    gap: 0.2rem;
+    text-align: center;
+  }
+
+  .signIcon {
+    inline-size: 3.4rem;
+    block-size: 3.4rem;
+    object-fit: contain;
+    rotate: -5deg;
+    filter: drop-shadow(0 0.45rem 0.35rem rgb(4 40 47 / 0.28));
+  }
+
+  .signName {
+    font-size: 2.55rem;
+    font-weight: 900;
+    line-height: 1.08;
+    color: var(--star);
+    text-shadow: 0.04em 0.035em 0 var(--night);
+    text-wrap: balance;
+    rotate: -1.5deg;
+  }
+
+  /* A neighbour: its name in pen, its arrow turned away from the sign, the whole of it a tap
+     (3rem tall at least). */
+  .neighbour {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 0.15rem;
+    min-block-size: 3rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 800;
+    line-height: 1.25;
+    text-align: center;
+    text-wrap: balance;
+    cursor: pointer;
+  }
+
+  .pen {
+    --pen: 2.4px;
+    inline-size: 2.1rem;
+    block-size: 1.45rem;
+    color: var(--night);
+    opacity: 0.85;
+  }
+
+  /* The arrow is drawn pointing towards the end of the line (the right, in Arabic): away from
+     the sign where the aisle is at the start, towards it where the aisle is at the end. */
+  .before .pen {
+    rotate: 12deg;
+  }
+
+  .before .pen:dir(ltr) {
+    scale: -1 1;
+  }
+
+  .after .pen {
+    rotate: -12deg;
+    scale: -1 1;
+  }
+
+  .after .pen:dir(ltr) {
+    scale: 1 1;
+  }
+
+  /* The keyboard's focus is on a radio nobody sees: the sign's name shows it, underlined. */
+  .layout:has(.radio:focus-visible) .signName {
+    text-decoration: underline 3px var(--night);
+    text-underline-offset: 0.2em;
+  }
+
+  /* A sign that appears is put up: it settles from a little above. */
+  @media (prefers-reduced-motion: no-preference) {
+    .sign {
+      animation: sign-in var(--duration-base) var(--ease-out);
+    }
+  }
+}
+
+@keyframes sign-in {
+  from {
+    opacity: 0;
+    translate: 0 -0.4rem;
   }
 }
 

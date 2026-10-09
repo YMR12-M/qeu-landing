@@ -42,8 +42,6 @@ const en = {
     ],
     download: 'Get Q',
     switchLocale: 'ع',
-    here: 'You’re here',
-    progress: '{n} of {total}',
     card: {
       title: 'Get Q on your phone',
       text: 'Scan the code with your phone’s camera — it opens your phone’s store.',
@@ -88,8 +86,6 @@ const en = {
   why: {
     title: 'Why Q?',
     lead: 'Because it puts the best deals and the lowest prices on one shelf.',
-    // Phones, under the row of four: it is swiped.
-    swipe: 'Swipe for the rest',
     items: [
       {
         id: 'deals',
@@ -258,6 +254,8 @@ const en = {
       minis: 'Minis & jumbos',
       dips: 'Dips & salads',
     },
+    // The same three, short enough to sit in a row on a phone, where one shelf shows at a time.
+    chips: { clubs: 'Clubs', minis: 'Minis & jumbos', dips: 'Dips & salads' },
     products: {
       'club-tuna': { name: 'Spicy tuna club with arugula', size: '1 piece' },
       'club-halloumi': { name: 'Halloumi club', size: '1 piece' },

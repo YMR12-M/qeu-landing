@@ -12,7 +12,7 @@ import { Scribble } from '../ui/Scribble.jsx';
 import styles from './Foods.module.css';
 
 // A pack is drawn at most about a third of its pile: a pile is a third of the page on a computer
-// and most of the screen on a phone, where the piles are swiped.
+// and most of the screen on a phone, where one pile is shown at a time.
 const PACK_SIZES = '(min-width: 64em) 10rem, (min-width: 48em) 7rem, 30vw';
 
 /**
@@ -73,7 +73,9 @@ const PILES = {
  * the sign, and pointing at a line lifts its pack out of the pile; a tap does the same on a
  * phone.
  *
- * On a computer the three piles stand side by side; on a phone they are swiped along. They are
+ * On a computer the three piles stand side by side; on a tablet they are swiped along; on a
+ * phone one is shown at a time, picked by three short names above them (a radio group, like the
+ * kitchen's own switch: it works without a script too). They are
  * stacked pack by pack, from the back of each pile to its top, as they come into view, and each
  * sign is leant on after its pile; the pre-rendered page — like reduced motion, or piles already
  * on screen — shows them in place.
@@ -126,6 +128,23 @@ export function FoodsPanel() {
         </div>
       </div>
 
+      {/* Phones only: the three piles are one at a time, and these are their names. */}
+      <fieldset className={styles.chips}>
+        <legend className="visually-hidden">{foods.shelvesLabel}</legend>
+        {MENU.foods.shelves.map((shelf, shelfIndex) => (
+          <label key={shelf.id} className={styles.chip}>
+            <input
+              className={styles.chipRadio}
+              type="radio"
+              name="foods-shelf"
+              value={shelf.id}
+              defaultChecked={shelfIndex === 0}
+            />
+            <span className={styles.chipName}>{foods.chips[shelf.id]}</span>
+          </label>
+        ))}
+      </fieldset>
+
       <div ref={pilesRef} className={styles.piles} role="group" aria-label={foods.shelvesLabel}>
         {MENU.foods.shelves.map((shelf, shelfIndex) => {
           const pile = PILES[shelf.id];
@@ -134,6 +153,7 @@ export function FoodsPanel() {
             <section
               key={shelf.id}
               className={styles.stall}
+              data-shelf={shelf.id}
               aria-labelledby={`foods-${shelf.id}`}
               style={{ '--pile': shelfIndex, '--count': pile.packs.length }}
             >

@@ -12,9 +12,7 @@
  */
 
 .hero {
-  /* A screenshot's height in the strip: on a phone, small enough that the headline stays the
-     largest thing on the first screen, and so the page's LCP, painted with the first frame —
-     also in English, whose headline has a line less than the Arabic one. */
+  /* A screenshot's height in the strip. */
   --product-h: clamp(8.5rem, 38vw, 12rem);
   --gap: clamp(0.875rem, 2.2vw, 1.75rem); /* between screens */
   --foot: clamp(1.25rem, 2.2vw, 2.5rem); /* under the pieces */
@@ -298,6 +296,107 @@
   box-shadow: 0 0.6rem 0.7rem -0.5rem rgb(4 40 47 / 0.6);
   rotate: var(--lean, 0deg);
   transform-origin: 50% 100%;
+}
+
+/* ── A phone: the words beside the app ───────────────────────────── */
+
+/* The words stand in a column on the reading side, the app's two screens beside them — large,
+   bleeding off the screen's edge, the second rising under the words and both fading into the wall
+   at the foot of the piece — and «مجاناً» painted over the first, as the page's signs are (yellow letters over a
+   night shadow). The strip glides under them. */
+@media (max-width: 47.99em) {
+  .bento {
+    grid-template-areas:
+      'hero'
+      'strip';
+  }
+
+  .words,
+  .phones,
+  .price {
+    grid-area: hero;
+  }
+
+  .words {
+    z-index: 2;
+    inline-size: 66%;
+    align-self: start;
+  }
+
+  .title {
+    font-size: clamp(1.625rem, 8.6vw, 2.1rem);
+    line-height: 1.18;
+  }
+
+  .lead {
+    font-size: 1.0625rem;
+    line-height: 1.45;
+  }
+
+  /* Only the sides are left open: a screen reaches off the page's edge, but is cut, and faded, at
+     the piece's foot. */
+  .phones {
+    min-block-size: 40rem;
+    clip-path: inset(0 -100vw);
+  }
+
+  /* The foot of the piece fades into the wall, so the second screen is never cut by a line. */
+  .phones::after {
+    content: '';
+    position: absolute;
+    inset-inline: -50vw;
+    inset-block-end: 0;
+    block-size: 9rem;
+    background: linear-gradient(transparent, var(--page-wall));
+    pointer-events: none;
+  }
+
+  .phone {
+    inline-size: min(16.5rem, 70vw);
+    inset-block-start: 7.5rem;
+  }
+
+  .phoneFront {
+    inset-inline-start: auto;
+    inset-inline-end: calc(var(--gutter) * -1 - 9.4rem);
+    rotate: calc(-6deg * var(--mirror));
+  }
+
+  /* The second screen rises under the words, on the reading side. */
+  .phoneBack {
+    inline-size: 12.5rem;
+    inset-inline-start: 0.25rem;
+    inset-block-start: 19rem;
+    rotate: calc(4deg * var(--mirror));
+  }
+
+  .price {
+    z-index: 3;
+    display: grid;
+    justify-items: center;
+    justify-self: end;
+    align-self: start;
+    margin-block-start: 1rem;
+    margin-inline-end: 0.5rem;
+    line-height: 0.95;
+    color: var(--star);
+    text-shadow: 0.04em 0.035em 0 var(--night);
+    rotate: calc(5deg * var(--mirror));
+  }
+
+  .priceName {
+    font-size: 1rem;
+    color: var(--night);
+    text-shadow: none;
+  }
+
+  .priceValue {
+    font-size: 3rem;
+  }
+
+  .priceCircle {
+    display: none;
+  }
 }
 
 /* ── A tablet: two rows ──────────────────────────────────────────── */

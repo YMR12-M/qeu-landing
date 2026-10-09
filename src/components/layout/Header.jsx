@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useActiveSection } from '../../hooks/useActiveSection.js';
 import { useLocale } from '../../i18n/useLocale.js';
-import { formatNumber, interpolate } from '../../lib/format.js';
 import { Logo } from '../brand/Logo.jsx';
 import { DownloadCard } from '../download/DownloadCard.jsx';
 import { ChevronDown, Globe } from '../ui/icons.jsx';
@@ -22,7 +21,7 @@ import styles from './Header.module.css';
  * page's sections, from any page.
  */
 export function Header({ sections }) {
-  const { t, locale, config, alternate, alternatePath, page, sectionHref } = useLocale();
+  const { t, config, alternate, alternatePath, page, sectionHref } = useLocale();
   const links = t.nav.items;
   const items = sections ?? links;
   const trackRef = useRef(null);
@@ -79,17 +78,9 @@ export function Header({ sections }) {
     menuRef.current.open = false;
   };
   const current = (id) => (active === id ? 'location' : undefined);
-  const progress = interpolate(t.nav.progress, {
-    n: formatNumber(activeIndex + 1, { locale }),
-    total: formatNumber(items.length, { locale }),
-  });
-  // Every name the button can show, with the count at its widest: unseen, they give it one
-  // width for the whole page (Header.module.css → .nowSlot).
-  const lastProgress = interpolate(t.nav.progress, {
-    n: formatNumber(items.length, { locale }),
-    total: formatNumber(items.length, { locale }),
-  });
-  const pillNames = [[t.a11y.sectionsMenu], ...items.map((item) => [item.label, lastProgress])];
+  // Every name the button can show: unseen, they give it one width for the whole page
+  // (Header.module.css → .nowSlot).
+  const pillNames = [t.a11y.sectionsMenu, ...items.map((item) => item.label)];
   // The language link: this very page in the other language — the home page or the policy —
   // or, from a page that has no other language (the 404), the site.
   const switchLabel = page === 'notFound' ? t.a11y.switchSite : t.a11y.switchLocale;
@@ -138,17 +129,15 @@ export function Header({ sections }) {
           <summary className={styles.now}>
             {activeIndex >= 0 && <span className="visually-hidden">{t.a11y.sectionsMenu}: </span>}
             <span className={styles.nowSlot}>
-              {pillNames.map(([name, count]) => (
+              {pillNames.map((name) => (
                 <span key={name} className={styles.nowRoom} aria-hidden="true">
                   <span className={styles.nowName}>{name}</span>
-                  {count && <span className={styles.nowCount}> {count}</span>}
                 </span>
               ))}
               <span key={active ?? 'none'} className={styles.nowLabel}>
                 <span className={styles.nowName}>
                   {activeIndex >= 0 ? items[activeIndex].label : t.a11y.sectionsMenu}
                 </span>
-                {activeIndex >= 0 && <span className={styles.nowCount}> {progress}</span>}
               </span>
             </span>
             <ChevronDown className={styles.nowIcon} />
@@ -156,7 +145,7 @@ export function Header({ sections }) {
           {/* Named apart from the bar's own list: two landmarks, two names. */}
           <nav className={styles.sheet} aria-label={t.a11y.sectionsMenu}>
             <ol className={styles.sheetList} role="list">
-              {items.map((item, index) => (
+              {items.map((item) => (
                 <li key={item.id}>
                   <a
                     className={styles.sheetLink}
@@ -164,15 +153,7 @@ export function Header({ sections }) {
                     aria-current={current(item.id)}
                     onClick={closeMenu}
                   >
-                    <span className={styles.sheetNumber} aria-hidden="true">
-                      {formatNumber(index + 1, { locale })}
-                    </span>
                     <span className={styles.sheetName}>{item.label}</span>
-                    {active === item.id && (
-                      <span className={styles.here} aria-hidden="true">
-                        {t.nav.here}
-                      </span>
-                    )}
                   </a>
                 </li>
               ))}

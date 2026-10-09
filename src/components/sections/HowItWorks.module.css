@@ -16,6 +16,7 @@
 
 .section {
   position: relative;
+  overflow-x: clip; /* the van bleeds off the page's side: the page never widens for it */
   padding-block: var(--section-space);
 }
 

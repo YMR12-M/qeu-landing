@@ -43,9 +43,6 @@ const ar = {
     ],
     download: 'حمّل كيو',
     switchLocale: 'EN',
-    here: 'أنت هنا',
-    // Beside the section's name in the bar at the top (phones): how far down the page it is.
-    progress: '{n} من {total}',
     // On a computer, «حمّل كيو» in the bar opens a card: the download QR code (which sends
     // each phone to its own store) and both stores.
     card: {
@@ -91,8 +88,6 @@ const ar = {
   why: {
     title: 'ليش {brand}؟',
     lead: 'لأنه يجمع لك أفضل العروض وأقل الأسعار على رف واحد.',
-    // Phones, under the row of four: it is swiped.
-    swipe: 'اسحب لتشوف الباقي',
     items: [
       {
         id: 'deals',
@@ -266,6 +261,8 @@ const ar = {
       minis: 'ميني وجامبو',
       dips: 'مقبلات وغموس وسلطات',
     },
+    // The same three, short enough to sit in a row on a phone, where one shelf shows at a time.
+    chips: { clubs: 'كلوب', minis: 'ميني وجامبو', dips: 'غموس وسلطات' },
     products: {
       'club-tuna': { name: 'كلوب تونة حارة بالجرجير', size: '1 قطعة' },
       'club-halloumi': { name: 'كلوب جبنة حلوم', size: '1 قطعة' },

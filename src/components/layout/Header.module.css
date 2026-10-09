@@ -31,8 +31,7 @@
 /* ── Brand ──────────────────────────────────────────────────────── */
 
 /* The wordmark alone, in the bar's ink. On a phone it is sized so the section's name beside
-   it keeps room for every name, with how far down the page it is (the longest, «حمّل التطبيق
-   7 من 7», at 360px). */
+   it keeps room for every name (the longest, «حمّل التطبيق», at 360px). */
 .brand {
   display: flex;
   flex: none; /* the wordmark stays whole: where room is short, the name beside it gives way */
@@ -154,12 +153,23 @@
 
 /* The name may narrow (then cut short); the store button beside it never does. */
 .menu {
-  flex: 1 1 auto;
+  flex: 1 1 0; /* the room that is left, whatever the list in it is wide: it never pushes the button out */
   min-inline-size: 0;
 }
 
 .download {
   flex: none;
+}
+
+/* The store button, as a sign-painter hangs it: a little crooked, a yellow shadow set off to one
+   side (phones and tablets, where the bar has the room to carry it). */
+@media (max-width: 63.99em) {
+  a.download,
+  .download > button {
+    rotate: -2deg;
+    box-shadow: 0.18rem 0.2rem 0 var(--star);
+    font-weight: 900;
+  }
 }
 
 .now {
@@ -173,8 +183,8 @@
   margin-inline: auto;
   padding-inline: 0.5rem;
   color: var(--ink);
-  font-size: 0.9375rem;
-  font-weight: 800;
+  font-size: 1.25rem;
+  font-weight: 900;
   white-space: nowrap;
   cursor: pointer;
   list-style: none;
@@ -217,12 +227,14 @@
    ellipsis, the name clips whatever overflows its box, and trimmed to the letters' middle that
    box is shorter than the letters: its clip reaches past it, above and below, as far as the
    tallest mark and the deepest tail. */
-.nowName,
-.nowCount {
+.nowName {
   text-box: var(--label-box);
 }
 
 .nowName {
+  /* The yellow marker under the name, as on the page's headlines: laid on its lower half. */
+  padding-inline: 0.2em;
+  background: url('../../assets/marks/marker.svg') no-repeat right 0 bottom 0.2em / 100% 0.95em;
   min-inline-size: 0;
   margin-block: -0.45em -0.4em;
   padding-block: 0.45em 0.4em;
@@ -234,27 +246,6 @@
   from {
     translate: 0 70%;
     opacity: 0;
-  }
-}
-
-/* How far down the page: «3 من 7», lighter than the name. */
-.nowCount {
-  flex: none;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  font-weight: 500;
-}
-
-.nowCount:lang(ar) {
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-/* The narrowest keep the wordmark and the store button whole: the name is enough there. */
-@media (max-width: 22.49em) {
-  .nowCount {
-    display: none;
   }
 }
 
@@ -362,33 +353,30 @@
   align-items: baseline;
   gap: 1rem;
   padding-block: 0.8125rem;
-  font-size: clamp(1.5rem, 6.5vw, 2rem);
-  font-weight: 800;
+  font-size: clamp(1.75rem, 7.4vw, 2.25rem);
+  font-weight: 900;
   line-height: var(--leading-snug);
   color: var(--white);
 }
 
-.sheetNumber {
-  flex: none;
-  inline-size: 1.25rem;
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--glow);
+/* The section being read: its name in night ink on the yellow marker, a little crooked. */
+.sheetName {
+  position: relative;
+  isolation: isolate;
 }
 
 .sheetLink[aria-current] .sheetName {
-  color: var(--star);
+  color: var(--night);
 }
 
-/* "You are here", beside the section being read. */
-.here {
-  flex: none;
-  align-self: center;
-  margin-inline-start: auto;
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--star);
+.sheetLink[aria-current] .sheetName::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 8% -0.45rem 0;
+  background: var(--star);
+  border-radius: 0.4em 0.15em 0.45em 0.12em / 0.2em 0.4em 0.15em 0.3em;
+  rotate: -1.4deg;
 }
 
 .sheetLocale {

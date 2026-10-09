@@ -30,10 +30,12 @@ const STOCK = Array.from({ length: SETS }, () => media.shelf).flat();
  *   way; they fade in at one end of the strip and out at the other, so none is ever seen cut.
  *
  * The headline has no entrance animation and is one block of text (lines broken with <br>), so on
- * a phone — where it is the biggest thing on the first screen — it is the page's Largest
- * Contentful Paint, painted with the first frame. On a computer the places are one picture, scaled
- * with the page (Hero.module.css); on a tablet two rows; on a phone stacked, the words first. The
- * glide stops while the hero is out of view, and is off entirely under reduced motion.
+ * a phone it is painted with the first frame. On a computer the places are one picture, scaled
+ * with the page (Hero.module.css); on a tablet two rows. On a phone the words stand in a column
+ * on the reading side, and the app's two screens stand large beside them, bleeding off the
+ * screen's edge and fading into the wall at their foot, «مجاناً» painted over the first; the
+ * store's strip glides under them. The glide stops while the hero is out of view, and is off
+ * entirely under reduced motion.
  */
 export function Hero() {
   const { t, figures } = useLocale();
@@ -97,16 +99,15 @@ export function Hero() {
             <Picture
               image={media.why.search}
               alt=""
-              sizes="21vw"
+              sizes="(min-width: 48em) 21vw, 56vw"
               fetchPriority="low"
               className={cx(styles.phone, styles.phoneBack)}
             />
             <Picture
               image={media.why.deals}
               alt=""
-              sizes="(min-width: 80em) 21vw, (min-width: 48em) 22vw, 28vw"
+              sizes="(min-width: 80em) 21vw, (min-width: 48em) 22vw, 72vw"
               loading="eager"
-              fetchPriority="low"
               className={cx(styles.phone, styles.phoneFront)}
             />
           </div>
