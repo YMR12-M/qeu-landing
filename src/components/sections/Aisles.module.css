@@ -1,6 +1,6 @@
 /*
  * «أقسام كيو» — the aisles on the page's wall: the store directory as a table of contents at the
- * start, the chosen department marked in yellow highlighter with a red-pen arrow to its aisle, and
+ * start, the chosen department marked in teal highlighter with a red-pen arrow to its aisle, and
  * beside it the department's categories piled in two rows — pictures standing on the wall, no
  * card, their names beside them — over the department's name painted on the wall.
  */
@@ -156,7 +156,7 @@
   text-box: var(--label-box);
 }
 
-/* The yellow marker over the chosen name, laid on as it is chosen: swept across from the right. */
+/* The teal marker over the chosen name, laid on as it is chosen: swept across from the right. */
 .mark {
   position: absolute;
   z-index: -1;
@@ -584,7 +584,7 @@
 /* ── Phones: the chosen aisle's sign ────────────────────────────── */
 
 /* In place of the directory: the chosen aisle's icon and name painted large, as the page's own
-   signs are (a night shadow behind yellow letters), and the aisle before it and the one after it
+   signs are (a night shadow behind teal letters), and the aisle before it and the one after it
    written beside it in pen, each a tap away. The directory's radios stay for a keyboard and a
    screen reader, out of sight. */
 .signs {

@@ -1,8 +1,8 @@
 /*
- * The hero: the words, the app's screens, the store's screenshots and a product, floating on the
- * page's white wall — nothing behind them, nothing cutting them: every picture is whole. Laid out
- * as the client drew it (the words top left, the app top right, the strip along the bottom, the
- * product in the corner; mirrored for Arabic).
+ * The hero: the words, the app's screens and the store's screenshots, floating on the page's
+ * white wall — nothing behind them, nothing cutting them: every picture is whole. Laid out as the
+ * client drew it (the words top left, the app top right, the strip along the bottom; mirrored for
+ * Arabic). The headline is built round one word painted as a sign.
  *
  * On a computer the places are one picture on a sheet of 1400 × 760 units, scaled with the page:
  * every size and place in the last block below is written in units (--u, one 1400th of the
@@ -71,57 +71,51 @@
   padding-block: clamp(0.5rem, 2vw, 1.5rem) clamp(1rem, 3vw, 2rem);
 }
 
+/* The headline: its lines are blocks, one of them a sign — the page's own way of painting a word
+   (a night shadow set behind the letters, as «ليش كيو» and «اسأل كيور» do), drawn large, in the
+   brand's teal, and outlined in the night so it keeps its edge on the white wall. The promise is
+   the last line, in the deeper teal that reads as text. */
 .title {
-  font-size: clamp(1.5rem, 7.6vw, 2.5rem);
-  line-height: var(--leading-hero);
+  font-size: clamp(1.75rem, 8vw, 2.5rem);
+  line-height: 1.12;
   color: var(--night);
 }
 
-/* The promise, marked with a yellow highlighter: a brush stroke along the lower half of its
-   letters, cut into each line if it wraps. It is swiped in, from where the line starts, once
-   the page has loaded — the words themselves are there from the first frame. */
-.accent {
-  margin-inline: -0.12em;
-  padding-inline: 0.12em;
-  background: url('../../assets/marks/marker.svg') no-repeat;
-  background-position: right 0 bottom 0.02em;
-  background-size: 100% 0.62em;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
+.title span {
+  display: block;
 }
 
-.hero:dir(ltr) .accent {
-  background-position: left 0 bottom 0.02em;
+.sign {
+  margin-block: -0.1em 0.06em;
+  padding-inline: 0.04em;
+  font-size: clamp(6rem, 32vw, 10rem);
+  line-height: 0.88;
+  color: var(--brand);
+  text-shadow: 0.035em 0.03em 0 var(--night);
+  -webkit-text-stroke: 0.012em var(--night);
+  paint-order: stroke fill;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .accent {
-    animation: swipe 1.1s var(--ease-out) 0.5s both;
-  }
-}
-
-@keyframes swipe {
-  from {
-    background-size: 0% 0.62em;
-  }
+.promise {
+  margin-block-start: 0.1em;
+  font-size: 0.78em;
+  color: var(--brand-text);
 }
 
 /* What it is, in one line: groceries, meals and coffee, brought to the door — the headline says
    what the prices are, this says what they are the prices of. */
 .lead {
   max-inline-size: 24em;
-  margin-block-start: clamp(1rem, 1.8vw, 1.5rem);
+  margin-block-start: clamp(0.75rem, 1.4vw, 1.5rem);
   font-size: clamp(1.0625rem, 2.4vw, 1.5rem);
   font-weight: 700;
   line-height: var(--leading-snug);
   color: var(--night);
 }
 
-.note {
-  margin-block-start: 0.875rem;
-  font-size: clamp(0.9375rem, 1.1vw, 1.125rem);
-  font-weight: 700;
-  color: var(--night);
+/* Both stores' buttons, side by side where there is room. */
+.stores {
+  margin-block-start: 1rem;
 }
 
 /* The download code is for scanning from a screen: a computer's. */
@@ -151,53 +145,6 @@
 .phoneFront {
   inset-inline-start: calc(50% - 1.25rem);
   rotate: calc(3deg * var(--mirror));
-}
-
-/* The app's own price, as a flyer prints it — on a computer. */
-.price {
-  display: none;
-}
-
-.priceName {
-  font-size: clamp(1rem, 1.2vw, 1.375rem);
-  font-weight: 800;
-}
-
-.priceValue {
-  position: relative;
-  font-size: clamp(2.5rem, 4.4vw, 5rem);
-  font-weight: 900;
-  line-height: 1.1;
-}
-
-/* The pen's loop round it, in ink. */
-.priceCircle {
-  --pen: 4px;
-  position: absolute;
-  inset-block: -0.2em -0.12em;
-  inset-inline: -0.45em;
-  inline-size: calc(100% + 0.9em);
-  block-size: calc(100% + 0.32em);
-  color: var(--night);
-}
-
-/* Drawn by a right hand either way: mirrored for a word read left to right. */
-.priceCircle:dir(ltr) {
-  scale: -1 1;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .priceValue {
-    animation: stamp 0.55s var(--ease-settle) 0.8s both;
-  }
-}
-
-@keyframes stamp {
-  from {
-    opacity: 0;
-    scale: 1.8;
-    rotate: -10deg;
-  }
 }
 
 /* ── The screens ─────────────────────────────────────────────────── */
@@ -298,12 +245,12 @@
   transform-origin: 50% 100%;
 }
 
-/* ── A phone: the words beside the app ───────────────────────────── */
+/* ── A phone: the sign across the width, the words beside the app ──── */
 
-/* The words stand in a column on the reading side, the app's two screens beside them — large,
-   bleeding off the screen's edge, the second rising under the words and both fading into the wall
-   at the foot of the piece — and «مجاناً» painted over the first, as the page's signs are (yellow letters over a
-   night shadow). The strip glides under them. */
+/* The sign stands across the whole width, its lines round it; under it the words stand in a
+   column on the reading side, the app's two screens beside them — large, bleeding off the
+   screen's edge, the second rising under the words and both fading into the wall at the foot of
+   the piece. The strip glides under them. */
 @media (max-width: 47.99em) {
   .bento {
     grid-template-areas:
@@ -312,20 +259,38 @@
   }
 
   .words,
-  .phones,
-  .price {
+  .phones {
     grid-area: hero;
   }
 
   .words {
     z-index: 2;
-    inline-size: 66%;
     align-self: start;
+    pointer-events: none; /* the app's screens under the empty side are not in its way */
+  }
+
+  .copy {
+    pointer-events: auto;
   }
 
   .title {
-    font-size: clamp(1.625rem, 8.6vw, 2.1rem);
-    line-height: 1.18;
+    font-size: clamp(1.625rem, 7.2vw, 2.125rem);
+    line-height: 1.12;
+  }
+
+  .sign {
+    font-size: clamp(6.5rem, 37vw, 9.75rem);
+  }
+
+  /* «deals» has no tail to leave room for under it and tall letters to leave room for over it. */
+  .title:lang(en) .sign {
+    font-size: clamp(5.5rem, 31vw, 8.5rem);
+    line-height: 0.74;
+    margin-block: 0.28em -0.1em;
+  }
+
+  .say {
+    inline-size: 62%;
   }
 
   .lead {
@@ -333,10 +298,14 @@
     line-height: 1.45;
   }
 
+  .stores {
+    margin-block-start: 0.875rem;
+  }
+
   /* Only the sides are left open: a screen reaches off the page's edge, but is cut, and faded, at
      the piece's foot. */
   .phones {
-    min-block-size: 40rem;
+    min-block-size: 49rem;
     clip-path: inset(0 -100vw);
   }
 
@@ -353,7 +322,7 @@
 
   .phone {
     inline-size: min(16.5rem, 70vw);
-    inset-block-start: 7.5rem;
+    inset-block-start: 14.5rem;
   }
 
   .phoneFront {
@@ -366,36 +335,8 @@
   .phoneBack {
     inline-size: 12.5rem;
     inset-inline-start: 0.25rem;
-    inset-block-start: 19rem;
+    inset-block-start: 28.5rem;
     rotate: calc(4deg * var(--mirror));
-  }
-
-  .price {
-    z-index: 3;
-    display: grid;
-    justify-items: center;
-    justify-self: end;
-    align-self: start;
-    margin-block-start: 1rem;
-    margin-inline-end: 0.5rem;
-    line-height: 0.95;
-    color: var(--star);
-    text-shadow: 0.04em 0.035em 0 var(--night);
-    rotate: calc(5deg * var(--mirror));
-  }
-
-  .priceName {
-    font-size: 1rem;
-    color: var(--night);
-    text-shadow: none;
-  }
-
-  .priceValue {
-    font-size: 3rem;
-  }
-
-  .priceCircle {
-    display: none;
   }
 }
 
@@ -425,7 +366,11 @@
 
   /* Two thirds of the width are room for the headline at a size that keeps its last line whole. */
   .title {
-    font-size: clamp(2rem, 4.6vw, 4rem);
+    font-size: clamp(1.75rem, 4vw, 3.25rem);
+  }
+
+  .sign {
+    font-size: clamp(7rem, 17vw, 12rem);
   }
 
   .lead {
@@ -453,7 +398,7 @@
 @media (min-width: 80em) {
   .bento {
     --u: calc(100cqi / 1400);
-    --product-h: calc(var(--u) * 262);
+    --product-h: calc(var(--u) * 126);
     --gap: calc(var(--u) * 26);
     display: block;
     position: relative;
@@ -477,10 +422,10 @@
     overflow: visible;
   }
 
-  /* The words. */
+  /* The words: the sign, its lines round it, and under them the row. */
   .copy {
     position: absolute;
-    inset-block-start: calc(var(--u) * 24);
+    inset-block-start: calc(var(--u) * 14);
     inset-inline-start: 0;
     inline-size: calc(var(--u) * 700);
     padding: 0;
@@ -488,24 +433,37 @@
 
   .title {
     max-inline-size: none;
-    font-size: calc(var(--u) * 72);
-    line-height: 1.1;
+    font-size: calc(var(--u) * 58);
+    line-height: 1.04;
   }
 
+  .sign {
+    font-size: calc(var(--u) * 290);
+    line-height: 0.82;
+    margin-block: calc(var(--u) * -4) calc(var(--u) * 20);
+  }
+
+  .promise {
+    margin-block-start: calc(var(--u) * 4);
+    font-size: calc(var(--u) * 46);
+  }
+
+  /* The English headline is one line longer and its sign is a shorter word. */
   .title:lang(en) {
-    font-size: calc(var(--u) * 50);
+    font-size: calc(var(--u) * 42);
   }
 
-  /* The English headline has a line less: the words sit a little lower. */
-  .copy:lang(en) {
-    inset-block-start: calc(var(--u) * 90);
+  .title:lang(en) .sign {
+    font-size: calc(var(--u) * 250);
+    line-height: 0.74;
+    margin-block: calc(var(--u) * 26) calc(var(--u) * -30);
   }
 
   .row {
     display: flex;
     align-items: center;
-    gap: calc(var(--u) * 28);
-    margin-block-start: calc(var(--u) * 22);
+    gap: calc(var(--u) * 24);
+    margin-block-start: calc(var(--u) * 14);
     inline-size: calc(var(--u) * 700);
   }
 
@@ -517,12 +475,13 @@
   .lead {
     max-inline-size: none;
     margin-block-start: 0;
-    font-size: max(0.9375rem, calc(var(--u) * 27));
+    font-size: max(0.9375rem, calc(var(--u) * 26));
   }
 
-  .note {
-    margin-block-start: calc(var(--u) * 16);
-    font-size: max(0.8125rem, calc(var(--u) * 20));
+  .stores {
+    margin-block-start: calc(var(--u) * 12);
+    inline-size: calc(var(--u) * 430);
+    gap: calc(var(--u) * 10);
   }
 
   /* The tear-off tab: a slip of the wall's own white, set a little crooked, the code and what
@@ -530,10 +489,10 @@
      from a screen, so it is only here where there is a pointer to point at one. */
   .code {
     flex: none;
-    inline-size: calc(var(--u) * 150);
+    inline-size: calc(var(--u) * 118);
     margin: 0;
-    padding: calc(var(--u) * 11) calc(var(--u) * 11) calc(var(--u) * 9);
-    border-radius: calc(var(--u) * 16);
+    padding: calc(var(--u) * 9) calc(var(--u) * 9) calc(var(--u) * 7);
+    border-radius: calc(var(--u) * 14);
     background: var(--page-wall);
     box-shadow: 0 0.2rem 0.6rem -0.3rem rgb(4 40 47 / 0.28);
     rotate: calc(-3deg * var(--mirror));
@@ -553,8 +512,8 @@
   }
 
   .codeCaption {
-    margin-block-start: calc(var(--u) * 4);
-    font-size: max(0.75rem, calc(var(--u) * 17));
+    margin-block-start: calc(var(--u) * 3);
+    font-size: max(0.75rem, calc(var(--u) * 16));
     font-weight: 800;
     line-height: 1.2;
     text-align: center;
@@ -578,32 +537,13 @@
     rotate: calc(-5deg * var(--mirror));
   }
 
-  /* The price stamp, between the words and the app. */
-  .price {
-    position: absolute;
-    inset-block-start: calc(var(--u) * 26);
-    inset-inline-start: calc(var(--u) * 660);
-    display: grid;
-    justify-items: center;
-    gap: 0.25rem;
-    rotate: calc(6deg * var(--mirror));
-  }
-
-  .priceName {
-    font-size: max(0.9375rem, calc(var(--u) * 20));
-  }
-
-  .priceValue {
-    font-size: calc(var(--u) * 68);
-  }
-
   /* The strip: the screens glide along the foot of the sheet under the words, and fade out
      before the app's screens, so none is ever seen cut. */
   .aisle {
     --fade: calc(var(--u) * 100);
     position: absolute;
     inset-inline: 0 calc(var(--u) * 640);
-    inset-block: calc(var(--u) * 482) calc(var(--u) * 6);
+    inset-block: calc(var(--u) * 618) calc(var(--u) * 6);
     padding-block: 0;
     display: flex;
     align-items: center;

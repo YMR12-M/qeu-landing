@@ -2,7 +2,7 @@
  * «عروضنا تجيك وبنفس السعر» — one poster on the page's wall, not three cards: the app's home
  * screen standing in front, its picks screen behind Qeu's van, and the van across the bottom, each
  * picture whole and large enough to read, with its number taped on it by hand — a torn scrap of
- * yellow paper, the digit in marker; one stroke of the marker is the ground they stand on.
+ * teal paper, the digit in marker; one stroke of the marker is the ground they stand on.
  *
  * On a computer the places are one picture on a sheet 100 units wide (the sheet is the poster,
  * scaled with the page: every size and place is written in hundredths of its width, cqi), counted
@@ -51,7 +51,7 @@
   font-size: min(var(--text-h2), 9.4cqi);
 }
 
-/* The promise, on the yellow marker as the hero's headline is — and as the van says it. */
+/* The promise, on the teal marker as the hero's headline is — and as the van says it. */
 .accent {
   margin-inline: -0.12em;
   padding-inline: 0.12em;
@@ -149,7 +149,7 @@
   align-items: start;
 }
 
-/* The number: yellow paper torn out of a sheet, its white core showing at the tear, a strip of tape
+/* The number: teal paper torn out of a sheet, its white core showing at the tear, a strip of tape
    across its top and the digit written on it in marker — each torn, taped and slanted its own way
    (the shapes are in HowItWorks.jsx). */
 .number {
@@ -188,7 +188,7 @@
 }
 
 .tape {
-  fill: #efe1b6;
+  fill: #c4e9ef;
   fill-opacity: 0.86;
 }
 

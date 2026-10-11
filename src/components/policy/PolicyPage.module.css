@@ -437,7 +437,7 @@
   font-size: 1rem;
 }
 
-/* The one promise the disclosure section makes, set larger and marked with the yellow
+/* The one promise the disclosure section makes, set larger and marked with the teal
    highlighter the landing page marks its promises with — a stroke under each line, no box. */
 .callout {
   max-inline-size: 40em;

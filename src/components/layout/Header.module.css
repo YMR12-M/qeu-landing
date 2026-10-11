@@ -67,7 +67,7 @@
   position: relative;
 }
 
-/* The mark under the section being read: a stroke of the yellow marker laid on the lower half of
+/* The mark under the section being read: a stroke of the teal marker laid on the lower half of
    its name, a little crooked. The end moving towards the new link sets off first, the other
    follows a beat later: it stretches across, then settles. */
 .mark {
@@ -119,7 +119,7 @@
   list-style: none;
 }
 
-/* Every link in one weight, the one being read on the yellow marker: bolding it would widen
+/* Every link in one weight, the one being read on the teal marker: bolding it would widen
    it, and move its neighbours every time the reader crossed into a section. */
 .link {
   position: relative;
@@ -159,7 +159,7 @@
   flex: none;
 }
 
-/* The store button, as a sign-painter hangs it: a little crooked, a yellow shadow set off to one
+/* The store button, as a sign-painter hangs it: a little crooked, a teal shadow set off to one
    side. On a computer it is the button that tilts, not the card that opens from it. */
 a.download,
 .download > button {
@@ -228,7 +228,7 @@ a.download,
 }
 
 .nowName {
-  /* The yellow marker under the name, as on the page's headlines: laid on its lower half. */
+  /* The teal marker under the name, as on the page's headlines: laid on its lower half. */
   padding-inline: 0.2em;
   background: url('../../assets/marks/marker.svg') no-repeat right 0 bottom 0.2em / 100% 0.95em;
   min-inline-size: 0;
@@ -323,7 +323,7 @@ a.download,
 /* ── The list of sections, dropped from under the bar (phones) ──── */
 
 /* A night sheet over the white page: the sections in large type, numbered, the one
-   being read marked in yellow. */
+   being read marked in teal. */
 .sheet {
   --focus-ring: var(--glow);
   position: fixed;
@@ -355,7 +355,7 @@ a.download,
   color: var(--white);
 }
 
-/* The section being read: its name in night ink on the yellow marker, a little crooked. */
+/* The section being read: its name in night ink on the teal marker, a little crooked. */
 .sheetName {
   position: relative;
   isolation: isolate;

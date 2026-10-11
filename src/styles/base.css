@@ -119,7 +119,7 @@ button {
   outline-offset: 3px;
 }
 
-/* Selected text is marked as the page marks a deal: in the offer yellow. */
+/* Selected text is marked as the page marks a deal: in the brand's teal. */
 ::selection {
   background: var(--star);
   color: var(--night);

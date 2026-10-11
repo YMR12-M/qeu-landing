@@ -14,7 +14,7 @@ const STORES = ['googlePlay', 'appStore'];
 
 /**
  * The footer, on the page's one white wall: the wordmark and Qeu's slogan set large — its last word marked
- * in yellow, as the hero's promise is — and under them what the order's delivery label says,
+ * in teal, as the hero's promise is — and under them what the order's delivery label says,
  * written on the wall: «طلبك وصل», from Qeu to your door, the app's store id in a barcode. Beside
  * it the page's contents and the ways to reach Qeu.
  * The small print along the bottom keeps the legal line and the figures' source. On a phone the

@@ -91,7 +91,7 @@ const PILES = Object.fromEntries(
 /**
  * «أقسام كيو» — the store's aisles, on the page's wall. At the start, the store directory set like
  * a table of contents: the app's six departments, each with the app's own icon,
- * its name, a run of dots and how many categories it has, the chosen one marked in yellow
+ * its name, a run of dots and how many categories it has, the chosen one marked in teal
  * highlighter with a pen arrow to its products. Beside it, from the top of the heading to the foot
  * of the directory, the chosen department's categories — the app's own picture of each — piled in
  * two rows, the back row higher with its names above, the front row with its names below, and

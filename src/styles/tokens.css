@@ -3,7 +3,7 @@
  *
  * Nothing on the page sits in a framed box, and nothing divides it: the whole page is one pale
  * wall (white, a shade toward the brand's aqua), and what is on it is told apart by space, size and weight. The brand's teal is what is
- * drawn on the wall — the screens, the awning — the deal yellow marks what is on offer, and the
+ * drawn on the wall — the screens, the awning — the deal mark, the brand's own teal, marks what is on offer, and the
  * night teal is the ink and the dark objects. Type does the rest: display titles are set large
  * and heavy (Tajawal 900), and every size is a clamp() that holds its proportion on a computer
  * and stays readable on a phone.
@@ -21,7 +21,7 @@
   --mist: #e3f2f3; /* the pale aqua of Qeu's store screenshots */
   --night: #04282f; /* the page's ink, and its dark objects */
   --glow: #9fe3ea; /* accent on night */
-  --star: #ffc43d; /* the deal yellow: the marker, the price stickers, the signs */
+  --star: var(--brand); /* the deal mark: the marker, the signs, the numbered scraps — the brand's own teal (it was a yellow until 11 Oct 2026) */
   --aqua: #92d6e0; /* the app's own «الأقسام» screen — its category circles */
   --deal: #c62828; /* the app's deal red, for prices: 5.6:1 on white */
   --white: #ffffff;

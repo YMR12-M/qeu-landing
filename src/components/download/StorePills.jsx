@@ -13,9 +13,10 @@ const STORES = [
 
 /**
  * Both stores, as two solid buttons of one weight — neither store comes second — each tagged
- * with its placement. `size="sm"`: smaller, side by side (the bar's download card).
+ * with its placement. `size="sm"`: smaller, side by side (the bar's download card). `size="row"`:
+ * the hero's — side by side where there is room, and `caption` (a small line) over each name.
  */
-export function StorePills({ placement, size = 'md', className }) {
+export function StorePills({ placement, size = 'md', caption, className }) {
   const { t } = useLocale();
   const target = storeLinkTarget(usePlatform());
 
@@ -34,8 +35,11 @@ export function StorePills({ placement, size = 'md', className }) {
             onClick={() => trackDownloadClick({ store: id, placement })}
           >
             <Icon className={styles.icon} />
-            <span className={styles.name} lang="en">
-              {t.stores[id]}
+            <span className={styles.label}>
+              {caption && <span className={styles.caption}>{caption}</span>}
+              <span className={styles.name} lang="en">
+                {t.stores[id]}
+              </span>
             </span>
           </a>
         </li>

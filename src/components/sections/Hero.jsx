@@ -3,9 +3,8 @@ import qrCode from '../../assets/qr/download-qr.svg';
 import { media } from '../../content/media.js';
 import { useLocale } from '../../i18n/useLocale.js';
 import { cx } from '../../lib/cx.js';
-import { interpolate } from '../../lib/format.js';
 import { Picture } from '../ui/Picture.jsx';
-import { Scribble } from '../ui/Scribble.jsx';
+import { StorePills } from '../download/StorePills.jsx';
 import styles from './Hero.module.css';
 
 // Identical sets of the six store screenshots side by side: the row moves by exactly one set
@@ -15,32 +14,30 @@ const SETS = 4;
 const STOCK = Array.from({ length: SETS }, () => media.shelf).flat();
 
 /**
- * The hero, on the page's white wall, laid out as the client drew it — the words top left, the
- * app top right, the store's screenshots along the bottom, a product in the corner — with nothing
- * behind any of it: every picture floats on the wall, whole.
+ * The hero, on the page's white wall, laid out as the client drew it — the words top left, the app
+ * top right, the store's screenshots along the bottom — with nothing behind any of it: every
+ * picture floats on the wall, whole.
  *
- * - The words: the headline — large, heavy, in night ink — with its promise, «وأسعار ما تلاقيها
- *   إلا فيه», marked in the deal yellow as with a highlighter pen; under it the line that says
- *   what the app is for (groceries, meals and coffee, brought to the door), how many have
- *   downloaded it and, for someone reading on a computer, the download code, stuck on like a
- *   flyer's tear-off tab.
- * - The app: two of its screens, and its price — free — circled in pen across the gap between
- *   them and the words.
+ * - The words: the headline, built round one word painted as a sign — «عروض», in the brand's teal
+ *   over a night shadow, as the page's signs are — with its promise, «وأسعار ما تلاقيها إلا فيه»,
+ *   in a deeper teal; under it the line that says what the app is for (groceries, meals and
+ *   coffee, brought to the door), both stores' buttons (the app is free: each says so) and, for
+ *   someone reading on a computer, the download code, stuck on like a flyer's tear-off tab.
+ * - The app: two of its screens, one in front of the other.
  * - The store's six Google Play screenshots, gliding by in the store's order, each leaning its own
  *   way; they fade in at one end of the strip and out at the other, so none is ever seen cut.
  *
- * The headline has no entrance animation and is one block of text (lines broken with <br>), so on
- * a phone it is painted with the first frame. On a computer the places are one picture, scaled
- * with the page (Hero.module.css); on a tablet two rows. On a phone the words stand in a column
- * on the reading side, and the app's two screens stand large beside them, bleeding off the
- * screen's edge and fading into the wall at their foot, «مجاناً» painted over the first; the
- * store's strip glides under them. The glide stops while the hero is out of view, and is off
- * entirely under reduced motion.
+ * The headline has no entrance animation and is one block of text (its lines are spans), so on a
+ * phone it is painted with the first frame. On a computer the places are one picture, scaled with
+ * the page (Hero.module.css); on a tablet two rows. On a phone the sign stands across the whole
+ * width, the words under it on the reading side and the app's two screens large beside them,
+ * bleeding off the screen's edge and fading into the wall at their foot; the store's strip glides
+ * under them. The glide stops while the hero is out of view, and is off entirely under reduced
+ * motion.
  */
 export function Hero() {
-  const { t, figures } = useLocale();
+  const { t } = useLocale();
   const { hero } = t;
-  const { shelf } = hero;
   const sectionRef = useRef(null);
 
   useEffect(() => {
@@ -60,12 +57,14 @@ export function Hero() {
           <div className={cx(styles.piece, styles.words)}>
             <div className={styles.copy}>
               <h1 id="hero-title" className={styles.title}>
-                {hero.titleLines.map((line) => (
-                  <Fragment key={line}>
-                    {line} <br />
-                  </Fragment>
-                ))}
-                <span className={styles.accent}>{hero.titleAccent}</span>
+                {hero.titleParts.map((part) => {
+                  const [kind, text] = Object.entries(part)[0];
+                  return (
+                    <Fragment key={text}>
+                      <span className={kind === 'text' ? undefined : styles[kind]}>{text}</span>{' '}
+                    </Fragment>
+                  );
+                })}
               </h1>
 
               <div className={styles.row}>
@@ -86,7 +85,12 @@ export function Hero() {
 
                 <div className={styles.say}>
                   <p className={styles.lead}>{hero.lead}</p>
-                  <p className={styles.note}>{interpolate(hero.note, figures)}</p>
+                  <StorePills
+                    placement="hero"
+                    size="row"
+                    caption={hero.getFree}
+                    className={styles.stores}
+                  />
                 </div>
               </div>
             </div>
@@ -133,14 +137,6 @@ export function Hero() {
             </div>
           </div>
 
-          {/* The app's own price, as a flyer prints it — and circled. */}
-          <p className={styles.price} aria-hidden="true">
-            <span className={styles.priceName}>{shelf.app}</span>
-            <span className={styles.priceValue}>
-              {shelf.price}
-              <Scribble shape="circle" draw="load" delay={1100} className={styles.priceCircle} />
-            </span>
-          </p>
         </div>
       </div>
     </section>

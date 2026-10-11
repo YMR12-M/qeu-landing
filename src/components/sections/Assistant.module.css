@@ -70,7 +70,7 @@
   text-align: center;
 }
 
-/* The assistant's name, in the deal yellow over a night shadow, as a sign-painter sets a word —
+/* The assistant's name, in the brand's teal over a night shadow, as a sign-painter sets a word —
    the same as the signs of «ليش كيو؟». */
 .name {
   color: var(--star);
@@ -160,7 +160,7 @@
 
 /* ── The notes ──────────────────────────────────────────────────── */
 
-/* A note: its number on a yellow disc, its words in night ink, as if written on the wall. */
+/* A note: its number on a teal disc, its words in night ink, as if written on the wall. */
 .notes {
   display: grid;
   gap: 1rem;
@@ -845,7 +845,7 @@
   color: var(--night);
 }
 
-/* The button's name, set as it reads in the app and marked in yellow, not as a second button. */
+/* The button's name, set as it reads in the app and marked in teal, not as a second button. */
 .hintButton {
   font-weight: 800;
   box-shadow: inset 0 -0.45em 0 var(--star);

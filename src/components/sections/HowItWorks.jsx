@@ -22,7 +22,7 @@ const DIGITS = {
 };
 
 // Each scrap of paper is torn its own way: its size, its tape's place and slant, and the seeds of
-// the two tears — the white of the paper's core, and the yellow over it.
+// the two tears — the white of the paper's core, and the teal over it.
 const SCRAPS = [
   { w: 118, h: 112, tape: [34, 58, -5], tears: [9, 21] },
   { w: 112, h: 120, tape: [30, 56, 6], tears: [14, 5] },
@@ -96,7 +96,7 @@ function PaperFilters() {
 }
 
 /**
- * A step's number: a scrap of yellow paper torn out of a sheet and taped down, the digit written
+ * A step's number: a scrap of teal paper torn out of a sheet and taped down, the digit written
  * on it in marker — not a printed badge. Each is torn, taped and slanted its own way.
  */
 function Scrap({ index }) {
@@ -150,8 +150,8 @@ function Scrap({ index }) {
  * «عروضنا تجيك وبنفس السعر» — the three steps of an order as one poster on the page's wall, not
  * three cards: the app's home screen standing in front, its picks screen behind Qeu's van, and the
  * van itself across the bottom — each picture whole, large enough to read, with its number taped on
- * it by hand (a scrap of yellow paper, the digit in marker), and under the headline's «وبنفس
- * السعر» the same yellow marker as the hero's. One stroke of the marker is the ground they stand on.
+ * it by hand (a scrap of teal paper, the digit in marker), and under the headline's «وبنفس
+ * السعر» the same teal marker as the hero's. One stroke of the marker is the ground they stand on.
  *
  * The places are in hundredths of the poster's width (the CSS), so it keeps its shape at any size;
  * on a phone the headline stands above and the pictures zigzag down the page, the van across its

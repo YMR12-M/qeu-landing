@@ -168,7 +168,7 @@
 /* ── The shelves' names (phones) ────────────────────────────────── */
 
 /* Three short names in a row, set as the kitchen's own switch is: the open one in full ink over a
-   yellow line, the others set back. One pile at a time (see the phone block under the piles). */
+   teal line, the others set back. One pile at a time (see the phone block under the piles). */
 .chips {
   display: none;
   min-inline-size: 0;
@@ -545,7 +545,7 @@
   gap: 0 0.45em;
 }
 
-/* Pointed at (or its pack in the pile): the name run over with the yellow highlighter. */
+/* Pointed at (or its pack in the pile): the name run over with the teal highlighter. */
 .name::before {
   content: '';
   position: absolute;

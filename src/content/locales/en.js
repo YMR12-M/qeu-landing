@@ -51,9 +51,15 @@ const en = {
   },
 
   hero: {
-    // The hero line on qeu.app/english.
+    // The hero line on qeu.app/english. The link-preview images (scripts/og-images.js) still draw
+    // the headline from these two.
     titleLines: ['Make your shopping easier,'],
     titleAccent: 'and your deals better!',
+    // The headline as the hero sets it, line by line: the one word painted as a sign, as the
+    // page's signs are. Read in order it is the same sentence.
+    titleParts: [{ text: 'Make your shopping easier, and your' }, { sign: 'deals' }, { text: 'better!' }],
+    // The small line over each store's name: the app is free.
+    getFree: 'Get it free on',
     cta: {
       default: 'Get Q for free',
       ios: 'Download free on the App Store',
@@ -315,7 +321,7 @@ const en = {
 
   inside: {
     title: 'Our deals come to you\u00a0—',
-    // The promise, on the yellow marker: it is also what is written on the van.
+    // The promise, on the teal marker: it is also what is written on the van.
     titleAccent: 'at the same price',
     lead: 'Simple shopping, secure payment options, and delivery right to your door.',
     steps: [

@@ -1,5 +1,5 @@
 /*
- * The awning (Edge.jsx): a strip of yellow and teal stripes cut into scallops by a mask, hanging
+ * The awning (Edge.jsx): a strip of teal and light-blue stripes cut into scallops by a mask, hanging
  * from the bar over the hero. It takes no room.
  */
 
@@ -12,7 +12,7 @@
   pointer-events: none;
 }
 
-/* Hanging from the bar: yellow and teal stripes, each stripe one scallop, a thin shadow cast
+/* Hanging from the bar: teal and light-blue stripes, each stripe one scallop, a thin shadow cast
    under it. It scrolls away with the hero; the bar stays. */
 .awning {
   --scallop: 1.125rem;
@@ -20,7 +20,7 @@
   block-size: calc(var(--scallop) * 2);
   background: repeating-linear-gradient(
     90deg,
-    var(--star) 0 calc(var(--scallop) * 2),
+    var(--aqua) 0 calc(var(--scallop) * 2),
     var(--brand) calc(var(--scallop) * 2) calc(var(--scallop) * 4)
   );
   mask:

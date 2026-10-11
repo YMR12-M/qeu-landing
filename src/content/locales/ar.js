@@ -54,8 +54,19 @@ const ar = {
   },
 
   hero: {
+    // The link-preview images (scripts/og-images.js) still draw the headline from these two.
     titleLines: ['تطبيق كله عروض', 'من أوله إلى آخره'],
     titleAccent: 'وأسعار ما تلاقيها إلا فيه',
+    // The headline as the hero sets it, line by line: the one word painted as a sign, as the
+    // page's signs are, and the promise last. Read in order it is the same sentence.
+    titleParts: [
+      { text: 'تطبيق كله' },
+      { sign: 'عروض' },
+      { text: 'من أوله إلى آخره' },
+      { promise: 'وأسعار ما تلاقيها إلا فيه' },
+    ],
+    // The small line over each store's name: the app is free.
+    getFree: 'حمّله مجاناً من',
     cta: {
       default: 'حمّل كيو مجاناً',
       ios: 'حمّله مجاناً من App Store',
@@ -328,7 +339,7 @@ const ar = {
 
   inside: {
     title: 'عروضنا تجيك',
-    // The promise, on the yellow marker: it is also what is written on the van.
+    // The promise, on the teal marker: it is also what is written on the van.
     titleAccent: 'وبنفس السعر',
     lead: 'تجربة شراء بسيطة، وخيارات دفع آمنة، وتوصيل لحد باب بيتك.',
     steps: [

@@ -1,6 +1,6 @@
 /* The store button: solid, rounded like the app's own buttons, no outline. Its colours come
    from the wall it stands on (--button-bg, --button-fg, --button-hover): night on the light
-   walls, the deal yellow on the dark ones. */
+   walls, the brand's teal on the dark ones. */
 .button {
   display: inline-flex;
   align-items: center;

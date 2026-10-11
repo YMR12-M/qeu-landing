@@ -56,3 +56,41 @@
   inline-size: 1.25em;
   block-size: 1.25em;
 }
+
+/* The hero's: one over the other on a phone, side by side from a tablet up, each with a small
+   line over the store's name. The name is set a little larger than the others'. */
+.row {
+  inline-size: 100%;
+  max-inline-size: 24rem;
+}
+
+.row .pill {
+  gap: 0.75rem;
+  block-size: clamp(3.5rem, 3.9vw, 4.5rem);
+  font-size: clamp(1.1875rem, 1.35vw, 1.5rem);
+}
+
+.label {
+  display: grid;
+  gap: 0.125rem;
+  justify-items: start;
+}
+
+.caption {
+  font-size: 0.75em;
+  font-weight: 500;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.row .name {
+  line-height: 1;
+}
+
+@media (min-width: 48em) {
+  .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-inline-size: none;
+    inline-size: min(100%, clamp(24rem, 33vw, 34rem));
+  }
+}

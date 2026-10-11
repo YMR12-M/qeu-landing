@@ -1,7 +1,7 @@
 /*
  * «ليش كيو؟» — on the page's wall, the app's four screens stand in a row, each leaning a little as
  * it was put there, every second one set a step lower, each under a sign painted with its promise
- * in the deal yellow — a night shadow behind the letters, as a sign-painter leaves it — and its
+ * in the brand's teal — a night shadow behind the letters, as a sign-painter leaves it — and its
  * words under the screen. The sign is the benefit's name: nothing is said twice. Everything is in
  * view at once: nothing waits behind a scroll or a click.
  */
@@ -115,7 +115,7 @@
   }
 }
 
-/* The sign: the benefit's promise, in the deal yellow over a night shadow — repeated from the
+/* The sign: the benefit's promise, in the brand's teal over a night shadow — repeated from the
    title, so it is hidden from a screen reader. */
 .sign {
   display: grid;
