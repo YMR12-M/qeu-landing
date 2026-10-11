@@ -65,8 +65,8 @@ const ar = {
       { text: 'من أوله إلى آخره' },
       { promise: 'وأسعار ما تلاقيها إلا فيه' },
     ],
-    // The small line over each store's name: the app is free.
-    getFree: 'حمّله مجاناً من',
+    // Under the store badges: the app is free, on both.
+    freeNote: 'مجاني على الآيفون والأندرويد',
     cta: {
       default: 'حمّل كيو مجاناً',
       ios: 'حمّله مجاناً من App Store',

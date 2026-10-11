@@ -1,9 +1,12 @@
-/* The two stores, one over the other: solid buttons, no outline. Their colours come from the
-   wall they stand on (--store-bg, --store-fg, --store-hover): night by default. */
+/* The two stores as the stores draw their own badges: a black plate, a thin grey line round it,
+   the store's mark and, in two lines, a small caption and its name in the system's own sans (the
+   face the badges are set in). One plate size per placement, set by --h; everything inside is in
+   proportion to it. A badge is read left to right whatever the page's direction. */
 .list {
+  --h: clamp(3.25rem, 3.4vw, 3.875rem);
   display: grid;
+  justify-items: start;
   gap: 0.75rem;
-  inline-size: min(100%, clamp(15rem, 15.5vw, 18.5rem));
   margin: 0;
   padding: 0;
   list-style: none;
@@ -12,85 +15,98 @@
 .pill {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.625rem;
-  block-size: clamp(3.25rem, 3.5vw, 4rem);
-  border-radius: var(--radius-control);
-  background: var(--store-bg, var(--night));
-  color: var(--store-fg, var(--white));
-  font-size: clamp(1.0625rem, 1.1vw, 1.25rem);
-  font-weight: 700;
+  gap: calc(var(--h) * 0.17);
+  direction: ltr;
+  min-inline-size: calc(var(--h) * 3.3);
+  block-size: var(--h);
+  padding-inline: calc(var(--h) * 0.24) calc(var(--h) * 0.3);
+  border: 1px solid #a6a6a6;
+  border-radius: calc(var(--h) * 0.18);
+  background: #000;
+  color: #fff;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
   transition:
     background-color var(--duration-fast) ease,
-    scale 150ms ease;
+    scale 160ms var(--ease-out);
 }
 
-.pill:hover {
-  background: var(--store-hover, var(--deep));
+@media (hover: hover) and (pointer: fine) {
+  .pill:hover {
+    background: #1c1c1c;
+  }
 }
 
 .pill:active {
-  scale: 0.98;
+  scale: 0.97;
 }
 
-/* Small, side by side: the bar's download card. */
+.icon {
+  flex: none;
+  inline-size: calc(var(--h) * 0.5);
+  block-size: calc(var(--h) * 0.5);
+}
+
+.label {
+  display: grid;
+  gap: calc(var(--h) * 0.03);
+  line-height: 1;
+  text-align: start;
+}
+
+.caption {
+  font-size: calc(var(--h) * 0.19);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.name {
+  font-size: calc(var(--h) * 0.4);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
+/* Google's badge sets its caption in capitals, wider spaced. */
+.list li:first-child .caption {
+  font-size: calc(var(--h) * 0.17);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+/* Smaller, side by side, the name alone: the bar's download card. */
 .sm {
+  --h: 2.75rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-items: stretch;
   gap: 0.5rem;
   inline-size: 100%;
 }
 
 .sm .pill {
+  min-inline-size: 0;
   gap: 0.4rem;
-  block-size: 2.75rem;
+  padding-inline: 0.5rem;
+}
+
+.sm .caption {
+  display: none;
+}
+
+.sm .name {
   font-size: 0.9375rem;
 }
 
-/* The store's name, level with the middle of its logo (tokens.css → --label-box). */
-.name {
-  text-box: var(--label-box);
-}
-
-.icon {
-  flex: none;
-  inline-size: 1.25em;
-  block-size: 1.25em;
-}
-
-/* The hero's: one over the other on a phone, side by side from a tablet up, each with a small
-   line over the store's name. The name is set a little larger than the others'. */
+/* The hero's: one over the other on a phone, side by side from a tablet up. */
 .row {
-  inline-size: 100%;
-  max-inline-size: 24rem;
-}
-
-.row .pill {
-  gap: 0.75rem;
-  block-size: clamp(3.5rem, 3.9vw, 4.5rem);
-  font-size: clamp(1.1875rem, 1.35vw, 1.5rem);
-}
-
-.label {
-  display: grid;
-  gap: 0.125rem;
-  justify-items: start;
-}
-
-.caption {
-  font-size: 0.75em;
-  font-weight: 500;
-  line-height: 1;
-  opacity: 0.85;
-}
-
-.row .name {
-  line-height: 1;
+  --h: 3.25rem;
 }
 
 @media (min-width: 48em) {
   .row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-inline-size: none;
-    inline-size: min(100%, clamp(24rem, 33vw, 34rem));
+    --h: clamp(3.25rem, 4.4vw, 4rem);
+    grid-auto-flow: column;
+    justify-content: start;
   }
 }

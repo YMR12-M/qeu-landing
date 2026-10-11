@@ -113,9 +113,16 @@
   color: var(--night);
 }
 
-/* Both stores' buttons, side by side where there is room. */
+/* Both stores' badges, side by side where there is room, and under them that the app is free. */
 .stores {
   margin-block-start: 1rem;
+}
+
+.free {
+  margin-block-start: 0.625rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--muted);
 }
 
 /* The download code is for scanning from a screen: a computer's. */
@@ -479,9 +486,14 @@
   }
 
   .stores {
+    --h: calc(var(--u) * 58);
     margin-block-start: calc(var(--u) * 12);
-    inline-size: calc(var(--u) * 430);
     gap: calc(var(--u) * 10);
+  }
+
+  .free {
+    margin-block-start: calc(var(--u) * 8);
+    font-size: max(0.8125rem, calc(var(--u) * 18));
   }
 
   /* The tear-off tab: a slip of the wall's own white, set a little crooked, the code and what

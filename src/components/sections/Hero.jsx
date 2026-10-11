@@ -85,12 +85,8 @@ export function Hero() {
 
                 <div className={styles.say}>
                   <p className={styles.lead}>{hero.lead}</p>
-                  <StorePills
-                    placement="hero"
-                    size="row"
-                    caption={hero.getFree}
-                    className={styles.stores}
-                  />
+                  <StorePills placement="hero" size="row" className={styles.stores} />
+                  <p className={styles.free}>{hero.freeNote}</p>
                 </div>
               </div>
             </div>

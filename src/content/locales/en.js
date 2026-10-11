@@ -58,8 +58,8 @@ const en = {
     // The headline as the hero sets it, line by line: the one word painted as a sign, as the
     // page's signs are. Read in order it is the same sentence.
     titleParts: [{ text: 'Make your shopping easier, and your' }, { sign: 'deals' }, { text: 'better!' }],
-    // The small line over each store's name: the app is free.
-    getFree: 'Get it free on',
+    // Under the store badges: the app is free, on both.
+    freeNote: 'Free on iPhone and Android',
     cta: {
       default: 'Get Q for free',
       ios: 'Download free on the App Store',

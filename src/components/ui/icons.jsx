@@ -1,7 +1,9 @@
 /**
- * Icons. The store logos are Phosphor Icons (MIT, https://phosphoricons.com) in their fill
- * weight, inlined so the bundle carries only these paths. All icons are decorative
- * (aria-hidden) and take the current text colour.
+ * Icons. The icons are Phosphor Icons (MIT, https://phosphoricons.com) in their fill weight,
+ * inlined so the bundle carries only these paths; the two store marks (AppStoreMark,
+ * PlayStoreMark) are the stores' own logos as Simple Icons draws them (CC0,
+ * https://simpleicons.org), the Play triangle in its four brand colours. All icons are decorative
+ * (aria-hidden) and take the current text colour, except the Play mark.
  */
 
 function Icon({ viewBox = '0 0 256 256', children, ...props }) {
@@ -19,18 +21,23 @@ function Icon({ viewBox = '0 0 256 256', children, ...props }) {
   );
 }
 
-export function AppleLogo(props) {
+/** The Apple logo, as the App Store's badge carries it. Takes the current text colour. */
+export function AppStoreMark(props) {
   return (
-    <Icon {...props}>
-      <path d="M128.23,30A40,40,0,0,1,167,0h1a8,8,0,0,1,0,16h-1a24,24,0,0,0-23.24,18,8,8,0,1,1-15.5-4ZM223.3,169.59a8.07,8.07,0,0,0-2.8-3.4C203.53,154.53,200,134.64,200,120c0-17.67,13.47-33.06,21.5-40.67a8,8,0,0,0,0-11.62C208.82,55.74,187.82,48,168,48a72.23,72.23,0,0,0-40,12.13,71.56,71.56,0,0,0-90.71,9.09A74.63,74.63,0,0,0,16,123.4a127,127,0,0,0,40.14,89.73A39.8,39.8,0,0,0,83.59,224h87.68a39.84,39.84,0,0,0,29.12-12.57,125,125,0,0,0,17.82-24.6C225.23,174,224.33,172,223.3,169.59Z" />
+    <Icon viewBox="0 0 24 24" {...props}>
+      <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" />
     </Icon>
   );
 }
 
-export function GooglePlayLogo(props) {
+/** Google Play's triangle, in its four colours (blue, green, yellow, red), as its badge carries it. */
+export function PlayStoreMark(props) {
   return (
-    <Icon {...props}>
-      <path d="M239.82,114.18,72,18.16a16,16,0,0,0-16.12,0A15.68,15.68,0,0,0,48,31.87V224.13a15.68,15.68,0,0,0,7.92,13.67,16,16,0,0,0,16.12,0l167.78-96a15.76,15.76,0,0,0,0-27.64ZM160,139.31l18.92,18.92-88.5,50.66ZM90.4,47.1l88.53,50.67L160,116.69ZM193.31,150l-22-22,22-22,38.43,22Z" />
+    <Icon viewBox="0 0 24 24" {...props}>
+      <path fill="#00a0ff" d="M1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924z" />
+      <path fill="#00e07b" d="M12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973z" />
+      <path fill="#ff3a44" d="M12.207 12.132l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z" />
+      <path fill="#ffd500" d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594z" />
     </Icon>
   );
 }

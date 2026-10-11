@@ -3,20 +3,24 @@ import { useLocale } from '../../i18n/useLocale.js';
 import { trackDownloadClick } from '../../lib/analytics.js';
 import { cx } from '../../lib/cx.js';
 import { getStoreHref, storeLinkTarget } from '../../lib/links.js';
-import { AppleLogo, GooglePlayLogo } from '../ui/icons.jsx';
+import { AppStoreMark, PlayStoreMark } from '../ui/icons.jsx';
 import styles from './StorePills.module.css';
 
+// What each store's own badge says over its name: the stores' wording, in the stores' language.
 const STORES = [
-  { id: 'googlePlay', Icon: GooglePlayLogo },
-  { id: 'appStore', Icon: AppleLogo },
+  { id: 'googlePlay', Mark: PlayStoreMark, caption: 'Get it on' },
+  { id: 'appStore', Mark: AppStoreMark, caption: 'Download on the' },
 ];
 
 /**
- * Both stores, as two solid buttons of one weight — neither store comes second — each tagged
- * with its placement. `size="sm"`: smaller, side by side (the bar's download card). `size="row"`:
- * the hero's — side by side where there is room, and `caption` (a small line) over each name.
+ * Both stores, as store badges: a black plate with a thin grey line, the store's own mark, a
+ * small line over its name — the way the stores draw theirs, so a visitor knows them at a glance
+ * — each tagged with its placement. Neither store comes second: both are one size. A badge is
+ * always read left to right, as the stores set them, whatever the page's direction.
+ * `size="sm"`: smaller, side by side, the name alone (the bar's download card). `size="row"`:
+ * the hero's — side by side where there is room, one over the other on a phone.
  */
-export function StorePills({ placement, size = 'md', caption, className }) {
+export function StorePills({ placement, size = 'md', className }) {
   const { t } = useLocale();
   const target = storeLinkTarget(usePlatform());
 
@@ -26,7 +30,7 @@ export function StorePills({ placement, size = 'md', caption, className }) {
       role="list"
       aria-label={t.a11y.storeLinks}
     >
-      {STORES.map(({ id, Icon }) => (
+      {STORES.map(({ id, Mark, caption }) => (
         <li key={id}>
           <a
             className={styles.pill}
@@ -34,12 +38,10 @@ export function StorePills({ placement, size = 'md', caption, className }) {
             {...target}
             onClick={() => trackDownloadClick({ store: id, placement })}
           >
-            <Icon className={styles.icon} />
-            <span className={styles.label}>
-              {caption && <span className={styles.caption}>{caption}</span>}
-              <span className={styles.name} lang="en">
-                {t.stores[id]}
-              </span>
+            <Mark className={styles.icon} />
+            <span className={styles.label} lang="en">
+              <span className={styles.caption}>{caption}</span>
+              <span className={styles.name}>{t.stores[id]}</span>
             </span>
           </a>
         </li>
